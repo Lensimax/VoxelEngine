@@ -1,11 +1,17 @@
+#ifndef DRAWABLEOBJECT_H
+#define DRAWABLEOBJECT_H
+
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include <vector>
 
 
 class DrawableObject {
     public:
-        virtual void getVertices() = 0;
-        virtual void getTriangles() = 0;
+        virtual inline float *getVertices() = 0;
+        virtual inline int *getTriangles() = 0;
 
         virtual glm::mat4 getTransform() = 0;
 
@@ -14,5 +20,6 @@ class DrawableObject {
     protected:
         virtual void createVAO() = 0;
         virtual void deleteVAO() = 0;
-        virtual void setUniform() = 0;
 };
+
+#endif

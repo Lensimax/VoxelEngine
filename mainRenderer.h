@@ -1,3 +1,6 @@
+#ifndef MAINRENDERER_H
+#define MAINRENDERER_H
+
 #include <GL/glew.h>
 
 #include <GL/gl.h>
@@ -12,6 +15,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "shader.h"
+#include "models/cube.h"
+
+#include <vector>
 
 class MainRenderer : public QGLWidget {
  public:
@@ -26,22 +32,18 @@ class MainRenderer : public QGLWidget {
     virtual void mousePressEvent(QMouseEvent *me);
     virtual void mouseMoveEvent(QMouseEvent *me);
 
-    QTimer *_timer;
 
-    glm::mat4 modelMat;
-    glm::mat4 viewMat;
-    glm::mat4 projectionMat;
 
     private:
-        Shader *exampleShader;
 
-        void createShaders();
-        void deleteShaders();
+        QTimer *_timer;
 
-        GLuint _vaoQuad;
-        GLuint _quad;
+        glm::mat4 modelMat;
+        glm::mat4 viewMat;
+        glm::mat4 projectionMat;
 
-        void createQuadVAO();
-        void deleteQuadVAO();
-        void drawQuad();
+        std::vector<DrawableObject*> objectsToDraw;
+
 };
+
+#endif
