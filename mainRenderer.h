@@ -13,10 +13,10 @@
 
 #include "shader.h"
 
-class Template : public QGLWidget {
+class MainRenderer : public QGLWidget {
  public:
-    Template(const QGLFormat &format=QGLFormat::defaultFormat());
-    ~Template();
+    MainRenderer(const QGLFormat &format=QGLFormat::defaultFormat());
+    ~MainRenderer();
 
  protected:
     virtual void paintGL();

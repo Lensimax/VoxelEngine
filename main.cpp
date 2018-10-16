@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include "template.h"
+#include "mainRenderer.h"
 
 
 using namespace std;
@@ -19,9 +19,9 @@ int main(int argc,char** argv) {
     fmt.setProfile(QGLFormat::CoreProfile);
     fmt.setSampleBuffers(true);
 
-    Template viewer(fmt);
+    MainRenderer viewer(fmt);
 
-    viewer.setWindowTitle("Template OpenGL");
+    viewer.setWindowTitle("Green Engine");
     viewer.show();
 
     return application.exec();

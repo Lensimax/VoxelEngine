@@ -12,5 +12,5 @@ QT += opengl
 LIBS += -lm -lGLEW
 
 # Input
-HEADERS += template.h shader.h
-SOURCES += main.cpp template.cpp shader.cpp
+HEADERS += mainRenderer.h shader.h models/cube.h models/drawableObject.h
+SOURCES += main.cpp mainRenderer.cpp shader.cpp models/cube.cpp

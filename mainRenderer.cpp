@@ -1,23 +1,22 @@
-#include "template.h"
+#include "mainRenderer.h"
 
-
-Template::Template(const QGLFormat &format) : QGLWidget(format), _timer(new QTimer(this)){
+MainRenderer::MainRenderer(const QGLFormat &format) : QGLWidget(format), _timer(new QTimer(this)){
     setlocale(LC_ALL,"C");
 
     _timer->setInterval(10);
     connect(_timer,SIGNAL(timeout()),this,SLOT(updateGL()));
 }
 
-void Template::createShaders(){
+void MainRenderer::createShaders(){
     exampleShader = new Shader();
     exampleShader->load("shaders/example.vert","shaders/example.frag");
 }
 
-void Template::deleteShaders() {
+void MainRenderer::deleteShaders() {
     delete exampleShader; exampleShader = NULL;
 }
 
-void Template::createQuadVAO(){
+void MainRenderer::createQuadVAO(){
     const GLfloat quadData[] = {-1.0f,-1.0f,0.0f, 1.0f,-1.0f,0.0f, -1.0f,1.0f,0.0f, -1.0f,1.0f,0.0f, 1.0f,-1.0f,0.0f, 1.0f,1.0f,0.0f };
 
 
@@ -30,18 +29,18 @@ void Template::createQuadVAO(){
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
     glEnableVertexAttribArray(0);
 }
-void Template::deleteQuadVAO(){
+void MainRenderer::deleteQuadVAO(){
     glDeleteBuffers(1,&_quad);
     glDeleteVertexArrays(1,&_vaoQuad);
 }
 
-void Template::drawQuad(){
+void MainRenderer::drawQuad(){
     glBindVertexArray(_vaoQuad);
     glDrawArrays(GL_TRIANGLES,0,6);
     glBindVertexArray(0);
 }
 
-void Template::paintGL(){
+void MainRenderer::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0,0,width(),height());
 
@@ -82,7 +81,7 @@ void Template::paintGL(){
 
 
 
-void Template::initializeGL(){
+void MainRenderer::initializeGL(){
     makeCurrent();
 
     glewExperimental = GL_TRUE;
@@ -104,24 +103,24 @@ void Template::initializeGL(){
 }
 
 
-void Template::resizeGL(int width,int height){
+void MainRenderer::resizeGL(int width,int height){
     glViewport(0,0,width,height);
     updateGL();
 }
-void Template::keyPressEvent(QKeyEvent *ke){
+void MainRenderer::keyPressEvent(QKeyEvent *ke){
     if(ke->key()==Qt::Key_R) {
         exampleShader->reload("shaders/example.vert","shaders/example.frag");
     }
 }
 
-void Template::mousePressEvent(QMouseEvent *me){
+void MainRenderer::mousePressEvent(QMouseEvent *me){
 
 }
-void Template::mouseMoveEvent(QMouseEvent *me){
+void MainRenderer::mouseMoveEvent(QMouseEvent *me){
 
 }
 
-Template::~Template(){
+MainRenderer::~MainRenderer(){
     deleteQuadVAO();
     deleteShaders();
 }
