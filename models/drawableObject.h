@@ -7,6 +7,8 @@
 
 #include <vector>
 
+#include "transform.h"
+
 
 class DrawableObject {
     public:
@@ -22,7 +24,7 @@ class DrawableObject {
         virtual int nbTriangles() = 0;
 
 
-        virtual glm::mat4 getTransform() = 0;
+        virtual Transform* getTransform() = 0;
 
         /* draw the object in the screen */
         virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat) = 0;

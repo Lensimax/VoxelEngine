@@ -124,8 +124,8 @@ int Cube::nbTriangles(){
     return triangles.size()/3;
 }
 
-glm::mat4 Cube::getTransform(){
-    return glm::mat4(1.0f);
+Transform *Cube::getTransform(){
+    return transform;
 }
 
 void Cube::draw(glm::mat4 viewMat, glm::mat4 projectionMat){

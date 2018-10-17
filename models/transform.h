@@ -8,13 +8,11 @@ using namespace glm;
 
 class Transform {
     public:
-        Transform();
-        Transform(vec3 position);
-        Transform(vec3 position, vec3 scale);
+        Transform(vec3 position = vec3(0.0,0.0,0.0), vec3 scale = vec3(1.0,1.0,1.0), vec3 rotation = vec3(0.0,0.0,0.0));
         ~Transform();
 
         void setPosition(vec3 position);
-        void rotate(vec3 axis, float angle);
+        void rotate(vec3 angle);
         void scale(vec3 scale);
 
         mat4 getMat4();

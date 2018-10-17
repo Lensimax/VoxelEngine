@@ -26,7 +26,7 @@ class Cube : public DrawableObject {
         virtual int nbVertices();
         virtual int nbTriangles();
 
-        virtual glm::mat4 getTransform();
+        virtual Transform* getTransform();
 
         virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat);
 

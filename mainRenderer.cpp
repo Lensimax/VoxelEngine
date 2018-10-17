@@ -12,7 +12,10 @@ MainRenderer::MainRenderer(const QGLFormat &format) : QGLWidget(format), _timer(
 void MainRenderer::makeScene(){
     objectsToDraw = std::vector<DrawableObject*>();
 
-    objectsToDraw.push_back(new Cube(glm::vec3(0.5,0.0,-1.0)));
+    Cube *c = new Cube(glm::vec3(0.5,0.0,-1.0), glm::vec3(0.5,0.5,0.5));
+    c->getTransform()->rotate(vec3(45.0,45.0,0.0));
+    // glm::vec3(0.0, 45.0, 0.0)
+    objectsToDraw.push_back(c);
     //objectsToDraw.push_back(new Cube(glm::vec3(-0.2,0.0,0.0)));
 }
 
