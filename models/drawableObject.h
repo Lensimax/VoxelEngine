@@ -10,16 +10,18 @@
 
 class DrawableObject {
     public:
-        virtual inline float *getVertices() = 0;
-        virtual inline int *getTriangles() = 0;
+
+
+        virtual float *getVertices() = 0;
+        virtual int *getTriangles() = 0;
+
+        virtual int nbVertices() = 0;
+        virtual int nbFaces() = 0;
 
         virtual glm::mat4 getTransform() = 0;
 
-        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat) = 0;
+        virtual GLuint shaderID() = 0;
 
-    protected:
-        virtual void createVAO() = 0;
-        virtual void deleteVAO() = 0;
 };
 
 #endif

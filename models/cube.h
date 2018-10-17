@@ -17,20 +17,21 @@ class Cube : public DrawableObject {
         Cube();
         ~Cube();
 
-        virtual inline float *getVertices();
-        virtual inline int *getTriangles();
+        virtual float *getVertices();
+        virtual int *getTriangles();
+        virtual int nbVertices();
+        virtual int nbFaces();
 
         virtual glm::mat4 getTransform();
 
         virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat);
 
+        virtual GLuint shaderID();
+
     protected:
-        virtual void createVAO();
-        virtual void deleteVAO();
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat);
 
-        int nbVertices();
-        int nbFaces();
+
 
         std::vector<float> createVertices();
         std::vector<int> createTriangles();
@@ -45,6 +46,9 @@ class Cube : public DrawableObject {
 
         void createShader();
         void deleteShader();
+
+        void debugFaces();
+        void debugVertices();
 
 
 };

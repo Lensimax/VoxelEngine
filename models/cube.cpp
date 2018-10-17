@@ -1,18 +1,22 @@
 #include "cube.h"
 
+#include <iostream>
+
 Cube::Cube(){
+
 
     vertices = createVertices();
     faces = createTriangles();
 
-    createVAO();
-    createShader();
+    //createShader();
+
+    // debugVertices();
+
 
 }
 
 Cube::~Cube(){
-    deleteVAO();
-    deleteShader();
+    //deleteShader();
 }
 
 std::vector<float> Cube::createVertices(){
@@ -81,20 +85,20 @@ std::vector<int> Cube::createTriangles(){
 }
 
 
-inline int *Cube::getTriangles(){
+int *Cube::getTriangles(){
     return &faces[0];
 }
 
-inline float *Cube::getVertices(){
+float *Cube::getVertices(){
     return &vertices[0];
 }
 
 int Cube::nbVertices(){
-    return vertices.size();
+    return vertices.size()/3;
 }
 
 int Cube::nbFaces(){
-    return faces.size();
+    return faces.size()/3;
 }
 
 glm::mat4 Cube::getTransform(){
@@ -114,33 +118,10 @@ void Cube::draw(glm::mat4 viewMat, glm::mat4 projectionMat){
     glUseProgram(0);
 }
 
-void Cube::createVAO(){
-    glGenBuffers(2, cubeVA);
-    glGenVertexArrays(1,&vertexArrayID);
-
-    // create the VBO associated with the grid (the terrain)
-    glBindVertexArray(vertexArrayID);
-    glBindBuffer(GL_ARRAY_BUFFER,cubeVA[0]); // vertices
-    glBufferData(GL_ARRAY_BUFFER,nbVertices()*3*sizeof(float),getVertices(),GL_STATIC_DRAW);
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,cubeVA[1]); // indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,nbFaces()*3*sizeof(int),getTriangles(),GL_STATIC_DRAW);
-}
-
-void Cube::deleteVAO(){
-    glDeleteBuffers(2,cubeVA);
-    glDeleteVertexArrays(1,&vertexArrayID);
-}
 
 void Cube::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat){
 
-    glm::mat4 modelMat = glm::mat4(1.0f);
 
-    // send the transformation matrix
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
 }
 
 void Cube::createShader(){
@@ -150,4 +131,22 @@ void Cube::createShader(){
 
 void Cube::deleteShader(){
     delete shader; shader = NULL;
+}
+
+GLuint Cube::shaderID(){
+    return shader->id();
+}
+
+void Cube::debugFaces(){
+    std::cout << "Faces:\n";
+    for(int i=0; i<faces.size(); i+=3){
+        std::cout << "(" << faces[i] << ", " << faces[i+1] << ", " << faces[i+2] << ")\n";
+    }
+}
+
+void Cube::debugVertices(){
+    std::cout << "Vertices:\n";
+    for(int i=0; i<vertices.size(); i+=3){
+        std::cout << "(" << vertices[i] << ", " << vertices[i+1] << ", " << vertices[i+2] << ")\n";
+    }
 }
