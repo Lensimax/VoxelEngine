@@ -23,9 +23,6 @@ class DrawableObject {
         /* get number of triangles */
         virtual int nbTriangles() = 0;
 
-
-        virtual Transform* getTransform() = 0;
-
         /* draw the object in the screen */
         virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat) = 0;
 
@@ -37,6 +34,10 @@ class DrawableObject {
         /* DEBUG */
         virtual void debugTrianglesAndTriangles() = 0;
 
+        Transform *getTransform();
+
+    protected:
+        Transform *transform;
 };
 
 #endif

@@ -13,4 +13,4 @@ LIBS += -lm -lGLEW
 
 # Input
 HEADERS += mainRenderer.h shader.h models/cube.h models/drawableObject.h models/transform.h
-SOURCES += main.cpp mainRenderer.cpp shader.cpp models/cube.cpp models/transform.cpp
+SOURCES += main.cpp mainRenderer.cpp shader.cpp models/cube.cpp models/drawableObject.cpp models/transform.cpp

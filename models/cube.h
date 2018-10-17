@@ -53,7 +53,7 @@ class Cube : public DrawableObject {
 
         Shader *shader;
 
-        Transform *transform;
+        
 
 
 
