@@ -8,6 +8,7 @@
 
 #include "drawableObject.h"
 #include "shader.h"
+#include "transform.h"
 
 #include <vector>
 
@@ -15,7 +16,10 @@ class Cube : public DrawableObject {
     public:
 
         Cube();
+        Cube(vec3 position);
+        Cube(vec3 position, vec3 scale);
         ~Cube();
+
 
         virtual float *getVertices();
         virtual int *getTriangles();
@@ -31,8 +35,11 @@ class Cube : public DrawableObject {
         void createVAO();
         void deleteVAO();
     protected:
+
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat);
 
+        void createShader();
+        void deleteShader();
 
 
         std::vector<float> createVertices();
@@ -46,8 +53,7 @@ class Cube : public DrawableObject {
 
         Shader *shader;
 
-        void createShader();
-        void deleteShader();
+        Transform *transform;
 
 
 

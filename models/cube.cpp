@@ -4,6 +4,8 @@
 
 Cube::Cube(){
 
+    transform = new Transform();
+
 
     vertices = createVertices();
     triangles = createTriangles();
@@ -14,9 +16,30 @@ Cube::Cube(){
 
 }
 
+Cube::Cube(vec3 position){
+    transform = new Transform(position);
+
+    vertices = createVertices();
+    triangles = createTriangles();
+
+    createVAO();
+    createShader();
+}
+
+Cube::Cube(vec3 position, vec3 scale){
+    transform = new Transform(position, scale);
+
+    vertices = createVertices();
+    triangles = createTriangles();
+
+    createVAO();
+    createShader();
+}
+
 Cube::~Cube(){
     deleteVAO();
     deleteShader();
+    delete transform;
 }
 
 std::vector<float> Cube::createVertices(){
@@ -142,7 +165,7 @@ void Cube::deleteVAO(){
 
 void Cube::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat){
 
-    glm::mat4 modelMat = glm::mat4(1.0f);
+    glm::mat4 modelMat = transform->getMat4();
 
     // send the transformation matrix
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
