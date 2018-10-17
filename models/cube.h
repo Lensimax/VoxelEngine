@@ -26,9 +26,12 @@ class Cube : public DrawableObject {
 
         virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat);
 
+        virtual void debugFaces();
+        virtual void debugVertices();
+
+        void createVAO();
+        void deleteVAO();
     protected:
-        virtual void createVAO();
-        virtual void deleteVAO();
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat);
 
 
@@ -47,8 +50,6 @@ class Cube : public DrawableObject {
         void createShader();
         void deleteShader();
 
-        void debugFaces();
-        void debugVertices();
 
 
 };

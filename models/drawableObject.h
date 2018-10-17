@@ -25,6 +25,9 @@ class DrawableObject {
         virtual void createVAO() = 0;
         virtual void deleteVAO() = 0;
 
+        virtual void debugFaces() = 0;
+        virtual void debugVertices() = 0;
+
 };
 
 #endif
