@@ -26,9 +26,9 @@ class Cube : public DrawableObject {
 
         virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat);
 
-        virtual GLuint shaderID();
-
     protected:
+        virtual void createVAO();
+        virtual void deleteVAO();
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat);
 
 
@@ -40,7 +40,7 @@ class Cube : public DrawableObject {
         std::vector<int> faces;
 
         GLuint vertexArrayID;
-        GLuint cubeVA[2];
+        GLuint *buffers;
 
         Shader *shader;
 

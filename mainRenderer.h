@@ -36,28 +36,15 @@ class MainRenderer : public QGLWidget {
 
     private:
 
+        void makeScene();
+        void deleteScene();
+
         QTimer *_timer;
 
-        glm::mat4 modelMat;
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
-
-        std::vector<GLuint*> arrayOfBuffers;
-        std::vector<GLuint> arrayOfVertexArrayID;
         std::vector<DrawableObject*> objectsToDraw;
-
-        void addObjectToScene(DrawableObject* object);
-        void createVAOObject(DrawableObject* object);
-        void deleteScene();
-
-        void drawAnObject(DrawableObject* object, int i);
-
-        void createShaders();
-
-        void deleteShaders();
-
-        Shader *exampleShader;
 
 };
 
