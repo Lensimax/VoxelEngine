@@ -6,7 +6,7 @@ Cube::Cube(){
 
 
     vertices = createVertices();
-    faces = createTriangles();
+    triangles = createTriangles();
 
     createVAO();
     createShader();
@@ -86,7 +86,7 @@ std::vector<int> Cube::createTriangles(){
 
 
 int *Cube::getTriangles(){
-    return &faces[0];
+    return &triangles[0];
 }
 
 float *Cube::getVertices(){
@@ -97,8 +97,8 @@ int Cube::nbVertices(){
     return vertices.size()/3;
 }
 
-int Cube::nbFaces(){
-    return faces.size()/3;
+int Cube::nbTriangles(){
+    return triangles.size()/3;
 }
 
 glm::mat4 Cube::getTransform(){
@@ -112,7 +112,7 @@ void Cube::draw(glm::mat4 viewMat, glm::mat4 projectionMat){
     setUniform(viewMat, projectionMat);
 
     glBindVertexArray(vertexArrayID);
-    glDrawElements(GL_TRIANGLES,3*nbFaces(),GL_UNSIGNED_INT,(void *)0);
+    glDrawElements(GL_TRIANGLES,3*nbTriangles(),GL_UNSIGNED_INT,(void *)0);
     glBindVertexArray(0);
 
     glUseProgram(0);
@@ -132,7 +132,7 @@ void Cube::createVAO(){
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,buffers[1]); // indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,nbFaces()*3*sizeof(int),getTriangles(),GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,nbTriangles()*3*sizeof(int),getTriangles(),GL_STATIC_DRAW);
 }
 
 void Cube::deleteVAO(){
@@ -159,16 +159,13 @@ void Cube::deleteShader(){
     delete shader; shader = NULL;
 }
 
-void Cube::debugFaces(){
-    std::cout << "Faces:\n";
-    for(int i=0; i<faces.size(); i+=3){
-        std::cout << "(" << faces[i] << ", " << faces[i+1] << ", " << faces[i+2] << ")\n";
+void Cube::debugTrianglesAndTriangles(){
+    std::cout << "Triangles:\n";
+    for(unsigned int i=0; i<triangles.size(); i+=3){
+        std::cout << "(" << triangles[i] << ", " << triangles[i+1] << ", " << triangles[i+2] << ")\n";
     }
-}
-
-void Cube::debugVertices(){
     std::cout << "Vertices:\n";
-    for(int i=0; i<vertices.size(); i+=3){
+    for(unsigned int i=0; i<vertices.size(); i+=3){
         std::cout << "(" << vertices[i] << ", " << vertices[i+1] << ", " << vertices[i+2] << ")\n";
     }
 }

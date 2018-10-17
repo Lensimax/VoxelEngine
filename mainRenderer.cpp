@@ -34,7 +34,7 @@ void MainRenderer::paintGL(){
     float far = 10.0f;
     projectionMat = glm::perspective(fovy, aspect, near, far);
 
-    for(int i=0; i<objectsToDraw.size(); i++){
+    for(unsigned int i=0; i<objectsToDraw.size(); i++){
         objectsToDraw[i]->draw(viewMat, projectionMat);
     }
 

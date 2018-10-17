@@ -20,14 +20,13 @@ class Cube : public DrawableObject {
         virtual float *getVertices();
         virtual int *getTriangles();
         virtual int nbVertices();
-        virtual int nbFaces();
+        virtual int nbTriangles();
 
         virtual glm::mat4 getTransform();
 
         virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat);
 
-        virtual void debugFaces();
-        virtual void debugVertices();
+        virtual void debugTrianglesAndTriangles();
 
         void createVAO();
         void deleteVAO();
@@ -40,7 +39,7 @@ class Cube : public DrawableObject {
         std::vector<int> createTriangles();
 
         std::vector<float> vertices;
-        std::vector<int> faces;
+        std::vector<int> triangles;
 
         GLuint vertexArrayID;
         GLuint *buffers;
