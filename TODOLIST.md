@@ -4,3 +4,4 @@
 * light unidirectionnal
 * Subdivision curvess
 * shadows
+* rotator
