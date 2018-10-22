@@ -17,6 +17,8 @@
 
 #include <GLFW/glfw3.h> // Include glfw3.h after our OpenGL definitions
 
+#include "mainRenderer.h"
+
 
 static void glfw_error_callback(int error, const char* description){
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
@@ -52,6 +54,7 @@ static void createInfoWindow(ImVec4 clear_color){
 int main(int, char**){
 
     glfwSetErrorCallback(glfw_error_callback);
+
 
     // init glfw: if it return an error we stop
     if (!glfwInit()){
@@ -90,6 +93,9 @@ int main(int, char**){
     // Setup style
     ImGui::StyleColorsDark();
 
+    MainRenderer *render = new MainRenderer();
+    render->initializeGL();
+
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -112,9 +118,8 @@ int main(int, char**){
         int display_w, display_h;
         glfwMakeContextCurrent(window);
         glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
+
+        render->paintGL(display_w, display_h);
 
 
 
