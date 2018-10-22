@@ -17,11 +17,27 @@
 
 #include <GLFW/glfw3.h> // Include glfw3.h after our OpenGL definitions
 
-static void glfw_error_callback(int error, const char* description)
-{
+static void glfw_error_callback(int error, const char* description){
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+
+int initializeOpenGLLoader(){
+    // Initialize OpenGL loader
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+    bool err = gl3wInit() != 0;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+    bool err = glewInit() != GLEW_OK;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+    bool err = gladLoadGL() != 0;
+#endif
+    if(err){
+        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
 int main(int, char**){
 
@@ -46,6 +62,54 @@ int main(int, char**){
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
 
+    if(initializeOpenGLLoader() == 1){
+        return 1;
+    }
+
+    // A EXPLIQUER
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+
+    // Setup style
+    ImGui::StyleColorsDark();
+
+
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    // the window is runnin
+    while (!glfwWindowShouldClose(window)){
+
+        glfwPollEvents();
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+
+
+
+        /* RENDERING */
+        ImGui::Render();
+
+        int display_w, display_h;
+        glfwMakeContextCurrent(window);
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glfwMakeContextCurrent(window);
+        glfwSwapBuffers(window);
+
+    }
 
     return 0;
 }
