@@ -17,6 +17,7 @@
 
 #include <GLFW/glfw3.h> // Include glfw3.h after our OpenGL definitions
 
+
 static void glfw_error_callback(int error, const char* description){
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
@@ -38,6 +39,15 @@ int initializeOpenGLLoader(){
         return 0;
     }
 }
+
+static void createInfoWindow(ImVec4 clear_color){
+    ImGui::Begin("Info Window");
+
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::ColorEdit3("clear color", (float*)&clear_color);
+    ImGui::End();
+}
+
 
 int main(int, char**){
 
@@ -94,11 +104,11 @@ int main(int, char**){
         ImGui::NewFrame();
 
 
+        createInfoWindow(clear_color);
 
 
         /* RENDERING */
         ImGui::Render();
-
         int display_w, display_h;
         glfwMakeContextCurrent(window);
         glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -106,10 +116,23 @@ int main(int, char**){
         glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
 
+
+
+
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwMakeContextCurrent(window);
         glfwSwapBuffers(window);
 
     }
+
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
     return 0;
 }
