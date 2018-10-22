@@ -15,7 +15,7 @@
 #CXX = clang++
 
 EXE = run
-SOURCES = main.cpp mainRenderer.cpp shader.cpp models/*.cpp
+SOURCES = main.cpp mainRenderer.cpp shader.cpp drawableObject.cpp cube.cpp transform.cpp
 SOURCES += impl/imgui_impl_glfw.cpp impl/imgui_impl_opengl3.cpp
 SOURCES += imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))

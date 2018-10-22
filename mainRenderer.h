@@ -1,9 +1,13 @@
 #ifndef MAINRENDERER_H
 #define MAINRENDERER_H
 
+#ifndef GLM_H
+#define GLM_H
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#endif
 
+#include "models/drawableObject.h"
 //#include "models/cube.h"
 
 #include <vector>
@@ -27,11 +31,10 @@ class MainRenderer {
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
-        //std::vector<DrawableObject*> objectsToDraw;
+        std::vector<DrawableObject*> objectsToDraw;
 
-        //DrawableObject* object;
+        DrawableObject* object;
 
-        int width, height;
 };
 
 #endif

@@ -1,13 +1,13 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-
+#ifndef GLM_H
+#define GLM_H
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#endif
 
-#include "drawableObject.h"
-#include "../shader.h"
-#include "transform.h"
+//#include "../shader.h"
 
 #include <vector>
 
@@ -48,7 +48,7 @@ class Cube : public DrawableObject {
         GLuint vertexArrayID;
         GLuint *buffers;
 
-        Shader *shader;
+        //Shader *shader;
 
 
 

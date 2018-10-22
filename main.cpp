@@ -42,11 +42,10 @@ int initializeOpenGLLoader(){
     }
 }
 
-static void createInfoWindow(ImVec4 clear_color){
+static void createInfoWindow(){
     ImGui::Begin("Info Window");
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::ColorEdit3("clear color", (float*)&clear_color);
     ImGui::End();
 }
 
@@ -97,7 +96,6 @@ int main(int, char**){
     render->initializeGL();
 
 
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     // the window is runnin
     while (!glfwWindowShouldClose(window)){
@@ -110,7 +108,7 @@ int main(int, char**){
         ImGui::NewFrame();
 
 
-        createInfoWindow(clear_color);
+        createInfoWindow();
 
 
         /* RENDERING */

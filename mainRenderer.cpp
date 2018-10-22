@@ -9,7 +9,7 @@ MainRenderer::MainRenderer(){
 }
 
 void MainRenderer::makeScene(){
-    //objectsToDraw = std::vector<DrawableObject*>();
+    objectsToDraw = std::vector<DrawableObject*>();
 
     //object = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5));
 
@@ -48,6 +48,7 @@ void MainRenderer::paintGL(int width, int height){
 
 
 void MainRenderer::initializeGL(){
+
 
     /* to print GLSL version */
     std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
