@@ -7,7 +7,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #endif
 
-#include "models/drawableObject.h"
+#include "drawableObject.h"
 //#include "models/cube.h"
 
 #include <vector>

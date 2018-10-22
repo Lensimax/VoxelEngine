@@ -1,5 +1,7 @@
 #include "cube.h"
 
+#include <iostream>
+
 Cube::Cube(){
 
     transform = new Transform();

@@ -7,7 +7,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #endif
 
-//#include "../shader.h"
+#include "drawableObject.h"
+#include "shader.h"
 
 #include <vector>
 
@@ -48,7 +49,7 @@ class Cube : public DrawableObject {
         GLuint vertexArrayID;
         GLuint *buffers;
 
-        //Shader *shader;
+        Shader *shader;
 
 
 
