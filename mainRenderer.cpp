@@ -1,6 +1,9 @@
 #include "mainRenderer.h"
 
+#ifndef _GLEW_H_
+#define _GLEW_H_
 #include <GL/glew.h>
+#endif
 
 #include <iostream>
 
@@ -9,7 +12,7 @@ MainRenderer::MainRenderer(){
 }
 
 void MainRenderer::makeScene(){
-    objectsToDraw = std::vector<DrawableObject*>();
+    //objectsToDraw = std::vector<DrawableObject*>();
 
     //object = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5));
 

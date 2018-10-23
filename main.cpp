@@ -117,7 +117,7 @@ int main(int, char**){
         glfwMakeContextCurrent(window);
         glfwGetFramebufferSize(window, &display_w, &display_h);
 
-        render->paintGL(display_w, display_h);
+        //render->paintGL(display_w, display_h);
 
 
 
