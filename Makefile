@@ -44,7 +44,7 @@ CXXFLAGS = -Ilibs/gl3w
 
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
-	LIBS = -lGL `pkg-config --static --libs glfw3` -lGLEW
+	LIBS = -lGL `pkg-config --static --libs glfw3`
 
 	CXXFLAGS += -Iimpl/ -Iimgui/  `pkg-config --cflags glfw3`
 	CXXFLAGS += -Wall -Wformat
@@ -91,7 +91,7 @@ endif
 # %.o:../libs/glad/src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-all: $(EXE)
+all: $(EXE) #exampleIMGUI
 	@echo Build complete for $(ECHO_MESSAGE)
 
 $(EXE): $(OBJS)
@@ -102,3 +102,11 @@ exec: $(EXE)
 
 clean:
 	rm -f $(EXE) $(OBJS)
+
+## COMPILE EXAMPLE IMGUI
+
+exampleIMGUI: exampleIMGUI.o
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
+
+exampleIMGUI.o: exampleIMGUI.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
