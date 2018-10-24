@@ -19,40 +19,17 @@
 
 #include <iostream>
 
-Cube::Cube(){
-
-    transform = new Transform();
-    verticesAndShader();
-}
-
-Cube::Cube(vec3 position){
-    transform = new Transform(position);
-
-
-    verticesAndShader();
-}
-
-Cube::Cube(vec3 position, vec3 scale){
-    transform = new Transform(position, scale);
-
-
-    verticesAndShader();
-}
-
 
 Cube::Cube(vec3 position, vec3 scale, vec3 rotation){
     transform = new Transform(position, scale, rotation);
 
-    verticesAndShader();
-}
-
-void Cube::verticesAndShader(){
     vertices = createVertices();
     triangles = createTriangles();
 
     createVAO();
     createShader();
 }
+
 
 Cube::~Cube(){
     deleteVAO();

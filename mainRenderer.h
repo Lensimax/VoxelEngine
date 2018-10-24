@@ -22,6 +22,8 @@ class MainRenderer {
     void paintGL(int width, int height);
     void initializeGL();
 
+    DrawableObject* object;
+
     private:
 
         void makeScene();
@@ -33,7 +35,6 @@ class MainRenderer {
 
         //std::vector<DrawableObject*> objectsToDraw;
 
-        DrawableObject* object;
 
 };
 

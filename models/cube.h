@@ -17,10 +17,7 @@
 class Cube : public DrawableObject {
     public:
 
-        Cube();
-        Cube(vec3 position);
-        Cube(vec3 position, vec3 scale);
-        Cube(vec3 position, vec3 scale, vec3 rotation);
+        Cube(vec3 position = glm::vec3(0.0,0.0,0.0), vec3 scale = glm::vec3(1.0,1.0,1.0), vec3 rotation = glm::vec3(0.0,0.0,0.0));
         ~Cube();
 
 
@@ -37,7 +34,6 @@ class Cube : public DrawableObject {
         void deleteVAO();
     protected:
 
-        void verticesAndShader();
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat);
 
         void createShader();

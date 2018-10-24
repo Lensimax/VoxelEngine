@@ -15,9 +15,13 @@
 #CXX = clang++
 
 EXE = run
-SOURCES = main.cpp mainRenderer.cpp shader.cpp models/drawableObject.cpp models/cube.cpp models/transform.cpp
+SOURCES = mainRenderer.cpp shader.cpp models/drawableObject.cpp models/cube.cpp models/transform.cpp
 SOURCES += impl/imgui_impl_glfw.cpp impl/imgui_impl_opengl3.cpp
 SOURCES += imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp
+
+
+SOURCES += main.cpp
+
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 
@@ -91,17 +95,17 @@ endif
 # %.o:../libs/glad/src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-all: $(EXE) #exampleIMGUI
+all: $(EXE)
 	@echo Build complete for $(ECHO_MESSAGE)
 
 $(EXE): $(OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
-exec: $(EXE) exampleIMGUI
+exec: $(EXE)
 	optirun ./$(EXE)
 
 clean:
-	rm -f $(EXE) $(OBJS) $(EXAMPLE_OBJS)
+	rm -f $(EXE) $(OBJS) exampleIMGUI exampleIMGUI.o
 
 ## COMPILE EXAMPLE IMGUI
 
