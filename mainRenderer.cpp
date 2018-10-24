@@ -25,13 +25,13 @@ MainRenderer::MainRenderer(){
 }
 
 void MainRenderer::makeScene(){
-    //objectsToDraw = std::vector<DrawableObject*>();
+    objectsToDraw = std::vector<DrawableObject*>();
 
-    object = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
+    Cube *c = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
 
     // glm::vec3(0.0, 45.0, 0.0)
-    // objectsToDraw.push_back(c);
-    //objectsToDraw.push_back(new Cube(glm::vec3(-0.2,0.0,0.0)));
+    objectsToDraw.push_back(c);
+    // objectsToDraw.push_back(new Cube(glm::vec3(-0.5,0.0,0.0)));
 }
 
 
@@ -61,11 +61,10 @@ void MainRenderer::paintGL(int width, int height){
     float far = 10.0f;
     projectionMat = glm::perspective(fovy, aspect, near, far);
 
-    /*for(unsigned int i=0; i<objectsToDraw.size(); i++){
+    for(unsigned int i=0; i<objectsToDraw.size(); i++){
         objectsToDraw[i]->draw(viewMat, projectionMat);
-    }*/
+    }
 
-    object->draw(viewMat, projectionMat);
 
     //printf("Finished\n");
 }
@@ -89,7 +88,15 @@ MainRenderer::~MainRenderer(){
     deleteScene();
 }
 
+void MainRenderer::createUI(){
+    for(unsigned int i=0; i<objectsToDraw.size(); i++){
+        objectsToDraw[i]->createUI();
+    }
+}
+
 
 void MainRenderer::deleteScene(){
-    delete object;
+    for(unsigned int i=0; i<objectsToDraw.size(); i++){
+        delete objectsToDraw[i];
+    }
 }

@@ -117,12 +117,7 @@ int main(int, char**){
 
         createInfoWindow();
 
-        ImGui::Begin("Cube");
-
-        ImGui::ColorEdit4("cube color", (float *)&renderer->object->color);
-        ImGui::End();
-
-
+        renderer->createUI();
 
         /* RENDERING */
         ImGui::Render();

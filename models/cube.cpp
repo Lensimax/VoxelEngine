@@ -78,6 +78,13 @@ std::vector<float> Cube::createVertices(){
     return vert;
 }
 
+void Cube::createUI(){
+    ImGui::Begin("Cube");
+
+    ImGui::ColorEdit4("cube color", (float *)&color);
+    ImGui::End();
+}
+
 std::vector<int> Cube::createTriangles(){
     std::vector<int> trian = std::vector<int>();
 

@@ -22,7 +22,7 @@ class MainRenderer {
     void paintGL(int width, int height);
     void initializeGL();
 
-    Cube* object;
+    void createUI();
 
     private:
 
@@ -33,7 +33,7 @@ class MainRenderer {
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
-        //std::vector<DrawableObject*> objectsToDraw;
+        std::vector<DrawableObject*> objectsToDraw;
 
 
 };

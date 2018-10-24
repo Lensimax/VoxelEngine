@@ -40,6 +40,8 @@ class DrawableObject {
 
         Transform *getTransform();
 
+        virtual void createUI() = 0;
+
 
     protected:
         Transform *transform;
