@@ -19,8 +19,8 @@ class MainRenderer {
     ~MainRenderer();
 
 
-    virtual void paintGL(int width, int height);
-    virtual void initializeGL();
+    void paintGL(int width, int height);
+    void initializeGL();
 
     private:
 

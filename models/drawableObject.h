@@ -15,6 +15,8 @@
 class DrawableObject {
     public:
 
+        virtual ~DrawableObject() = default;
+
         /* get vertices array of this object */
         virtual float *getVertices() = 0;
         /* get faces/triangle array of this object */
@@ -37,6 +39,7 @@ class DrawableObject {
         virtual void debugTrianglesAndTriangles() = 0;
 
         Transform *getTransform();
+
 
     protected:
         Transform *transform;

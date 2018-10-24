@@ -44,6 +44,9 @@ void MainRenderer::paintGL(int width, int height){
         exit(1);
     }
 
+
+    /* CAMERA */
+
     // camera position, rotation
     glm::vec3 position = glm::vec3(0.0,0.0,5.0);
     glm::vec3 directionOfView = glm::vec3(0.0,0.0,0.0);
@@ -75,12 +78,6 @@ void MainRenderer::initializeGL(){
     /* to print GLSL version */
     //std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 
-    glClearColor(0.0,0.0,0.0,1.0);
-    /*glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_MULTISAMPLE);
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);*/
-
 
     makeScene();
 
@@ -94,5 +91,5 @@ MainRenderer::~MainRenderer(){
 
 
 void MainRenderer::deleteScene(){
-
+    delete object;
 }

@@ -88,7 +88,6 @@
 #endif
 #endif
 
-#include "../mainRenderer.h"
 
 // OpenGL Data
 static char         g_GlslVersionString[32] = "";
@@ -179,11 +178,7 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
 
-    MainRenderer *renderer = new MainRenderer();
-    renderer->initializeGL();
-    renderer->paintGL(fb_width, fb_height);
-
-    delete renderer;
+    
 
     // Setup viewport, orthographic projection matrix
     // Our visible imgui space lies from draw_data->DisplayPps (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayMin is typically (0,0) for single viewport apps.

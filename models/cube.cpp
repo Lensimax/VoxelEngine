@@ -22,41 +22,31 @@
 Cube::Cube(){
 
     transform = new Transform();
-
-
-    vertices = createVertices();
-    triangles = createTriangles();
-
-    createVAO();
-    createShader();
-
-
+    verticesAndShader();
 }
 
 Cube::Cube(vec3 position){
     transform = new Transform(position);
 
-    vertices = createVertices();
-    triangles = createTriangles();
 
-    createVAO();
-    createShader();
+    verticesAndShader();
 }
 
 Cube::Cube(vec3 position, vec3 scale){
     transform = new Transform(position, scale);
 
-    vertices = createVertices();
-    triangles = createTriangles();
 
-    createVAO();
-    createShader();
+    verticesAndShader();
 }
 
 
 Cube::Cube(vec3 position, vec3 scale, vec3 rotation){
     transform = new Transform(position, scale, rotation);
 
+    verticesAndShader();
+}
+
+void Cube::verticesAndShader(){
     vertices = createVertices();
     triangles = createTriangles();
 

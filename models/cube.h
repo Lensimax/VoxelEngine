@@ -37,6 +37,7 @@ class Cube : public DrawableObject {
         void deleteVAO();
     protected:
 
+        void verticesAndShader();
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat);
 
         void createShader();
