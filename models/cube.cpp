@@ -53,6 +53,17 @@ Cube::Cube(vec3 position, vec3 scale){
     createShader();
 }
 
+
+Cube::Cube(vec3 position, vec3 scale, vec3 rotation){
+    transform = new Transform(position, scale, rotation);
+
+    vertices = createVertices();
+    triangles = createTriangles();
+
+    createVAO();
+    createShader();
+}
+
 Cube::~Cube(){
     deleteVAO();
     deleteShader();

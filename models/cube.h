@@ -20,6 +20,7 @@ class Cube : public DrawableObject {
         Cube();
         Cube(vec3 position);
         Cube(vec3 position, vec3 scale);
+        Cube(vec3 position, vec3 scale, vec3 rotation);
         ~Cube();
 
 

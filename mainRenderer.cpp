@@ -27,7 +27,7 @@ MainRenderer::MainRenderer(){
 void MainRenderer::makeScene(){
     //objectsToDraw = std::vector<DrawableObject*>();
 
-    object = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5));
+    object = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
 
     // glm::vec3(0.0, 45.0, 0.0)
     // objectsToDraw.push_back(c);
@@ -64,7 +64,7 @@ void MainRenderer::paintGL(int width, int height){
 
     object->draw(viewMat, projectionMat);
 
-    printf("Finished\n");
+    //printf("Finished\n");
 }
 
 
@@ -73,7 +73,7 @@ void MainRenderer::initializeGL(){
 
 
     /* to print GLSL version */
-    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
+    //std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 
     glClearColor(0.0,0.0,0.0,1.0);
     /*glEnable(GL_DEPTH_TEST);
