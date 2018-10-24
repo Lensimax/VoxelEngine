@@ -8,7 +8,7 @@
 #endif
 
 #include "models/drawableObject.h"
-//#include "cube.h"
+#include "models/cube.h"
 
 #include <vector>
 
@@ -31,7 +31,7 @@ class MainRenderer {
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
-        std::vector<DrawableObject*> objectsToDraw;
+        //std::vector<DrawableObject*> objectsToDraw;
 
         DrawableObject* object;
 

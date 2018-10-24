@@ -1,7 +1,7 @@
 
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "impl/imgui_impl_glfw.h"
+#include "impl/imgui_impl_opengl3.h"
 #include <stdio.h>
 
 
@@ -66,7 +66,7 @@ int main(int, char**){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     // create window
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Green Engine", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1000, 600, "Green Engine", NULL, NULL);
     if (window == NULL){
         return 1;
     }
@@ -92,8 +92,8 @@ int main(int, char**){
     // Setup style
     ImGui::StyleColorsDark();
 
-    MainRenderer *render = new MainRenderer();
-    render->initializeGL();
+    MainRenderer *renderer = new MainRenderer();
+    renderer->initializeGL();
 
 
 
@@ -116,11 +116,11 @@ int main(int, char**){
         int display_w, display_h;
         glfwMakeContextCurrent(window);
         glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        //render->paintGL(display_w, display_h);
-
-
-
+        renderer->paintGL(display_w, display_h);
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -129,6 +129,7 @@ int main(int, char**){
 
     }
 
+    delete renderer;
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

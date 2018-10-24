@@ -7,10 +7,7 @@
 #include "../glm/gtc/matrix_transform.hpp"
 #endif
 
-#ifndef _GLEW_H_
-#define _GLEW_H_
-#include <GL/glew.h>
-#endif
+
 
 #include "drawableObject.h"
 #include "../shader.h"

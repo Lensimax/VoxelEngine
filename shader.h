@@ -1,10 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#ifndef _GLEW_H_
-#define _GLEW_H_
-#include <GL/glew.h>
-#endif
+#include <GL/gl.h>
 
 #include <string>
 

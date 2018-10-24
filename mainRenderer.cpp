@@ -1,9 +1,12 @@
-#include "mainRenderer.h"
 
 #ifndef _GLEW_H_
 #define _GLEW_H_
 #include <GL/glew.h>
 #endif
+
+
+#include "mainRenderer.h"
+
 
 #include <iostream>
 
@@ -14,7 +17,7 @@ MainRenderer::MainRenderer(){
 void MainRenderer::makeScene(){
     //objectsToDraw = std::vector<DrawableObject*>();
 
-    //object = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5));
+    object = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5));
 
     // glm::vec3(0.0, 45.0, 0.0)
     // objectsToDraw.push_back(c);
@@ -23,7 +26,6 @@ void MainRenderer::makeScene(){
 
 
 void MainRenderer::paintGL(int width, int height){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0,0,width,height);
 
 
@@ -44,7 +46,7 @@ void MainRenderer::paintGL(int width, int height){
         objectsToDraw[i]->draw(viewMat, projectionMat);
     }*/
 
-    //object->draw(viewMat, projectionMat);
+    object->draw(viewMat, projectionMat);
 
 }
 
