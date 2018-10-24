@@ -97,15 +97,20 @@ all: $(EXE) #exampleIMGUI
 $(EXE): $(OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
-exec: $(EXE)
+exec: $(EXE) exampleIMGUI
 	optirun ./$(EXE)
 
 clean:
-	rm -f $(EXE) $(OBJS)
+	rm -f $(EXE) $(OBJS) $(EXAMPLE_OBJS)
 
 ## COMPILE EXAMPLE IMGUI
 
-exampleIMGUI: exampleIMGUI.o
+EXAMPLE_SOURCES = exampleIMGUI.cpp mainRenderer.cpp shader.cpp models/drawableObject.cpp models/cube.cpp models/transform.cpp
+EXAMPLE_SOURCES += impl/imgui_impl_glfw.cpp impl/imgui_impl_opengl3.cpp libs/gl3w/GL/gl3w.c
+EXAMPLE_SOURCES += imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp
+
+EXAMPLE_OBJS = $(addsuffix .o, $(basename $(notdir $(EXAMPLE_SOURCES))))
+exampleIMGUI: $(EXAMPLE_OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 exampleIMGUI.o: exampleIMGUI.cpp
