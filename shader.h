@@ -1,7 +1,10 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#ifndef GL_H
+#define GL_H
 #include <GL/gl.h>
+#endif
 
 #include <string>
 

@@ -19,6 +19,8 @@
 
 #include <iostream>
 
+#include "../material/lambertian.h"
+
 
 Cube::Cube(vec3 position, vec3 scale, vec3 rotation){
     transform = new Transform(position, scale, rotation);
@@ -27,16 +29,15 @@ Cube::Cube(vec3 position, vec3 scale, vec3 rotation){
     triangles = createTriangles();
 
     createVAO();
-    createShader();
 
-    color = glm::vec4(1.0,0.0,0.0,1.0);
+    material = new Lambertian();
 }
 
 
 Cube::~Cube(){
     deleteVAO();
-    deleteShader();
     delete transform;
+    delete material;
 }
 
 std::vector<float> Cube::createVertices(){
@@ -81,7 +82,8 @@ std::vector<float> Cube::createVertices(){
 void Cube::createUI(){
     ImGui::Begin("Cube");
 
-    ImGui::ColorEdit4("cube color", (float *)&color);
+    material->createUI();
+
     ImGui::End();
 }
 
@@ -132,7 +134,7 @@ int Cube::nbTriangles(){
 
 void Cube::draw(glm::mat4 viewMat, glm::mat4 projectionMat){
 
-    glUseProgram(shader->id());
+    glUseProgram(material->shaderID());
 
     setUniform(viewMat, projectionMat);
 
@@ -171,21 +173,11 @@ void Cube::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat){
 
 
     // send the transformation matrix
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+    material->callUniform(modelMat, viewMat, projectionMat);
 
-    glUniform4fv(glGetUniformLocation(shader->id(),"color"),1,&(color[0]));
 }
 
-void Cube::createShader(){
-    shader = new Shader();
-    shader->load("shaders/example.vert","shaders/example.frag");
-}
 
-void Cube::deleteShader(){
-    delete shader; shader = NULL;
-}
 
 void Cube::debugTrianglesAndTriangles(){
     std::cout << "Triangles:\n";

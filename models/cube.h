@@ -7,10 +7,9 @@
 #include "../glm/gtc/matrix_transform.hpp"
 #endif
 
-
+#include "../material/material.h"
 
 #include "drawableObject.h"
-#include "../shader.h"
 
 #include <vector>
 
@@ -35,7 +34,6 @@ class Cube : public DrawableObject {
         void createVAO();
         void deleteVAO();
 
-        glm::vec4 color;
 
     protected:
 
@@ -54,9 +52,7 @@ class Cube : public DrawableObject {
         GLuint vertexArrayID;
         GLuint *buffers;
 
-        Shader *shader;
-
-
+        Material *material;
 
 
 
