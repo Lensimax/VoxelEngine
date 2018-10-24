@@ -28,6 +28,8 @@ Cube::Cube(vec3 position, vec3 scale, vec3 rotation){
 
     createVAO();
     createShader();
+
+    color = glm::vec4(1.0,0.0,0.0,1.0);
 }
 
 
@@ -165,6 +167,8 @@ void Cube::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat){
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    glUniform4fv(glGetUniformLocation(shader->id(),"color"),1,&(color[0]));
 }
 
 void Cube::createShader(){

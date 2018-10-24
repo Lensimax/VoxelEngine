@@ -22,7 +22,7 @@ class MainRenderer {
     void paintGL(int width, int height);
     void initializeGL();
 
-    DrawableObject* object;
+    Cube* object;
 
     private:
 

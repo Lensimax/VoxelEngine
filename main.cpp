@@ -4,6 +4,12 @@
 #include "impl/imgui_impl_opengl3.h"
 #include <stdio.h>
 
+#ifndef GLM_H
+#define GLM_H
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#endif
+
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include <GL/gl3w.h>    // Initialize with gl3wInit()
@@ -111,6 +117,10 @@ int main(int, char**){
 
         createInfoWindow();
 
+        ImGui::Begin("Cube");
+
+        ImGui::ColorEdit4("cube color", (float *)&renderer->object->color);
+        ImGui::End();
 
 
 

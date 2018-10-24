@@ -32,6 +32,9 @@ class Cube : public DrawableObject {
 
         void createVAO();
         void deleteVAO();
+
+        glm::vec4 color;
+
     protected:
 
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat);
