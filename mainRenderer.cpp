@@ -1,7 +1,17 @@
 
-#ifndef _GLEW_H_
-#define _GLEW_H_
-#include <GL/glew.h>
+#include "imgui.h"
+#include "impl/imgui_impl_glfw.h"
+#include "impl/imgui_impl_opengl3.h"
+
+
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+#include <GL/gl3w.h>    // Initialize with gl3wInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+#include <GL/glew.h>    // Initialize with glewInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+#include <glad/glad.h>  // Initialize with gladLoadGL()
+#else
+#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
 
@@ -26,14 +36,20 @@ void MainRenderer::makeScene(){
 
 
 void MainRenderer::paintGL(int width, int height){
-    glViewport(0,0,width,height);
+    /*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0,0,width,height);*/
 
+    if(height == 0){
+        fprintf(stderr, "Error height = 0\n");
+        exit(1);
+    }
 
     // camera position, rotation
     glm::vec3 position = glm::vec3(0.0,0.0,5.0);
     glm::vec3 directionOfView = glm::vec3(0.0,0.0,0.0);
     glm::vec3 up = glm::vec3(0.0,1.0,0.0);
     viewMat = glm::lookAt(position, directionOfView, up);
+
 
     // projection matrix
     float fovy = 45.0f;
@@ -48,6 +64,7 @@ void MainRenderer::paintGL(int width, int height){
 
     object->draw(viewMat, projectionMat);
 
+    printf("Finished\n");
 }
 
 

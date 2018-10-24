@@ -74,7 +74,7 @@
 #include <GLES3/gl3.h>  // Use GL ES 3
 #else
 // Regular OpenGL
-// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
+// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually.
 // Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
 // You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -87,6 +87,8 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 #endif
+
+#include "../mainRenderer.h"
 
 // OpenGL Data
 static char         g_GlslVersionString[32] = "";
@@ -110,6 +112,9 @@ bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
     IM_ASSERT((int)strlen(glsl_version) + 2 < IM_ARRAYSIZE(g_GlslVersionString));
     strcpy(g_GlslVersionString, glsl_version);
     strcat(g_GlslVersionString, "\n");
+
+
+
     return true;
 }
 
@@ -173,6 +178,12 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
 #ifdef GL_POLYGON_MODE
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
+
+    MainRenderer *renderer = new MainRenderer();
+    renderer->initializeGL();
+    renderer->paintGL(fb_width, fb_height);
+
+    delete renderer;
 
     // Setup viewport, orthographic projection matrix
     // Our visible imgui space lies from draw_data->DisplayPps (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayMin is typically (0,0) for single viewport apps.

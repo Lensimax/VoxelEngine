@@ -98,7 +98,7 @@ $(EXE): $(OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 exec: $(EXE)
-	./$(EXE)
+	optirun ./$(EXE)
 
 clean:
 	rm -f $(EXE) $(OBJS)

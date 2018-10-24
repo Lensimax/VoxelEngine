@@ -1,6 +1,17 @@
-#ifndef _GLEW_H_
-#define _GLEW_H_
-#include <GL/glew.h>
+
+#include "../imgui/imgui.h"
+#include "../impl/imgui_impl_glfw.h"
+#include "../impl/imgui_impl_opengl3.h"
+
+
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+#include <GL/gl3w.h>    // Initialize with gl3wInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+#include <GL/glew.h>    // Initialize with glewInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+#include <glad/glad.h>  // Initialize with gladLoadGL()
+#else
+#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
 
@@ -170,6 +181,7 @@ void Cube::deleteVAO(){
 void Cube::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat){
 
     glm::mat4 modelMat = transform->getMat4();
+
 
     // send the transformation matrix
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));

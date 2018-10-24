@@ -17,7 +17,6 @@
 
 #include <GLFW/glfw3.h> // Include glfw3.h after our OpenGL definitions
 
-#include "mainRenderer.h"
 
 
 static void glfw_error_callback(int error, const char* description){
@@ -92,8 +91,7 @@ int main(int, char**){
     // Setup style
     ImGui::StyleColorsDark();
 
-    MainRenderer *renderer = new MainRenderer();
-    renderer->initializeGL();
+
 
 
 
@@ -120,7 +118,6 @@ int main(int, char**){
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        renderer->paintGL(display_w, display_h);
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -129,7 +126,6 @@ int main(int, char**){
 
     }
 
-    delete renderer;
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
