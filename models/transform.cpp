@@ -40,16 +40,19 @@ void Transform::createUI(){
     const float lowestValue = -1000.0f;
     const float highestValue = 1000.0f;
 
+    // format d'affichage
+    const char *format = "%.3f";
+
     // to hide label of the input
     ImGui::PushItemWidth(-1);
 
     ImGui::Text("Transform");
     ImGui::Text("Position: "); ImGui::SameLine();
-    ImGui::DragFloat3("position", &vecPosition[0], 0.01f, lowestValue, highestValue);
+    ImGui::DragFloat3("position", &vecPosition[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Rotation: "); ImGui::SameLine();
-    ImGui::DragFloat3("rotation", &vecRotation[0], 0.01f, lowestValue, highestValue);
+    ImGui::DragFloat3("rotation", &vecRotation[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Scale: "); ImGui::SameLine();
-    ImGui::DragFloat3("scale", &vecScale[0], 0.005f, 0.0f, highestValue);
+    ImGui::DragFloat3("scale", &vecScale[0], 0.005f, 0.0f, highestValue, format);
 
     // to hide label of the input
     ImGui::PopItemWidth();

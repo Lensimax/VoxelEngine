@@ -44,6 +44,7 @@ class DrawableObject {
 
 
         void setName(std::string n);
+        std::string getName();
         Transform *getTransform();
 
 

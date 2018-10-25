@@ -9,3 +9,7 @@ Transform *DrawableObject::getTransform(){
 void DrawableObject::setName(std::string n){
     name = n;
 }
+
+std::string DrawableObject::getName(){
+    return name;
+}
