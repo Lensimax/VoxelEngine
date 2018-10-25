@@ -26,6 +26,7 @@
 
 #include "../mainRenderer.h"
 
+
 static void glfw_error_callback(int error, const char* description){
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
@@ -50,7 +51,6 @@ int initializeOpenGLLoader(){
 
 static void createInfoWindow(){
     ImGui::Begin("Info Window");
-
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
 }

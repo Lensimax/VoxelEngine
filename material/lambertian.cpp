@@ -39,8 +39,15 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
 
 void Lambertian::createUI(){
+    // to hide label of the input
+    ImGui::PushItemWidth(-1);
+
     ImGui::Text("Material");
-    ImGui::ColorEdit4("cube color", (float *)&color);
+    ImGui::Text("Color: "); ImGui::SameLine();
+    ImGui::ColorEdit4("lambertian-color", (float *)&color);
+
+    // to hide label of the input
+    ImGui::PopItemWidth();
 }
 
 GLuint Lambertian::shaderID(){
