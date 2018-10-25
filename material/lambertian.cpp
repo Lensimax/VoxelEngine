@@ -39,6 +39,7 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
 
 void Lambertian::createUI(){
+    ImGui::Text("Material");
     ImGui::ColorEdit4("cube color", (float *)&color);
 }
 

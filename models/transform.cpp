@@ -37,8 +37,20 @@ mat4 Transform::getMat4(){
 
 
 void Transform::createUI(){
-    ImGui::Text("Position");
-    ImGui::InputFloat("x", &vecPosition.x, 0.00f, 0.0f);
-    ImGui::InputFloat("y", &vecPosition.y, 0.00f, 0.0f);
-    ImGui::InputFloat("z", &vecPosition.z, 0.00f, 0.0f);
+    const float lowestValue = -1000.0f;
+    const float highestValue = 1000.0f;
+
+    // to hide label of the input
+    ImGui::PushItemWidth(-1);
+
+    ImGui::Text("Transform");
+    ImGui::Text("Position: "); ImGui::SameLine();
+    ImGui::DragFloat3("position", &vecPosition[0], 0.01f, lowestValue, highestValue);
+    ImGui::Text("Rotation: "); ImGui::SameLine();
+    ImGui::DragFloat3("rotation", &vecRotation[0], 0.01f, lowestValue, highestValue);
+    ImGui::Text("Scale: "); ImGui::SameLine();
+    ImGui::DragFloat3("scale", &vecScale[0], 0.005f, 0.0f, highestValue);
+
+    // to hide label of the input
+    ImGui::PopItemWidth();
 }
