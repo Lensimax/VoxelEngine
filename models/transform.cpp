@@ -1,5 +1,7 @@
 #include "transform.h"
 
+#include "../imgui/imgui.h"
+
 
 Transform::Transform(vec3 position, vec3 scale, vec3 rotation){
     this->vecPosition = position;
@@ -31,4 +33,12 @@ mat4 Transform::getMat4(){
     model = glm::rotate(model, vecRotation[1], vec3(0.0,1.0,0.0));
     model = glm::rotate(model, vecRotation[2], vec3(0.0,0.0,1.0));
     return model;
+}
+
+
+void Transform::createUI(){
+    ImGui::Text("Position");
+    ImGui::InputFloat("x", &vecPosition.x, 0.00f, 0.0f);
+    ImGui::InputFloat("y", &vecPosition.y, 0.00f, 0.0f);
+    ImGui::InputFloat("z", &vecPosition.z, 0.00f, 0.0f);
 }

@@ -82,6 +82,7 @@ std::vector<float> Cube::createVertices(){
 void Cube::createUI(){
     ImGui::Begin("Cube");
 
+    transform->createUI();
     material->createUI();
 
     ImGui::End();

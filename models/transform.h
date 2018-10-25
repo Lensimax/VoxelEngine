@@ -20,6 +20,8 @@ class Transform {
 
         mat4 getMat4();
 
+        void createUI();
+
     private:
 
         vec3 vecPosition, vecScale, vecRotation;
