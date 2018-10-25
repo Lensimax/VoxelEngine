@@ -22,7 +22,7 @@
 #include "../material/lambertian.h"
 
 
-Cube::Cube(vec3 position, vec3 scale, vec3 rotation){
+Cube::Cube(std::string n, vec3 position, vec3 scale, vec3 rotation){
     transform = new Transform(position, scale, rotation);
 
     vertices = createVertices();
@@ -31,6 +31,8 @@ Cube::Cube(vec3 position, vec3 scale, vec3 rotation){
     createVAO();
 
     material = new Lambertian();
+
+    name = n;
 }
 
 
@@ -80,7 +82,7 @@ std::vector<float> Cube::createVertices(){
 }
 
 void Cube::createUI(){
-    ImGui::Begin("Cube");
+    ImGui::Begin(name.c_str());
 
     transform->createUI();
     material->createUI();

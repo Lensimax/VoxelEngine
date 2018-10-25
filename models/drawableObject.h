@@ -11,6 +11,8 @@
 
 #include "transform.h"
 
+#include <string>
+
 
 class DrawableObject {
     public:
@@ -38,13 +40,17 @@ class DrawableObject {
         /* DEBUG */
         virtual void debugTrianglesAndTriangles() = 0;
 
+        virtual void createUI() = 0;
+
+
+        void setName(std::string n);
         Transform *getTransform();
 
-        virtual void createUI() = 0;
 
 
     protected:
         Transform *transform;
+        std::string name;
 };
 
 #endif

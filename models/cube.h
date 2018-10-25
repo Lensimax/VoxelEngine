@@ -13,10 +13,12 @@
 
 #include <vector>
 
+#include <string>
+
 class Cube : public DrawableObject {
     public:
 
-        Cube(vec3 position = glm::vec3(0.0,0.0,0.0), vec3 scale = glm::vec3(1.0,1.0,1.0), vec3 rotation = glm::vec3(0.0,0.0,0.0));
+        Cube(std::string n = "Cube", vec3 position = glm::vec3(0.0,0.0,0.0), vec3 scale = glm::vec3(1.0,1.0,1.0), vec3 rotation = glm::vec3(0.0,0.0,0.0));
         ~Cube();
 
 

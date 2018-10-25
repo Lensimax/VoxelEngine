@@ -27,11 +27,11 @@ MainRenderer::MainRenderer(){
 void MainRenderer::makeScene(){
     objectsToDraw = std::vector<DrawableObject*>();
 
-    Cube *c = new Cube(glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
+    Cube *c = new Cube("Cube 1", glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
 
     // glm::vec3(0.0, 45.0, 0.0)
     objectsToDraw.push_back(c);
-    // objectsToDraw.push_back(new Cube(glm::vec3(-0.5,0.0,0.0)));
+    objectsToDraw.push_back(new Cube("Cube 2", glm::vec3(-0.5,0.0,0.0)));
 }
 
 
