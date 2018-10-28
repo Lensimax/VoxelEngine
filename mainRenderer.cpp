@@ -36,8 +36,8 @@ void MainRenderer::makeScene(){
 
 
 void MainRenderer::paintGL(int width, int height){
-    /*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0,0,width,height);*/
+    /*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+    glViewport(0,0,width,height);
 
     if(height == 0){
         fprintf(stderr, "Error height = 0\n");
@@ -73,7 +73,9 @@ void MainRenderer::paintGL(int width, int height){
 
 void MainRenderer::initializeGL(){
 
-
+    /*glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);*/
     /* to print GLSL version */
     //std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 

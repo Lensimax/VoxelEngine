@@ -1,5 +1,6 @@
 
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "impl/imgui_impl_glfw.h"
 #include "impl/imgui_impl_opengl3.h"
 #include <stdio.h>
@@ -26,6 +27,49 @@
 
 #include "../mainRenderer.h"
 
+/*bool Splitter(bool split_vertically, float thickness, float* size1, float* size2, float min_size1, float min_size2, float splitter_long_axis_size = -1.0f)
+{
+    ImGuiContext& g = *GImGui;
+    ImGuiWindow* window = g.CurrentWindow;
+    ImGuiID id = window->GetID("##Splitter");
+    ImRect bb;
+    bb.Min = window->DC.CursorPos + (split_vertically ? ImVec2(*size1, 0.0f) : ImVec2(0.0f, *size1));
+    bb.Max = bb.Min + ImGui::CalcItemSize(split_vertically ? ImVec2(thickness, splitter_long_axis_size) : ImVec2(splitter_long_axis_size, thickness), 0.0f, 0.0f);
+    return ImGui::SplitterBehavior(bb,id, split_vertically ? ImGuiAxis_X : ImGuiAxis_Y, size1, size2, min_size1, min_size2, 0.0f);
+}*/
+
+void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1)
+{
+    ImVec2 backup_pos = ImGui::GetCursorPos();
+    if (split_vertically)
+        ImGui::SetCursorPosY(backup_pos.y + *size0);
+    else
+        ImGui::SetCursorPosX(backup_pos.x + *size0);
+
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0,0,0,0));          // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f,0.6f,0.6f,0.10f));
+    ImGui::Button("##Splitter", ImVec2(!split_vertically ? thickness : -1.0f, split_vertically ? thickness : -1.0f));
+    ImGui::PopStyleColor(3);
+
+    ImGui::SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter.
+
+    if (ImGui::IsItemActive())
+    {
+        float mouse_delta = split_vertically ? ImGui::GetIO().MouseDelta.y : ImGui::GetIO().MouseDelta.x;
+
+        // Minimum pane size
+        if (mouse_delta < min_size0 - *size0)
+            mouse_delta = min_size0 - *size0;
+        if (mouse_delta > *size1 - min_size1)
+            mouse_delta = *size1 - min_size1;
+
+        // Apply resize
+        *size0 += mouse_delta;
+        *size1 -= mouse_delta;
+    }
+    ImGui::SetCursorPos(backup_pos);
+}
 
 static void glfw_error_callback(int error, const char* description){
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
@@ -55,6 +99,7 @@ static void createInfoWindow(){
     ImGui::End();
 }
 
+using namespace ImGui;
 
 int main(int, char**){
 
@@ -83,6 +128,7 @@ int main(int, char**){
     if(initializeOpenGLLoader() == 1){
         return 1;
     }
+    //ImGuiWindow* windowImGui = ImGui::GetCurrentWindow();
 
     // A EXPLIQUER
     IMGUI_CHECKVERSION();
@@ -102,6 +148,11 @@ int main(int, char**){
     renderer->initializeGL();
 
 
+    float h = 500;
+
+    float sizeLeft = 200;
+    float sizeRight = 200;
+
 
 
     // the window is runnin
@@ -109,25 +160,53 @@ int main(int, char**){
 
         glfwPollEvents();
 
+
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
 
+
         createInfoWindow();
 
-        renderer->createUI();
+        //renderer->createUI();
+
+        Begin("Project");
+
+        //ImGui::SplitterBehavior(bb, id, ImGuiAxis_X, &leftSide, &rightSide, 50.0f, 50.f);
+        DrawSplitter(false, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
+
+        ImGui::BeginChild("left", ImVec2(sizeLeft, h), true); // pass width here
+        ImGui::Text("I'm on left side");
+
+        for(int i=0; i<3; i++){
+            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Bullet;
+            ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Node %d", i);
+
+        }
+        ImGui::EndChild();
+
+        ImGui::SameLine();
+
+        ImGui::BeginChild("right", ImVec2(sizeRight, h),true); // pass width here
+        ImGui::Text("I'm on right side");
+        ImGui::EndChild();
+
+        End();
+
 
         /* RENDERING */
+        ImGui::EndFrame();
         ImGui::Render();
-        int display_w, display_h;
         glfwMakeContextCurrent(window);
-        glfwGetFramebufferSize(window, &display_w, &display_h);
+
         glViewport(0, 0, display_w, display_h);
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
-
 
         renderer->paintGL(display_w, display_h);
 
