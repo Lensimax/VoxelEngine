@@ -177,13 +177,8 @@ int main(int, char**){
         createInfoWindow();
 
         std::vector<std::string> listOfObjects = renderer->getNameOfAllObjects();
-
-
-        //renderer->createUI();
-
         Begin("Project");
 
-        //ImGui::SplitterBehavior(bb, id, ImGuiAxis_X, &leftSide, &rightSide, 50.0f, 50.f);
         DrawSplitter(false, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
 
         ImGui::BeginChild("left", ImVec2(sizeLeft, h), true); // pass width here
@@ -217,7 +212,7 @@ int main(int, char**){
         glfwMakeContextCurrent(window);
 
         glViewport(0, 0, display_w, display_h);
-        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClearColor(0.239f, 0.478f, 0.647f, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
 
         renderer->paintGL(display_w, display_h);
