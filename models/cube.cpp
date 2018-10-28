@@ -81,13 +81,14 @@ std::vector<float> Cube::createVertices(){
     return vert;
 }
 
-void Cube::createUI(){
-    ImGui::Begin(name.c_str());
+void Cube::createUI(char *ID){
+    ImGui::BeginChild(ID);
+    ImGui::Text(name.c_str());
 
     transform->createUI();
     material->createUI();
 
-    ImGui::End();
+    ImGui::EndChild();
 }
 
 std::vector<int> Cube::createTriangles(){

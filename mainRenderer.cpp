@@ -29,9 +29,9 @@ void MainRenderer::makeScene(){
 
     Cube *c = new Cube("Cube 1", glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
 
-    // glm::vec3(0.0, 45.0, 0.0)
     objectsToDraw.push_back(c);
     objectsToDraw.push_back(new Cube("Cube 2", glm::vec3(-0.5,0.0,0.0)));
+
 }
 
 
@@ -90,9 +90,9 @@ MainRenderer::~MainRenderer(){
     deleteScene();
 }
 
-void MainRenderer::createUI(){
+void MainRenderer::createUI(char *ID){
     for(unsigned int i=0; i<objectsToDraw.size(); i++){
-        objectsToDraw[i]->createUI();
+        objectsToDraw[i]->createUI(ID);
     }
 }
 
@@ -101,4 +101,21 @@ void MainRenderer::deleteScene(){
     for(unsigned int i=0; i<objectsToDraw.size(); i++){
         delete objectsToDraw[i];
     }
+}
+
+
+void MainRenderer::createUIAtID(int indexItem, char *ID){
+    if(indexItem >= 0 && indexItem < (int)objectsToDraw.size()){
+        objectsToDraw[indexItem]->createUI(ID);
+    }
+}
+
+std::vector<std::string> MainRenderer::getNameOfAllObjects(){
+    std::vector<std::string> list = std::vector<std::string>();
+
+    for(unsigned int i=0; i<objectsToDraw.size(); i++){
+        list.push_back(objectsToDraw[i]->getName());
+    }
+
+    return list;
 }

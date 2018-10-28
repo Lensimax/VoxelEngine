@@ -11,6 +11,7 @@
 #include "models/cube.h"
 
 #include <vector>
+#include <string>
 
 class MainRenderer {
 
@@ -22,8 +23,10 @@ class MainRenderer {
     void paintGL(int width, int height);
     void initializeGL();
 
-    void createUI();
+    void createUI(char *ID);
+    void createUIAtID(int indexItem, char *ID);
 
+    std::vector<std::string> getNameOfAllObjects();
     private:
 
         void makeScene();

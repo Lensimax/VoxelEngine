@@ -26,6 +26,9 @@
 
 
 #include "../mainRenderer.h"
+#include <iostream>
+// #include <string>
+// #include <vector>
 
 /*bool Splitter(bool split_vertically, float thickness, float* size1, float* size2, float min_size1, float min_size2, float splitter_long_axis_size = -1.0f)
 {
@@ -173,6 +176,9 @@ int main(int, char**){
 
         createInfoWindow();
 
+        std::vector<std::string> listOfObjects = renderer->getNameOfAllObjects();
+
+
         //renderer->createUI();
 
         Begin("Project");
@@ -183,17 +189,23 @@ int main(int, char**){
         ImGui::BeginChild("left", ImVec2(sizeLeft, h), true); // pass width here
         ImGui::Text("I'm on left side");
 
-        for(int i=0; i<3; i++){
-            ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_Bullet;
-            ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Node %d", i);
+        static int selected = -1;
+        for (unsigned int i = 0; i < listOfObjects.size(); i++){
 
+            if (ImGui::Selectable(listOfObjects[i].c_str(), selected == (int)i))
+                selected = i;
         }
+
         ImGui::EndChild();
 
         ImGui::SameLine();
 
         ImGui::BeginChild("right", ImVec2(sizeRight, h),true); // pass width here
-        ImGui::Text("I'm on right side");
+
+        if(selected > -1){
+            renderer->createUIAtID(selected, "right");
+        }
+
         ImGui::EndChild();
 
         End();

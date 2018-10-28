@@ -40,7 +40,7 @@ class DrawableObject {
         /* DEBUG */
         virtual void debugTrianglesAndTriangles() = 0;
 
-        virtual void createUI() = 0;
+        virtual void createUI(char *ID) = 0;
 
 
         void setName(std::string n);
