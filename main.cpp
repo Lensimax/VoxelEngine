@@ -181,7 +181,7 @@ int main(int, char**){
 
         DrawSplitter(false, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
 
-        ImGui::BeginChild("left", ImVec2(sizeLeft, h), true); // pass width here
+        ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
         ImGui::Text("Project");
 
         static int selected = -1;
@@ -195,7 +195,7 @@ int main(int, char**){
 
         ImGui::SameLine();
 
-        ImGui::BeginChild("right", ImVec2(sizeRight, h),true); // pass width here
+        ImGui::BeginChild("right", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()),true); // pass width here
 
         if(selected > -1){
             renderer->createUIAtID(selected, "right");
