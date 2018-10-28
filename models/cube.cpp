@@ -84,9 +84,12 @@ std::vector<float> Cube::createVertices(){
 void Cube::createUI(char *ID){
     ImGui::BeginChild(ID);
     ImGui::Text(name.c_str());
+    ImGui::Separator();
 
     transform->createUI();
+    ImGui::Separator();
     material->createUI();
+    ImGui::Separator();
 
     ImGui::EndChild();
 }

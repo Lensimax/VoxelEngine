@@ -187,7 +187,7 @@ int main(int, char**){
         DrawSplitter(false, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
 
         ImGui::BeginChild("left", ImVec2(sizeLeft, h), true); // pass width here
-        ImGui::Text("I'm on left side");
+        ImGui::Text("Project");
 
         static int selected = -1;
         for (unsigned int i = 0; i < listOfObjects.size(); i++){
