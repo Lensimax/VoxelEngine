@@ -9,6 +9,7 @@
 
 #include "models/drawableObject.h"
 #include "models/cube.h"
+#include "tools/cameraProj.h"
 
 #include <vector>
 #include <string>
@@ -31,6 +32,7 @@ class MainRenderer {
 
         void makeScene();
         void deleteScene();
+
 
 
         glm::mat4 viewMat;
