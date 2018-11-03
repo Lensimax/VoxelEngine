@@ -10,14 +10,14 @@
 
 
 #include "transform.h"
+#include "../engineObject.h"
 
 #include <string>
 
 
-class DrawableObject {
+class DrawableObject : public EngineObject {
     public:
 
-        virtual ~DrawableObject() = default;
 
         /* get vertices array of this object */
         virtual float *getVertices() = 0;
@@ -40,18 +40,16 @@ class DrawableObject {
         /* DEBUG */
         virtual void debugTrianglesAndTriangles() = 0;
 
-        virtual void createUI(char *ID) = 0;
+        //virtual void createUI(char *ID) = 0;
 
 
-        void setName(std::string n);
-        std::string getName();
+
         Transform *getTransform();
 
 
 
     protected:
         Transform *transform;
-        std::string name;
 };
 
 #endif

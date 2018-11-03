@@ -151,7 +151,6 @@ int main(int, char**){
     renderer->initializeGL();
 
 
-    float h = 500;
 
     float sizeLeft = 200;
     float sizeRight = 200;
@@ -195,10 +194,12 @@ int main(int, char**){
 
         ImGui::SameLine();
 
-        ImGui::BeginChild("right", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()),true); // pass width here
+        ImGui::BeginChild("right", ImVec2(0, -ImGui::GetFrameHeight()),true); // pass width here
 
         if(selected > -1){
-            renderer->createUIAtID(selected, "right");
+            char idInspector[10];
+            sprintf(idInspector, "right");
+            renderer->createUIAtID(selected, idInspector);
         }
 
         ImGui::EndChild();

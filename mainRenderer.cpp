@@ -25,7 +25,7 @@ MainRenderer::MainRenderer(){
 }
 
 void MainRenderer::makeScene(){
-    objectsToDraw = std::vector<DrawableObject*>();
+    objectsToDraw = std::vector<EngineObject*>();
 
     Cube *c = new Cube("Cube 1", glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
 
@@ -62,8 +62,12 @@ void MainRenderer::paintGL(int width, int height){
     projectionMat = glm::perspective(fovy, aspect, near, far);
 
     for(unsigned int i=0; i<objectsToDraw.size(); i++){
-        objectsToDraw[i]->draw(viewMat, projectionMat);
+        if(DrawableObject* o = dynamic_cast<DrawableObject*>(objectsToDraw[i])) {
+        // old was safely casted to NewType
+            o->draw(viewMat, projectionMat);
+        }
     }
+
 
 
     //printf("Finished\n");

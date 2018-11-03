@@ -36,7 +36,7 @@ class MainRenderer {
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
-        std::vector<DrawableObject*> objectsToDraw;
+        std::vector<EngineObject*> objectsToDraw;
 
 
 };
