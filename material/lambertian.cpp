@@ -34,7 +34,7 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projMat[0][0]));
 
-    printf("y = %f\n", light[1]);
+    // printf("y = %f\n", light[1]);
 
     glUniform3fv(glGetUniformLocation(shader->id(),"light"), 1, &light[0]);
 
