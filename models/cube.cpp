@@ -143,7 +143,7 @@ void Cube::draw(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light){
 
     glUseProgram(material->shaderID());
 
-    setUniform(viewMat, projectionMat);
+    setUniform(viewMat, projectionMat, light);
 
     glBindVertexArray(vertexArrayID);
     glDrawElements(GL_TRIANGLES,3*nbTriangles(),GL_UNSIGNED_INT,(void *)0);
@@ -174,13 +174,13 @@ void Cube::deleteVAO(){
     glDeleteVertexArrays(1,&vertexArrayID);
 }
 
-void Cube::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat){
+void Cube::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light){
 
     glm::mat4 modelMat = transform->getMat4();
 
 
     // send the transformation matrix
-    material->callUniform(modelMat, viewMat, projectionMat);
+    material->callUniform(modelMat, viewMat, projectionMat, light);
 
 }
 

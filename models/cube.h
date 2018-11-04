@@ -39,7 +39,7 @@ class Cube : public DrawableObject {
 
     protected:
 
-        void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat);
+        void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light);
 
         void createShader();
         void deleteShader();
