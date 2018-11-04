@@ -33,12 +33,12 @@ class MainRenderer {
         void makeScene();
         void deleteScene();
 
-
+        Camera *getCamera();
 
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
-        std::vector<EngineObject*> objectsToDraw;
+        std::vector<EngineObject*> objectsEngine;
 
 
 };

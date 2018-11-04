@@ -25,12 +25,16 @@ MainRenderer::MainRenderer(){
 }
 
 void MainRenderer::makeScene(){
-    objectsToDraw = std::vector<EngineObject*>();
+    objectsEngine = std::vector<EngineObject*>();
 
     Cube *c = new Cube("Cube 1", glm::vec3(0.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
 
-    objectsToDraw.push_back(c);
-    objectsToDraw.push_back(new Cube("Cube 2", glm::vec3(-0.5,0.0,0.0)));
+    objectsEngine.push_back(c);
+    objectsEngine.push_back(new Cube("Cube 2", glm::vec3(-0.5,0.0,0.0)));
+
+    Camera *cam = new CameraProj();
+
+    objectsEngine.push_back(cam);
 
 }
 
@@ -47,24 +51,16 @@ void MainRenderer::paintGL(int width, int height){
 
     /* CAMERA */
 
-    // camera position, rotation
-    glm::vec3 position = glm::vec3(0.0,0.0,5.0);
-    glm::vec3 directionOfView = glm::vec3(0.0,0.0,0.0);
-    glm::vec3 up = glm::vec3(0.0,1.0,0.0);
-    viewMat = glm::lookAt(position, directionOfView, up);
+    Camera *c = getCamera();
 
+    if(c == NULL){
+        return;
+    }
 
-    // projection matrix
-    float fovy = 45.0f;
-    float aspect = (float)width/(float)height;
-    float near = 0.1;
-    float far = 10.0f;
-    projectionMat = glm::perspective(fovy, aspect, near, far);
-
-    for(unsigned int i=0; i<objectsToDraw.size(); i++){
-        if(DrawableObject* o = dynamic_cast<DrawableObject*>(objectsToDraw[i])) {
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        if(DrawableObject* o = dynamic_cast<DrawableObject*>(objectsEngine[i])) {
         // old was safely casted to NewType
-            o->draw(viewMat, projectionMat);
+            o->draw(c->getView(), c->getProj());
         }
     }
 
@@ -72,6 +68,7 @@ void MainRenderer::paintGL(int width, int height){
 
     //printf("Finished\n");
 }
+
 
 
 
@@ -89,36 +86,46 @@ void MainRenderer::initializeGL(){
 
 }
 
+Camera *MainRenderer::getCamera(){
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        if(Camera* c = dynamic_cast<Camera*>(objectsEngine[i])) {
+        // old was safely casted to NewType
+            return c;
+        }
+    }
+    return NULL;
+}
+
 
 MainRenderer::~MainRenderer(){
     deleteScene();
 }
 
 void MainRenderer::createUI(char *ID){
-    for(unsigned int i=0; i<objectsToDraw.size(); i++){
-        objectsToDraw[i]->createUI(ID);
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        objectsEngine[i]->createUI(ID);
     }
 }
 
 
 void MainRenderer::deleteScene(){
-    for(unsigned int i=0; i<objectsToDraw.size(); i++){
-        delete objectsToDraw[i];
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        delete objectsEngine[i];
     }
 }
 
 
 void MainRenderer::createUIAtID(int indexItem, char *ID){
-    if(indexItem >= 0 && indexItem < (int)objectsToDraw.size()){
-        objectsToDraw[indexItem]->createUI(ID);
+    if(indexItem >= 0 && indexItem < (int)objectsEngine.size()){
+        objectsEngine[indexItem]->createUI(ID);
     }
 }
 
 std::vector<std::string> MainRenderer::getNameOfAllObjects(){
     std::vector<std::string> list = std::vector<std::string>();
 
-    for(unsigned int i=0; i<objectsToDraw.size(); i++){
-        list.push_back(objectsToDraw[i]->getName());
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        list.push_back(objectsEngine[i]->getName());
     }
 
     return list;
