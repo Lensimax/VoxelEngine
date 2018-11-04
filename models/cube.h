@@ -41,8 +41,6 @@ class Cube : public DrawableObject {
 
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light);
 
-        void createShader();
-        void deleteShader();
 
 
         std::vector<float> createVertices();

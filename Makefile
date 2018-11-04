@@ -15,7 +15,8 @@
 #CXX = clang++
 
 EXE = run
-SOURCES = mainRenderer.cpp shader.cpp models/drawableObject.cpp models/cube.cpp models/transform.cpp material/lambertian.cpp engineObject.cpp
+SOURCES = mainRenderer.cpp shader.cpp material/lambertian.cpp engineObject.cpp
+SOURCES += models/cube.cpp models/transform.cpp models/drawableObject.cpp models/sphere.cpp
 SOURCES += tools/camera.cpp tools/cameraProj.cpp tools/lights/directionnalLight.cpp
 
 SOURCES += impl/imgui_impl_glfw.cpp impl/imgui_impl_opengl3.cpp

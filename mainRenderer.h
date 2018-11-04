@@ -7,6 +7,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #endif
 
+#include "tools/lights/light.h"
+
 #include "models/drawableObject.h"
 #include "models/cube.h"
 #include "tools/cameraProj.h"
