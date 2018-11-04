@@ -34,6 +34,7 @@ class MainRenderer {
         void deleteScene();
 
         Camera *getCamera();
+        Light *getLight();
 
         glm::mat4 viewMat;
         glm::mat4 projectionMat;

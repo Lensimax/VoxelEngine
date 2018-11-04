@@ -56,15 +56,22 @@ void MainRenderer::paintGL(int width, int height){
     /* CAMERA */
 
     Camera *c = getCamera();
-
     if(c == NULL){
         return;
+    }
+
+    Light *l = getLight();
+    glm::vec3 light;
+    if(l == NULL){
+        light = glm::vec3(0.0,0.0,0.0);
+    } else {
+        light = l->getLight();
     }
 
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         if(DrawableObject* o = dynamic_cast<DrawableObject*>(objectsEngine[i])) {
         // old was safely casted to NewType
-            o->draw(c->getView(), c->getProj());
+            o->draw(c->getView(), c->getProj(), light);
         }
     }
 
@@ -99,6 +106,17 @@ Camera *MainRenderer::getCamera(){
     }
     return NULL;
 }
+
+Light *MainRenderer::getLight(){
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        if(Light* l = dynamic_cast<Light*>(objectsEngine[i])) {
+        // old was safely casted to NewType
+            return l;
+        }
+    }
+    return NULL;
+}
+
 
 
 MainRenderer::~MainRenderer(){
