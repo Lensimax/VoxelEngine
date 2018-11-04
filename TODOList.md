@@ -1,8 +1,9 @@
 * Object importer
-* shader
+* custom shader
+* add/remove object from scene
 * Sphere - Manual Mesh
-* light unidirectionnal
-* Subdivision curvess
+* implem orthographic camera
+* Subdivision curves
 * shadows
 * rotator
 * customable pipeline
