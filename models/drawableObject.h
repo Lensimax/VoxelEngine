@@ -30,7 +30,7 @@ class DrawableObject : public EngineObject {
         virtual int nbTriangles() = 0;
 
         /* draw the object in the screen */
-        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat) = 0;
+        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light = glm::vec3(0.0,0.0,0.0)) = 0;
 
         /* create the buffers and the vertex array on the GPU */
         virtual void createVAO() = 0;

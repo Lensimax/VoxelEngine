@@ -3,6 +3,8 @@
 #include "impl/imgui_impl_glfw.h"
 #include "impl/imgui_impl_opengl3.h"
 
+#include "tools/lights/directionnalLight.h"
+
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include <GL/gl3w.h>    // Initialize with gl3wInit()
@@ -36,6 +38,8 @@ void MainRenderer::makeScene(){
 
     objectsEngine.push_back(cam);
 
+
+    objectsEngine.push_back(new DirectionnalLight());
 }
 
 

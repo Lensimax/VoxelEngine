@@ -139,7 +139,7 @@ int Cube::nbTriangles(){
 
 
 
-void Cube::draw(glm::mat4 viewMat, glm::mat4 projectionMat){
+void Cube::draw(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light){
 
     glUseProgram(material->shaderID());
 

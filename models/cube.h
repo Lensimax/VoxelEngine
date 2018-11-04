@@ -29,7 +29,7 @@ class Cube : public DrawableObject {
 
         virtual void createUI(char *ID);
 
-        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat);
+        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light = glm::vec3(0.0,0.0,0.0));
 
         virtual void debugTrianglesAndTriangles();
 
