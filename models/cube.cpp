@@ -183,16 +183,3 @@ void Cube::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 ligh
     material->callUniform(modelMat, viewMat, projectionMat, light);
 
 }
-
-
-
-void Cube::debugTrianglesAndTriangles(){
-    std::cout << "Triangles:\n";
-    for(unsigned int i=0; i<triangles.size(); i+=3){
-        std::cout << "(" << triangles[i] << ", " << triangles[i+1] << ", " << triangles[i+2] << ")\n";
-    }
-    std::cout << "Vertices:\n";
-    for(unsigned int i=0; i<vertices.size(); i+=3){
-        std::cout << "(" << vertices[i] << ", " << vertices[i+1] << ", " << vertices[i+2] << ")\n";
-    }
-}

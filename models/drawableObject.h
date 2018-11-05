@@ -37,11 +37,6 @@ class DrawableObject : public EngineObject {
         /* delete it */
         virtual void deleteVAO() = 0;
 
-        /* DEBUG */
-        virtual void debugTrianglesAndTriangles() = 0;
-
-        //virtual void createUI(char *ID) = 0;
-
 
 
         Transform *getTransform();

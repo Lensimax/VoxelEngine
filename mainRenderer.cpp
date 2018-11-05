@@ -19,6 +19,8 @@
 
 #include "mainRenderer.h"
 
+#include "models/sphere.h"
+
 
 #include <iostream>
 
@@ -31,8 +33,10 @@ void MainRenderer::makeScene(){
 
     Cube *c = new Cube("Cube 1", glm::vec3(-3.0,0.0,0.0), glm::vec3(0.5,0.5,0.5), glm::vec3(45.0,45.0,0.0));
 
-    objectsEngine.push_back(c);
-    objectsEngine.push_back(new Cube("Cube 2", glm::vec3(0.22,0.0,0.0)));
+    //objectsEngine.push_back(c);
+    //objectsEngine.push_back(new Cube("Cube 2", glm::vec3(0.22,0.0,0.0)));
+
+    objectsEngine.push_back(new Sphere());
 
     Camera *cam = new CameraProj();
 
