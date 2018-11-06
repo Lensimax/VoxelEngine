@@ -216,7 +216,7 @@ int main(int, char**){
         glClearColor(0.239f, 0.478f, 0.647f, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        renderer->paintGL(display_w, display_h);
+        //renderer->paintGL(display_w, display_h);
 
         /* draw the widget */
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

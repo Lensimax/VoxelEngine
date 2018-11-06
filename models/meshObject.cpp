@@ -27,7 +27,9 @@ MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 
 
     createMesh(filename);
     computeCenter();
+    printf("vert %i  triangle %i\n", vertices.size()/3, triangles.size()/3);
     computeNormals();
+
 
 
     createVAO();
@@ -98,9 +100,14 @@ void MeshObject::createMesh(const char *filename){
 
 glm::vec3 MeshObject::getVertex(int i){
     glm::vec3 r;
-    r[0] = vertices[i*3];
-    r[1] = vertices[(i*3)+1];
-    r[2] = vertices[(i*3)+2];
+    if(i >= 0 && i < vertices.size()){
+
+        r[0] = vertices[i*3];
+        r[1] = vertices[(i*3)+1];
+        r[2] = vertices[(i*3)+2];
+    } else {
+        exit(1);
+    }
     return r;
 }
 
@@ -109,6 +116,7 @@ void MeshObject::computeNormals(){
     unsigned int nb_vertices = vertices.size()/3;
     float norm;
 
+
     glm::vec3 v12,v13,v1,v2,v3;
 
     // computing normals per faces
@@ -116,9 +124,9 @@ void MeshObject::computeNormals(){
     for(unsigned int i=0;i<triangles.size();i+=3) {
 
         // the three vertices of the current face
-        v1 = getVertex(3*i);
-        v2 = getVertex((3*i)+1);
-        v3 = getVertex((3*i)+2);
+        v1 = getVertex(triangles[i]);
+        v2 = getVertex(triangles[i+1]);
+        v3 = getVertex(triangles[i+2]);
 
         // the two vectors of the current face
         v12[0] = v2[0]-v1[0];
@@ -135,10 +143,15 @@ void MeshObject::computeNormals(){
         nf.push_back(v12[0]*v13[1] - v12[1]*v13[0]);
 
         // normalization
+
         norm = sqrt(nf[3*i]*nf[3*i]+nf[3*i+1]*nf[3*i+1]+nf[3*i+2]*nf[3*i+2]);
-        nf[3*i  ] /= norm;
-        nf[3*i+1] /= norm;
-        nf[3*i+2] /= norm;
+        if(norm != 0.0){
+            nf[3*i  ] /= norm;
+            nf[3*i+1] /= norm;
+            nf[3*i+2] /= norm;
+        } else {
+            printf("division by zero\n");
+        }
     }
 
     // computing normals per vertex
@@ -180,9 +193,13 @@ void MeshObject::computeNormals(){
 
     for(unsigned int i=0;i<nb_vertices;++i) {
         // normalization
-        normals[3*i  ] /= -nv[i];
-        normals[3*i+1] /= -nv[i];
-        normals[3*i+2] /= -nv[i];
+        if(-nv[i] != 0.0){
+            normals[3*i  ] /= -nv[i];
+            normals[3*i+1] /= -nv[i];
+            normals[3*i+2] /= -nv[i];
+        } else {
+            printf("division by 0\n");
+        }
     }
 
 }
