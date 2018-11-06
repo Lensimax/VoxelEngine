@@ -27,7 +27,7 @@ MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 
 
     createMesh(filename);
     computeCenter();
-    //computeNormals();
+    computeNormals();
 
 
     createVAO();
@@ -106,14 +106,13 @@ glm::vec3 MeshObject::getVertex(int i){
 
 
 void MeshObject::computeNormals(){
-    normals = std::vector<float>(vertices.size());
-    unsigned int nb_vertices = vertices.size();
+    unsigned int nb_vertices = vertices.size()/3;
     float norm;
 
     glm::vec3 v12,v13,v1,v2,v3;
 
     // computing normals per faces
-    float *nf = (float *)malloc(triangles.size()*sizeof(float));
+    std::vector<float> nf = std::vector<float>();
     for(unsigned int i=0;i<triangles.size();i+=3) {
 
         // the three vertices of the current face
@@ -131,9 +130,9 @@ void MeshObject::computeNormals(){
         v13[2] = v3[2]-v1[2];
 
         // cross product
-        nf[3*i  ] = v12[1]*v13[2] - v12[2]*v13[1];
-        nf[3*i+1] = v12[2]*v13[0] - v12[0]*v13[2];
-        nf[3*i+2] = v12[0]*v13[1] - v12[1]*v13[0];
+        nf.push_back(v12[1]*v13[2] - v12[2]*v13[1]);
+        nf.push_back(v12[2]*v13[0] - v12[0]*v13[2]);
+        nf.push_back(v12[0]*v13[1] - v12[1]*v13[0]);
 
         // normalization
         norm = sqrt(nf[3*i]*nf[3*i]+nf[3*i+1]*nf[3*i+1]+nf[3*i+2]*nf[3*i+2]);
@@ -143,23 +142,25 @@ void MeshObject::computeNormals(){
     }
 
     // computing normals per vertex
-    float *nv = (float *)malloc(nb_vertices*sizeof(float));
+
+    normals = std::vector<float>();
+    std::vector<float> nv = std::vector<float>();
 
     for(unsigned int i=0;i<nb_vertices;++i) {
         // initialization
-        normals[3*i  ] = 0.0;
-        normals[3*i+1] = 0.0;
-        normals[3*i+2] = 0.0;
-        nv[i] = 0.0;
+        normals.push_back(0.0);
+        normals.push_back(0.0);
+        normals.push_back(0.0);
+        nv.push_back(0.0);
     }
 
     int f[3];
     for(unsigned int i=0;i<triangles.size();i+=3) {
         // face normals average
         // f = get_face(i);
-        f[0] = 3*i;
-        f[1] = 3*i+1;
-        f[2] = 3*i+2;
+        f[0] = triangles[i];
+        f[1] = triangles[i+1];
+        f[2] = triangles[i+2];
 
         normals[3*f[0]  ] += nf[3*i  ];
         normals[3*f[0]+1] += nf[3*i+1];
@@ -184,8 +185,6 @@ void MeshObject::computeNormals(){
         normals[3*i+2] /= -nv[i];
     }
 
-    free(nf);
-    free(nv);
 }
 
 void MeshObject::computeCenter(){
