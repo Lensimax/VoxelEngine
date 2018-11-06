@@ -26,6 +26,8 @@ MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 
     transform = new Transform(position, scale, rotation);
 
     createMesh(filename);
+    computeCenter();
+    computeNormals();
 
 
     createVAO();
@@ -77,25 +79,124 @@ void MeshObject::createMesh(const char *filename){
     }
 
     for(int i=0;i<nb_faces;i++) {
-    error = fscanf(file,"%d %d %d %d\n",&tmp, &face1, &face2, &face3);
-    if(error==EOF) {
-      printf("Unable to read faces of %s\n",filename);
-        exit(1);
-    }
+        error = fscanf(file,"%d %d %d %d\n",&tmp, &face1, &face2, &face3);
+        if(error==EOF) {
+          printf("Unable to read faces of %s\n",filename);
+            exit(1);
+        }
 
-    if(tmp!=3) {
-      printf("Error : face %d is not a triangle (%d polygonal face!)\n",i/3,tmp);
-      exit(1);
+        if(tmp!=3) {
+          printf("Error : face %d is not a triangle (%d polygonal face!)\n",i/3,tmp);
+          exit(1);
+        }
+        triangles.push_back(face1);
+        triangles.push_back(face2);
+        triangles.push_back(face3);
     }
-    triangles.push_back(face1);
-    triangles.push_back(face2);
-    triangles.push_back(face3);
-  }
-  fclose(file);
+    fclose(file);
+}
+
+glm::vec3 MeshObject::getVertex(int i){
+    glm::vec3 r;
+    r[0] = vertices[i*3];
+    r[1] = vertices[(i*3)+1];
+    r[2] = vertices[(i*3)+2];
+    return r;
 }
 
 
+void MeshObject::computeNormals(){
+    normals = std::vector<float>(vertices.size());
+    unsigned int nb_vertices = vertices.size();
+    float norm;
 
+    glm::vec3 v12,v13,v1,v2,v3;
+
+    // computing normals per faces
+    float *nf = (float *)malloc(triangles.size()*sizeof(float));
+    for(unsigned int i=0;i<triangles.size();i+=3) {
+
+        // the three vertices of the current face
+        v1 = getVertex(3*i);
+        v2 = getVertex((3*i)+1);
+        v3 = getVertex((3*i)+2);
+
+        // the two vectors of the current face
+        v12[0] = v2[0]-v1[0];
+        v12[1] = v2[1]-v1[1];
+        v12[2] = v2[2]-v1[2];
+
+        v13[0] = v3[0]-v1[0];
+        v13[1] = v3[1]-v1[1];
+        v13[2] = v3[2]-v1[2];
+
+        // cross product
+        nf[3*i  ] = v12[1]*v13[2] - v12[2]*v13[1];
+        nf[3*i+1] = v12[2]*v13[0] - v12[0]*v13[2];
+        nf[3*i+2] = v12[0]*v13[1] - v12[1]*v13[0];
+
+        // normalization
+        norm = sqrt(nf[3*i]*nf[3*i]+nf[3*i+1]*nf[3*i+1]+nf[3*i+2]*nf[3*i+2]);
+        nf[3*i  ] /= norm;
+        nf[3*i+1] /= norm;
+        nf[3*i+2] /= norm;
+    }
+
+    // computing normals per vertex
+    float *nv = (float *)malloc(nb_vertices*sizeof(float));
+
+    for(unsigned int i=0;i<nb_vertices;++i) {
+        // initialization
+        normals[3*i  ] = 0.0;
+        normals[3*i+1] = 0.0;
+        normals[3*i+2] = 0.0;
+        nv[i] = 0.0;
+    }
+    
+    int f[3];
+    for(unsigned int i=0;i<triangles.size();i+=3) {
+        // face normals average
+        // f = get_face(i);
+        f[0] = 3*i;
+        f[1] = 3*i+1;
+        f[2] = 3*i+2;
+
+        normals[3*f[0]  ] += nf[3*i  ];
+        normals[3*f[0]+1] += nf[3*i+1];
+        normals[3*f[0]+2] += nf[3*i+2];
+        nv[f[0]] ++;
+
+        normals[3*f[1]  ] += nf[3*i  ];
+        normals[3*f[1]+1] += nf[3*i+1];
+        normals[3*f[1]+2] += nf[3*i+2];
+        nv[f[1]] ++;
+
+        normals[3*f[2]  ] += nf[3*i  ];
+        normals[3*f[2]+1] += nf[3*i+1];
+        normals[3*f[2]+2] += nf[3*i+2];
+        nv[f[2]] ++;
+    }
+
+    for(unsigned int i=0;i<nb_vertices;++i) {
+        // normalization
+        normals[3*i  ] /= -nv[i];
+        normals[3*i+1] /= -nv[i];
+        normals[3*i+2] /= -nv[i];
+    }
+}
+
+void MeshObject::computeCenter(){
+    glm::vec3 c = glm::vec3(0.0,0.0,0.0);
+    int nb_vertices = vertices.size();
+    for(int i=0;i<nb_vertices*3;i+=3) {
+        c[0] += vertices[i  ];
+        c[1] += vertices[i+1];
+        c[2] += vertices[i+2];
+    }
+    center[0] = c[0]/(float)nb_vertices;
+    center[1] = c[1]/(float)nb_vertices;
+    center[2] = c[2]/(float)nb_vertices;
+}
 
 
 int *MeshObject::getTriangles(){

@@ -41,14 +41,22 @@ class MeshObject : public DrawableObject {
 
         void createMesh(const char *filename);
 
+        void computeNormals();
+        void computeCenter();
+
+        glm::vec3 getVertex(int i);
+
 
         std::vector<float> vertices;
         std::vector<int> triangles;
+        std::vector<float> normals;
 
         GLuint vertexArrayID;
         GLuint *buffers;
 
         Material *material;
+
+        glm::vec3 center;
 
 };
 
