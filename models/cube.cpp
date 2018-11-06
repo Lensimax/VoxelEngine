@@ -25,7 +25,7 @@
 Cube::Cube(std::string n, vec3 position, vec3 scale, vec3 rotation){
     transform = new Transform(position, scale, rotation);
 
-    vertices = createVertices();
+    createVertices();
     triangles = createTriangles();
 
     createVAO();
@@ -42,43 +42,35 @@ Cube::~Cube(){
     delete material;
 }
 
-std::vector<float> Cube::createVertices(){
-    std::vector<float> vert = std::vector<float>();
+void Cube::addVertex(glm::vec3 v){
+    vertices.push_back(v[0]);
+    vertices.push_back(v[1]);
+    vertices.push_back(v[2]);
+}
+
+/*
+*   update std::vector<float> vertices;
+*/
+void Cube::createVertices(){
+    vertices = std::vector<float>();
 
     // 0
-    vert.push_back(-1.0f);
-    vert.push_back(-1.0f);
-    vert.push_back(1.0f);
+    addVertex(glm::vec3(-1.0, -1.0, 1.0));
     // 1
-    vert.push_back(-1.0f);
-    vert.push_back(1.0f);
-    vert.push_back(1.0f);
+    addVertex(glm::vec3(-1.0, 1.0, 1.0));
     // 2
-    vert.push_back(1.0f);
-    vert.push_back(1.0f);
-    vert.push_back(1.0f);
+    addVertex(glm::vec3(1.0, 1.0, 1.0));
     // 3
-    vert.push_back(1.0f);
-    vert.push_back(-1.0f);
-    vert.push_back(1.0f);
+    addVertex(glm::vec3(1.0, -1.0, 1.0));
     // 4
-    vert.push_back(-1.0f);
-    vert.push_back(-1.0f);
-    vert.push_back(-1.0f);
+    addVertex(glm::vec3(-1.0, -1.0, -1.0));
     // 5
-    vert.push_back(-1.0f);
-    vert.push_back(1.0f);
-    vert.push_back(-1.0f);
+    addVertex(glm::vec3(-1.0, 1.0, -1.0));
     // 6
-    vert.push_back(1.0f);
-    vert.push_back(1.0f);
-    vert.push_back(-1.0f);
+    addVertex(glm::vec3(1.0, 1.0, -1.0));
     // 7
-    vert.push_back(1.0f);
-    vert.push_back(-1.0f);
-    vert.push_back(-1.0f);
+    addVertex(glm::vec3(1.0, -1.0, -1.0));
 
-    return vert;
 }
 
 void Cube::createUI(char *ID){

@@ -42,8 +42,9 @@ class Cube : public DrawableObject {
 
 
 
-        std::vector<float> createVertices();
+        void createVertices();
         std::vector<int> createTriangles();
+        void addVertex(glm::vec3 v);
 
         std::vector<float> vertices;
         std::vector<int> triangles;
