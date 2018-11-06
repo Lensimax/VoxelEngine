@@ -27,7 +27,7 @@ MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 
 
     createMesh(filename);
     computeCenter();
-    computeNormals();
+    //computeNormals();
 
 
     createVAO();
@@ -152,7 +152,7 @@ void MeshObject::computeNormals(){
         normals[3*i+2] = 0.0;
         nv[i] = 0.0;
     }
-    
+
     int f[3];
     for(unsigned int i=0;i<triangles.size();i+=3) {
         // face normals average
@@ -183,6 +183,9 @@ void MeshObject::computeNormals(){
         normals[3*i+1] /= -nv[i];
         normals[3*i+2] /= -nv[i];
     }
+
+    free(nf);
+    free(nv);
 }
 
 void MeshObject::computeCenter(){
