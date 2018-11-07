@@ -39,12 +39,6 @@ class MeshObject : public DrawableObject {
 
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light);
 
-        void createMesh(const char *filename);
-
-        void computeNormals();
-        void computeCenter();
-
-        glm::vec3 getVertex(int i);
 
 
         std::vector<float> vertices;
@@ -56,7 +50,6 @@ class MeshObject : public DrawableObject {
 
         Material *material;
 
-        glm::vec3 center;
 
 };
 
