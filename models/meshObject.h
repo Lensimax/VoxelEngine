@@ -16,6 +16,8 @@
 
 #include <string>
 
+#include "cubeMesh.h"
+
 class MeshObject : public DrawableObject {
     public:
 
@@ -49,6 +51,8 @@ class MeshObject : public DrawableObject {
         GLuint *buffers;
 
         Material *material;
+
+        Mesh *mesh;
 
 };
 

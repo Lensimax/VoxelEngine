@@ -37,9 +37,9 @@ void MainRenderer::makeScene(){
     //objectsEngine.push_back(c);
     //objectsEngine.push_back(new Cube("Cube 2", glm::vec3(0.22,0.0,0.0)));
 
-    objectsEngine.push_back(new Sphere());
+    // objectsEngine.push_back(new Sphere());
 
-    // objectsEngine.push_back(new MeshObject("Object","exampleModels/monkey.off"));
+    objectsEngine.push_back(new MeshObject("Object","exampleModels/monkey.off"));
 
     Camera *cam = new CameraProj();
 
