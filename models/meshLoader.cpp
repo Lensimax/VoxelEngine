@@ -14,9 +14,13 @@ MeshLoader::MeshLoader(char *filename) {
   //free(nf);
 }
 
-void MeshLoader::recreate(char *filename){
+void MeshLoader::recreate(){
+    if(fopen(currentFilename,"r") == NULL) {
+        return;
+    }
+
     cleanup();
-    createMesh(filename);
+    createMesh(currentFilename);
 }
 
 void MeshLoader::createMesh(char *filename){
@@ -283,9 +287,6 @@ void MeshLoader::createUI(){
 
     ImGui::Text("Mesh Loader");
     ImGui::InputText("fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
-    if (ImGui::Button("Recreate")){
-        createMesh(currentFilename);
-    }
     ImGui::Text("Number vertices: %d", nb_vertices/3);
     ImGui::Text("Number faces: %d", nb_faces/3);
 

@@ -174,6 +174,10 @@ void MeshObject::createUI(char *ID){
     ImGui::Text(name.c_str());
     ImGui::Separator();
     mesh->createUI();
+    if (ImGui::Button("Recreate")){
+        mesh->recreate();
+        createVAO();
+    }
     ImGui::Separator();
 
     transform->createUI();

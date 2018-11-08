@@ -16,6 +16,8 @@ public:
      unsigned int getNBFaces();
 
      virtual void createUI();
+     virtual void recreate();
+
 
      // length
 

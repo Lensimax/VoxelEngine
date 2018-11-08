@@ -9,11 +9,12 @@ class MeshLoader : public Mesh {
         MeshLoader(char* filename);
         ~MeshLoader();
 
+
+        void recreate() override;
         void createUI() override;
     private:
 
         void createMesh(char *filename);
-        void recreate(char *filename);
         void cleanup();
 
         char currentFilename[1024];
