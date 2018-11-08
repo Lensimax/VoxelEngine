@@ -17,19 +17,21 @@
 
 #include "meshObject.h"
 #include "meshLoader.h"
+#include "sphereMesh.h"
 
 #include <iostream>
 
 #include "../material/lambertian.h"
 
 
-MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 scale, vec3 rotation){
+MeshObject::MeshObject(std::string n, char *filename, vec3 position, vec3 scale, vec3 rotation){
     transform = new Transform(position, scale, rotation);
 
     // createMesh(filename);
 
     // mesh = new CubeMesh();
     mesh = new MeshLoader(filename);
+    // mesh = new SphereMesh();
 
 
     createVAO();
@@ -170,6 +172,8 @@ void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec
 void MeshObject::createUI(char *ID){
     ImGui::BeginChild(ID);
     ImGui::Text(name.c_str());
+    ImGui::Separator();
+    mesh->createUI();
     ImGui::Separator();
 
     transform->createUI();

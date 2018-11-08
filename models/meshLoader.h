@@ -6,10 +6,15 @@
 class MeshLoader : public Mesh {
 
     public:
-        MeshLoader(const char*  filename);
+        MeshLoader(char* filename);
         ~MeshLoader();
 
+        void createUI() override;
+    private:
 
+        void createMesh(char *filename);
+
+        char *currentFilename;
 };
 
 

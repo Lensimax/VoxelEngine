@@ -21,7 +21,7 @@
 class MeshObject : public DrawableObject {
     public:
 
-        MeshObject(std::string n = "MeshObject", const char *filename = "exampleModels/head.off",vec3 position = glm::vec3(0.0,0.0,0.0), vec3 scale = glm::vec3(1.0,1.0,1.0), vec3 rotation = glm::vec3(0.0,0.0,0.0));
+        MeshObject(std::string n = "MeshObject", char *filename = "exampleModels/head.off",vec3 position = glm::vec3(0.0,0.0,0.0), vec3 scale = glm::vec3(1.0,1.0,1.0), vec3 rotation = glm::vec3(0.0,0.0,0.0));
         ~MeshObject();
 
 

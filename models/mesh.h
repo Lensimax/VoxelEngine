@@ -15,6 +15,8 @@ public:
      unsigned int getNBVertices();
      unsigned int getNBFaces();
 
+     virtual void createUI();
+
      // length
 
 

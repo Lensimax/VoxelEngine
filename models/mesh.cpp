@@ -1,4 +1,4 @@
-
+#include "../imgui/imgui.h"
 
 #include "mesh.h"
 
@@ -41,4 +41,10 @@ unsigned int Mesh::getNBVertices(){
 
 unsigned int Mesh::getNBFaces(){
     return nb_faces;
+}
+
+void Mesh::createUI(){
+    ImGui::Text("Mesh");
+    ImGui::Text("Number vertices: %d", nb_vertices/3);
+    ImGui::Text("Number faces: %d", nb_faces/3);
 }
