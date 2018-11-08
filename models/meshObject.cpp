@@ -28,7 +28,7 @@ MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 
     // createMesh(filename);
 
     // mesh = new CubeMesh();
-    mesh = new Mesh("exampleModels/head.off");
+    mesh = new Mesh(filename);
 
 
     createVAO();

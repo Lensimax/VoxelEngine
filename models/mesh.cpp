@@ -51,7 +51,7 @@ Mesh::~Mesh(){
 }
 */
 
-Mesh::Mesh(char *filename) {
+Mesh::Mesh(const char *filename) {
   unsigned int tmp;
   unsigned int i,j;
   unsigned int *f;
@@ -175,6 +175,9 @@ Mesh::Mesh(char *filename) {
 
     // normalization
     norm = sqrt(nf[3*i]*nf[3*i]+nf[3*i+1]*nf[3*i+1]+nf[3*i+2]*nf[3*i+2]);
+    if(norm == 0.0f){
+        fprintf(stderr, "division by 0\n");
+    }
     nf[3*i  ] /= norm;
     nf[3*i+1] /= norm;
     nf[3*i+2] /= norm;

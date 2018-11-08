@@ -6,7 +6,7 @@
 class Mesh {
 
 public:
-     Mesh(char *filename);
+     Mesh(const char *filename);
      ~Mesh();
 
      float *getVertices();
