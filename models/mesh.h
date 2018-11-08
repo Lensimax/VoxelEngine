@@ -6,8 +6,8 @@
 class Mesh {
 
 public:
-     Mesh(const char *filename);
-     ~Mesh();
+
+     virtual ~Mesh() = default;
 
      float *getVertices();
      unsigned int *getFaces();

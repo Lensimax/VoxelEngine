@@ -16,6 +16,7 @@
 
 
 #include "meshObject.h"
+#include "meshLoader.h"
 
 #include <iostream>
 
@@ -28,7 +29,7 @@ MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 
     // createMesh(filename);
 
     // mesh = new CubeMesh();
-    mesh = new Mesh(filename);
+    mesh = new MeshLoader(filename);
 
 
     createVAO();

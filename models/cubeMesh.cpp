@@ -60,7 +60,7 @@ void CubeMesh::createFaces(){
     faces[27] = 4; faces[28] = 1; faces[29] = 0;
         // right face
     faces[30] = 3; faces[31] = 2; faces[32] = 6;
-    faces[33] = 3; faces[34] = 6; faces[35] = 47;
+    faces[33] = 3; faces[34] = 6; faces[35] = 7;
 
 }
 
