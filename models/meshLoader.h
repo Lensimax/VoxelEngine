@@ -14,7 +14,7 @@ class MeshLoader : public Mesh {
 
         void createMesh(char *filename);
 
-        char *currentFilename;
+        char currentFilename[1024];
 };
 
 
