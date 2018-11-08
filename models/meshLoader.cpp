@@ -9,9 +9,14 @@
 
 MeshLoader::MeshLoader(char *filename) {
 
-    createMesh(filename);
     sprintf(currentFilename, "%s", filename);
+    createMesh(currentFilename);
   //free(nf);
+}
+
+void MeshLoader::recreate(char *filename){
+    cleanup();
+    createMesh(filename);
 }
 
 void MeshLoader::createMesh(char *filename){
@@ -278,28 +283,35 @@ void MeshLoader::createUI(){
 
     ImGui::Text("Mesh Loader");
     ImGui::InputText("fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
+    if (ImGui::Button("Recreate")){
+        createMesh(currentFilename);
+    }
     ImGui::Text("Number vertices: %d", nb_vertices/3);
     ImGui::Text("Number faces: %d", nb_faces/3);
 
     ImGui::PopItemWidth();
 }
 
+void MeshLoader::cleanup(){
+    if(normals!=NULL)
+      free(normals);
+
+    if(tangents!=NULL)
+      free(tangents);
+
+    if(colors!=NULL)
+      free(colors);
+
+    if(vertices!=NULL)
+      free(vertices);
+
+    if(faces!=NULL)
+      free(faces);
+
+    if(coords!=NULL)
+      free(coords);
+}
+
 MeshLoader::~MeshLoader() {
-  if(normals!=NULL)
-    free(normals);
-
-  if(tangents!=NULL)
-    free(tangents);
-
-  if(colors!=NULL)
-    free(colors);
-
-  if(vertices!=NULL)
-    free(vertices);
-
-  if(faces!=NULL)
-    free(faces);
-
-  if(coords!=NULL)
-    free(coords);
+    cleanup();
 }
