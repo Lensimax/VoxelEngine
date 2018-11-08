@@ -39,7 +39,7 @@ void MainRenderer::makeScene(){
 
     // objectsEngine.push_back(new Sphere());
 
-    objectsEngine.push_back(new MeshObject("Object","exampleModels/monkey.off"));
+    objectsEngine.push_back(new MeshObject("Object","exampleModels/quad.off"));
 
     Camera *cam = new CameraProj();
 
