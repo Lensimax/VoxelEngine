@@ -28,16 +28,7 @@
 MeshObject::MeshObject(std::string n, char *filename, vec3 position, vec3 scale, vec3 rotation){
     transform = new Transform(position, scale, rotation);
 
-    // createMesh(filename);
-
-    // mesh = new CubeMesh();
     mesh = new MeshLoader(filename);
-    // mesh = new SphereMesh();
-
-    // triangles;
-    // normals;
-
-    printf("creation done\n");
 
     createVAO();
 

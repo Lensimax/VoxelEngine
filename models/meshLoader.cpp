@@ -287,8 +287,8 @@ void MeshLoader::createUI(){
 
     ImGui::Text("Mesh Loader");
     ImGui::InputText("fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
-    ImGui::Text("Number vertices: %d", nb_vertices/3);
-    ImGui::Text("Number faces: %d", nb_faces/3);
+    ImGui::Text("Number vertices: %d", getNBVertices());
+    ImGui::Text("Number faces: %d", getNBFaces());
 
     ImGui::PopItemWidth();
 }
