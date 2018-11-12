@@ -82,19 +82,31 @@ void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 ligh
 
 void MeshObject::createVAO(){
 
-    buffers = new GLuint[2];
+    buffers = new GLuint[3];
 
-    glGenBuffers(2, buffers);
+    glGenBuffers(3, buffers);
     glGenVertexArrays(1,&vertexArrayID);
 
     // create the VBO associated with the grid (the terrain)
     glBindVertexArray(vertexArrayID);
+
     glBindBuffer(GL_ARRAY_BUFFER,buffers[0]); // vertices
     glBufferData(GL_ARRAY_BUFFER,mesh->getNBVertices()*3*sizeof(float),mesh->getVertices(),GL_STATIC_DRAW);
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
-    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(POSITION_ATTRIB);
+    glVertexAttribPointer(POSITION_ATTRIB,3,GL_FLOAT,GL_FALSE,0,(void *)0);
+
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,buffers[1]); // indices
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,mesh->getNBFaces()*3*sizeof(unsigned int),mesh->getFaces(),GL_STATIC_DRAW);
+
+    /* normals */
+    glEnableVertexAttribArray(VERTEX_NORMAL_ATTRIB);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+    glBufferData(GL_ARRAY_BUFFER, mesh->getNBVertices()*3* sizeof(float), mesh->getNormals(), GL_STATIC_DRAW); //normals is std::vector<float>
+    glEnableVertexAttribArray(VERTEX_NORMAL_ATTRIB);
+    glVertexAttribPointer(VERTEX_NORMAL_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    //indices
+    glBindVertexArray(0);
 }
 
 void MeshObject::deleteVAO(){

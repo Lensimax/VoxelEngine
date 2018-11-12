@@ -2,6 +2,8 @@
 
 out vec4 bufferColor;
 
+in vec3 normal;
+
 uniform vec4 color;
 
 uniform vec3 light;
@@ -36,4 +38,5 @@ void main(){
 	}*/
 
 	bufferColor = color;
+	// bufferColor = vec4(normal, 1.0);
 }
