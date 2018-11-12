@@ -8,6 +8,7 @@
 #endif
 
 #include "tools/lights/light.h"
+#include "scene.h"
 
 #include "models/drawableObject.h"
 #include "models/cube.h"
@@ -23,17 +24,11 @@ class MainRenderer {
     ~MainRenderer();
 
 
-    void paintGL(int width, int height);
+    void paintGL(Scene *scene, int width, int height);
     void initializeGL();
 
-    void createUI(char *ID);
-    void createUIAtID(int indexItem, char *ID);
-
-    std::vector<std::string> getNameOfAllObjects();
     private:
 
-        void makeScene();
-        void deleteScene();
 
         Camera *getCamera();
         Light *getLight();
@@ -41,7 +36,6 @@ class MainRenderer {
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
-        std::vector<EngineObject*> objectsEngine;
 
 
 };

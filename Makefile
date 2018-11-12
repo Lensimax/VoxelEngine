@@ -15,7 +15,7 @@
 #CXX = clang++
 
 EXE = run
-SOURCES = mainRenderer.cpp shader.cpp material/lambertian.cpp engineObject.cpp
+SOURCES = mainRenderer.cpp shader.cpp material/lambertian.cpp engineObject.cpp scene.cpp
 SOURCES += models/cube.cpp models/transform.cpp models/drawableObject.cpp models/sphereMesh.cpp models/sphere.cpp models/meshLoader.cpp models/meshObject.cpp models/mesh.cpp models/cubeMesh.cpp
 SOURCES += tools/camera.cpp tools/cameraProj.cpp tools/lights/directionnalLight.cpp
 

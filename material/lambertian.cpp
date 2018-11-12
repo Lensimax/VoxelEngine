@@ -22,7 +22,7 @@ Lambertian::Lambertian(glm::vec4 color){
 
     this->color = color;
     createShader();
-    activeDebugNormal = false;
+    activeDebugNormal = true;
 
 }
 Lambertian::~Lambertian(){

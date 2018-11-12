@@ -88,6 +88,10 @@
 #endif
 #endif
 
+#include "../mainRenderer.h"
+
+static MainRenderer *renderer;
+
 
 // OpenGL Data
 static char         g_GlslVersionString[32] = "";
@@ -112,7 +116,8 @@ bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
     strcpy(g_GlslVersionString, glsl_version);
     strcat(g_GlslVersionString, "\n");
 
-
+    renderer = new MainRenderer();
+    renderer->initializeGL();
 
     return true;
 }
@@ -120,6 +125,7 @@ bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
 void    ImGui_ImplOpenGL3_Shutdown()
 {
     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+    delete renderer;
 }
 
 void    ImGui_ImplOpenGL3_NewFrame()
@@ -131,7 +137,7 @@ void    ImGui_ImplOpenGL3_NewFrame()
 // OpenGL3 Render function.
 // (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
 // Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so.
-void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
+void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data, Scene *scene)
 {
     // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
     ImGuiIO& io = ImGui::GetIO();
@@ -140,6 +146,8 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
     if (fb_width <= 0 || fb_height <= 0)
         return;
     draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+
+    // renderer->paintGL(scene, fb_width, fb_height);
 
     // Backup GL state
     GLenum last_active_texture; glGetIntegerv(GL_ACTIVE_TEXTURE, (GLint*)&last_active_texture);
@@ -180,9 +188,13 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
 
 
 
+
     // Setup viewport, orthographic projection matrix
     // Our visible imgui space lies from draw_data->DisplayPps (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayMin is typically (0,0) for single viewport apps.
     glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
+
+
+
     float L = draw_data->DisplayPos.x;
     float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
     float T = draw_data->DisplayPos.y;
@@ -212,6 +224,8 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
     glVertexAttribPointer(g_AttribLocationPosition, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, pos));
     glVertexAttribPointer(g_AttribLocationUV, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, uv));
     glVertexAttribPointer(g_AttribLocationColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), (GLvoid*)IM_OFFSETOF(ImDrawVert, col));
+
+
 
     // Draw
     ImVec2 pos = draw_data->DisplayPos;

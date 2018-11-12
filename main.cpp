@@ -26,6 +26,7 @@
 
 
 #include "../mainRenderer.h"
+#include "scene.h"
 #include <iostream>
 // #include <string>
 // #include <vector>
@@ -141,6 +142,7 @@ int main(int, char**){
     MainRenderer *renderer = new MainRenderer();
     renderer->initializeGL();
 
+    Scene *scene = new Scene();
 
 
     float sizeLeft = 200;
@@ -166,7 +168,7 @@ int main(int, char**){
 
         createInfoWindow();
 
-        std::vector<std::string> listOfObjects = renderer->getNameOfAllObjects();
+        std::vector<std::string> listOfObjects = scene->getNameOfAllObjects();
         Begin("Project");
 
         DrawSplitter(false, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
@@ -190,7 +192,7 @@ int main(int, char**){
         if(selected > -1){
             char idInspector[10];
             sprintf(idInspector, "right");
-            renderer->createUIAtID(selected, idInspector);
+            scene->createUIAtID(selected, idInspector);
         }
 
         ImGui::EndChild();
@@ -207,10 +209,10 @@ int main(int, char**){
         glClearColor(0.239f, 0.478f, 0.647f, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        renderer->paintGL(display_w, display_h);
+        renderer->paintGL(scene, display_w, display_h);
 
         /* draw the widget */
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData(), scene);
 
         glfwMakeContextCurrent(window);
         glfwSwapBuffers(window);
