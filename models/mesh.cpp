@@ -43,6 +43,10 @@ unsigned int Mesh::getNBFaces(){
     return nb_faces;
 }
 
+float *Mesh::getNormals(){
+    return normals;
+}
+
 void Mesh::createUI(){
     ImGui::Text("Mesh");
     ImGui::Text("Number vertices: %d", nb_vertices/3);

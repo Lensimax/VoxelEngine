@@ -11,6 +11,7 @@ public:
 
      float *getVertices();
      unsigned int *getFaces();
+     float *getNormals();
 
      unsigned int getNBVertices();
      unsigned int getNBFaces();

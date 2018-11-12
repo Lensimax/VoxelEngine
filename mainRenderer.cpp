@@ -40,7 +40,7 @@ void MainRenderer::makeScene(){
     // objectsEngine.push_back(new Sphere());
 
     // objectsEngine.push_back(new MeshObject("Object","exampleModels/quad.off", glm::vec3(-2.28, 0.0,0.0)));
-    objectsEngine.push_back(new MeshObject("Object","exampleModels/monkey.off", glm::vec3(0.0, 0.0,0.0)));
+    objectsEngine.push_back(new MeshObject("Object Loaded"));
 
     Camera *cam = new CameraProj();
 
