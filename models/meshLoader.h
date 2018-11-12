@@ -1,33 +1,24 @@
 #ifndef MESH_LOADER_H
 #define MESH_LOADER_H
 
-class Mesh {
- public:
-  Mesh(char *filename);
-  ~Mesh();
+#include "mesh.h"
 
-  unsigned int *get_face(unsigned int i);
-  float        *get_vertex(unsigned int i);
-  float        *get_normal(unsigned int i);
-  float        *get_tangent(unsigned int i);
-  float        *get_coord(unsigned int i);
-  float        *get_color(unsigned int i);
+class MeshLoader : public Mesh {
 
-  // length
-  unsigned int  nb_vertices;
-  unsigned int  nb_faces;
+    public:
+        MeshLoader(char* filename);
+        ~MeshLoader();
 
-  // data
-  float        *vertices;
-  float        *normals;
-  float        *tangents;
-  float        *colors;
-  float        *coords;
-  unsigned int *faces;
 
-  // info
-  float         center[3];
-  float         radius;
+        void recreate() override;
+        void createUI() override;
+    private:
+
+        void createMesh(char *filename);
+        void cleanup();
+
+        char currentFilename[1024];
 };
 
-#endif // MESH_LOADER_H
+
+#endif

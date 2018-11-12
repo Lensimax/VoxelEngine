@@ -37,10 +37,10 @@ void MainRenderer::makeScene(){
     //objectsEngine.push_back(c);
     //objectsEngine.push_back(new Cube("Cube 2", glm::vec3(0.22,0.0,0.0)));
 
-    //objectsEngine.push_back(new Sphere());
+    // objectsEngine.push_back(new Sphere());
 
     // objectsEngine.push_back(new MeshObject("Object","exampleModels/quad.off", glm::vec3(-2.28, 0.0,0.0)));
-    objectsEngine.push_back(new MeshObject("Object","exampleModels/monkey.off", glm::vec3(-2.28, 0.0,0.0)));
+    objectsEngine.push_back(new MeshObject("Object","exampleModels/monkey.off", glm::vec3(0.0, 0.0,0.0)));
 
     Camera *cam = new CameraProj();
 
@@ -77,10 +77,10 @@ void MainRenderer::paintGL(int width, int height){
     }
 
     for(unsigned int i=0; i<objectsEngine.size(); i++){
-        /*if(DrawableObject* o = dynamic_cast<DrawableObject*>(objectsEngine[i])) {
+        if(DrawableObject* o = dynamic_cast<DrawableObject*>(objectsEngine[i])) {
         // old was safely casted to NewType
             o->draw(c->getView(), c->getProj(), light);
-        }*/
+        }
     }
 
 

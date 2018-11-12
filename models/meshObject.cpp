@@ -17,20 +17,23 @@
 #include "meshLoader.h"
 
 #include "meshObject.h"
+#include "meshLoader.h"
+#include "sphereMesh.h"
 
 #include <iostream>
 
 #include "../material/lambertian.h"
 
 
-MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 scale, vec3 rotation){
+MeshObject::MeshObject(std::string n, char *filename, vec3 position, vec3 scale, vec3 rotation){
     transform = new Transform(position, scale, rotation);
 
-    Mesh *m = new Mesh("exampleModels/head.off");
+    // createMesh(filename);
 
-    vertices = std::vector<float>(m->vertices, m->vertices + sizeof(m->vertices) / sizeof(m->vertices) );
-    triangles = std::vector<int>(m->faces, m->faces + sizeof(m->faces) / sizeof(m->faces) );
-    normals = std::vector<float>(m->normals, m->normals + sizeof(m->normals) / sizeof(m->normals) );
+    // mesh = new CubeMesh();
+    mesh = new MeshLoader(filename);
+    // mesh = new SphereMesh();
+
     // triangles;
     // normals;
 
@@ -42,7 +45,6 @@ MeshObject::MeshObject(std::string n, const char *filename, vec3 position, vec3 
 
     name = n;
 
-    delete m;
 }
 
 
@@ -50,6 +52,7 @@ MeshObject::~MeshObject(){
     deleteVAO();
     delete transform;
     delete material;
+    delete mesh;
 }
 
 
@@ -80,7 +83,7 @@ void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 ligh
     setUniform(viewMat, projectionMat, light);
 
     glBindVertexArray(vertexArrayID);
-    glDrawElements(GL_TRIANGLES,3*nbTriangles(),GL_UNSIGNED_INT,(void *)0);
+    glDrawElements(GL_TRIANGLES,3*mesh->getNBFaces(),GL_UNSIGNED_INT,(void *)0);
     glBindVertexArray(0);
 
     glUseProgram(0);
@@ -96,11 +99,11 @@ void MeshObject::createVAO(){
     // create the VBO associated with the grid (the terrain)
     glBindVertexArray(vertexArrayID);
     glBindBuffer(GL_ARRAY_BUFFER,buffers[0]); // vertices
-    glBufferData(GL_ARRAY_BUFFER,nbVertices()*3*sizeof(float),getVertices(),GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,mesh->getNBVertices()*3*sizeof(float),mesh->getVertices(),GL_STATIC_DRAW);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,buffers[1]); // indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,nbTriangles()*3*sizeof(int),getTriangles(),GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,mesh->getNBFaces()*3*sizeof(unsigned int),mesh->getFaces(),GL_STATIC_DRAW);
 }
 
 void MeshObject::deleteVAO(){
@@ -122,6 +125,12 @@ void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec
 void MeshObject::createUI(char *ID){
     ImGui::BeginChild(ID);
     ImGui::Text(name.c_str());
+    ImGui::Separator();
+    mesh->createUI();
+    if (ImGui::Button("Recreate")){
+        mesh->recreate();
+        createVAO();
+    }
     ImGui::Separator();
 
     transform->createUI();
