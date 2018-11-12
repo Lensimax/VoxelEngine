@@ -30,6 +30,10 @@ class Lambertian : public Material {
         void createShader();
         void deleteShader();
 
+        Shader *debugNormalShader;
+
+        bool activeDebugNormal;
+
 };
 
 #endif

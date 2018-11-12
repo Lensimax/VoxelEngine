@@ -22,6 +22,7 @@ Lambertian::Lambertian(glm::vec4 color){
 
     this->color = color;
     createShader();
+    activeDebugNormal = false;
 
 }
 Lambertian::~Lambertian(){
@@ -30,15 +31,25 @@ Lambertian::~Lambertian(){
 
 void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, glm::vec3 light){
 
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projMat[0][0]));
+    GLuint shaderID;
+    if(activeDebugNormal){
+        shaderID = debugNormalShader->id();
+    } else {
+        shaderID = shader->id();
+    }
+
+    glUniformMatrix4fv(glGetUniformLocation(shaderID,"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shaderID,"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shaderID,"projMat"),1,GL_FALSE,&(projMat[0][0]));
 
     // printf("y = %f\n", light[1]);
 
-    glUniform3fv(glGetUniformLocation(shader->id(),"light"), 1, &light[0]);
+    if(!activeDebugNormal){
 
-    glUniform4fv(glGetUniformLocation(shader->id(),"color"),1,&(color[0]));
+        glUniform3fv(glGetUniformLocation(shaderID,"light"), 1, &light[0]);
+
+        glUniform4fv(glGetUniformLocation(shaderID,"color"),1,&(color[0]));
+    }
 }
 
 
@@ -50,20 +61,32 @@ void Lambertian::createUI(){
     ImGui::Text("Color: "); ImGui::SameLine();
     ImGui::ColorEdit4("lambertian-color", (float *)&color);
 
+    ImGui::Text("debug Normal "); ImGui::SameLine();
+    ImGui::Checkbox("",&activeDebugNormal);
+
     // to hide label of the input
     ImGui::PopItemWidth();
 }
 
 GLuint Lambertian::shaderID(){
-    return shader->id();
+    GLuint shaderID;
+    if(activeDebugNormal){
+        shaderID = debugNormalShader->id();
+    } else {
+        shaderID = shader->id();
+    }
+    return shaderID;
 }
 
 
 void Lambertian::createShader(){
     shader = new Shader();
     shader->load("material/shaders/lambertian.vert","material/shaders/lambertian.frag");
+    debugNormalShader = new Shader();
+    debugNormalShader->load("material/shaders/debugNormal.vert","material/shaders/debugNormal.frag");
 }
 
 void Lambertian::deleteShader(){
     delete shader; shader = NULL;
+    delete debugNormalShader; debugNormalShader = NULL;
 }

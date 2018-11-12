@@ -38,5 +38,4 @@ void main(){
 	}*/
 
 	bufferColor = color;
-	// bufferColor = vec4(normal, 1.0);
 }
