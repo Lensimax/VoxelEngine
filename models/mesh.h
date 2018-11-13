@@ -46,6 +46,12 @@ public:
      float         center[3];
      float         radius;
 
+     void computeNormals();
+     void computeTangents();
+     void computeCenter();
+     void computeRadius();
+     void computeUVCoord();
+
 };
 
 
