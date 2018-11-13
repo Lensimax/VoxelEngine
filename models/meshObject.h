@@ -9,6 +9,7 @@
 #endif
 
 #include "../material/material.h"
+#include "../material/lambertian.h"
 
 #include "drawableObject.h"
 
@@ -26,7 +27,7 @@ const std::string defaultFilename = "exampleModels/monkey.off";
 class MeshObject : public DrawableObject {
     public:
 
-        MeshObject(std::string n = "MeshObject", char *filename = (char*)defaultFilename.c_str(),vec3 position = glm::vec3(0.0,0.0,0.0), vec3 scale = glm::vec3(1.0,1.0,1.0), vec3 rotation = glm::vec3(0.0,0.0,0.0));
+        MeshObject(std::string n = "MeshObject", char *filename = (char*)defaultFilename.c_str(),Transform *t = new Transform(), Material *m = new Lambertian());
         ~MeshObject();
 
 

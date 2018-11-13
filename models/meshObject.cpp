@@ -25,14 +25,14 @@
 #include "../material/lambertian.h"
 
 
-MeshObject::MeshObject(std::string n, char *filename, vec3 position, vec3 scale, vec3 rotation){
-    transform = new Transform(position, scale, rotation);
+MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m){
+    transform = t;
 
     mesh = new MeshLoader(filename);
 
     createVAO();
 
-    material = new Lambertian();
+    material = m;
 
     name = n;
 
