@@ -6,6 +6,10 @@ in vec3 normal;
 
 uniform vec4 color;
 
+
+in vec3 normalView;
+in vec3 eyeView;
+
 uniform vec3 light;
 
 vec4 phong(vec3 myColor, float specDeg, vec3 ambientColor, vec3 specular, vec3 n, vec3 e, vec3 l){
@@ -33,12 +37,13 @@ void main(){
 
 
 	// normal / view and light directions (in camera space)
-	// vec3 n = normalize(normal);
-	// vec3 e = normalize(eyeView);
-	// vec3 l = normalize(lightVector);
+	vec3 n = normalize(normalView);
+	vec3 e = normalize(eyeView);
+	vec3 l = normalize(light);
 
 	const vec3 ambientColor  = vec3(0.1,0.1,0.1);
 	const vec3 specular = vec3(0.9,0.9,0.9);
 
-	bufferColor = color;
+	// bufferColor = color;
+	bufferColor = phong(color.rgb, 0.1, ambientColor, specular, n, e, l);
 }

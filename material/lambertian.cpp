@@ -17,6 +17,8 @@
 
 #include "lambertian.h"
 
+#include "../glm/gtc/matrix_inverse.hpp"
+
 
 Lambertian::Lambertian(glm::vec4 color){
 
@@ -29,9 +31,6 @@ Lambertian::~Lambertian(){
     deleteShader();
 }
 
-/*glm::mat3 normalMatrix (glm::mat) {
-    return glm::mat3(glm::inverseTranspose(mdvMatrix()));
-}*/
 
 void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, glm::vec3 light){
 
@@ -46,9 +45,15 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
     glUniformMatrix4fv(glGetUniformLocation(shaderID,"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shaderID,"projMat"),1,GL_FALSE,&(projMat[0][0]));
 
+
+
     // printf("y = %f\n", light[1]);
 
     if(!activeDebugNormal){
+        glm::mat3 normalMatrix = viewMat * modelMat;
+        normalMatrix = glm::mat3(glm::inverseTranspose(normalMatrix));
+
+        glUniformMatrix3fv(glGetUniformLocation(shaderID,"normalMatrix"),1,GL_FALSE,&(normalMatrix[0][0]));
 
         glUniform3fv(glGetUniformLocation(shaderID,"light"), 1, &light[0]);
 
