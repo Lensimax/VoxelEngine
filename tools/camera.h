@@ -24,6 +24,7 @@ class Camera : public EngineObject {
 
         glm::vec3 position, up, directionOfView;
 
+
 };
 
 #endif

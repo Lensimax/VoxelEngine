@@ -29,6 +29,10 @@ Lambertian::~Lambertian(){
     deleteShader();
 }
 
+/*glm::mat3 normalMatrix (glm::mat) {
+    return glm::mat3(glm::inverseTranspose(mdvMatrix()));
+}*/
+
 void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, glm::vec3 light){
 
     GLuint shaderID;
