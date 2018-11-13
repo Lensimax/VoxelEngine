@@ -2,17 +2,21 @@
 
 out vec4 bufferColor;
 
-in vec3 normal;
 
 uniform vec4 color;
+uniform vec3 light;
+
+uniform vec3 ambientColor;
+uniform vec3 specularColor;
+uniform float specularDegree;
 
 
+in vec3 normal;
 in vec3 normalView;
 in vec3 eyeView;
 
-uniform vec3 light;
 
-vec4 phong(vec3 myColor, float specDeg, vec3 ambientColor, vec3 specular, vec3 n, vec3 e, vec3 l){
+vec4 phong(vec3 myColor, float specDeg, vec3 aColor, vec3 specColor, vec3 n, vec3 e, vec3 l){
 
 
 	// diffuse and specular components of the phong shading model
@@ -20,30 +24,25 @@ vec4 phong(vec3 myColor, float specDeg, vec3 ambientColor, vec3 specular, vec3 n
 	float spec = pow(max(dot(reflect(l,n),e),0.0),specDeg);
 
 	// final color
-	vec3 color = ambientColor + diff*myColor + spec*specular;
+	vec3 color = aColor + diff*myColor + spec*specColor;
 	return vec4(color,1.0);
 }
 
 
 void main(){
-	//bufferColor = vec4(1.0,1.0,0.0,1.0);
-	/*light = Normalize(light);
-	if(light == vec3(0.0,0.0,0.0)){
+
+
+	if(light != vec3(0.0,0.0,0.0)){
+
+		// normal / view and light directions (in camera space)
+		vec3 n = normalize(normalView);
+		vec3 e = normalize(eyeView);
+		vec3 l = normalize(light);
+
+
+		// bufferColor = color;
+		bufferColor = phong(color.rgb, specularDegree, ambientColor, specularColor, n, e, l);
+	} else {
 		bufferColor = color;
-	} else { //  we do phong equation
-		// bufferColor = phong(color, 0.5);
-		bufferColor = vec3(0.0,1.0,0.0,1.0);
-	}*/
-
-
-	// normal / view and light directions (in camera space)
-	vec3 n = normalize(normalView);
-	vec3 e = normalize(eyeView);
-	vec3 l = normalize(light);
-
-	const vec3 ambientColor  = vec3(0.1,0.1,0.1);
-	const vec3 specular = vec3(0.9,0.9,0.9);
-
-	// bufferColor = color;
-	bufferColor = phong(color.rgb, 0.1, ambientColor, specular, n, e, l);
+	}
 }

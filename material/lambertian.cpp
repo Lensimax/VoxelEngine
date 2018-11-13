@@ -26,6 +26,10 @@ Lambertian::Lambertian(glm::vec4 color){
     createShader();
     activeDebugNormal = false;
 
+    specularDeg = 2;
+    ambientColor = vec3(0.1,0.1,0.1);
+    specularColor = vec3(1.0,1.0,1.0);
+
 }
 Lambertian::~Lambertian(){
     deleteShader();
@@ -58,6 +62,10 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
         glUniform3fv(glGetUniformLocation(shaderID,"light"), 1, &light[0]);
 
         glUniform4fv(glGetUniformLocation(shaderID,"color"),1,&(color[0]));
+
+        glUniform3fv(glGetUniformLocation(shaderID,"ambientColor"),1,&(ambientColor[0]));
+        glUniform3fv(glGetUniformLocation(shaderID,"specularColor"),1,&(specularColor[0]));
+        glUniform1f(glGetUniformLocation(shaderID,"specularDegree"), specularDeg);
     }
 }
 
@@ -69,6 +77,15 @@ void Lambertian::createUI(){
     ImGui::Text("Material");
     ImGui::Text("Color: "); ImGui::SameLine();
     ImGui::ColorEdit4("lambertian-color", (float *)&color);
+
+    ImGui::Text("Specular degree"); ImGui::SameLine();
+    ImGui::DragFloat("specdeg", &specularDeg, 0.01f, 0.0, 100, "%.3f");
+
+    ImGui::Text("Ambient color"); ImGui::SameLine();
+    ImGui::ColorEdit4("ambient-color", (float *)&ambientColor);
+
+    ImGui::Text("Specular color"); ImGui::SameLine();
+    ImGui::ColorEdit4("specular-color", (float *)&specularColor);
 
     ImGui::Text("debug Normal "); ImGui::SameLine();
     ImGui::Checkbox("",&activeDebugNormal);

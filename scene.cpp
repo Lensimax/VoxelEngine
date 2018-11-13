@@ -9,14 +9,14 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-    objectsEngine.push_back(new MeshObject("Object Loaded", "exampleModels/monkey.off", glm::vec3(-2.28, 0.0,0.0)));
+    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"exampleModels/monkey.off", glm::vec3(-2.28, 0.0,0.0)));
 
     Camera *cam = new CameraProj();
 
     objectsEngine.push_back(cam);
 
 
-    objectsEngine.push_back(new DirectionnalLight());
+    objectsEngine.push_back(new DirectionnalLight("Light", glm::vec3(8, 0.0, 1)));
 
 }
 

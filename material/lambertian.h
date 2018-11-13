@@ -8,7 +8,6 @@
 #define GLM_H
 #include "../glm/glm.hpp"
 #include "../glm/gtc/matrix_transform.hpp"
-#include "../glm/gtc/matrix_inverse.hpp"
 #endif
 
 
@@ -34,6 +33,10 @@ class Lambertian : public Material {
         Shader *debugNormalShader;
 
         bool activeDebugNormal;
+
+        float specularDeg;
+        glm::vec3 ambientColor, specularColor;
+
 
 };
 
