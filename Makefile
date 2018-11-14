@@ -16,7 +16,7 @@
 #CXX = g++
 #CXX = clang++
 
-EXE = run
+EXE = green-engine
 SOURCES = mainRenderer.cpp shader.cpp material/lambertian.cpp engineObject.cpp scene.cpp
 SOURCES += models/cube.cpp models/transform.cpp models/drawableObject.cpp models/sphereMesh.cpp models/sphere.cpp models/meshLoader.cpp models/meshObject.cpp models/mesh.cpp models/cubeMesh.cpp
 SOURCES += tools/camera.cpp tools/cameraProj.cpp tools/lights/directionnalLight.cpp
@@ -31,8 +31,11 @@ OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 
 ObjectDir=obj/
+BinDir=bin/
 
 CObjects=$(addprefix $(ObjectDir),$(OBJS))
+Executable=$(addprefix $(BinDir),$(EXE))
+
 
 ##---------------------------------------------------------------------
 ## OPENGL LOADER
@@ -116,18 +119,21 @@ $(ObjectDir)%.o:libs/gl3w/GL/%.c
 # %.o:../libs/glad/src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-all: $(EXE)
+all: $(Executable) $(SOURCES)
 	@echo Build complete for $(ECHO_MESSAGE)
 
-$(EXE): $(CObjects) #$(OBJS)
+$(Executable): $(CObjects) #$(OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
-exec: $(EXE)
-	optirun ./$(EXE)
+exec: $(Executable)
+	optirun $(Executable)
 
 clean:
-	rm -f $(EXE) $(ObjectDir)*.o exampleIMGUI exampleIMGUI.o
+	rm -f $(ObjectDir)*.o
 
-maketest:
-	FILE=$(wildcard *.cpp)
-	echo "$(FILE)"
+superclean:
+	make clean
+	rm -f bin/*
+
+cleanImGui:
+	rm -r imgui.ini
