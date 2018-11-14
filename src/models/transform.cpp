@@ -1,6 +1,6 @@
 #include "transform.h"
 
-#include "../imgui/imgui.h"
+#include <imgui.h>
 
 
 Transform::Transform(vec3 position, vec3 scale, vec3 rotation){

@@ -1,6 +1,6 @@
 #include "cameraProj.h"
 
-#include "../imgui/imgui.h"
+#include <imgui.h>
 
 
 CameraProj::CameraProj(std::string name, glm::vec3 pos, glm::vec3 u, glm::vec3 direction, float fov, float aspectP, float n, float f){

@@ -1,8 +1,8 @@
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
-#include "impl/imgui_impl_glfw.h"
-#include "impl/imgui_impl_opengl3.h"
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 #include <stdio.h>
 
 #ifndef GLM_H
