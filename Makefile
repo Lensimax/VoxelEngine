@@ -44,7 +44,7 @@ BinDir=bin/
 
 ## Using OpenGL loader: gl3w [default]
 SOURCES += libs/gl3w/GL/gl3w.c
-CXXFLAGS = -Isrc/libs/gl3w
+CXXFLAGS = -I$(SourceDir)libs/gl3w
 
 CSources=$(addprefix $(SourceDir),$(SOURCES))
 CObjects=$(addprefix $(ObjectDir),$(OBJS))
@@ -78,7 +78,7 @@ ifeq ($(UNAME_S), Darwin) #APPLE
 	#LIBS += -L/usr/local/lib -lglfw3
 	LIBS += -L/usr/local/lib -lglfw
 
-	CXXFLAGS += -Iimpl/ -Iimgui/ -I/usr/local/include
+	CXXFLAGS += -I$(SourceDir)impl/ -I$(SourceDir)$(SourceDir)imgui/ -I/usr/local/include
 	CXXFLAGS += -Wall -Wformat
 	CFLAGS = $(CXXFLAGS)
 endif
@@ -87,7 +87,7 @@ ifeq ($(findstring MINGW,$(UNAME_S)),MINGW)
    ECHO_MESSAGE = "Windows"
    LIBS = -lglfw3 -lgdi32 -lopengl32 -limm32
 
-   CXXFLAGS += -Iimpl/ -Iimgui/ `pkg-config --cflags glfw3`
+   CXXFLAGS += -I$(SourceDir)impl/ -I$(SourceDir)imgui/ `pkg-config --cflags glfw3`
    CXXFLAGS += -Wall -Wformat
    CFLAGS = $(CXXFLAGS)
 endif
@@ -118,7 +118,7 @@ $(ObjectDir)%.o:$(SourceDir)imgui/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 
-$(ObjectDir)%.o:src/libs/gl3w/GL/%.c
+$(ObjectDir)%.o:$(SourceDir)libs/gl3w/GL/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 all: $(Executable) $(CSources)
