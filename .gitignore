@@ -1,4 +1,3 @@
-run
-exampleIMGUI
+bin/
 *.o
 imgui.ini
