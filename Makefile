@@ -30,6 +30,10 @@ SOURCES += main.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 
+ObjectDir=obj/
+
+CObjects=$(addprefix $(ObjectDir),$(OBJS))
+
 ##---------------------------------------------------------------------
 ## OPENGL LOADER
 ##---------------------------------------------------------------------
@@ -86,43 +90,43 @@ endif
 ## BUILD RULES
 ##---------------------------------------------------------------------
 
-%.o:%.cpp
+$(ObjectDir)%.o:%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:models/%.cpp
+$(ObjectDir)%.o:models/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:material/%.cpp
+$(ObjectDir)%.o:material/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:tools/%.cpp
+$(ObjectDir)%.o:tools/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:tools/lights/%.cpp
+$(ObjectDir)%.o:tools/lights/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:impl/%.cpp
+$(ObjectDir)%.o:impl/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:imgui/%.cpp
+$(ObjectDir)%.o:imgui/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 
-%.o:libs/gl3w/GL/%.c
+$(ObjectDir)%.o:libs/gl3w/GL/%.c
 # %.o:../libs/glad/src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 all: $(EXE)
 	@echo Build complete for $(ECHO_MESSAGE)
 
-$(EXE): $(OBJS)
+$(EXE): $(CObjects) #$(OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 exec: $(EXE)
 	optirun ./$(EXE)
 
 clean:
-	rm -f $(EXE) $(OBJS) exampleIMGUI exampleIMGUI.o
+	rm -f $(EXE) $(ObjectDir)*.o exampleIMGUI exampleIMGUI.o
 
 maketest:
 	FILE=$(wildcard *.cpp)
