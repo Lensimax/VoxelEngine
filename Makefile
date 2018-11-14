@@ -30,11 +30,10 @@ SOURCES += main.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 
+SourceDir=src/
 ObjectDir=obj/
 BinDir=bin/
 
-CObjects=$(addprefix $(ObjectDir),$(OBJS))
-Executable=$(addprefix $(BinDir),$(EXE))
 
 
 ##---------------------------------------------------------------------
@@ -45,7 +44,11 @@ Executable=$(addprefix $(BinDir),$(EXE))
 
 ## Using OpenGL loader: gl3w [default]
 SOURCES += libs/gl3w/GL/gl3w.c
-CXXFLAGS = -Ilibs/gl3w
+CXXFLAGS = -Isrc/libs/gl3w
+
+CSources=$(addprefix $(SourceDir),$(SOURCES))
+CObjects=$(addprefix $(ObjectDir),$(OBJS))
+Executable=$(addprefix $(BinDir),$(EXE))
 
 ## Using OpenGL loader: glew
 ## (This assumes a system-wide installation)
@@ -64,7 +67,7 @@ ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
 	LIBS = -lGL `pkg-config --static --libs glfw3`
 
-	CXXFLAGS += -Iimpl/ -Iimgui/  `pkg-config --cflags glfw3`
+	CXXFLAGS += -I$(SourceDir)impl/ -I$(SourceDir)imgui/  `pkg-config --cflags glfw3`
 	CXXFLAGS += -Wall -Wformat
 	CFLAGS = $(CXXFLAGS)
 endif
@@ -93,33 +96,32 @@ endif
 ## BUILD RULES
 ##---------------------------------------------------------------------
 
-$(ObjectDir)%.o:%.cpp
+$(ObjectDir)%.o:$(SourceDir)%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(ObjectDir)%.o:models/%.cpp
+$(ObjectDir)%.o:$(SourceDir)models/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(ObjectDir)%.o:material/%.cpp
+$(ObjectDir)%.o:$(SourceDir)material/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(ObjectDir)%.o:tools/%.cpp
+$(ObjectDir)%.o:$(SourceDir)tools/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(ObjectDir)%.o:tools/lights/%.cpp
+$(ObjectDir)%.o:$(SourceDir)tools/lights/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(ObjectDir)%.o:impl/%.cpp
+$(ObjectDir)%.o:$(SourceDir)impl/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-$(ObjectDir)%.o:imgui/%.cpp
+$(ObjectDir)%.o:$(SourceDir)imgui/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 
-$(ObjectDir)%.o:libs/gl3w/GL/%.c
-# %.o:../libs/glad/src/%.c
+$(ObjectDir)%.o:src/libs/gl3w/GL/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-all: $(Executable) $(SOURCES)
+all: $(Executable) $(CSources)
 	@echo Build complete for $(ECHO_MESSAGE)
 
 $(Executable): $(CObjects) #$(OBJS)

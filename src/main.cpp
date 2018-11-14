@@ -1,6 +1,6 @@
 
-#include "imgui.h"
-#include "imgui_internal.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "impl/imgui_impl_glfw.h"
 #include "impl/imgui_impl_opengl3.h"
 #include <stdio.h>
@@ -25,7 +25,7 @@
 #include <GLFW/glfw3.h> // Include glfw3.h after our OpenGL definitions
 
 
-#include "../mainRenderer.h"
+#include "mainRenderer.h"
 #include "scene.h"
 #include <iostream>
 // #include <string>
