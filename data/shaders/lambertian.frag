@@ -16,9 +16,9 @@ in vec4 eyeView;
 
 vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l){
 
-	const float lightIntensity = 100;
+	const float lightIntensity = 200;
 	const bool blinnPhong = true;
-	const float eta = 0.2;
+	const float eta = 100;
 
 
 	/* ambient lighting */
@@ -36,18 +36,24 @@ vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l){
     float normed = length(l + e);
     float fresnelFactor = 1.0;
     vec4 H =(l+e)/normed;
-    if(!blinnPhong){
+
+    /*if(!blinnPhong){
         maxVal = pow(max( dot(reflectedVector,e),0), shininess);
     } else {
         maxVal = pow(max( dot(n, H),0), 4*shininess);
         float f0 = pow(1-eta, 2)/pow(1+eta, 2);
         fresnelFactor = f0 + (1 - f0)*pow((1-dot(H, e)), 5);
     }
-    vec4 specularColor = specReflectionFactor * vcolor * fresnelFactor * lightIntensity;
+
+    vec4 specularColor = specReflectionFactor * vcolor * fresnelFactor * lightIntensity;*/
+
+	vec4 specularColor = vcolor * pow(max(dot(reflect(l,n),e),0.0),shininess) * lightIntensity;
 
 
-	// return ambientColor + diffuseColor + specularColor;
-	return ambientColor;
+	// return specularColor;
+	// return ambientColor;
+	return diffuseColor;
+	// return specularColor + ambientColor + diffuseColor;
 }
 
 

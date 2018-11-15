@@ -23,6 +23,7 @@ class Lambertian : public Material {
         virtual void callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, glm::vec3 light = glm::vec3(0.0,0.0,0.0));
         virtual void createUI();
         virtual GLuint shaderID();
+        virtual void reloadShaders();
 
     protected:
         glm::vec4 color;
@@ -36,7 +37,6 @@ class Lambertian : public Material {
 
         float specularDeg;
         glm::vec3 ambientColor, specularColor;
-
 
 };
 

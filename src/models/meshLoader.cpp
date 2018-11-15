@@ -11,7 +11,6 @@ MeshLoader::MeshLoader(char *filename) {
 
     sprintf(currentFilename, "%s", filename);
     createMesh(currentFilename);
-  //free(nf);
 }
 
 void MeshLoader::recreate(){

@@ -22,6 +22,7 @@
 
 Lambertian::Lambertian(glm::vec4 color){
 
+
     this->color = color;
     createShader();
     activeDebugNormal = false;
@@ -74,7 +75,10 @@ void Lambertian::createUI(){
     // to hide label of the input
     ImGui::PushItemWidth(-1);
 
-    ImGui::Text("Material");
+    ImGui::Text("Material"); ImGui::SameLine();
+    if (ImGui::Button("Refresh")){
+        reloadShaders();
+    }
     ImGui::Text("Color: "); ImGui::SameLine();
     ImGui::ColorEdit4("lambertian-color", (float *)&color);
 
@@ -110,6 +114,10 @@ void Lambertian::createShader(){
     shader->load("data/shaders/lambertian.vert","data/shaders/lambertian.frag");
     debugNormalShader = new Shader();
     debugNormalShader->load("data/shaders/debugNormal.vert","data/shaders/debugNormal.frag");
+}
+void Lambertian::reloadShaders(){
+    shader->reload("data/shaders/lambertian.vert","data/shaders/lambertian.frag");
+    debugNormalShader->reload("data/shaders/debugNormal.vert","data/shaders/debugNormal.frag");
 }
 
 void Lambertian::deleteShader(){
