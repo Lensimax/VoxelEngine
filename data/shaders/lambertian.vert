@@ -11,16 +11,16 @@ uniform mat4 modelMat;
 uniform mat4 projMat;
 uniform mat4 viewMat;
 
-out vec3 normal;
-out vec3 normalView;
-out vec3 eyeView;
+out vec4 normal;
+out vec4 normalView;
+out vec4 eyeView;
 
 void main() {
 	mat4 mv = viewMat * modelMat;
 
 	gl_Position = projMat*mv*vec4(position, 1.0);
 
-	normal = normalize(vertNormal);
+	normal = normalize(vec4(vertNormal,0.0));
 	normalView = normalize(normalMatrix*normal);
-	eyeView = normalize((mv*vec4(position,1.0)).xyz);
+	eyeView = normalize((mv*vec4(position,1.0)));
 }
