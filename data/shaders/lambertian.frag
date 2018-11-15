@@ -14,13 +14,16 @@ in vec4 normalView;
 in vec4 eyeView;
 
 
-vec4 phong(vec4 vcolor, float specDeg, vec4 n, vec4 e, vec4 l){
+vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l){
 
 	const float lightIntensity = 100;
+	const bool blinnPhong = true;
+	const float eta = 0.2;
+
 
 	/* ambient lighting */
     const float ambientReflectionFactor = 0.2;
-    vec4 ambienColor = ambientReflectionFactor * vcolor * lightIntensity;
+    vec4 ambientColor = ambientReflectionFactor * vcolor * lightIntensity;
 
     /* Diffuse lighting */
     const float diffuseRefletionFactor = 0.5;
@@ -53,19 +56,19 @@ vec4 phong(vec4 vcolor, float specDeg, vec4 n, vec4 e, vec4 l){
 	return vec4(color,1.0);*/
 
 	// return specularColor;
-	return ambientColor
+	return ambientColor;
 }
 
 
 void main(){
 
 
-	if(light != vec3(0.0,0.0,0.0)){
+	if(light != vec4(0.0,0.0,0.0,1.0)){
 
 		// normal / view and light directions (in camera space)
-		vec3 n = normalize(normalView);
-		vec3 e = normalize(eyeView);
-		vec3 l = normalize(light);
+		vec4 n = normalize(normalView);
+		vec4 e = normalize(eyeView);
+		vec4 l = normalize(light);
 
 
 		// bufferColor = color;

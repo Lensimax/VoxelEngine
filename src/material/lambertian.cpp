@@ -107,9 +107,9 @@ GLuint Lambertian::shaderID(){
 
 void Lambertian::createShader(){
     shader = new Shader();
-    shader->load("material/shaders/lambertian.vert","material/shaders/lambertian.frag");
+    shader->load("data/shaders/lambertian.vert","data/shaders/lambertian.frag");
     debugNormalShader = new Shader();
-    debugNormalShader->load("material/shaders/debugNormal.vert","material/shaders/debugNormal.frag");
+    // debugNormalShader->load("data/shaders/debugNormal.vert","material/shaders/debugNormal.frag");
 }
 
 void Lambertian::deleteShader(){
