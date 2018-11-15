@@ -46,16 +46,7 @@ vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l){
     vec4 specularColor = specReflectionFactor * vcolor * fresnelFactor * lightIntensity;
 
 
-/*
-	// diffuse and specular components of the phong shading model
-	float diff = max(dot(l,n),0.0);
-	float spec = pow(max(dot(reflect(l,n),e),0.0),specDeg);
-
-	// final color
-	vec3 color = aColor + diff*myColor + spec*specColor;
-	return vec4(color,1.0);*/
-
-	// return specularColor;
+	// return ambientColor + diffuseColor + specularColor;
 	return ambientColor;
 }
 

@@ -109,7 +109,7 @@ void Lambertian::createShader(){
     shader = new Shader();
     shader->load("data/shaders/lambertian.vert","data/shaders/lambertian.frag");
     debugNormalShader = new Shader();
-    // debugNormalShader->load("data/shaders/debugNormal.vert","material/shaders/debugNormal.frag");
+    debugNormalShader->load("data/shaders/debugNormal.vert","data/shaders/debugNormal.frag");
 }
 
 void Lambertian::deleteShader(){
