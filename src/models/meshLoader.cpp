@@ -110,27 +110,37 @@ void MeshLoader::createUI(){
     ImGui::Text("Number vertices: %d", getNBVertices());
     ImGui::Text("Number faces: %d", getNBFaces());
 
+
     ImGui::PopItemWidth();
 }
 
 void MeshLoader::cleanup(){
-    if(normals!=NULL)
-      free(normals);
+    if(normals!=NULL){
+        free(normals);
+        normals = NULL;
+    }
+    if(tangents!=NULL){
+        free(tangents);
+        tangents = NULL;
+    }
+    if(colors!=NULL){
+        free(colors);
+        colors = NULL;
+    }
+    if(vertices!=NULL){
+        free(vertices);
+        vertices = NULL;
+    }
+    if(faces!=NULL){
+        free(faces);
+        faces = NULL;
+    }
+    if(coords!=NULL){
+        free(coords);
+        coords = NULL;
+    }
 
-    if(tangents!=NULL)
-      free(tangents);
 
-    if(colors!=NULL)
-      free(colors);
-
-    if(vertices!=NULL)
-      free(vertices);
-
-    if(faces!=NULL)
-      free(faces);
-
-    if(coords!=NULL)
-      free(coords);
 }
 
 MeshLoader::~MeshLoader() {

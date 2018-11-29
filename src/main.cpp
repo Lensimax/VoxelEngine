@@ -221,6 +221,7 @@ int main(int, char**){
 
 
     delete renderer;
+    delete scene;
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
