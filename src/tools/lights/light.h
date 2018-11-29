@@ -13,6 +13,9 @@ class Light : public EngineObject {
 
     public:
         virtual glm::vec3 getLight() = 0;
+
+        float intensity;
+    protected:
 };
 
 #endif

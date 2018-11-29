@@ -15,6 +15,7 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+#include "tools/lights/directionnalLight.h"
 
 #include "mainRenderer.h"
 
@@ -49,18 +50,15 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     }
 
     Light *l = scene->getLight();
-    glm::vec3 light;
     if(l == NULL){
-        light = glm::vec3(0.0,0.0,0.0);
-    } else {
-        light = l->getLight();
+        l = new DirectionnalLight();
     }
 
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         if(DrawableObject* o = dynamic_cast<DrawableObject*>(scene->objectsEngine[i])) {
         // old was safely casted to NewType
-            o->draw(c->getView(), c->getProj(), light);
+            o->draw(c->getView(), c->getProj(), l);
         }
     }
 

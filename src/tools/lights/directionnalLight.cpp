@@ -5,6 +5,7 @@
 DirectionnalLight::DirectionnalLight(std::string name, glm::vec3 l){
     setName(name);
     light = l;
+    intensity = 1.0;
 }
 
 
@@ -27,6 +28,9 @@ void DirectionnalLight::createUI(char *ID){
 
     ImGui::Text("Direction: "); ImGui::SameLine();
     ImGui::DragFloat3("directionLight", &light[0], 0.01f, lowestValue, highestValue, format);
+
+    ImGui::Text("Intensity: "); ImGui::SameLine();
+    ImGui::DragFloat("intensity", &intensity, 0.01f, 0.0, 2.0, "%.3f");
 
 
     ImGui::PopItemWidth();

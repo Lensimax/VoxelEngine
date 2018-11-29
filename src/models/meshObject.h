@@ -38,14 +38,14 @@ class MeshObject : public DrawableObject {
 
         virtual void createUI(char *ID);
 
-        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light = glm::vec3(0.0,0.0,0.0));
+        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
 
 
     private:
         void createVAO();
         void deleteVAO();
 
-        void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light);
+        void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
 
 
 

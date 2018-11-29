@@ -38,7 +38,7 @@ Lambertian::~Lambertian(){
 }
 
 
-void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, glm::vec3 light){
+void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, Light *light){
 
     GLuint shaderID;
     if(activeDebugNormal){
@@ -63,13 +63,13 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
         glUniformMatrix4fv(glGetUniformLocation(shaderID,"lightMat4"),1,GL_FALSE,&(modelMat[0][0]));
 
-        glm::vec4 vecLight = glm::vec4(light, 1.0);
+        glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &light->getLight()[0]);
 
-        glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &vecLight[0]);
 
         glUniform4fv(glGetUniformLocation(shaderID,"color"),1,&(color[0]));
 
         glUniform1f(glGetUniformLocation(shaderID,"specularDegree"), specularDeg);
+        glUniform1f(glGetUniformLocation(shaderID,"lightIntensity"), light->intensity);
 
         glUniform1f(glGetUniformLocation(shaderID,"indexOfRefraction"), refractionValue);
     }

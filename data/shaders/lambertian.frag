@@ -6,6 +6,7 @@ out vec4 bufferColor;
 uniform vec4 color;
 uniform float indexOfRefraction;
 uniform float specularDegree;
+uniform float lightIntensity;
 
 
 in vec4 lightVec;
@@ -41,7 +42,6 @@ float fresnelCoef(float teta, float eta){
 
 vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l, float eta){
 
-	const float lightIntensity = 200;
 	const bool blinnPhong = true;
 
 
@@ -79,8 +79,8 @@ vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l, float eta){
 
 	// return specularColor;
 	// return ambientColor;
-	return specularColor;
-	// return specularColor + ambientColor + diffuseColor;
+	// return specularColor;
+	return specularColor + ambientColor + diffuseColor;
 }
 
 

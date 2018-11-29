@@ -67,7 +67,7 @@ int MeshObject::nbTriangles(){
 
 
 
-void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light){
+void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
     glUseProgram(material->shaderID());
 
@@ -114,7 +114,7 @@ void MeshObject::deleteVAO(){
     glDeleteVertexArrays(1,&vertexArrayID);
 }
 
-void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, glm::vec3 light){
+void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
     glm::mat4 modelMat = transform->getMat4();
 
