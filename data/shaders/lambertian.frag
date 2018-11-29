@@ -74,13 +74,16 @@ vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l, float eta){
 
     vec4 specularColor = fresnelCoef(dot(H, l), eta) * vcolor * maxVal * lightIntensity;
 
+	/*if(maxVal == 0.0){
+		specularColor = vec4(0.0,1.0,0.0,1.0);
+	}*/
 	// vec4 specularColor = vcolor * pow(max(dot(reflect(l,n),e),0.0),shininess) * lightIntensity;
 
 
-	// return specularColor;
+	// return diffuseColor;
 	// return ambientColor;
-	// return specularColor;
-	return specularColor + ambientColor + diffuseColor;
+	return specularColor;
+	// return specularColor + ambientColor + diffuseColor;
 }
 
 

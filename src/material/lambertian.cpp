@@ -28,7 +28,7 @@ Lambertian::Lambertian(glm::vec4 color){
     activeDebugNormal = false;
 
     specularDeg = 2;
-    refractionValue = 1.5f;
+    refractionValue = 2.4175;
     ambientColor = vec3(0.1,0.1,0.1);
     specularColor = vec3(1.0,1.0,1.0);
 
