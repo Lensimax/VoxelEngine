@@ -35,7 +35,7 @@ class Lambertian : public Material {
 
         bool activeDebugNormal;
 
-        float specularDeg;
+        float specularDeg, refractionValue;
         glm::vec3 ambientColor, specularColor;
 
 };
