@@ -3,6 +3,7 @@
 
 #include "tools/lights/directionnalLight.h"
 #include "models/meshObject.h"
+#include "models/sphere.h"
 
 Scene::Scene(){
 
@@ -12,6 +13,8 @@ Scene::Scene(){
 
 
     objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"exampleModels/monkey.off", new Transform(glm::vec3(-2.28, 0.0, 0.0))));
+
+    // objectsEngine.push_back(new Sphere());
 
     Camera *cam = new CameraProj();
 
