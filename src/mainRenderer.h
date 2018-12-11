@@ -37,7 +37,18 @@ class MainRenderer {
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
+        /* FBO */
+
+        GLuint fboRenderScene;
+
+        void createFBOSceneRender();
+        void initFBOSceneRender(int width, int height);
+        void deleteFBOSceneRender();
+
+        GLuint renderedSceneTextureID;
+
         /* final rendering */
+
 
         void createVAOQuad();
         void deleteVAOQuad();

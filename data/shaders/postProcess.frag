@@ -1,13 +1,15 @@
 #version 330
 
+uniform sampler2D sceneRendered;
 
-in vec3 pixelPos;
+in vec2 texcoord;
 
 out vec4 bufferColor;
 
 void main(){
 
-    vec2 uvCoord = 0.5 + pixelPos.xy * 0.5;
+    bufferColor = texture(sceneRendered, texcoord);
 
-    bufferColor = vec4(uvCoord.x,uvCoord.y,0.0,1.0);
+    // bufferColor = vec4(texcoord.x,texcoord.y,0.0,1.0);
+
 }
