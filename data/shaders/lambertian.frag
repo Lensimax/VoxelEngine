@@ -14,13 +14,6 @@ in vec4 normal;
 in vec4 normalView;
 in vec4 eyeView;
 
-float pow2AbsDiv(float a, float b){
-	if(b != 0){
-		return abs((a/b)*(a/b));
-	} else {
-		return 0.001;
-	}
-}
 
 
 
@@ -62,11 +55,7 @@ float fresnel(vec3 I, vec3 N, float ior){
 }
 
 
-
 vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l, float eta){
-
-	const bool blinnPhong = true;
-
 
 	/* ambient lighting */
     const float ambientReflectionFactor = 0.2;
@@ -84,19 +73,12 @@ vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l, float eta){
     vec4 H =(l+e)/normed;
 
 
-    /*if(!blinnPhong){
-        maxVal = pow(max( dot(reflectedVector,e),0), shininess);
-    } else {
-        maxVal = pow(max( dot(n, H),0), 4*shininess);
-        float f0 = pow(1-eta, 2)/pow(1+eta, 2);
-        fresnelFactor = f0 + (1 - f0)*pow((1-dot(H, e)), 5);
-    }*/
+	float maxVal = pow(max( dot(n, H),0), shininess);
+	float f0 = pow(1-eta, 2)/pow(1+eta, 2);
+	float fresnelFactor = f0 + (1 - f0)*pow((1-dot(H, e)), 5);
 
-	float maxVal = pow(max( dot(n, H),0.0), shininess);
 
     vec4 specularColor = fresnel(H.xyz, l.xyz, eta) * vcolor * maxVal * lightIntensity;
-
-	// vec4 specularColor = vcolor * pow(max(dot(reflect(l,n),e),0.0),shininess) * lightIntensity;
 
 
 	// return diffuseColor;
@@ -120,6 +102,7 @@ void main(){
 
 		// bufferColor = color;
 		bufferColor = phong(color, specularDegree, n, e, l, indexOfRefraction);
+		// bufferColor = testBlinn(color, specularDegree, l.xyz, n.xyz, e.xyz);
 	} else {
 		bufferColor = color;
 	}
