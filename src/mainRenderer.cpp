@@ -27,14 +27,15 @@
 
 MainRenderer::MainRenderer(){
 
+    postProcessShader = new Shader();
+    postProcessShader->load("data/shaders/postProcess.vert","data/shaders/postProcess.frag");
+
+    createVAOQuad();
+
 }
 
+void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
-
-void MainRenderer::paintGL(Scene *scene, int width, int height){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    initializeGL();
-    glViewport(0,0,width,height);
 
     if(height == 0){
         fprintf(stderr, "Error height = 0\n");
@@ -43,7 +44,6 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
 
 
     /* CAMERA */
-
     Camera *c = scene->getCamera();
     if(c == NULL){
         return;
@@ -57,18 +57,34 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         if(DrawableObject* o = dynamic_cast<DrawableObject*>(scene->objectsEngine[i])) {
-        // old was safely casted to NewType
+            // old was safely casted to NewType
             o->draw(c->getView(), c->getProj(), l);
         }
     }
 
 
 
-    //printf("Finished\n");
+}
+
+
+
+void MainRenderer::paintGL(Scene *scene, int width, int height){
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    initializeGL();
+    glViewport(0,0,width,height);
+
+    // renderTheScene(scene, width, height);
+
+    glUseProgram(postProcessShader->id());
+
+    drawQuad();
+
+    // printf("Finisshed\n");
 }
 
 MainRenderer::~MainRenderer(){
-
+    delete postProcessShader;
+    deleteVAOQuad();
 }
 
 
@@ -82,4 +98,30 @@ void MainRenderer::initializeGL(){
     //std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 
 
+}
+
+
+void MainRenderer::createVAOQuad(){
+    const GLfloat quadData[] = {-1.0f,-1.0f,0.0f, 1.0f,-1.0f,0.0f, -1.0f,1.0f,0.0f, -1.0f,1.0f,0.0f, 1.0f,-1.0f,0.0f, 1.0f,1.0f,0.0f };
+
+    glGenBuffers(1,&_quad);
+    glGenVertexArrays(1,&_vaoQuad);
+
+    glBindVertexArray(_vaoQuad);
+    glBindBuffer(GL_ARRAY_BUFFER,_quad); // vertices
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadData),quadData,GL_STATIC_DRAW);
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
+    glEnableVertexAttribArray(0);
+}
+
+void MainRenderer::deleteVAOQuad(){
+    glDeleteBuffers(1,&_quad);
+    glDeleteVertexArrays(1,&_vaoQuad);
+}
+
+
+void MainRenderer::drawQuad(){
+    glBindVertexArray(_vaoQuad);
+    glDrawArrays(GL_TRIANGLES,0,6);
+    glBindVertexArray(0);
 }

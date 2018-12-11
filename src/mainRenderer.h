@@ -19,16 +19,17 @@
 
 class MainRenderer {
 
- public:
-    MainRenderer();
-    ~MainRenderer();
+    public:
+        MainRenderer();
+        ~MainRenderer();
 
 
-    void paintGL(Scene *scene, int width, int height);
-    void initializeGL();
+        void paintGL(Scene *scene, int width, int height);
+        void initializeGL();
 
     private:
 
+        void renderTheScene(Scene *scene, int width, int height);
 
         Camera *getCamera();
         Light *getLight();
@@ -36,7 +37,17 @@ class MainRenderer {
         glm::mat4 viewMat;
         glm::mat4 projectionMat;
 
+        /* final rendering */
 
+        void createVAOQuad();
+        void deleteVAOQuad();
+        void drawQuad();
+
+        Shader *postProcessShader;
+
+
+        GLuint _vaoQuad;
+        GLuint _quad;
 
 };
 
