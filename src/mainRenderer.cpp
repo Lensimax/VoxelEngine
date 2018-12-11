@@ -76,30 +76,31 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     glViewport(0,0,width,height);
 
 
-    initFBOSceneRender(width, height);
-    glBindFramebuffer(GL_FRAMEBUFFER, fboRenderScene);
+    // glBindFramebuffer(GL_FRAMEBUFFER, fboRenderScene);
+    // initFBOSceneRender(width, height);
 
-    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+    // glDrawBuffer(GL_COLOR_ATTACHMENT0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render in texture
     renderTheScene(scene, width, height);
 
-    /* disable FBO */
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // disable FBO
+    /*glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(postProcessShader->id());
 
-    /* send rendered scene to the post process shader */
+    // send rendered scene to the post process shader
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
     glUniform1i(glGetUniformLocation(postProcessShader->id(), "sceneRendered"), 0);
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     drawQuad();
 
-    glUseProgram(0);
+    glUseProgram(0);*/
     // printf("Finisshed\n");
 }
 
