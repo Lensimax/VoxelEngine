@@ -31,6 +31,15 @@
 // #include <string>
 // #include <vector>
 
+void mouseClicked(){
+    ImGuiIO& io = ImGui::GetIO();
+    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++){
+        if (ImGui::IsMouseClicked(i)){
+            printf("Clicked\n");
+        }
+    }
+}
+
 
 
 void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1)
@@ -164,6 +173,7 @@ int main(int, char**){
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        mouseClicked();
 
 
         createInfoWindow();
