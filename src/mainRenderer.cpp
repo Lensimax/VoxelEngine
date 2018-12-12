@@ -75,18 +75,18 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     initializeGL();
     glViewport(0,0,width,height);
 
+    initFBOSceneRender(width, height);
 
-    // glBindFramebuffer(GL_FRAMEBUFFER, fboRenderScene);
-    // initFBOSceneRender(width, height);
+    glBindFramebuffer(GL_FRAMEBUFFER, fboRenderScene);
 
-    // glDrawBuffer(GL_COLOR_ATTACHMENT0);
+    glDrawBuffer(GL_COLOR_ATTACHMENT0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render in texture
     renderTheScene(scene, width, height);
 
     // disable FBO
-    /*glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
     glUseProgram(postProcessShader->id());
@@ -96,11 +96,12 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
     glUniform1i(glGetUniformLocation(postProcessShader->id(), "sceneRendered"), 0);
 
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawQuad();
 
-    glUseProgram(0);*/
+    glUseProgram(0);
     // printf("Finisshed\n");
 }
 
@@ -116,6 +117,7 @@ void MainRenderer::initializeGL(){
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
+    glDepthMask(GL_TRUE);
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     /* to print GLSL version */
     //std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
@@ -171,10 +173,10 @@ void MainRenderer::initFBOSceneRender(int width, int height){
     glBindFramebuffer(GL_FRAMEBUFFER,fboRenderScene);
 
     glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,renderedSceneTextureID,0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,renderedSceneTextureID,0);
 
     /* on desactive le buffer */
-     glBindFramebuffer(GL_FRAMEBUFFER,0);
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
 }
 
 void MainRenderer::deleteFBOSceneRender(){
