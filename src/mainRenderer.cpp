@@ -72,14 +72,15 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 void MainRenderer::paintGL(Scene *scene, int width, int height){
 
 
-    initializeGL();
-    glViewport(0,0,width,height);
+
 
     initFBOSceneRender(width, height);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fboRenderScene);
-
     glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
+    initializeGL();
+    glViewport(0,0,width,height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render in texture
@@ -96,7 +97,8 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
     glUniform1i(glGetUniformLocation(postProcessShader->id(), "sceneRendered"), 0);
 
-
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     drawQuad();
@@ -155,6 +157,7 @@ void MainRenderer::drawQuad(){
 void MainRenderer::createFBOSceneRender(){
     glGenFramebuffers(1, &fboRenderScene);
     glGenTextures(1,&renderedSceneTextureID);
+    glGenTextures(1,&renderedDepth);
 
 }
 
@@ -170,10 +173,20 @@ void MainRenderer::initFBOSceneRender(int width, int height){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+    glBindTexture(GL_TEXTURE_2D, renderedDepth);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT24,width,height,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     glBindFramebuffer(GL_FRAMEBUFFER,fboRenderScene);
 
     glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,renderedSceneTextureID,0);
+
+    glBindTexture(GL_TEXTURE_2D,renderedDepth);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,renderedDepth,0);
 
     /* on desactive le buffer */
     glBindFramebuffer(GL_FRAMEBUFFER,0);
@@ -182,4 +195,5 @@ void MainRenderer::initFBOSceneRender(int width, int height){
 void MainRenderer::deleteFBOSceneRender(){
     glDeleteFramebuffers(1,&fboRenderScene);
     glDeleteTextures(1, &renderedSceneTextureID);
+    glDeleteTextures(1,&renderedDepth);
 }

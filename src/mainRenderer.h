@@ -46,6 +46,7 @@ class MainRenderer {
         void deleteFBOSceneRender();
 
         GLuint renderedSceneTextureID;
+        GLuint renderedDepth;
 
         /* final rendering */
 
