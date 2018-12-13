@@ -18,7 +18,7 @@
 
 EXE = green-engine
 SOURCES = mainRenderer.cpp shader.cpp material/lambertian.cpp engineObject.cpp scene.cpp
-SOURCES += models/transform.cpp models/drawableObject.cpp models/sphereMesh.cpp models/sphere.cpp models/meshLoader.cpp models/meshObject.cpp models/mesh.cpp models/cubeMesh.cpp
+SOURCES += models/transform.cpp models/drawableObject.cpp models/sphereMesh.cpp models/sphere.cpp models/meshLoader.cpp models/meshObject.cpp models/mesh.cpp
 SOURCES += tools/camera.cpp tools/cameraProj.cpp tools/lights/directionnalLight.cpp
 
 SOURCES += impl/imgui_impl_glfw.cpp impl/imgui_impl_opengl3.cpp

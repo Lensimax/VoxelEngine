@@ -23,7 +23,7 @@
 
 Sphere::Sphere(std::string n, float radius, unsigned int rings, unsigned int sectors, vec3 position, vec3 scale, vec3 rotation){
     setName(n);
-    transform = new Transform(position, scale, rotation);
+    transform = new Transform(vec3(0.0,0.0,0.0), position, scale, rotation);
 
     createMesh(radius, rings, sectors);
 

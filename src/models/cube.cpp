@@ -23,7 +23,7 @@
 
 
 Cube::Cube(std::string n, vec3 position, vec3 scale, vec3 rotation){
-    transform = new Transform(position, scale, rotation);
+    transform = new Transform(vec3(0.0,0.0,0.0), position, scale, rotation);
 
     createVertices();
     triangles = createTriangles();

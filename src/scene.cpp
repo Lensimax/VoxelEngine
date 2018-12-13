@@ -12,7 +12,7 @@ Scene::Scene(){
 
 
 
-    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"exampleModels/monkey.off", new Transform(glm::vec3(-2.28, 0.0, 0.0))));
+    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"exampleModels/monkey.off", new Transform()));
 
     // objectsEngine.push_back(new Sphere());
 

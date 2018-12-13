@@ -29,6 +29,8 @@ MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m)
     transform = t;
 
     mesh = new MeshLoader(filename);
+    float *center = mesh->getCenter();
+    t->setCenter(glm::vec3(center[0],center[1], center[2]));
 
     createVAO();
 

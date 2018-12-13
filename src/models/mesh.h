@@ -19,6 +19,8 @@ public:
      virtual void createUI();
      virtual void recreate();
 
+     float *getCenter();
+
 
      // length
 

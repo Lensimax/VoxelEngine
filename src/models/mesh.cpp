@@ -61,6 +61,10 @@ void Mesh::recreate(){
 
 }
 
+float *Mesh::getCenter(){
+    return center;
+}
+
 
 void Mesh::computeNormals(){
     float *nf;

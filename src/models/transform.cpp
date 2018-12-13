@@ -3,10 +3,11 @@
 #include <imgui.h>
 
 
-Transform::Transform(vec3 position, vec3 scale, vec3 rotation){
+Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
     this->vecPosition = position;
     this->vecScale = scale;
     this->vecRotation = rotation;
+    this->center = center;
 }
 
 
@@ -21,6 +22,10 @@ void Transform::rotate(vec3 axis){
     this->vecRotation = axis;
 }
 
+void Transform::setCenter(vec3 center) {
+    this->center = center;
+}
+
 void Transform::scale(vec3 scale){
     this->vecScale = scale;
 }
@@ -28,10 +33,12 @@ void Transform::scale(vec3 scale){
 mat4 Transform::getMat4(){
     mat4 model = mat4(1.0f);
     model = translate(model, vecPosition);
+    model = translate(model, center);
     model = glm::scale(model, vecScale);
     model = glm::rotate(model, vecRotation[0], vec3(1.0,0.0,0.0));
     model = glm::rotate(model, vecRotation[1], vec3(0.0,1.0,0.0));
     model = glm::rotate(model, vecRotation[2], vec3(0.0,0.0,1.0));
+
     return model;
 }
 
