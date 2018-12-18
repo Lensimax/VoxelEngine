@@ -90,7 +90,7 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
-    glUseProgram(postProcessShader->id());
+    /*glUseProgram(postProcessShader->id());
 
     // send rendered scene to the post process shader
     glActiveTexture(GL_TEXTURE0);
@@ -104,7 +104,7 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     drawQuad();
 
     glUseProgram(0);
-    // printf("Finisshed\n");
+    // printf("Finisshed\n");*/
 }
 
 MainRenderer::~MainRenderer(){
