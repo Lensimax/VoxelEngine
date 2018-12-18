@@ -82,7 +82,7 @@ ifeq ($(UNAME_S), Darwin) #APPLE
 	CXXFLAGS += -Wall -Wformat
 	CFLAGS = $(CXXFLAGS)
 endif
-, const ImVec4& tint_col, const ImVec4& border_col
+
 ifeq ($(findstring MINGW,$(UNAME_S)),MINGW)
    ECHO_MESSAGE = "Windows"
    LIBS = -lglfw3 -lgdi32 -lopengl32 -limm32
@@ -138,8 +138,8 @@ superclean:
 	rm -f bin/*
 
 install:
-	mkdir bin
-	mkdir obj
+	mkdir bin;
+	mkdir obj;
 
 cleanImGui:
 	rm -r imgui.ini
