@@ -209,6 +209,10 @@ int main(int, char**){
 
         End();
 
+        /* test for the texture in the framebuffer */
+        ImGui::Begin("Image Test");
+        ImGui::Image((void*)(intptr_t)renderer->getTextureID(), ImVec2(512,512));
+        ImGui::End();
 
         /* RENDERING */
         ImGui::EndFrame();

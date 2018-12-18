@@ -197,3 +197,7 @@ void MainRenderer::deleteFBOSceneRender(){
     glDeleteTextures(1, &renderedSceneTextureID);
     glDeleteTextures(1,&renderedDepth);
 }
+
+GLuint MainRenderer::getTextureID(){
+    return renderedSceneTextureID;
+}
