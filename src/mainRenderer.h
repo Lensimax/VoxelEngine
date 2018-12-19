@@ -26,6 +26,7 @@ class MainRenderer {
 
         void paintGL(Scene *scene, int width, int height);
         void initializeGL();
+        void displaySceneOnTheScreen(int width, int height);
 
         GLuint getTextureID();
 

@@ -89,8 +89,16 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     // disable FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+    glUseProgram(0);
 
-    /*glUseProgram(postProcessShader->id());
+
+    // printf("Finished\n");
+}
+
+void MainRenderer::displaySceneOnTheScreen(int width, int height){
+    glViewport(0,0,width,height);
+
+    glUseProgram(postProcessShader->id());
 
     // send rendered scene to the post process shader
     glActiveTexture(GL_TEXTURE0);
@@ -104,7 +112,6 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     drawQuad();
 
     glUseProgram(0);
-    // printf("Finisshed\n");*/
 }
 
 MainRenderer::~MainRenderer(){

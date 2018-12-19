@@ -142,4 +142,4 @@ install:
 	mkdir obj;
 
 cleanImGui:
-	rm -r imgui.ini
+	rm -f imgui.ini
