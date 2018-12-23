@@ -32,7 +32,7 @@ class MeshObject : public DrawableObject {
 
 
         virtual float *getVertices();
-        virtual int *getTriangles();
+        virtual unsigned int *getTriangles();
         virtual int nbVertices();
         virtual int nbTriangles();
 

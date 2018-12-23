@@ -15,6 +15,7 @@
 
 
 #include "sphere.h"
+#include "sphereMesh.h"
 
 
 #include "../material/lambertian.h"
@@ -25,7 +26,7 @@ Sphere::Sphere(std::string n, float radius, unsigned int rings, unsigned int sec
     setName(n);
     transform = new Transform(vec3(0.0,0.0,0.0), position, scale, rotation);
 
-    createMesh(radius, rings, sectors);
+    mesh = new SphereMesh(radius, rings, sectors);
 
     material = new Lambertian();
 
@@ -68,53 +69,6 @@ void Sphere::deleteVAO(){
 }
 
 
-void Sphere::createMesh(float radius, unsigned int rings, unsigned int sectors){
-
-    vertices = std::vector<float>();
-    triangles = std::vector<int>();
-    normals = std::vector<float>();
-    texCoords = std::vector<float>();
-
-    float const R = 1./(float)(rings-1);
-    float const S = 1./(float)(sectors-1);
-
-    vertices.resize(rings * sectors * 3);
-    normals.resize(rings * sectors * 3);
-    texCoords.resize(rings * sectors * 2);
-    std::vector<float>::iterator v = vertices.begin();
-    std::vector<float>::iterator n = normals.begin();
-    std::vector<float>::iterator t = texCoords.begin();
-    for(unsigned int r = 0; r < rings; r++){
-        for(unsigned int s = 0; s < sectors; s++) {
-            float const y = sin( -M_PI_2 + M_PI * r * R );
-            float const x = cos(2*M_PI * s * S) * sin( M_PI * r * R );
-            float const z = sin(2*M_PI * s * S) * sin( M_PI * r * R );
-
-            *t++ = s*S;
-            *t++ = r*R;
-
-            *v++ = x * radius;
-            *v++ = y * radius;
-            *v++ = z * radius;
-
-            *n++ = x;
-            *n++ = y;
-            *n++ = z;
-        }
-    }
-
-    triangles.resize(rings * sectors * 4);
-    std::vector<int>::iterator i = triangles.begin();
-    for(unsigned int r = 0; r < rings; r++) {
-        for(unsigned int s = 0; s < sectors; s++) {
-            *i++ = r * sectors + s;
-            *i++ = r * sectors + (s+1);
-            *i++ = (r+1) * sectors + (s+1);
-            *i++ = (r+1) * sectors + s;
-        }
-    }
-}
-
 
 
 void Sphere::createUI(char *ID){
@@ -140,20 +94,20 @@ void Sphere::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light * ligh
 
 }
 
-int *Sphere::getTriangles(){
-    return &triangles[0];
+unsigned int *Sphere::getTriangles(){
+    return mesh->getFaces();
 }
 
 float *Sphere::getVertices(){
-    return &vertices[0];
+    return mesh->getVertices();
 }
 
 int Sphere::nbVertices(){
-    return vertices.size()/3;
+    return mesh->getNBVertices();
 }
 
 int Sphere::nbTriangles(){
-    return triangles.size()/3;
+    return mesh->getNBFaces();
 }
 
 Sphere::~Sphere(){

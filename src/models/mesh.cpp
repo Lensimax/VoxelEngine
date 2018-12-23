@@ -53,8 +53,8 @@ float *Mesh::getNormals(){
 
 void Mesh::createUI(){
     ImGui::Text("Mesh");
-    ImGui::Text("Number vertices: %d", nb_vertices/3);
-    ImGui::Text("Number faces: %d", nb_faces/3);
+    ImGui::Text("Number vertices: %d", nb_vertices);
+    ImGui::Text("Number faces: %d", nb_faces);
 }
 
 void Mesh::recreate(){

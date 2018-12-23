@@ -51,20 +51,20 @@ MeshObject::~MeshObject(){
 
 
 
-int *MeshObject::getTriangles(){
-    return &triangles[0];
+unsigned int *MeshObject::getTriangles(){
+    return mesh->getFaces();
 }
 
 float *MeshObject::getVertices(){
-    return &vertices[0];
+    return mesh->getVertices();
 }
 
 int MeshObject::nbVertices(){
-    return vertices.size()/3;
+    return mesh->getNBVertices();
 }
 
 int MeshObject::nbTriangles(){
-    return triangles.size()/3;
+    return mesh->getNBFaces();
 }
 
 

@@ -4,6 +4,7 @@
 #include "drawableObject.h"
 
 #include "../material/material.h"
+#include "../models/mesh.h"
 
 #include <vector>
 
@@ -16,7 +17,7 @@ class Sphere : public DrawableObject {
 
 
         virtual float *getVertices();
-        virtual int *getTriangles();
+        virtual unsigned int *getTriangles();
         virtual int nbVertices();
         virtual int nbTriangles();
 
@@ -27,13 +28,10 @@ class Sphere : public DrawableObject {
     // https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
     private:
 
-        std::vector<float> vertices;
-        std::vector<int> triangles;
-        std::vector<float> normals;
-        std::vector<float> texCoords;
-
         GLuint vertexArrayID;
         GLuint *buffers;
+
+        Mesh *mesh;
 
         Material *material;
 

@@ -15,6 +15,7 @@ public:
     SphereMesh(float radius = 1.0f, unsigned int rings = 12, unsigned int sectors = 24);
     ~SphereMesh();
 
+
 private:
     void addVertex(int i, glm::vec3 v);
     void createVertices();

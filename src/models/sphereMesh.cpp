@@ -7,6 +7,21 @@ SphereMesh::SphereMesh(float radius, unsigned int rings, unsigned int sectors){
 
     createMesh(radius, rings, sectors);
 
+    computeCenter();
+
+    // computing radius
+    computeRadius();
+
+    computeNormals();
+
+    // computing colors as normals
+    for(int i=0;i<3*nb_vertices;++i) {
+      colors[i] = (normals[i]+1.0)/2.0;
+    }
+
+    computeUVCoord();
+
+    computeTangents();
 }
 
 

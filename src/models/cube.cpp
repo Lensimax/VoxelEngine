@@ -113,7 +113,7 @@ std::vector<int> Cube::createTriangles(){
 }
 
 
-int *Cube::getTriangles(){
+unsigned int *Cube::getTriangles(){
     return &triangles[0];
 }
 
