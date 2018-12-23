@@ -209,10 +209,16 @@ int main(int, char**){
 
         End();
 
+        /*ImGui::Begin("mainWindow");
+
+        ImGui::BeginChild("Image Test");
+        ImGui::Image((void*)(intptr_t)renderer->getTextureID(), ImVec2(640,640), ImVec2(0, 1), ImVec2(1, 0),ImColor(255,255,255,255), ImColor(255,255,255,128));
+        ImGui::EndChild();
+
+        ImGui::End();*/
+
         /* test for the texture in the framebuffer */
-        ImGui::Begin("Image Test");
-        ImGui::Image((void*)(intptr_t)renderer->getTextureID(), ImVec2(640,360), ImVec2(0, 1), ImVec2(1, 0),ImColor(255,255,255,255), ImColor(255,255,255,128));
-        ImGui::End();
+
 
         /* RENDERING */
         ImGui::EndFrame();
@@ -223,7 +229,7 @@ int main(int, char**){
         glClearColor(0.239f, 0.478f, 0.647f, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
         renderer->paintGL(scene, display_w, display_h);
-        // renderer->displaySceneOnTheScreen(display_w, display_h);
+        renderer->displaySceneOnTheScreen(display_w, display_h);
 
 
         /* draw the widget */
