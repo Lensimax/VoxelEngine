@@ -15,6 +15,7 @@ class Cube : public MeshObject {
         Cube(std::string n = "Cube", Transform *t = new Transform(), Material *m = new Lambertian());
         ~Cube();
 
+        void createUI(char *ID) override;
 
 };
 
