@@ -11,7 +11,7 @@
 class Sphere : public DrawableObject {
     public:
         Sphere(std::string n = "Sphere", float radius = 1.0f, unsigned int rings = 12, unsigned int sectors = 24,
-            vec3 position = glm::vec3(0.0,0.0,0.0), vec3 scale = glm::vec3(1.0,1.0,1.0), vec3 rotation = glm::vec3(0.0,0.0,0.0));
+            Transform *t = new Transform());
 
         ~Sphere();
 

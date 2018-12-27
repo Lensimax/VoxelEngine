@@ -21,7 +21,7 @@ private:
     void createVertices();
     void createFaces();
 
-    void createMesh(float radius, unsigned int rings, unsigned int sectors);
+    void createMesh(float radius, unsigned int divs);
 
 
 

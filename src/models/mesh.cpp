@@ -256,7 +256,7 @@ void Mesh::computeTangents(){
 
 void Mesh::computeCenter(){
     // computing center
-    float c[3];
+    float c[] = {0.0,0.0,0.0};
     for(unsigned int i=0;i<nb_vertices*3;i+=3) {
       c[0] += vertices[i  ];
       c[1] += vertices[i+1];

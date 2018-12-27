@@ -44,13 +44,9 @@ void MeshLoader::createMesh(char *filename){
     if(error==EOF) {
       printf("Unable to read %s\n",filename);
     }
-    vertices = new float[3*nb_vertices];
-    tangents = new float[3*nb_vertices];
-    colors = new float[3*nb_vertices];
-    coords = new float[3*nb_vertices];
-    faces = new unsigned int[3*nb_faces];
 
-    // vertices = (float *)malloc(3*nb_vertices*sizeof(float));
+
+    vertices = (float *)malloc(3*nb_vertices*sizeof(float));
     normals  = (float *)malloc(3*nb_vertices*sizeof(float));
     tangents = (float *)malloc(3*nb_vertices*sizeof(float));
     colors   = (float *)malloc(3*nb_vertices*sizeof(float));

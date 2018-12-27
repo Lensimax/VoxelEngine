@@ -41,7 +41,7 @@ class MeshObject : public DrawableObject {
         virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
 
 
-    private:
+    protected:
         void createVAO();
         void deleteVAO();
 

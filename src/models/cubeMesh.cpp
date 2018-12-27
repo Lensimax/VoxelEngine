@@ -5,21 +5,67 @@ CubeMesh::CubeMesh(){
     nb_vertices = 8;
     nb_faces = 12;
 
+    vertices = (float *)malloc(3*nb_vertices*sizeof(float));
+    normals  = (float *)malloc(3*nb_vertices*sizeof(float));
+    tangents = (float *)malloc(3*nb_vertices*sizeof(float));
+    colors   = (float *)malloc(3*nb_vertices*sizeof(float));
+    coords   = (float *)malloc(2*nb_vertices*sizeof(float));
+    faces    = (unsigned int *)malloc(3*nb_faces*sizeof(unsigned int));
+
     createVertices();
     createFaces();
+
+    computeCenter();
+    computeRadius();
+    computeNormals();
 
 }
 
 CubeMesh::~CubeMesh(){
-    free(vertices);
-    free(faces);
+    if(normals!=NULL){
+        free(normals);
+        normals = NULL;
+    }
+    if(tangents!=NULL){
+        free(tangents);
+        tangents = NULL;
+    }
+    if(colors!=NULL){
+        free(colors);
+        colors = NULL;
+    }
+    if(vertices!=NULL){
+        free(vertices);
+        vertices = NULL;
+    }
+    if(faces!=NULL){
+        free(faces);
+        faces = NULL;
+    }
+    if(coords!=NULL){
+        free(coords);
+        coords = NULL;
+    }
+
+}
+
+void CubeMesh::computeCenter(){
+    center[0] = 0.0;
+    center[1] = 0.0;
+    center[2] = 0.0;
+}
+
+void CubeMesh::computeRadius(){
+    radius = 2.0;
+}
+
+void CubeMesh::computeNormals(){
+    for(unsigned int i=0; i<3*nb_vertices; i++){
+        normals[i] = 0.0;
+    }
 }
 
 void CubeMesh::createVertices(){
-
-    const int nb_Vert = 8;
-
-    vertices = (float *)malloc(3 * nb_Vert * sizeof(float));
 
     addVertex(0, glm::vec3(-1.0, -1.0, 1.0));
     // 1
@@ -37,12 +83,12 @@ void CubeMesh::createVertices(){
     // 7
     addVertex(7, glm::vec3(1.0, -1.0, -1.0));
 
+
 }
 
 
 void CubeMesh::createFaces(){
 
-    faces = (unsigned int *)malloc(3*nb_faces*sizeof(unsigned int));
         // front face
     faces[0] = 0; faces[1] = 1; faces[2] = 2;
     faces[3] = 0; faces[4] = 2; faces[5] = 3;
@@ -67,6 +113,6 @@ void CubeMesh::createFaces(){
 
 void CubeMesh::addVertex(int i, glm::vec3 v){
     vertices[i*3] = v[0];
-    vertices[i*3] = v[1];
-    vertices[i*3] = v[2];
+    vertices[i*3+1] = v[1];
+    vertices[i*3+2] = v[2];
 }

@@ -20,6 +20,13 @@ private:
     void createVertices();
     void createFaces();
 
+protected:
+    virtual void computeNormals();
+    // virtual void computeTangents();
+    virtual void computeCenter();
+    virtual void computeRadius();
+    // virtual void computeUVCoord();
+
 };
 
 

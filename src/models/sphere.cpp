@@ -22,9 +22,9 @@
 
 
 
-Sphere::Sphere(std::string n, float radius, unsigned int rings, unsigned int sectors, vec3 position, vec3 scale, vec3 rotation){
+Sphere::Sphere(std::string n, float radius, unsigned int rings, unsigned int sectors, Transform *t){
     setName(n);
-    transform = new Transform(vec3(0.0,0.0,0.0), position, scale, rotation);
+    transform = t;
 
     mesh = new SphereMesh(radius, rings, sectors);
 
@@ -60,7 +60,7 @@ void Sphere::createVAO(){
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,buffers[1]); // indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,nbTriangles()*3*sizeof(int),getTriangles(),GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,nbTriangles()*3*sizeof(unsigned int),getTriangles(),GL_STATIC_DRAW);
 }
 
 void Sphere::deleteVAO(){

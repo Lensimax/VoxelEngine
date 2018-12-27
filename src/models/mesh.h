@@ -48,11 +48,11 @@ public:
      float         center[3];
      float         radius;
 
-     void computeNormals();
-     void computeTangents();
-     void computeCenter();
-     void computeRadius();
-     void computeUVCoord();
+     virtual void computeNormals();
+     virtual void computeTangents();
+     virtual void computeCenter();
+     virtual void computeRadius();
+     virtual void computeUVCoord();
 
 };
 

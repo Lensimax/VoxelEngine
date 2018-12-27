@@ -19,6 +19,7 @@
 #include "meshObject.h"
 #include "meshLoader.h"
 #include "sphereMesh.h"
+#include "cubeMesh.h"
 
 #include <iostream>
 
@@ -29,6 +30,9 @@ MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m)
     transform = t;
 
     mesh = new MeshLoader(filename);
+    // mesh = new CubeMesh();
+
+
     float *center = mesh->getCenter();
     t->setCenter(glm::vec3(center[0],center[1], center[2]));
 
