@@ -18,8 +18,6 @@ public:
 
 private:
     void addVertex(int i, glm::vec3 v);
-    void createVertices();
-    void createFaces();
 
     void createMesh(float radius, unsigned int divs);
 
