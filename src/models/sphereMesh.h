@@ -18,9 +18,16 @@ public:
 
 private:
     void addVertex(int i, glm::vec3 v);
+    // virtual void computeNormals();
+    virtual void computeCenter();
+    virtual void computeRadius();
 
     void createMesh(float radius, unsigned int divs);
 
+    void addFace(unsigned int v1, unsigned int v2, unsigned int v3);
+    void addVertex(float x, float y, float z);
+
+    int numFace, numVertex;
 
 
 };

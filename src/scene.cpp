@@ -13,9 +13,9 @@ Scene::Scene(){
 
 
 
-    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"exampleModels/monkey.off", new Transform()));
+    // objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"exampleModels/monkey.off", new Transform()));
 
-    // objectsEngine.push_back(new Sphere());
+    objectsEngine.push_back(new Sphere());
 
     // objectsEngine.push_back(new Cube());
 

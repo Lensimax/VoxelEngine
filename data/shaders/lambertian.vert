@@ -29,5 +29,5 @@ void main() {
 	normalView = normalize(normalMatrix*normal);
 	eyeView = normalize((-1)*mv*vec4(position,1.0));
 
-	lightVec = viewMat * lightMat4 * light;
+	lightVec = projMat*mv*light;
 }
