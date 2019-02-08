@@ -3,11 +3,10 @@
 out vec4 bufferColor;
 
 
-uniform vec4 color;
-uniform float indexOfRefraction;
 uniform float specularDegree;
-uniform float lightIntensity;
-
+uniform vec4 ambientColor;
+uniform vec4 diffuseColor;
+uniform vec4 specularColor;
 
 in vec4 lightVec;
 in vec4 normal;
@@ -17,74 +16,19 @@ in vec4 eyeView;
 
 
 
-/*
+
+vec4 phong(vec3 l, vec3 n, vec3 e) {
 
 
-ior : index of refraction
-I : incoming ray
-N : normal
+	float d = max(dot(n,l),0.);
+	float s = pow(max(dot(reflect(l,n),e),0.),specularDegree);
 
-*/
+	vec4 renderedColor;
 
-float fresnel(vec3 I, vec3 N, float ior){
+	renderedColor.xyzw = ambientColor + diffuseColor*d + specularColor*s;
+	renderedColor.w = 1;
 
-	float fresnelCoef;
-	float tmp;
-
-	float cosi = dot(I, N);
-	float etai = 1, etat = ior;
-	if (cosi > 0) {
-		tmp = etai;
-		etai = etat;
-		etat = tmp;
-	}
-	// Compute sini using Snell's law
-	float sint = etai / etat * sqrt(max(0.f, 1 - cosi * cosi));
-	// Total internal reflection
-	if (sint >= 1) {
-		fresnelCoef = 1;
-	} else {
-		float cost = sqrt(max(0.f, 1 - sint * sint));
-		cosi = abs(cosi);
-		float Rs = ((etat * cosi) - (etai * cost)) / ((etat * cosi) + (etai * cost));
-		float Rp = ((etai * cosi) - (etat * cost)) / ((etai * cosi) + (etat * cost));
-		fresnelCoef = (Rs * Rs + Rp * Rp) / 2;
-	}
-
-	return fresnelCoef;
-}
-
-
-vec4 phong(vec4 vcolor, float shininess, vec4 n, vec4 e, vec4 l, float eta){
-
-	/* ambient lighting */
-    const float ambientReflectionFactor = 0.2;
-    vec4 ambientColor = ambientReflectionFactor * vcolor * lightIntensity;
-
-    /* Diffuse lighting */
-    const float diffuseRefletionFactor = 0.5;
-    vec4 diffuseColor = diffuseRefletionFactor * vcolor * max(dot(n , l), 0) * lightIntensity;
-
-	/* Specular Lighting */
-    vec4 reflectedVector = reflect(l, n);
-    const float specReflectionFactor = 1.2;
-    // float maxVal = 0.0;
-    float normed = length(l + e);
-    vec4 H =(l+e)/normed;
-
-
-	float maxVal = pow(max( dot(n, H),0), shininess);
-	float f0 = pow(1-eta, 2)/pow(1+eta, 2);
-	float fresnelFactor = f0 + (1 - f0)*pow((1-dot(H, e)), 5);
-
-
-    vec4 specularColor = fresnel(H.xyz, l.xyz, eta) * vcolor * maxVal * lightIntensity;
-
-
-	// return diffuseColor;
-	// return ambientColor;
-	// return specularColor;
-	return specularColor + ambientColor + diffuseColor;
+	return renderedColor;
 }
 
 
@@ -94,16 +38,16 @@ void main(){
 
 	if(lightVec != vec4(0.0,0.0,0.0,1.0)){
 
-		// normal / view and light directions (in camera space)
+		// normal, view and light directions (in camera space)
 		vec4 n = normalize(normalView);
 		vec4 e = normalize(eyeView);
 		vec4 l = normalize(lightVec);
 
 
 		// bufferColor = color;
-		bufferColor = phong(color, specularDegree, n, e, l, indexOfRefraction);
+		bufferColor = phong(l.xyz, n.xyz, e.xyz);
 		// bufferColor = testBlinn(color, specularDegree, l.xyz, n.xyz, e.xyz);
 	} else {
-		bufferColor = color;
+		bufferColor = diffuseColor;
 	}
 }

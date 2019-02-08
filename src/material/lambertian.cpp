@@ -23,14 +23,13 @@
 Lambertian::Lambertian(glm::vec4 color){
 
 
-    this->color = color;
     createShader();
     activeDebugNormal = false;
 
     specularDeg = 2;
-    refractionValue = 2.4175;
-    ambientColor = vec3(0.1,0.1,0.1);
-    specularColor = vec3(1.0,1.0,1.0);
+    ambientColor = vec4(0.0,0.0,0.0,0.0);
+    diffuseColor = color;
+    specularColor = vec4(141./255.,104./255.,43./255.,1.0);
 
 }
 Lambertian::~Lambertian(){
@@ -66,12 +65,12 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
         glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &light->getLight()[0]);
 
 
-        glUniform4fv(glGetUniformLocation(shaderID,"color"),1,&(color[0]));
+        glUniform4fv(glGetUniformLocation(shaderID,"ambientColor"),1,&(ambientColor[0]));
+        glUniform4fv(glGetUniformLocation(shaderID,"diffuseColor"),1,&(diffuseColor[0]));
+        glUniform4fv(glGetUniformLocation(shaderID,"specularColor"),1,&(specularColor[0]));
 
         glUniform1f(glGetUniformLocation(shaderID,"specularDegree"), specularDeg);
-        glUniform1f(glGetUniformLocation(shaderID,"lightIntensity"), light->intensity);
 
-        glUniform1f(glGetUniformLocation(shaderID,"indexOfRefraction"), refractionValue);
     }
 }
 
@@ -84,14 +83,15 @@ void Lambertian::createUI(){
     if (ImGui::Button("Refresh")){
         reloadShaders();
     }
-    ImGui::Text("Color: "); ImGui::SameLine();
-    ImGui::ColorEdit4("lambertian-color", (float *)&color);
+    ImGui::Text("Diffuse Color: "); ImGui::SameLine();
+    ImGui::ColorEdit4("diffuse-color", (float *)&diffuseColor);
+    ImGui::Text("Ambient Color: "); ImGui::SameLine();
+    ImGui::ColorEdit4("ambient-color", (float *)&ambientColor);
+    ImGui::Text("Specular Color: "); ImGui::SameLine();
+    ImGui::ColorEdit4("spec-color", (float *)&specularColor);
 
     ImGui::Text("Specular degree"); ImGui::SameLine();
-    ImGui::DragFloat("specdeg", &specularDeg, 0.01f, 0.0, 100, "%.3f");
-
-    ImGui::Text("Refraction value"); ImGui::SameLine();
-    ImGui::DragFloat("refraction", &refractionValue, 0.01f, 0.0, 100, "%.3f");
+    ImGui::DragFloat("specdeg", &specularDeg, 1.00f, 1.0, 10000, "%.0f");
 
     ImGui::Text("debug Normal "); ImGui::SameLine();
     ImGui::Checkbox("",&activeDebugNormal);
