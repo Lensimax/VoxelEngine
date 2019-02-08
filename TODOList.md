@@ -1,6 +1,6 @@
-* Object importer
+* Object importer (.obj)
 * custom shader
-* fixed FPS
+* fixed FPS (almost done)
 * mouse wheel control view
 * put the object in the center
 * add/remove object from scene
