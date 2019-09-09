@@ -128,7 +128,7 @@ $(Executable): $(CObjects) #$(OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 exec: $(Executable)
-	optirun $(Executable)
+	$(Executable)
 
 clean:
 	rm -f $(ObjectDir)*.o
