@@ -91,7 +91,7 @@ void Lambertian::createUI(){
     ImGui::ColorEdit4("spec-color", (float *)&specularColor);
 
     ImGui::Text("Specular degree"); ImGui::SameLine();
-    ImGui::DragFloat("specdeg", &specularDeg, 1.00f, 1.0, 10000, "%.0f");
+    ImGui::DragFloat("specdeg", &specularDeg, 0.01f, 0.001f, 10000, "%.3f");
 
     ImGui::Text("debug Normal "); ImGui::SameLine();
     ImGui::Checkbox("",&activeDebugNormal);
