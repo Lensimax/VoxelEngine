@@ -13,7 +13,7 @@ Scene::Scene(){
 
 
 
-    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"data/models/monkey.off", new Transform()));
+    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"data/models/monkey.off", new Transform(vec3(0,0,0), vec3(-2.5f,0,0))));
 
     // objectsEngine.push_back(new Sphere());
 

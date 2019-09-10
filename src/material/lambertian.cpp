@@ -27,9 +27,10 @@ Lambertian::Lambertian(glm::vec4 color){
     activeDebugNormal = false;
 
     specularDeg = 2;
-    ambientColor = vec4(0.0,0.0,0.0,0.0);
+    ambientColor = vec4(25./255.,25./255.,25./255.,1.0);
     diffuseColor = color;
-    specularColor = vec4(141./255.,104./255.,43./255.,1.0);
+    // specularColor = vec4(141./255.,104./255.,43./255.,1.0);
+    specularColor = vec4(255./255.,255./255.,255./255.,1.0);
 
 }
 Lambertian::~Lambertian(){
