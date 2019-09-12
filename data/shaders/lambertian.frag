@@ -40,8 +40,9 @@ vec4 testPhong(vec4 l, vec4 n, vec4 e) {
 
 	renderedColor.xyzw = ambientColor + diffuseColor*d + specularColor*s;
 
-	// renderedColor.xyzw = specularColor*s;
-	// renderedColor.w = 1;
+	renderedColor.xyzw = specularColor*s;
+	// renderedColor.xyzw = diffuseColor*d;
+	renderedColor.w = 1;
 
 	// renderedColor = vec4(0, max(dot(reflect(l,n),e),0.), 0, 1);
 	// renderedColor = vec4(0, dot(l,n), 0, 1);
@@ -61,7 +62,6 @@ void main(){
 		vec4 e = normalize(eyeView);
 		vec4 l = normalize(lightVec);
 
-		// l = vec4(1,0,0,1);
 
 		// bufferColor = color;
 		// bufferColor = phong(l.xyz, n.xyz, e.xyz);

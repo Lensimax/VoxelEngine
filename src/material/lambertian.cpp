@@ -64,12 +64,14 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
         glUniformMatrix4fv(glGetUniformLocation(shaderID,"lightMat4"),1,GL_FALSE,&(modelMat[0][0]));
 
-        glm::vec4 light = glm::vec4(0,0,1,0);
+        glm::vec4 lightVec = glm::vec4(0,0,1,1);
+        lightVec[0] = light->getLight()[0];
+        lightVec[1] = light->getLight()[1];
+        lightVec[2] = light->getLight()[2];
 
-        printf("light : (%d %d %d)\n", light[0], light[1], light[2]);
 
         // glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &light->getLight()[0]);
-        glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &light[0]);
+        glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &lightVec[0]);
 
 
         glUniform4fv(glGetUniformLocation(shaderID,"ambientColor"),1,&(ambientColor[0]));
