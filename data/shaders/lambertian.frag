@@ -25,8 +25,26 @@ vec4 phong(vec3 l, vec3 n, vec3 e) {
 
 	vec4 renderedColor;
 
+
 	renderedColor.xyzw = ambientColor + diffuseColor*d + specularColor*s;
 	renderedColor.w = 1;
+
+	return renderedColor;
+}
+
+vec4 testPhong(vec4 l, vec4 n, vec4 e) {
+	float d = max(dot(n,l),0.);
+	float s = pow(max(dot(reflect(l,n),e),0.),specularDegree);
+
+	vec4 renderedColor;
+
+	renderedColor.xyzw = ambientColor + diffuseColor*d + specularColor*s;
+
+	// renderedColor.xyzw = specularColor*s;
+	// renderedColor.w = 1;
+
+	// renderedColor = vec4(0, max(dot(reflect(l,n),e),0.), 0, 1);
+	// renderedColor = vec4(0, dot(l,n), 0, 1);
 
 	return renderedColor;
 }
@@ -39,13 +57,16 @@ void main(){
 	if(lightVec != vec4(0.0,0.0,0.0,1.0)){
 
 		// normal, view and light directions (in camera space)
-		vec4 n = normalize(normalView);
+		vec4 n = normalize(normal);
 		vec4 e = normalize(eyeView);
 		vec4 l = normalize(lightVec);
 
+		// l = vec4(1,0,0,1);
 
 		// bufferColor = color;
-		bufferColor = phong(l.xyz, n.xyz, e.xyz);
+		// bufferColor = phong(l.xyz, n.xyz, e.xyz);
+		bufferColor = testPhong(l, n, e);
+		// bufferColor = vec4(n.xyz, 1);
 		// bufferColor = testBlinn(color, specularDegree, l.xyz, n.xyz, e.xyz);
 	} else {
 		bufferColor = diffuseColor;

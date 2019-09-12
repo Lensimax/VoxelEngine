@@ -57,13 +57,19 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
     if(!activeDebugNormal){
         glm::mat4 normalMatrix = viewMat * modelMat;
-        normalMatrix = glm::inverseTranspose(normalMatrix);
+        // normalMatrix = glm::inverseTranspose(normalMatrix);
+        normalMatrix = glm::transpose(glm::inverse(normalMatrix));
 
         glUniformMatrix4fv(glGetUniformLocation(shaderID,"normalMatrix"),1,GL_FALSE,&(normalMatrix[0][0]));
 
         glUniformMatrix4fv(glGetUniformLocation(shaderID,"lightMat4"),1,GL_FALSE,&(modelMat[0][0]));
 
-        glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &light->getLight()[0]);
+        glm::vec4 light = glm::vec4(0,0,1,0);
+
+        printf("light : (%d %d %d)\n", light[0], light[1], light[2]);
+
+        // glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &light->getLight()[0]);
+        glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &light[0]);
 
 
         glUniform4fv(glGetUniformLocation(shaderID,"ambientColor"),1,&(ambientColor[0]));

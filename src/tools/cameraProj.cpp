@@ -50,5 +50,6 @@ void CameraProj::createUI(char *ID){
 
 
 glm::mat4 CameraProj::getProj(){
-    return glm::perspective(fovy, aspect, near, far);
+    const float radius = 1;
+    return glm::perspective(fovy, aspect, radius/far, radius*far);
 }
