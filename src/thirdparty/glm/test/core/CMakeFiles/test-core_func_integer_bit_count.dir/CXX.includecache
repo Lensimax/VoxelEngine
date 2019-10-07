@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/thespygeek/Projects/green-engine/thirdparty/glm/test/core/core_func_integer_bit_count.cpp
+cstdio
+-
+cstdlib
+-
+ctime
+-
+
