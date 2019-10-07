@@ -2,11 +2,9 @@
 #define DRAWABLEOBJECT_H
 
 
-#ifndef GLM_H
-#define GLM_H
-#include <glm/glm.hpp>
+#include <glm/mat4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#endif
+
 
 
 #include "transform.h"

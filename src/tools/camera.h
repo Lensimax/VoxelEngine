@@ -2,11 +2,11 @@
 #define CAMERA_H
 
 
-#ifndef GLM_H
-#define GLM_H
-#include <glm/glm.hpp>
+
+#include <glm/mat4.hpp>
+#include <glm/vec3.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#endif
+
 
 
 #include "../engineObject.h"

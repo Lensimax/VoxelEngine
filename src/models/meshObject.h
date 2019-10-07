@@ -2,11 +2,10 @@
 #ifndef MESH_OBJECT_H
 #define MESH_OBJECT_H
 
-#ifndef GLM_H
-#define GLM_H
-#include <glm/glm.hpp>
+
+#include <glm/mat4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#endif
+
 
 #include "../material/material.h"
 #include "../material/lambertian.h"
