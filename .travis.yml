@@ -1,22 +1,23 @@
 language: cpp
-compiler: g++
-os:
-- linux
+
+compiler:
+  - gcc
+
+before_install:
+  - sudo apt-get update -qq
 
 install:
-# Update system
-  - sudo apt-get update -qq
-# Install dependencies
-  - sudo apt-get install -qq cmake g++-4.8 gcc-4.8 libglew-dev libfreetype6-dev doxygen libharfbuzz-dev libxmu-dev libxi-dev libxrandr-dev libxinerama-dev libxcursor-dev
-# Prepare manual installation of dependencies
-  - mkdir TRAVIS_TMP/ && cd TRAVIS_TMP
-# GLFW 3.1.1 install
-  - wget -O glfw-3.2.1.zip https://github.com/glfw/glfw/archive/3.2.1.zip
-  - unzip glfw-3.2.1.zip
-  - cd glfw-3.2.1
-  - cmake -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLIB_SUFFIX=/x86_64-linux-gnu
-  - make
-  - sudo make install
-  - cd ..
+  - sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev
+  - mkdir build
+  - cd build
+  - cmake ..
 
-script: make install && make
+script:
+  - make -j
+
+
+after_success:
+  - echo "SUCESS !!!"
+
+after_failure:
+  - echo "failure !"
