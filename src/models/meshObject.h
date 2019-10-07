@@ -3,7 +3,7 @@
 #define MESH_OBJECT_H
 
 
-#include <glm/mat4.hpp>
+#include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 
