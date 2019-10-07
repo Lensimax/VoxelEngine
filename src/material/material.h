@@ -7,6 +7,7 @@
 #endif
 
 #include "../shader.h"
+#include "../tools/lights/light.h"
 
 class Material {
 
