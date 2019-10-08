@@ -3,13 +3,10 @@
 #define SCENE_H
 
 
-#include "models/drawableObject.h"
-
-
-#include "tools/cameraProj.h"
-#include "tools/lights/light.h"
-
+#include <string>
 #include <vector>
+
+#include "engineObject.h"
 
 
 class Scene {
@@ -19,8 +16,8 @@ class Scene {
         ~Scene();
 
         void createUI();
-        Camera *getCamera();
-        Light *getLight();
+        // Camera *getCamera();
+        // Light *getLight();
         void createUIAtID(int indexItem, char *ID);
         std::vector<std::string> getNameOfAllObjects();
 
