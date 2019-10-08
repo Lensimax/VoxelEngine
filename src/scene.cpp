@@ -44,7 +44,7 @@ void Scene::deleteScene(){
         }
     }
     return NULL;
-}
+}*/
 
 Light *Scene::getLight(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
@@ -54,7 +54,7 @@ Light *Scene::getLight(){
         }
     }
     return NULL;
-}*/
+}
 
 void Scene::createUIAtID(int indexItem, char *ID){
     if(indexItem >= 0 && indexItem < (int)objectsEngine.size()){

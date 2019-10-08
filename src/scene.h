@@ -7,15 +7,12 @@
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
-/*#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/ext/matrix_clip_space.hpp>*/
 #endif
 
 #include <string>
 #include <vector>
+
+#include "tools/lights/light.h"
 
 #include "engineObject.h"
 
@@ -28,7 +25,7 @@ class Scene {
 
         void createUI();
         // Camera *getCamera();
-        // Light *getLight();
+        Light *getLight();
         void createUIAtID(int indexItem, char *ID);
         std::vector<std::string> getNameOfAllObjects();
 
