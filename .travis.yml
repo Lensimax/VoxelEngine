@@ -1,6 +1,12 @@
 os: linux
 language: cpp
 
+# safelist
+branches:
+  only:
+  - master
+  - stable
+
 compiler:
   - g++
 
