@@ -1,5 +1,6 @@
 #include "scene.h"
 
+#include "tools/lights/directionnalLight.h"
 
 
 Scene::Scene(){
@@ -16,11 +17,12 @@ Scene::Scene(){
     // objectsEngine.push_back(new Cube());
 
 
+
     // Camera *cam = new CameraProj();
 
     // objectsEngine.push_back(cam);
 
-    // objectsEngine.push_back(new DirectionnalLight("Light", glm::vec3(8, 0.0, 1)));
+    objectsEngine.push_back(new DirectionnalLight("Light", glm::vec3(8, 0.0, 1)));
 
 }
 

@@ -184,14 +184,18 @@ int main(int, char**)
 
         createInfoWindow();
 
+        // Scene explorer
+
         std::vector<std::string> listOfObjects = scene->getNameOfAllObjects();
         ImGui::Begin("Project");
+
 
         DrawSplitter(false, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
 
         ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
         ImGui::Text("Project");
 
+        // on cherche celui selectionné
         static int selected = -1;
         for (unsigned int i = 0; i < listOfObjects.size(); i++){
 
