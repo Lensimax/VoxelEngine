@@ -40,7 +40,7 @@ vec4 testPhong(vec4 l, vec4 n, vec4 e) {
 
 	renderedColor.xyzw = ambientColor + diffuseColor*d + specularColor*s;
 
-	renderedColor.xyzw = specularColor*s;
+	// renderedColor.xyzw = specularColor*s;
 	// renderedColor.xyzw = diffuseColor*d;
 	renderedColor.w = 1;
 
