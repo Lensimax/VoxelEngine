@@ -29,7 +29,6 @@ MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m)
     transform = t;
 
     mesh = new MeshLoader(filename);
-    // mesh = new CubeMesh();
 
 
     float *center = mesh->getCenter();
