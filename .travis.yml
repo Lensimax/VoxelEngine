@@ -1,23 +1,17 @@
+os: linux
 language: cpp
 
 compiler:
-  - gcc
+  - g++
 
 before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev
+  - sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev g++-5
   - mkdir build
   - cd build
   - cmake ..
 
 script:
   - make -j
-
-
-after_success:
-  - echo "SUCESS !!!"
-
-after_failure:
-  - echo "failure !"
