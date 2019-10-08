@@ -10,9 +10,10 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
-#include "../material/material.h"
-// #include "../material/lambertian.h"
+// #include "../material/material.h"
+#include "../material/lambertian.h"
 
+#include "mesh.h"
 #include "drawableObject.h"
 
 #include <vector>
@@ -29,7 +30,7 @@ const std::string defaultFilename = "exampleModels/monkey.off";
 class MeshObject : public DrawableObject {
     public:
 
-        MeshObject(std::string n = "MeshObject", char *filename = (char*)defaultFilename.c_str(),Transform *t = new Transform(), Material *m = NULL);
+        MeshObject(std::string n = "MeshObject", char *filename = (char*)defaultFilename.c_str(),Transform *t = new Transform(), Material *m = new Lambertian());
         ~MeshObject();
 
 

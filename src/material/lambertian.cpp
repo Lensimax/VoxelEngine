@@ -112,13 +112,13 @@ GLuint Lambertian::shaderID(){
 
 void Lambertian::createShader(){
     shader = new Shader();
-    shader->load("data/shaders/lambertian.vert","data/shaders/lambertian.frag");
+    shader->load("../data/shaders/lambertian.vert","../data/shaders/lambertian.frag");
     debugNormalShader = new Shader();
-    debugNormalShader->load("data/shaders/debugNormal.vert","data/shaders/debugNormal.frag");
+    debugNormalShader->load("../data/shaders/debugNormal.vert","../data/shaders/debugNormal.frag");
 }
 void Lambertian::reloadShaders(){
-    shader->reload("data/shaders/lambertian.vert","data/shaders/lambertian.frag");
-    debugNormalShader->reload("data/shaders/debugNormal.vert","data/shaders/debugNormal.frag");
+    shader->reload("../data/shaders/lambertian.vert","../data/shaders/lambertian.frag");
+    debugNormalShader->reload("../data/shaders/debugNormal.vert","../data/shaders/debugNormal.frag");
 }
 
 void Lambertian::deleteShader(){

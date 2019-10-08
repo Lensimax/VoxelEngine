@@ -28,7 +28,7 @@
 MainRenderer::MainRenderer(){
 
     postProcessShader = new Shader();
-    postProcessShader->load("data/shaders/postProcess.vert","data/shaders/postProcess.frag");
+    postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
 
     createVAOQuad();
     createFBOSceneRender();

@@ -3,6 +3,8 @@
 #include "tools/lights/directionnalLight.h"
 #include "tools/cameraProj.h"
 
+#include "models/meshObject.h"
+
 
 Scene::Scene(){
 
@@ -11,7 +13,7 @@ Scene::Scene(){
 
 
 
-    // objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"data/models/monkey.off", new Transform()));
+    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"../data/models/monkey.off", new Transform()));
 
     // objectsEngine.push_back(new Sphere());
 
