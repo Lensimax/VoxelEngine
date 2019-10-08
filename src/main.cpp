@@ -105,7 +105,7 @@ int main(int, char**)
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1000, 600, "Green-Engine", NULL, NULL);
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
@@ -188,16 +188,28 @@ int main(int, char**)
 
         createInfoWindow();
 
+
+
         // Scene explorer
 
         std::vector<std::string> listOfObjects = scene->getNameOfAllObjects();
-        ImGui::Begin("Project");
+        ImGui::Begin("Scene Manager", NULL, ImGuiWindowFlags_MenuBar);
+
+        if (ImGui::BeginMenuBar()){
+            if (ImGui::BeginMenu("Add")){
+                if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { /* Do stuff */ }
+                if (ImGui::MenuItem("Add Cube", "")) { /* Do stuff */ }
+                if (ImGui::MenuItem("Add Sphere", "")) { /* Do stuff */ }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
 
 
-        DrawSplitter(false, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
+        DrawSplitter(true, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
 
         ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
-        ImGui::Text("Project");
+
 
         // on cherche celui selectionné
         static int selected = -1;
