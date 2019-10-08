@@ -35,6 +35,7 @@ file(GLOB_RECURSE HEADERS
 )
 
 add_definitions( -ldl -Wformat -Wall)
+add_definitions(-std=c++11)
 
 
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
