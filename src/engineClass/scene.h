@@ -13,8 +13,8 @@
 #include <string>
 #include <vector>
 
-#include "tools/lights/light.h"
-#include "tools/camera.h"
+#include "../tools/lights/light.h"
+#include "../tools/camera.h"
 
 #include "engineObject.h"
 

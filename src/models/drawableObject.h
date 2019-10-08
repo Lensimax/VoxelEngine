@@ -13,7 +13,7 @@
 
 #include "transform.h"
 #include "../tools/lights/light.h"
-#include "../engineObject.h"
+#include "../engineClass/engineObject.h"
 
 #include <string>
 

@@ -15,7 +15,7 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
-#include "tools/lights/directionnalLight.h"
+#include "../tools/lights/directionnalLight.h"
 
 #include "mainRenderer.h"
 
