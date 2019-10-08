@@ -14,7 +14,7 @@
 
 // #include "models/drawableObject.h"
 // #include "models/cube.h"
-// #include "tools/cameraProj.h"
+#include "tools/camera.h"
 
 #include <vector>
 #include <string>
@@ -36,7 +36,7 @@ class MainRenderer {
 
         // void renderTheScene(Scene *scene, int width, int height);
 
-        // Camera *getCamera();
+        Camera *getCamera();
         Light *getLight();
 
         glm::mat4 viewMat;

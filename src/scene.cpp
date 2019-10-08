@@ -1,6 +1,7 @@
 #include "scene.h"
 
 #include "tools/lights/directionnalLight.h"
+#include "tools/cameraProj.h"
 
 
 Scene::Scene(){
@@ -18,9 +19,9 @@ Scene::Scene(){
 
 
 
-    // Camera *cam = new CameraProj();
+    Camera *cam = new CameraProj();
 
-    // objectsEngine.push_back(cam);
+    objectsEngine.push_back(cam);
 
     objectsEngine.push_back(new DirectionnalLight("Light", glm::vec3(8, 0.0, 1)));
 
@@ -36,20 +37,18 @@ void Scene::deleteScene(){
     }
 }
 
-/*Camera *Scene::getCamera(){
+Camera *Scene::getCamera(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         if(Camera* c = dynamic_cast<Camera*>(objectsEngine[i])) {
-        // old was safely casted to NewType
             return c;
         }
     }
     return NULL;
-}*/
+}
 
 Light *Scene::getLight(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         if(Light* l = dynamic_cast<Light*>(objectsEngine[i])) {
-        // old was safely casted to NewType
             return l;
         }
     }

@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "tools/lights/light.h"
+#include "tools/camera.h"
 
 #include "engineObject.h"
 
@@ -24,7 +25,7 @@ class Scene {
         ~Scene();
 
         void createUI();
-        // Camera *getCamera();
+        Camera *getCamera();
         Light *getLight();
         void createUIAtID(int indexItem, char *ID);
         std::vector<std::string> getNameOfAllObjects();
