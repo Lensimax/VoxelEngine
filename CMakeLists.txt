@@ -34,7 +34,7 @@ file(GLOB_RECURSE HEADERS
 	src/*.hpp
 )
 
-add_definitions( -ldl )
+add_definitions( -ldl -Wformat -Wall)
 
 
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
