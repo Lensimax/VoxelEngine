@@ -12,7 +12,7 @@
 #include "scene.h"
 #include "shader.h"
 
-// #include "models/drawableObject.h"
+#include "models/drawableObject.h"
 // #include "models/cube.h"
 #include "tools/camera.h"
 
@@ -34,7 +34,7 @@ class MainRenderer {
 
     private:
 
-        // void renderTheScene(Scene *scene, int width, int height);
+        void renderTheScene(Scene *scene, int width, int height);
 
         Camera *getCamera();
         Light *getLight();

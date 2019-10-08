@@ -35,7 +35,7 @@ MainRenderer::MainRenderer(){
 
 }
 
-/*void MainRenderer::renderTheScene(Scene *scene, int width, int height){
+void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 
     if(height == 0){
@@ -57,15 +57,14 @@ MainRenderer::MainRenderer(){
 
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        if(DrawableObject* o = dynamic_cast<DrawableObject*>(scene->objectsEngine[i])) {
-            // old was safely casted to NewType
+        if(DrawableObject* o = dynamic_cast<DrawableObject*>(scene->objectsEngine[i])) { // safe cast
             o->draw(c->getView(), c->getProj(), l);
         }
     }
 
 
 
-}*/
+}
 
 
 
@@ -84,7 +83,7 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render in texture
-    // renderTheScene(scene, width, height);
+    renderTheScene(scene, width, height);
 
     // disable FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
