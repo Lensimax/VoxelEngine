@@ -72,3 +72,7 @@ std::vector<std::string> Scene::getNameOfAllObjects(){
 
     return list;
 }
+
+void Scene::addMeshObject(){
+    objectsEngine.push_back(new MeshObject());
+}

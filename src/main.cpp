@@ -35,38 +35,12 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1)
-{
-    ImVec2 backup_pos = ImGui::GetCursorPos();
-    if (split_vertically)
-        ImGui::SetCursorPosY(backup_pos.y + *size0);
-    else
-        ImGui::SetCursorPosX(backup_pos.x + *size0);
 
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0,0,0,0));          // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f,0.6f,0.6f,0.10f));
-    ImGui::Button("##Splitter", ImVec2(!split_vertically ? thickness : -1.0f, split_vertically ? thickness : -1.0f));
-    ImGui::PopStyleColor(3);
+// fonction du main
+void createUISceneManager(Scene *scene);
+void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1);
 
-    ImGui::SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter.
 
-    if (ImGui::IsItemActive())
-    {
-        float mouse_delta = split_vertically ? ImGui::GetIO().MouseDelta.y : ImGui::GetIO().MouseDelta.x;
-
-        // Minimum pane size
-        if (mouse_delta < min_size0 - *size0)
-            mouse_delta = min_size0 - *size0;
-        if (mouse_delta > *size1 - min_size1)
-            mouse_delta = *size1 - min_size1;
-
-        // Apply resize
-        *size0 += mouse_delta;
-        *size1 -= mouse_delta;
-    }
-    ImGui::SetCursorPos(backup_pos);
-}
 
 
 static void createInfoWindow(){
@@ -161,8 +135,6 @@ int main(int, char**)
     renderer->initializeGL();
 
     Scene *scene = new Scene();
-    float sizeLeft = 200;
-    float sizeRight = 200;
 
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -183,57 +155,15 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-
-        // CREATE UI
+        ///////////////
+        // CREATE UI //
+        ///////////////
 
         createInfoWindow();
 
+        // SCENE MANAGER
+        createUISceneManager(scene);
 
-
-        // Scene explorer
-
-        std::vector<std::string> listOfObjects = scene->getNameOfAllObjects();
-        ImGui::Begin("Scene Manager", NULL, ImGuiWindowFlags_MenuBar);
-
-        if (ImGui::BeginMenuBar()){
-            if (ImGui::BeginMenu("Add")){
-                if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { /* Do stuff */ }
-                if (ImGui::MenuItem("Add Cube", "")) { /* Do stuff */ }
-                if (ImGui::MenuItem("Add Sphere", "")) { /* Do stuff */ }
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenuBar();
-        }
-
-
-        DrawSplitter(true, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
-
-        ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
-
-
-        // on cherche celui selectionné
-        static int selected = -1;
-        for (unsigned int i = 0; i < listOfObjects.size(); i++){
-
-            if (ImGui::Selectable(listOfObjects[i].c_str(), selected == (int)i))
-                selected = i;
-        }
-
-        ImGui::EndChild();
-
-        ImGui::SameLine();
-
-        ImGui::BeginChild("right", ImVec2(0, -ImGui::GetFrameHeight()),true); // pass width here
-
-        if(selected > -1){
-            char idInspector[10];
-            sprintf(idInspector, "right");
-            scene->createUIAtID(selected, idInspector);
-        }
-
-        ImGui::EndChild();
-
-        ImGui::End();
 
         // Rendering
         ImGui::Render();
@@ -263,4 +193,86 @@ int main(int, char**)
     glfwTerminate();
 
     return 0;
+}
+
+
+void createUISceneManager(Scene *scene){
+    float sizeLeft = 200;
+    float sizeRight = 200;
+
+    std::vector<std::string> listOfObjects = scene->getNameOfAllObjects();
+    ImGui::Begin("Scene Manager", NULL, ImGuiWindowFlags_MenuBar);
+
+    if (ImGui::BeginMenuBar()){
+        if (ImGui::BeginMenu("Add")){
+            if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { scene->addMeshObject(); }
+            if (ImGui::MenuItem("Add Cube", "")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Add Sphere", "")) { /* Do stuff */ }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
+
+
+    DrawSplitter(true, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
+
+    ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
+
+
+    // on cherche celui selectionné
+    static int selected = -1;
+    for (unsigned int i = 0; i < listOfObjects.size(); i++){
+
+        if (ImGui::Selectable(listOfObjects[i].c_str(), selected == (int)i))
+            selected = i;
+    }
+
+    ImGui::EndChild();
+
+    ImGui::SameLine();
+
+    ImGui::BeginChild("right", ImVec2(0, -ImGui::GetFrameHeight()),true); // pass width here
+
+    if(selected > -1){
+        char idInspector[10];
+        sprintf(idInspector, "right");
+        scene->createUIAtID(selected, idInspector);
+    }
+
+    ImGui::EndChild();
+
+    ImGui::End();
+}
+
+void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1)
+{
+    ImVec2 backup_pos = ImGui::GetCursorPos();
+    if (split_vertically)
+        ImGui::SetCursorPosY(backup_pos.y + *size0);
+    else
+        ImGui::SetCursorPosX(backup_pos.x + *size0);
+
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0,0,0,0));          // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f,0.6f,0.6f,0.10f));
+    ImGui::Button("##Splitter", ImVec2(!split_vertically ? thickness : -1.0f, split_vertically ? thickness : -1.0f));
+    ImGui::PopStyleColor(3);
+
+    ImGui::SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter.
+
+    if (ImGui::IsItemActive())
+    {
+        float mouse_delta = split_vertically ? ImGui::GetIO().MouseDelta.y : ImGui::GetIO().MouseDelta.x;
+
+        // Minimum pane size
+        if (mouse_delta < min_size0 - *size0)
+            mouse_delta = min_size0 - *size0;
+        if (mouse_delta > *size1 - min_size1)
+            mouse_delta = *size1 - min_size1;
+
+        // Apply resize
+        *size0 += mouse_delta;
+        *size1 -= mouse_delta;
+    }
+    ImGui::SetCursorPos(backup_pos);
 }

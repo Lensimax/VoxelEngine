@@ -31,6 +31,8 @@ class Scene {
         void createUIAtID(int indexItem, char *ID);
         std::vector<std::string> getNameOfAllObjects();
 
+        void addMeshObject();
+
 
         std::vector<EngineObject*> objectsEngine;
 
