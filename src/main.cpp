@@ -54,6 +54,8 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+static int selected = -1;
+
 int main(int, char**)
 {
     // Setup window
@@ -200,14 +202,25 @@ void createUISceneManager(Scene *scene){
     float sizeLeft = 200;
     float sizeRight = 200;
 
+
     std::vector<std::string> listOfObjects = scene->getNameOfAllObjects();
     ImGui::Begin("Scene Manager", NULL, ImGuiWindowFlags_MenuBar);
 
+
+
+    // Menu on the top
     if (ImGui::BeginMenuBar()){
-        if (ImGui::BeginMenu("Add")){
+        if (ImGui::BeginMenu("File")){
+            if (ImGui::MenuItem("New Scene", "WIP")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Load Scene", "WIP")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Save Scene", "WIP")) { /* Do stuff */ }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Edit")){
             if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { scene->addMeshObject(); }
-            if (ImGui::MenuItem("Add Cube", "")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Add Sphere", "")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Add Cube", "WIP")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Add Sphere", "WIP")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selected); }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
@@ -218,14 +231,12 @@ void createUISceneManager(Scene *scene){
 
     ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
 
-
     // on cherche celui selectionné
-    static int selected = -1;
     for (unsigned int i = 0; i < listOfObjects.size(); i++){
-
         if (ImGui::Selectable(listOfObjects[i].c_str(), selected == (int)i))
             selected = i;
     }
+
 
     ImGui::EndChild();
 
@@ -244,6 +255,8 @@ void createUISceneManager(Scene *scene){
     ImGui::End();
 }
 
+
+// SPLITTER
 void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1)
 {
     ImVec2 backup_pos = ImGui::GetCursorPos();

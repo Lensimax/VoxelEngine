@@ -32,6 +32,7 @@ class Scene {
         std::vector<std::string> getNameOfAllObjects();
 
         void addMeshObject();
+        void deleteObject(int index);
 
 
         std::vector<EngineObject*> objectsEngine;

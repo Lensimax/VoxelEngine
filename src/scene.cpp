@@ -76,3 +76,12 @@ std::vector<std::string> Scene::getNameOfAllObjects(){
 void Scene::addMeshObject(){
     objectsEngine.push_back(new MeshObject());
 }
+
+
+void Scene::deleteObject(int index){
+    if(index >= 0 && index < objectsEngine.size()){
+        EngineObject *obj = objectsEngine[index];
+        objectsEngine.erase (objectsEngine.begin()+index);
+        delete(obj);
+    }
+}
