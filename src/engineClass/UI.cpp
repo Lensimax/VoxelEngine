@@ -8,6 +8,7 @@
 
 UI::UI(){
     selected = -1;
+    hasToBeDisplayed = true;
 }
 
 UI::~UI(){
@@ -15,6 +16,9 @@ UI::~UI(){
 }
 
 void UI::drawUI(Scene *scene){
+    if(!hasToBeDisplayed){
+        return;
+    }
     createInfoWindow();
 
     createUISceneManager(scene);
@@ -118,4 +122,9 @@ void UI::DrawSplitter(int split_vertically, float thickness, float* size0, float
         *size1 -= mouse_delta;
     }
     ImGui::SetCursorPos(backup_pos);
+}
+
+
+void UI::toggleHasToBeDisplayed(){
+    hasToBeDisplayed = !hasToBeDisplayed;
 }

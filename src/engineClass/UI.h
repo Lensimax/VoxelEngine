@@ -11,6 +11,8 @@ public:
 
     void drawUI(Scene *scene);
 
+    void toggleHasToBeDisplayed();
+
 
 private:
 
@@ -19,7 +21,7 @@ private:
     void createInfoWindow();
 
 
-
+    bool hasToBeDisplayed;
     int selected = -1;
 };
 
