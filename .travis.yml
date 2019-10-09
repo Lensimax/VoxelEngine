@@ -6,6 +6,7 @@ branches:
   only:
   - master
   - stable
+  - develop
 
 compiler:
   - g++
