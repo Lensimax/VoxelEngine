@@ -11,7 +11,7 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
-#include "../shader.h"
+#include "shader.h"
 #include "../tools/lights/light.h"
 
 class Material {

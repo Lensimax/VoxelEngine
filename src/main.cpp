@@ -25,8 +25,10 @@
 // Include glfw3.h after our OpenGL definitions
 #include <GLFW/glfw3.h>
 
-#include "scene.h"
-#include "mainRenderer.h"
+#include "engineClass/scene.h"
+#include "engineClass/mainRenderer.h"
+#include "engineClass/UI.h"
+#include "engineClass/InputManager.h"
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
@@ -35,50 +37,17 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1)
-{
-    ImVec2 backup_pos = ImGui::GetCursorPos();
-    if (split_vertically)
-        ImGui::SetCursorPosY(backup_pos.y + *size0);
-    else
-        ImGui::SetCursorPosX(backup_pos.x + *size0);
-
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0,0,0,0));          // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.6f,0.6f,0.6f,0.10f));
-    ImGui::Button("##Splitter", ImVec2(!split_vertically ? thickness : -1.0f, split_vertically ? thickness : -1.0f));
-    ImGui::PopStyleColor(3);
-
-    ImGui::SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter.
-
-    if (ImGui::IsItemActive())
-    {
-        float mouse_delta = split_vertically ? ImGui::GetIO().MouseDelta.y : ImGui::GetIO().MouseDelta.x;
-
-        // Minimum pane size
-        if (mouse_delta < min_size0 - *size0)
-            mouse_delta = min_size0 - *size0;
-        if (mouse_delta > *size1 - min_size1)
-            mouse_delta = *size1 - min_size1;
-
-        // Apply resize
-        *size0 += mouse_delta;
-        *size1 -= mouse_delta;
-    }
-    ImGui::SetCursorPos(backup_pos);
-}
 
 
-static void createInfoWindow(){
-    ImGui::Begin("Info Window");
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::End();
-}
+
+
+
 
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
+
 
 int main(int, char**)
 {
@@ -136,7 +105,6 @@ int main(int, char**)
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -157,20 +125,25 @@ int main(int, char**)
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
 
+
+
     MainRenderer *renderer = new MainRenderer();
     renderer->initializeGL();
 
     Scene *scene = new Scene();
-    float sizeLeft = 200;
-    float sizeRight = 200;
+
+    UI *ui = new UI();
+
+    InputManager *inputManager = new InputManager();
+    inputManager->setUI(ui);
+    inputManager->setScene(scene);
 
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
     // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)){
         // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
         // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
@@ -183,57 +156,15 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        ///////////////
+        // CREATE UI //
+        ///////////////
 
-        // CREATE UI
+        inputManager->update();
+        ui->drawUI(scene);
 
-        createInfoWindow();
+        //ImGui::ShowDemoWindow();
 
-
-
-        // Scene explorer
-
-        std::vector<std::string> listOfObjects = scene->getNameOfAllObjects();
-        ImGui::Begin("Scene Manager", NULL, ImGuiWindowFlags_MenuBar);
-
-        if (ImGui::BeginMenuBar()){
-            if (ImGui::BeginMenu("Add")){
-                if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { /* Do stuff */ }
-                if (ImGui::MenuItem("Add Cube", "")) { /* Do stuff */ }
-                if (ImGui::MenuItem("Add Sphere", "")) { /* Do stuff */ }
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenuBar();
-        }
-
-
-        DrawSplitter(true, 10.0f, &sizeLeft, &sizeRight, 10.0f, 10.f); // code above
-
-        ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
-
-
-        // on cherche celui selectionné
-        static int selected = -1;
-        for (unsigned int i = 0; i < listOfObjects.size(); i++){
-
-            if (ImGui::Selectable(listOfObjects[i].c_str(), selected == (int)i))
-                selected = i;
-        }
-
-        ImGui::EndChild();
-
-        ImGui::SameLine();
-
-        ImGui::BeginChild("right", ImVec2(0, -ImGui::GetFrameHeight()),true); // pass width here
-
-        if(selected > -1){
-            char idInspector[10];
-            sprintf(idInspector, "right");
-            scene->createUIAtID(selected, idInspector);
-        }
-
-        ImGui::EndChild();
-
-        ImGui::End();
 
         // Rendering
         ImGui::Render();
@@ -253,6 +184,8 @@ int main(int, char**)
 
     delete(scene);
     delete(renderer);
+    delete(ui);
+    delete(inputManager);
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();

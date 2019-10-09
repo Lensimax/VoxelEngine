@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#define M_PI 3.1415926
+
 
 unsigned int *Mesh::get_face(unsigned int i) {
   return &(faces[3*i]);

@@ -9,13 +9,12 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
-#include "tools/lights/light.h"
+#include "../tools/lights/light.h"
 #include "scene.h"
-#include "shader.h"
+#include "../material/shader.h"
 
-#include "models/drawableObject.h"
-// #include "models/cube.h"
-#include "tools/camera.h"
+#include "../models/drawableObject.h"
+#include "../tools/camera.h"
 
 #include <vector>
 #include <string>

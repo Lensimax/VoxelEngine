@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
-#include "../../engineObject.h"
+#include "../../engineClass/engineObject.h"
 
 class Light : public EngineObject {
 

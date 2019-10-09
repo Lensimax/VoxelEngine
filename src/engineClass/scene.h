@@ -13,8 +13,8 @@
 #include <string>
 #include <vector>
 
-#include "tools/lights/light.h"
-#include "tools/camera.h"
+#include "../tools/lights/light.h"
+#include "../tools/camera.h"
 
 #include "engineObject.h"
 
@@ -30,6 +30,9 @@ class Scene {
         Light *getLight();
         void createUIAtID(int indexItem, char *ID);
         std::vector<std::string> getNameOfAllObjects();
+
+        void addMeshObject();
+        void deleteObject(int index);
 
 
         std::vector<EngineObject*> objectsEngine;
