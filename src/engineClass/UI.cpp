@@ -124,6 +124,10 @@ void UI::DrawSplitter(int split_vertically, float thickness, float* size0, float
     ImGui::SetCursorPos(backup_pos);
 }
 
+int UI::getSelected(){
+    return selected;
+}
+
 
 void UI::toggleHasToBeDisplayed(){
     hasToBeDisplayed = !hasToBeDisplayed;

@@ -13,6 +13,7 @@ public:
 
     void toggleHasToBeDisplayed();
 
+    int getSelected();
 
 private:
 

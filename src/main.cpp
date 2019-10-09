@@ -136,6 +136,7 @@ int main(int, char**)
 
     InputManager *inputManager = new InputManager();
     inputManager->setUI(ui);
+    inputManager->setScene(scene);
 
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -159,7 +160,10 @@ int main(int, char**)
         // CREATE UI //
         ///////////////
 
+        inputManager->update();
         ui->drawUI(scene);
+
+        //ImGui::ShowDemoWindow();
 
 
         // Rendering
