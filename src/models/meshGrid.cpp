@@ -62,9 +62,24 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
 
     // creation faces
 
+	unsigned int p1,p2,p3,p4;
+	unsigned int numFace;
+
 	for(unsigned int i=0; i<size-1; i++){
     	for(unsigned int j=0; j<size-1; j++){
-    		
+			p1 = i*size + j;
+			p2 = i*size + j+1;
+			p3 = (i+1)*size + j+1;
+			p4 = (i+1)*size + j;
+
+			numFace = (i*size + j)*2*3;
+			faces[numFace] = p1;
+			faces[numFace+1] = p2;
+			faces[numFace+2] = p4;
+
+			faces[numFace+3] = p4;
+			faces[numFace+4] = p2;
+			faces[numFace+5] = p3;
     	}
     }
 
@@ -129,4 +144,3 @@ void MeshGrid::cleanup(){
 
 
 }
-
