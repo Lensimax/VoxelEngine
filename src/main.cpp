@@ -163,7 +163,7 @@ int main(int, char**)
         inputManager->update();
         ui->drawUI(scene);
 
-        //ImGui::ShowDemoWindow();
+        // ImGui::ShowDemoWindow();
 
 
         // Rendering

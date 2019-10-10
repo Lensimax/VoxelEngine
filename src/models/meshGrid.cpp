@@ -38,6 +38,7 @@ void MeshGrid::recreate(){
 void MeshGrid::createMesh(unsigned int size, float w, float z){
 
 	const float startingWidth = -(width/2.0f);
+	const float offset = width/(size-1);
 
 	nb_vertices = size*size;
 	nb_faces = (size-1)*(size-1)*2;
@@ -52,11 +53,20 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
     // points creation
     for(unsigned int i=0; i<size; i++){
     	for(unsigned int j=0; j<size; j++){
-
+    		int arrayPos = i*size + j;
+    		vec3 pos = vec3(startingWidth + i*offset, startingWidth + j*offset, gridZ);
+    		vec2 uv = vec2(i/size, j/size);
+    		addVertex(arrayPos, pos, defaultNormal, defaultTangent, defaultColor, uv);
     	}
     }
 
+    // creation faces
 
+	for(unsigned int i=0; i<size-1; i++){
+    	for(unsigned int j=0; j<size-1; j++){
+    		
+    	}
+    }
 
 
     computeCenter();
