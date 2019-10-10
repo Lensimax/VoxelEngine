@@ -22,8 +22,6 @@
 
 // #include "cubeMesh.h"
 
-#define POSITION_ATTRIB 0
-#define VERTEX_NORMAL_ATTRIB 1
 
 const std::string defaultFilename = "exampleModels/monkey.off";
 

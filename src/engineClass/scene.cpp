@@ -5,6 +5,8 @@
 
 #include "../models/meshObject.h"
 
+#include "../models/plane.h"
+
 
 Scene::Scene(){
 
@@ -13,7 +15,7 @@ Scene::Scene(){
 
 
 
-    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"../data/models/monkey.off", new Transform()));
+    // objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"../data/models/monkey.off", new Transform()));
 
     // objectsEngine.push_back(new Sphere());
 
@@ -75,6 +77,10 @@ std::vector<std::string> Scene::getNameOfAllObjects(){
 
 void Scene::addMeshObject(){
     objectsEngine.push_back(new MeshObject());
+}
+
+void Scene::addPlane(){
+    objectsEngine.push_back(new Plane());
 }
 
 

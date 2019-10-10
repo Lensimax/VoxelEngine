@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 
+#include <stdio.h>
 
 using namespace glm;
 
@@ -19,6 +20,7 @@ MeshGrid::MeshGrid(unsigned int size, float w, float z){
     colors   = NULL;
     coords   = NULL;
     faces    = NULL;
+
 
     createMesh(nbPointPerRowColumn, width, gridZ);
 }
@@ -42,6 +44,9 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
 
 	nb_vertices = size*size;
 	nb_faces = (size-1)*(size-1)*2;
+
+	printf("nb_vertices %d\n", nb_vertices);
+	printf("nb_faces %d\n", nb_faces);
 
 	vertices = (float *)malloc(3*nb_vertices*sizeof(float));
     normals  = (float *)malloc(3*nb_vertices*sizeof(float));

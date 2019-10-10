@@ -1,10 +1,11 @@
+#include "plane.h"
+
+#define POSITION_ATTRIB 0
+#define VERTEX_NORMAL_ATTRIB 1
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-
-#define POSITION_ATTRIB 0
-#define VERTEX_NORMAL_ATTRIB 1
 
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -17,21 +18,15 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
-#include "meshLoader.h"
-#include "meshObject.h"
-// #include "meshLoader.h"
-// #include "sphereMesh.h"
-// #include "cubeMesh.h"
 
 #include <iostream>
 
-// #include "../material/lambertian.h"
 
 
-MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m){
+Plane::Plane(std::string n, unsigned int size, float width, float gridZ, Transform *t, Material *m){
     transform = t;
 
-    mesh = new MeshLoader(filename);
+    mesh = new MeshGrid(size, width, gridZ);
 
 
     float *center = mesh->getCenter();
@@ -46,7 +41,7 @@ MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m)
 }
 
 
-MeshObject::~MeshObject(){
+Plane::~Plane(){
     deleteVAO();
     delete transform;
     delete material;
@@ -55,26 +50,7 @@ MeshObject::~MeshObject(){
 
 
 
-
-unsigned int *MeshObject::getTriangles(){
-    return mesh->getFaces();
-}
-
-float *MeshObject::getVertices(){
-    return mesh->getVertices();
-}
-
-int MeshObject::nbVertices(){
-    return mesh->getNBVertices();
-}
-
-int MeshObject::nbTriangles(){
-    return mesh->getNBFaces();
-}
-
-
-
-void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+void Plane::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
     glUseProgram(material->shaderID());
 
@@ -87,7 +63,7 @@ void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
     glUseProgram(0);
 }
 
-void MeshObject::createVAO(){
+void Plane::createVAO(){
 
     buffers = new GLuint[3];
 
@@ -116,12 +92,12 @@ void MeshObject::createVAO(){
     glBindVertexArray(0);
 }
 
-void MeshObject::deleteVAO(){
+void Plane::deleteVAO(){
     glDeleteBuffers(2,buffers);
     glDeleteVertexArrays(1,&vertexArrayID);
 }
 
-void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
+void Plane::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
     glm::mat4 modelMat = transform->getMat4();
 
@@ -131,8 +107,25 @@ void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* l
 
 }
 
+unsigned int *Plane::getTriangles(){
+    return mesh->getFaces();
+}
 
-void MeshObject::createUI(char *ID){
+float *Plane::getVertices(){
+    return mesh->getVertices();
+}
+
+int Plane::nbVertices(){
+    return mesh->getNBVertices();
+}
+
+int Plane::nbTriangles(){
+    return mesh->getNBFaces();
+}
+
+
+
+void Plane::createUI(char *ID){
     ImGui::BeginChild(ID);
     ImGui::Text(name.c_str());
     ImGui::Separator();
