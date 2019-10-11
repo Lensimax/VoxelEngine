@@ -217,9 +217,11 @@ void Mesh::computeNormals(){
 void Mesh::computeUVCoord(){
     // computing spherical uv coordinates
 
+    coords.resize(nb_vertices);
+
     glm::vec3 v1;
     glm::vec3 c;
-    float norm, r;
+    float r;
 
 
     for(unsigned int i=0;i<nb_vertices;i++) {
@@ -278,4 +280,12 @@ void Mesh::computeRadius(){
       radius = r>radius ? r : radius;
     }
 
+}
+
+void Mesh::computeColor(){
+    colors.resize(nb_vertices);
+
+    for(unsigned int i=0; i<nb_vertices; i++){
+        colors[i] = glm::vec3(1,0,0);
+    }
 }

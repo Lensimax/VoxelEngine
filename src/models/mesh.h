@@ -63,6 +63,7 @@ public:
      void computeCenter();
      void computeRadius();
      void computeUVCoord();
+     void computeColor();
 
 };
 

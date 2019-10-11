@@ -58,5 +58,6 @@ void MeshQuad::createMesh(){
     center = glm::vec3(0,0,0);
     radius = 1;
 
-    printf("nb faces %u\n", faces.size());
+    computeColor();
+
 }

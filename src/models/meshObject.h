@@ -23,7 +23,7 @@
 // #include "cubeMesh.h"
 
 
-const std::string defaultFilename = "exampleModels/monkey.off";
+const std::string defaultFilename = "../data/models/monkey.off";
 
 class MeshObject : public DrawableObject {
     public:

@@ -17,7 +17,7 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
-// #include "meshLoader.h"
+#include "meshLoader.h"
 #include "meshObject.h"
 // #include "meshLoader.h"
 // #include "sphereMesh.h"
@@ -27,14 +27,15 @@
 
 #include <iostream>
 
-// #include "../material/lambertian.h"
 
 
 MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m){
     transform = t;
 
     // mesh = new MeshLoader(filename);
-    mesh = new MeshQuad();
+    mesh = new MeshLoader("../data/models/quad.off");
+
+    // mesh = new MeshQuad();
 
 
     glm::vec3 center = mesh->getCenter();
@@ -56,16 +57,6 @@ MeshObject::~MeshObject(){
     delete mesh;
 }
 
-
-
-
-/*unsigned int *MeshObject::getTriangles(){
-    return mesh->getFaces();
-}
-
-float *MeshObject::getVertices(){
-    return mesh->getVertices();
-}*/
 
 int MeshObject::nbVertices(){
     return mesh->getNBVertices();
