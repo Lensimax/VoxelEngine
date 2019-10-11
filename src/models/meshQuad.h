@@ -11,6 +11,11 @@ public:
     ~MeshQuad();
 
 
+    void recreate();
+
+public:
+    void createMesh();
+
 };
 
 

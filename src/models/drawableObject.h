@@ -23,9 +23,9 @@ class DrawableObject : public EngineObject {
 
 
         /* get vertices array of this object */
-        virtual float *getVertices() = 0;
+        // virtual float *getVertices() = 0;
         /* get faces/triangle array of this object */
-        virtual unsigned int *getTriangles() = 0;
+        // virtual unsigned int *getTriangles() = 0;
 
         /* get number of vertices */
         virtual int nbVertices() = 0;

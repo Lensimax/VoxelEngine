@@ -19,9 +19,9 @@ public:
 
      virtual ~Mesh() = default;
 
-     float *getVertices();
-     unsigned int *getFaces();
-     float *getNormals();
+     void *getVertices();
+     void *getFaces();
+     void *getNormals();
 
      unsigned int getNBVertices();
      unsigned int getNBFaces();
@@ -55,8 +55,8 @@ public:
      std::vector<unsigned int> faces;
 
      // info
-     glm::vec3 center[3];
-     float         radius;
+     glm::vec3      center;
+     float          radius;
 
      void computeNormals();
      void computeTangents();

@@ -32,8 +32,8 @@ class MeshObject : public DrawableObject {
         ~MeshObject();
 
 
-        virtual float *getVertices();
-        virtual unsigned int *getTriangles();
+        /*virtual float *getVertices();
+        virtual unsigned int *getTriangles();*/
         virtual int nbVertices();
         virtual int nbTriangles();
 

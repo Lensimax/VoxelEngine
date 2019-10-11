@@ -17,11 +17,13 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
-#include "meshLoader.h"
+// #include "meshLoader.h"
 #include "meshObject.h"
 // #include "meshLoader.h"
 // #include "sphereMesh.h"
 // #include "cubeMesh.h"
+
+#include "meshQuad.h"
 
 #include <iostream>
 
@@ -31,11 +33,12 @@
 MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m){
     transform = t;
 
-    mesh = new MeshLoader(filename);
+    // mesh = new MeshLoader(filename);
+    mesh = new MeshQuad();
 
 
-    float *center = mesh->getCenter();
-    t->setCenter(glm::vec3(center[0],center[1], center[2]));
+    glm::vec3 center = mesh->getCenter();
+    t->setCenter(center);
 
     createVAO();
 
@@ -56,13 +59,13 @@ MeshObject::~MeshObject(){
 
 
 
-unsigned int *MeshObject::getTriangles(){
+/*unsigned int *MeshObject::getTriangles(){
     return mesh->getFaces();
 }
 
 float *MeshObject::getVertices(){
     return mesh->getVertices();
-}
+}*/
 
 int MeshObject::nbVertices(){
     return mesh->getNBVertices();
