@@ -151,6 +151,8 @@ void Mesh::createUI(){
     ImGui::Text("Mesh");
     ImGui::Text("Number vertices: %d", getNBVertices());
     ImGui::Text("Number faces: %d", getNBFaces());
+    ImGui::Text("Smooth Normal "); ImGui::SameLine();
+    ImGui::Checkbox("",&smoothNormals);
 }
 
 
@@ -158,10 +160,7 @@ glm::vec3 Mesh::getCenter(){
     return center;
 }
 
-
-
-void Mesh::computeNormals(){
-
+void Mesh::computeSmoothNormals(){
     vector<vector<unsigned int>> one_ring;
     vector<glm::vec3> triangle_normals;
     vector<int> valences;
@@ -209,6 +208,77 @@ void Mesh::computeNormals(){
         n /= one_ring[i].size();
         normals[i] = n;
 
+    }
+
+
+}
+
+void Mesh::computeNormals(){
+    if(smoothNormals){
+        computeSmoothNormals();
+    } else {
+        computeNormalsWithAngles();
+    }
+}
+
+void Mesh::computeNormalsWithAngles(){
+    std::vector<glm::vec3> nf;
+
+    normals.resize(nb_vertices);
+
+    glm::vec3 v1, v2, v3;
+    glm::vec3 v12;
+    glm::vec3 v13;
+    std::vector<unsigned int> f;
+
+    std::vector<float> nv;
+
+    // computing normals per faces
+    nf.resize(3*nb_faces);
+    for(unsigned int i=0;i<nb_faces;i++) {
+        f = get_face(i);
+
+        // the three vertices of the current face
+        v1 = get_vertex(f[0]);
+        v2 = get_vertex(f[1]);
+        v3 = get_vertex(f[2]);
+
+        // the two vectors of the current face
+        v12 = v2-v1;
+        v13 = v3-v1;
+
+        // cross product
+        nf[3*i] = glm::cross(v12, v13);
+        nf[3*i] = glm::normalize(nf[3*i]);
+    }
+
+    // computing normals per vertex
+    nv.resize(nb_vertices);
+    for(unsigned int i=0;i<nb_vertices;i++) {
+        // initialization
+        normals[i] = glm::vec3(0);
+        nv[i] = 0.0;
+    }
+
+    for(unsigned int i=0;i<nb_faces;i++) {
+        // face normals average
+        f = get_face(i);
+        //n = &(nf[3*i]);
+
+        normals[f[0]] += nf[3*i];
+        normals[f[1]] += nf[3*i];
+        normals[f[2]] += nf[3*i];
+        nv[f[0]] ++;
+        nv[f[1]] ++;
+        nv[f[2]] ++;
+
+    }
+
+    for(unsigned int i=0;i<nb_vertices;i++) {
+        // normalization
+        if(nv[i] != 0.0){
+            normals[i] /= -nv[i];
+        }
     }
 
 

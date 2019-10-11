@@ -65,6 +65,11 @@ public:
      void computeUVCoord();
      void computeColor();
 
+     void computeSmoothNormals();
+     void computeNormalsWithAngles();
+
+     bool smoothNormals = false;
+
 };
 
 

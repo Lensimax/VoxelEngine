@@ -56,7 +56,6 @@ void MeshLoader::createMesh(char *filename){
         vertices[i] = vertex;
     }
 
-    std::cout << "after reading vertices" << std::endl;
 
     // reading faces
     j = 0;
@@ -76,22 +75,16 @@ void MeshLoader::createMesh(char *filename){
         j += 3;
     }
 
-    std::cout << "after reading faces" << std::endl;
-
     fclose(file);
 
     computeCenter();
 
-    std::cout << "after center" << std::endl;
 
     // computing radius
     computeRadius();
 
-    std::cout << "after radius" << std::endl;
-
     computeNormals();
 
-    std::cout << "after normal" << std::endl;
 
     // computing colors as normals
     colors.resize(nb_vertices);
@@ -101,12 +94,10 @@ void MeshLoader::createMesh(char *filename){
 
     computeUVCoord();
 
-        std::cout << "after normal" << std::endl;
 
     computeTangents();
 
 
-    std::cout << "after creating mesh" << std::endl;
 }
 
 void MeshLoader::createUI(){
@@ -116,7 +107,8 @@ void MeshLoader::createUI(){
     ImGui::InputText("fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
     ImGui::Text("Number vertices: %d", getNBVertices());
     ImGui::Text("Number faces: %d", getNBFaces());
-
+    ImGui::Text("Smooth Normal "); ImGui::SameLine();
+    ImGui::Checkbox("smoothNormal",&smoothNormals);
 
     ImGui::PopItemWidth();
 }
