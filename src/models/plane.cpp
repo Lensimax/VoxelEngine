@@ -29,8 +29,8 @@ Plane::Plane(std::string n, unsigned int size, float width, float gridZ, Transfo
     mesh = new MeshGrid(size, width, gridZ);
 
 
-    float *center = mesh->getCenter();
-    t->setCenter(glm::vec3(center[0],center[1], center[2]));
+    glm::vec3 center = mesh->getCenter();
+    t->setCenter(center);
 
     std::cout << __LINE__ << " Fin creation mesh" << std::endl;
 
@@ -111,13 +111,7 @@ void Plane::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light)
 
 }
 
-unsigned int *Plane::getTriangles(){
-    return mesh->getFaces();
-}
 
-float *Plane::getVertices(){
-    return mesh->getVertices();
-}
 
 int Plane::nbVertices(){
     return mesh->getNBVertices();

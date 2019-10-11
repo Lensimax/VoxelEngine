@@ -19,8 +19,6 @@ public:
 
     virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
 
-    virtual float *getVertices();
-    virtual unsigned int *getTriangles();
     virtual int nbVertices();
     virtual int nbTriangles();
 

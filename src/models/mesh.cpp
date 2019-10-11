@@ -152,7 +152,7 @@ void Mesh::createUI(){
     ImGui::Text("Number vertices: %d", getNBVertices());
     ImGui::Text("Number faces: %d", getNBFaces());
     ImGui::Text("Smooth Normal "); ImGui::SameLine();
-    ImGui::Checkbox("",&smoothNormals);
+    ImGui::Checkbox("smoothNormal",&smoothNormals);
 }
 
 

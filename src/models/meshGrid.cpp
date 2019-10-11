@@ -8,19 +8,14 @@
 using namespace glm;
 
 MeshGrid::MeshGrid(unsigned int size, float w, float z){
+	assert(size >= 1);
 	nbPointPerRowColumn = size;
+
 	width = w;
 	gridZ = z;
 
 	nb_vertices = 0;
 	nb_faces = 0;
-
-	vertices = NULL;
-    normals  = NULL;
-    tangents = NULL;
-    colors   = NULL;
-    coords   = NULL;
-    faces    = NULL;
 
 
     createMesh(nbPointPerRowColumn, width, gridZ);
@@ -40,7 +35,8 @@ void MeshGrid::recreate(){
 
 
 
-void MeshGrid::createMesh(unsigned int size, float w, float z){
+void MeshGrid::createMesh(int size, float w, float z){
+	assert(size >= 1);
 
 	const float startingWidth = -(width/2.0f);
 	const float offset = width/(size-1);
@@ -51,12 +47,12 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
 	printf("nb_vertices %d\n", nb_vertices);
 	printf("nb_faces %d\n", nb_faces);
 
-	vertices = (float *)malloc(3*nb_vertices*sizeof(float));
-    normals  = (float *)malloc(3*nb_vertices*sizeof(float));
-    tangents = (float *)malloc(3*nb_vertices*sizeof(float));
-    colors   = (float *)malloc(3*nb_vertices*sizeof(float));
-    coords   = (float *)malloc(2*nb_vertices*sizeof(float));
-    faces    = (unsigned int *)malloc(3*nb_faces*sizeof(unsigned int));
+	vertices.resize(nb_vertices);
+    normals.resize(nb_vertices);
+    tangents.resize(nb_vertices);
+    colors.resize(nb_vertices);
+    coords.resize(nb_vertices);
+    faces.resize(3*nb_faces);
 
 
     // points creation
@@ -74,6 +70,9 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
 	unsigned int p1,p2,p3,p4;
 	unsigned int numFace;
 
+
+	numFace = 0;
+
 	for(unsigned int i=0; i<size-1; i++){
     	for(unsigned int j=0; j<size-1; j++){
 			p1 = i*size + j;
@@ -81,7 +80,6 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
 			p3 = (i+1)*size + j+1;
 			p4 = (i+1)*size + j;
 
-			numFace = (i*size + j)*2*3;
 			faces[numFace] = p1;
 			faces[numFace+1] = p2;
 			faces[numFace+2] = p4;
@@ -89,13 +87,13 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
 			faces[numFace+3] = p4;
 			faces[numFace+4] = p2;
 			faces[numFace+5] = p3;
-    	}
+
+			numFace += 6;
+		}
     }
 
 
-	center[0] = 0;
-	center[1] = 0;
-	center[2] = gridZ;
+	center = glm::vec3(0,0,gridZ);
 
 	radius = width/2;
 
@@ -104,62 +102,77 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
 
 void MeshGrid::addVertex(unsigned int arrayPos, vec3 pos, vec3 n, vec3 tangent, vec3 col, vec2 uv){
 	// position
-	vertices[3*arrayPos] = pos.x;
-	vertices[3*arrayPos+1] = pos.y;
-	vertices[3*arrayPos+2] = pos.z;
+	vertices[arrayPos] = pos;
 	// normal
-	normals[3*arrayPos] = n.x;
-	normals[3*arrayPos+1] = n.y;
-	normals[3*arrayPos+2] = n.z;
+	normals[arrayPos] = n;
 	// tangent
-	tangents[3*arrayPos] = tangent.x;
-	tangents[3*arrayPos+1] = tangent.y;
-	tangents[3*arrayPos+2] = tangent.z;
+	tangents[arrayPos] = tangent;
 	// color
-	colors[3*arrayPos] = col.x;
-	colors[3*arrayPos+1] = col.y;
-	colors[3*arrayPos+2] = col.z;
+	colors[arrayPos] = col;
 	// uv coordinates
-	coords[2*arrayPos] = tangent.x;
-	coords[2*arrayPos+1] = tangent.y;
+	coords[arrayPos] = uv;
 }
 
-void MeshGrid::createUI(){
-	ImGui::PushItemWidth(-1);
 
-    ImGui::Text("Mesh Grid");
+void MeshGrid::cleanup(){
+
+}
+
+
+void MeshGrid::createUI(){
+    ImGui::Text("Mesh");
+
+	// nbPointPerRowColumn, width, gridZ
+	ImGui::Text("Size :"); ImGui::SameLine();
+	ImGui::InputInt("size", &nbPointPerRowColumn, 1, 10);
+	ImGui::Text("Width :"); ImGui::SameLine();
+	ImGui::InputFloat("width", &width, 0.01f, 1.0f, "%.3f");
+	ImGui::Text("Z plane :"); ImGui::SameLine();
+	ImGui::InputFloat("gridZ", &gridZ, 0.01f, 1.0f, "%.3f");
+
     ImGui::Text("Number vertices: %d", getNBVertices());
     ImGui::Text("Number faces: %d", getNBFaces());
 
+	if (ImGui::TreeNode("Vertices")){
 
-    ImGui::PopItemWidth();
-}
+		ImGui::Columns(3, "Vertices"); // 4-ways, with border
+		ImGui::Separator();
+        ImGui::Text("X"); ImGui::NextColumn();
+        ImGui::Text("Y"); ImGui::NextColumn();
+        ImGui::Text("Z"); ImGui::NextColumn();
+		ImGui::Separator();
+		for(unsigned int i=0; i<nb_vertices; i++){
+			ImGui::Text("%4f",vertices[i].x); ImGui::NextColumn();
+            ImGui::Text("%4f",vertices[i].y); ImGui::NextColumn();
+            ImGui::Text("%4f", vertices[i].z); ImGui::NextColumn();
+		}
 
-void MeshGrid::cleanup(){
-    if(normals!=NULL){
-        free(normals);
-        normals = NULL;
-    }
-    if(tangents!=NULL){
-        free(tangents);
-        tangents = NULL;
-    }
-    if(colors!=NULL){
-        free(colors);
-        colors = NULL;
-    }
-    if(vertices!=NULL){
-        free(vertices);
-        vertices = NULL;
-    }
-    if(faces!=NULL){
-        free(faces);
-        faces = NULL;
-    }
-    if(coords!=NULL){
-        free(coords);
-        coords = NULL;
-    }
+		ImGui::Columns(1);
+		ImGui::Separator();
+        ImGui::TreePop();
 
+	}
 
+	if (ImGui::TreeNode("Faces")){
+
+		ImGui::Columns(3, "Face"); // 4-ways, with border
+		ImGui::Separator();
+        ImGui::Text("V1"); ImGui::NextColumn();
+        ImGui::Text("V2"); ImGui::NextColumn();
+        ImGui::Text("V3"); ImGui::NextColumn();
+		ImGui::Separator();
+		for(unsigned int i=0; i<nb_faces; i++){
+			ImGui::Text("%d",faces[3*i]); ImGui::NextColumn();
+            ImGui::Text("%d",faces[3*i+1]); ImGui::NextColumn();
+            ImGui::Text("%d", faces[3*i+2]); ImGui::NextColumn();
+		}
+
+		ImGui::Columns(1);
+		ImGui::Separator();
+        ImGui::TreePop();
+
+	}
+
+    ImGui::Text("Smooth Normal "); ImGui::SameLine();
+    ImGui::Checkbox("smoothNormal",&smoothNormals);
 }
