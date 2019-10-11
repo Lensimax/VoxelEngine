@@ -13,7 +13,6 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-    objectsEngine.push_back(new Plane("Plane", 3, 1, 0));
 
     // objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"../data/models/monkey.off", new Transform()));
 

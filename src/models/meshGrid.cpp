@@ -23,9 +23,7 @@ MeshGrid::MeshGrid(unsigned int size, float w, float z){
 
 
 MeshGrid::~MeshGrid(){
-	std::cout << __LINE__ << " before cleanup" << std::endl;
 	cleanup();
-	std::cout << __LINE__ << " before cleanup" << std::endl;
 }
 
 void MeshGrid::recreate(){
@@ -44,8 +42,6 @@ void MeshGrid::createMesh(int size, float w, float z){
 	nb_vertices = size*size;
 	nb_faces = (size-1)*(size-1)*2;
 
-	printf("nb_vertices %d\n", nb_vertices);
-	printf("nb_faces %d\n", nb_faces);
 
 	vertices.resize(nb_vertices);
     normals.resize(nb_vertices);
