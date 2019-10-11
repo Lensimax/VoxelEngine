@@ -3,6 +3,7 @@
 #include <imgui.h>
 
 #include <stdio.h>
+#include <iostream>
 
 using namespace glm;
 
@@ -27,7 +28,9 @@ MeshGrid::MeshGrid(unsigned int size, float w, float z){
 
 
 MeshGrid::~MeshGrid(){
-
+	std::cout << __LINE__ << " before cleanup" << std::endl;
+	cleanup();
+	std::cout << __LINE__ << " before cleanup" << std::endl;
 }
 
 void MeshGrid::recreate(){
@@ -54,6 +57,7 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
     colors   = (float *)malloc(3*nb_vertices*sizeof(float));
     coords   = (float *)malloc(2*nb_vertices*sizeof(float));
     faces    = (unsigned int *)malloc(3*nb_faces*sizeof(unsigned int));
+
 
     // points creation
     for(unsigned int i=0; i<size; i++){
@@ -89,8 +93,11 @@ void MeshGrid::createMesh(unsigned int size, float w, float z){
     }
 
 
-    computeCenter();
-    computeRadius();
+	center[0] = 0;
+	center[1] = 0;
+	center[2] = gridZ;
+
+	radius = width/2;
 
 }
 
@@ -118,7 +125,14 @@ void MeshGrid::addVertex(unsigned int arrayPos, vec3 pos, vec3 n, vec3 tangent, 
 }
 
 void MeshGrid::createUI(){
+	ImGui::PushItemWidth(-1);
 
+    ImGui::Text("Mesh Grid");
+    ImGui::Text("Number vertices: %d", getNBVertices());
+    ImGui::Text("Number faces: %d", getNBFaces());
+
+
+    ImGui::PopItemWidth();
 }
 
 void MeshGrid::cleanup(){

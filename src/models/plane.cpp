@@ -32,7 +32,11 @@ Plane::Plane(std::string n, unsigned int size, float width, float gridZ, Transfo
     float *center = mesh->getCenter();
     t->setCenter(glm::vec3(center[0],center[1], center[2]));
 
+    std::cout << __LINE__ << " Fin creation mesh" << std::endl;
+
     createVAO();
+
+    std::cout << __LINE__ << " after create VAO" << std::endl;
 
     material = m;
 
