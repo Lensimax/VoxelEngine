@@ -185,42 +185,6 @@ void compute_smooth_vertex_normals (){
 
     } else if (weight_type == 2) { // angle weight
 
-        unsigned short i0, i1, i2;
-        glm::vec3 p0,p1,p2;
-
-        for(unsigned int i=0; i<vertex_normals.size(); i++){ // pour chaque sommet
-            glm::vec3 n = glm::vec3(0.);
-            float sumalpha = 0;
-            for(unsigned int j=0; j<one_ring[i].size(); j++){ // pour chaque triangle dans le voisinage
-
-                // calcul angle
-                i0 = triangles[one_ring[i][j]][0]; i1 = triangles[one_ring[i][j]][1]; i2 = triangles[one_ring[i][j]][2];
-                p0 = indexed_vertices[i0]; p1 = indexed_vertices[i1]; p2 = indexed_vertices[i2];
-
-                if(i == i1){
-                    p1 = indexed_vertices[i0];
-                    p0 = indexed_vertices[i1];
-                } else if(i == i2) {
-                    p2 = indexed_vertices[i0];
-                    p0 = indexed_vertices[i2];
-                }
-
-                float alpha = glm::acos(glm::dot(p1-p0, p2-p0)/(glm::length(p1-p0)*glm::length(p2-p0)));
-
-
-
-
-
-                n += alpha*triangle_normals[one_ring[i][j]];
-                sumalpha += alpha;
-            }
-
-
-            n /= sumalpha;
-            n /= one_ring[i].size();
-            vertex_normals[i] = n;
-
-        }
 
 
 
@@ -231,82 +195,50 @@ void compute_smooth_vertex_normals (){
 
 
 void Mesh::computeNormals(){
-    std::vector<glm::vec3> nf;
 
-    glm::vec3 v1, v2, v3;
-    glm::vec3 v12;
-    glm::vec3 v13;
-    std::vector<unsigned int> f;
-    float norm;
-    glm::vec3 nv;
+    vector<vector<unsigned short>> one_ring;
+    vector<glm::vec3> triangle_normals;
+    vector<int> valences;
 
-    // computing normals per faces
-    nf.resize(nb_faces);
-    for(unsigned int i=0;i<nb_faces;++i) {
-        f = get_face(i);
+    compute_triangle_normals(triangle_normals, faces, vertices);
+    collect_one_ring(one_ring,faces, vertices.size());
+    compute_vertex_valences (valences, one_ring, faces);
 
-        // the three vertices of the current face
-        v1 = get_vertex(f[0]);
-        v2 = get_vertex(f[1]);
-        v3 = get_vertex(f[2]);
+    normals.resize(vertices.size());
 
-        // the two vectors of the current face
-        v12 = v2-v1;
-        v13 = v3-v1;
+    unsigned short i0, i1, i2;
+    glm::vec3 p0,p1,p2;
 
-        // cross product
-        nf[] = glm::cross(v12,v13);
+    for(unsigned int i=0; i<normals.size(); i++){ // pour chaque sommet
+        glm::vec3 n = glm::vec3(0.);
+        float sumalpha = 0;
+        for(unsigned int j=0; j<one_ring[i].size(); j++){ // pour chaque triangle dans le voisinage
 
-        // normalization
-        norm = glm::vec3()
-        norm = sqrt(nf[3*i]*nf[3*i]+nf[3*i+1]*nf[3*i+1]+nf[3*i+2]*nf[3*i+2]);
-        if(norm == 0.0f){
-            fprintf(stderr, "division by 0\n");
+            // calcul angle
+            i0 = faces[one_ring[i][j]][0]; i1 = faces[one_ring[i][j]][1]; i2 = faces[one_ring[i][j]][2];
+            p0 = vertices[i0]; p1 = vertices[i1]; p2 = vertices[i2];
+
+            if(i == i1){
+                p1 = vertices[i0];
+                p0 = vertices[i1];
+            } else if(i == i2) {
+                p2 = vertices[i0];
+                p0 = vertices[i2];
+            }
+
+            float alpha = glm::acos(glm::dot(p1-p0, p2-p0)/(glm::length(p1-p0)*glm::length(p2-p0)));
+
+            n += alpha*triangle_normals[one_ring[i][j]];
+            sumalpha += alpha;
         }
-        nf[3*i  ] /= norm;
-        nf[3*i+1] /= norm;
-        nf[3*i+2] /= norm;
+
+
+        n /= sumalpha;
+        n /= one_ring[i].size();
+        normals[i] = n;
+
     }
 
-    // computing normals per vertex
-    nv = (float *)malloc(nb_vertices*sizeof(float));
-    for(unsigned int i=0;i<nb_vertices;++i) {
-        // initialization
-        normals[3*i  ] = 0.0;
-        normals[3*i+1] = 0.0;
-        normals[3*i+2] = 0.0;
-        nv[i] = 0.0;
-    }
-    for(unsigned int i=0;i<nb_faces;++i) {
-        // face normals average
-        f = get_face(i);
-        //n = &(nf[3*i]);
-
-        normals[3*f[0]  ] += nf[3*i  ];
-        normals[3*f[0]+1] += nf[3*i+1];
-        normals[3*f[0]+2] += nf[3*i+2];
-        nv[f[0]] ++;
-
-        normals[3*f[1]  ] += nf[3*i  ];
-        normals[3*f[1]+1] += nf[3*i+1];
-        normals[3*f[1]+2] += nf[3*i+2];
-        nv[f[1]] ++;
-
-        normals[3*f[2]  ] += nf[3*i  ];
-        normals[3*f[2]+1] += nf[3*i+1];
-        normals[3*f[2]+2] += nf[3*i+2];
-        nv[f[2]] ++;
-    }
-
-    for(unsigned int i=0;i<nb_vertices;++i) {
-        // normalization
-        normals[3*i  ] /= -nv[i];
-        normals[3*i+1] /= -nv[i];
-        normals[3*i+2] /= -nv[i];
-    }
-
-    free(nf);
-    free(nv);
 
 }
 
