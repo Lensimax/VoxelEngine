@@ -58,7 +58,7 @@ void main(){
 	if(lightVec != vec4(0.0,0.0,0.0,1.0)){
 
 		// normal, view and light directions (in camera space)
-		vec4 n = normalize(normal);
+		vec4 n = normalize(normalView);
 		vec4 e = normalize(eyeView);
 		vec4 l = normalize(lightVec);
 
@@ -66,6 +66,10 @@ void main(){
 		// bufferColor = color;
 		// bufferColor = phong(l.xyz, n.xyz, e.xyz);
 		bufferColor = testPhong(l, n, e);
+		bufferColor = vec4(dot(n,e),0,0,1);
+		bufferColor = n;
+		bufferColor = vec4(max(dot(reflect(l,n),e),0.),0,0,1);
+		bufferColor.a = 1;
 		// bufferColor = vec4(n.xyz, 1);
 		// bufferColor = testBlinn(color, specularDegree, l.xyz, n.xyz, e.xyz);
 	} else {

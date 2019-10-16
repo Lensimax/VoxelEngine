@@ -19,7 +19,7 @@
 class Lambertian : public Material {
 
     public:
-        Lambertian(glm::vec4 color = glm::vec4(188./255.,150./255.,185./255.,1.0));
+        Lambertian(glm::vec4 color = glm::vec4(255./255.,0./255.,0./255.,1.0));
         ~Lambertian();
 
         virtual void callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, Light *light);

@@ -20,13 +20,15 @@ Scene::Scene(){
 
     // objectsEngine.push_back(new Cube());
 
+    objectsEngine.push_back(new Plane());
 
 
-    Camera *cam = new CameraProj();
+
+    Camera *cam = new CameraProj("Camera", glm::vec3(0,0,3));
 
     objectsEngine.push_back(cam);
 
-    objectsEngine.push_back(new DirectionnalLight("Light", glm::vec3(8, 0.0, 1)));
+    objectsEngine.push_back(new DirectionnalLight("Light", glm::vec3(1, 0.0, 0)));
 
 }
 
