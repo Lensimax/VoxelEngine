@@ -2,6 +2,7 @@
 #define UI_H
 
 #include "scene.h"
+#include "mainRenderer.h"
 
 
 class UI {
@@ -9,11 +10,14 @@ public:
     UI();
     ~UI();
 
-    void drawUI(Scene *scene);
+    void drawUI();
 
     void toggleHasToBeDisplayed();
 
     int getSelected();
+
+    void set(Scene *sc);
+    void set(MainRenderer *main);
 
 private:
 
@@ -24,6 +28,10 @@ private:
 
     bool hasToBeDisplayed;
     int selected = -1;
+
+    Scene *scene;
+    MainRenderer *mainRenderer;
+
 };
 
 #endif

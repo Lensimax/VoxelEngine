@@ -133,6 +133,8 @@ int main(int, char**)
     Scene *scene = new Scene();
 
     UI *ui = new UI();
+    ui->set(scene);
+    ui->set(renderer);
 
     InputManager *inputManager = new InputManager();
     inputManager->setUI(ui);
@@ -161,7 +163,7 @@ int main(int, char**)
         ///////////////
 
         inputManager->update();
-        ui->drawUI(scene);
+        ui->drawUI();
 
         // ImGui::ShowDemoWindow();
 
