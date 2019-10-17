@@ -6,41 +6,16 @@
 
 #include <iostream>
 
+#ifndef M_PI
 #define M_PI 3.1415926
+#endif
 
-using namespace std;
-
-// a partir d'un triangle calcul la normales du triangle puis la renvoie sous forme de vec3
-glm::vec3 computeNormalOfOneTriangle(vector<unsigned int> triangle, vector<glm::vec3> indexed_vertices){
-
-    unsigned int i0,i1,i2;
-    glm::vec3 p0, p1, p2;
-
-    i0 = triangle[0]; i1 = triangle[1]; i2=triangle[2];
-
-    p0 = indexed_vertices[i0]; p1 = indexed_vertices[i1]; p2 = indexed_vertices[i2];
-
-    glm::vec3 normal = glm::cross(p1-p0, p2-p0)/glm::length(glm::cross(p1-p0, p2-p0));
-
-    return normal;
-}
-
-void compute_triangle_normals (std::vector<glm::vec3> & triangle_normals, vector<vector<unsigned int> > triangles, vector<glm::vec3> indexed_vertices){
-
-    triangle_normals = std::vector<glm::vec3>(triangles.size());
-
-    for(unsigned int i=0; i<triangles.size(); i++){
-        glm::vec3 n = computeNormalOfOneTriangle(triangles[i], indexed_vertices);
-        triangle_normals[i] = n;
-    }
-
-}
 
 
 
 // calcul le 1-voisinage des sommets
-void collect_one_ring (std::vector<std::vector<unsigned int> > & one_ring, vector<vector<unsigned int> > triangles, unsigned int nbVertices) {
-    one_ring = vector<vector<unsigned int>>(nbVertices);
+void Mesh::collect_one_ring (std::vector<std::vector<unsigned int> > & one_ring, std::vector<std::vector<unsigned int> > triangles, unsigned int nbVertices) {
+    one_ring = std::vector<std::vector<unsigned int>>(nbVertices);
 
     for(unsigned int i=0; i<triangles.size(); i++){ // pour chaque triangle
 
@@ -53,7 +28,7 @@ void collect_one_ring (std::vector<std::vector<unsigned int> > & one_ring, vecto
 
 }
 
-bool alreadyExist(unsigned int num, vector<unsigned int> vec){
+bool Mesh::alreadyExist(unsigned int num, std::vector<unsigned int> vec){
     for(unsigned int i=0; i<vec.size(); i++){
         if(vec[i] == num){
             return true;
@@ -63,16 +38,16 @@ bool alreadyExist(unsigned int num, vector<unsigned int> vec){
 }
 
 
-void compute_vertex_valences (vector<int> & valences, vector<vector<unsigned int>> one_ring, vector<vector<unsigned int> > triangles) {
-    valences = vector<int>(one_ring.size());
+void Mesh::compute_vertex_valences (std::vector<int> & valences, std::vector<std::vector<unsigned int>> one_ring, std::vector<std::vector<unsigned int> > triangles) {
+    valences = std::vector<int>(one_ring.size());
 
-    vector<unsigned int> vecVertex;
+    std::vector<unsigned int> vecVertex;
 
     for(unsigned int i=0; i<one_ring.size(); i++){ // pour chaque sommet
 
         unsigned int current = i;
 
-        vecVertex = vector<unsigned int>();
+        vecVertex = std::vector<unsigned int>();
         valences[i] = 0;
 
         for(unsigned int j=0; j<one_ring[i].size(); j++){ // pour chaque triangle adjacent
@@ -88,7 +63,7 @@ void compute_vertex_valences (vector<int> & valences, vector<vector<unsigned int
 
 }
 
-int maxValue(vector<int> vec){
+int Mesh::maxValue(std::vector<int> vec){
     int max = 0;
 
     for(unsigned int i=0; i<vec.size(); i++){
@@ -200,12 +175,24 @@ glm::vec3 Mesh::getCenter(){
     return center;
 }
 
-void Mesh::computeSmoothNormals(){
-    vector<vector<unsigned int>> one_ring;
-    vector<glm::vec3> triangle_normals;
-    vector<int> valences;
 
-    vector<vector<unsigned int>> triangles;
+///////////////////// COMPUTE NORMAL !!!! /////////////////////
+
+void Mesh::computeNormals(){
+    if(smoothNormals){
+        computeSmoothNormals();
+    } else {
+        computeNormalsWithAngles();
+    }
+}
+
+
+void Mesh::computeSmoothNormals(){
+    std::vector<std::vector<unsigned int>> one_ring;
+    std::vector<glm::vec3> triangle_normals;
+    std::vector<int> valences;
+
+    std::vector<std::vector<unsigned int>> triangles;
     triangles.resize(getNBFaces());
     for(unsigned int i=0; i<triangles.size(); i++){
         triangles[i] = get_face(i);
@@ -253,13 +240,35 @@ void Mesh::computeSmoothNormals(){
 
 }
 
-void Mesh::computeNormals(){
-    if(smoothNormals){
-        computeSmoothNormals();
-    } else {
-        computeNormalsWithAngles();
-    }
+// a partir d'un triangle calcul la normales du triangle puis la renvoie sous forme de vec3
+glm::vec3 Mesh::computeNormalOfOneTriangle(std::vector<unsigned int> triangle, std::vector<glm::vec3> indexed_vertices){
+
+    unsigned int i0,i1,i2;
+    glm::vec3 p0, p1, p2;
+
+    i0 = triangle[0]; i1 = triangle[1]; i2=triangle[2];
+
+    p0 = indexed_vertices[i0]; p1 = indexed_vertices[i1]; p2 = indexed_vertices[i2];
+
+    glm::vec3 normal = glm::cross(p1-p0, p2-p0)/glm::length(glm::cross(p1-p0, p2-p0));
+
+    return normal;
 }
+
+void Mesh::compute_triangle_normals (std::vector<glm::vec3> & triangle_normals, std::vector<std::vector<unsigned int> > triangles, std::vector<glm::vec3> indexed_vertices){
+
+    triangle_normals = std::vector<glm::vec3>(triangles.size());
+
+    for(unsigned int i=0; i<triangles.size(); i++){
+        glm::vec3 n = computeNormalOfOneTriangle(triangles[i], indexed_vertices);
+        triangle_normals[i] = n;
+    }
+
+}
+
+
+
+
 
 void Mesh::computeNormalsWithAngles(){
     std::vector<glm::vec3> nf;
@@ -325,6 +334,10 @@ void Mesh::computeNormalsWithAngles(){
 
 }
 
+
+
+////////////////// COMPUTE TEXTURE COORDINATE ///////////////
+
 void Mesh::computeUVCoord(){
     // computing spherical uv coordinates
 
@@ -357,6 +370,10 @@ void Mesh::computeUVCoord(){
     }
 }
 
+
+////////////////// COMPUTE TANGENTS  ///////////////////////
+
+
 void Mesh::computeTangents(){
 
     // TODO
@@ -369,6 +386,8 @@ void Mesh::computeTangents(){
 
 }
 
+////////////////// COMPUTE CENTER  ///////////////////////
+
 void Mesh::computeCenter(){
     // computing center
     glm::vec3 c = glm::vec3(0);
@@ -378,6 +397,8 @@ void Mesh::computeCenter(){
     center = c/(float)nb_vertices;
 
 }
+
+////////////////// COMPUTE RADIUS  ///////////////////////
 
 void Mesh::computeRadius(){
 

@@ -54,6 +54,11 @@ public:
      std::vector<glm::vec2> coords;
      std::vector<unsigned int> faces;
 
+     // voisinage
+     std::vector<std::vector<unsigned int>> oneRing;
+     // degree de chaque sommet
+     std::vector<int> valences;
+
      // info
      glm::vec3      center;
      float          radius;
@@ -67,6 +72,14 @@ public:
 
      void computeSmoothNormals();
      void computeNormalsWithAngles();
+
+     int maxValue(std::vector<int> vec);
+     void compute_vertex_valences (std::vector<int> & valences, std::vector<std::vector<unsigned int>> one_ring, std::vector<std::vector<unsigned int> > triangles);
+     bool alreadyExist(unsigned int num, std::vector<unsigned int> vec);
+     void collect_one_ring (std::vector<std::vector<unsigned int> > & one_ring, std::vector<std::vector<unsigned int> > triangles, unsigned int nbVertices);
+
+     void compute_triangle_normals(std::vector<glm::vec3> & triangle_normals, std::vector<std::vector<unsigned int> > triangles, std::vector<glm::vec3> indexed_vertices);
+     glm::vec3 computeNormalOfOneTriangle(std::vector<unsigned int> triangle, std::vector<glm::vec3> indexed_vertices);
 
      bool smoothNormals = false;
 
