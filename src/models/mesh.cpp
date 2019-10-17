@@ -246,7 +246,7 @@ void Mesh::computeSmoothNormals(){
 
         n /= sumalpha;
         n /= one_ring[i].size();
-        normals[i] = n;
+        normals[i] = glm::normalize(n);
 
     }
 
@@ -319,6 +319,7 @@ void Mesh::computeNormalsWithAngles(){
         if(nv[i] != 0.0){
             normals[i] /= -nv[i];
         }
+        normals[i] = glm::normalize(normals[i]);
     }
 
 

@@ -11,6 +11,7 @@ UI::UI(){
     hasToBeDisplayed = true;
     scene = NULL;
     mainRenderer = NULL;
+    window = NULL;
 }
 
 UI::~UI(){
@@ -64,6 +65,13 @@ void UI::createUISceneManager(Scene *scene){
         }
         if (ImGui::BeginMenu("View")){
             if (ImGui::MenuItem("Toggle wire frame", "WIP")) { /*if(mainRenderer != NULL) mainRenderer->toggleWire();*/ }
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Window")){
+            if (ImGui::MenuItem("640*480")) { if(window != NULL) glfwSetWindowSize(window, 640, 480); }
+            if (ImGui::MenuItem("1280*720")) { if(window != NULL) glfwSetWindowSize(window, 1280, 720); }
+            if (ImGui::MenuItem("1920*1080")) { if(window != NULL) glfwSetWindowSize(window, 1920, 1080); }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
@@ -151,4 +159,8 @@ void UI::set(Scene *sc){
 
 void UI::set(MainRenderer *main){
     mainRenderer = main;
+}
+
+void UI::set(GLFWwindow *win){
+    window = win;
 }
