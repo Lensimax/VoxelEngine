@@ -14,7 +14,7 @@ class MeshLoader : public Mesh {
         void createUI() override;
     private:
 
-        void createMesh(char *filename);
+        void computeAllInfo();
         void cleanup();
         void readOFFfile(char *filename);
 

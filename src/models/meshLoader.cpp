@@ -10,10 +10,12 @@
 MeshLoader::MeshLoader(char *filename) {
 
     sprintf(currentFilename, "%s", filename);
-    createMesh(currentFilename);
+    readOFFfile(filename);
 
     backupVertices = vertices;
     backupFaces = faces;
+
+    computeAllInfo();
 }
 
 void MeshLoader::recreate(){
@@ -22,12 +24,14 @@ void MeshLoader::recreate(){
     }
 
     cleanup();
-    createMesh(currentFilename);
+
+    vertices = backupVertices;
+    faces = backupFaces;
+    computeAllInfo();
 }
 
-void MeshLoader::createMesh(char *filename){
+void MeshLoader::computeAllInfo(){
 
-    readOFFfile(filename);
 
 
     computeCenter();
