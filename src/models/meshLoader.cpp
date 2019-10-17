@@ -105,10 +105,7 @@ void MeshLoader::createUI(){
 
     ImGui::Text("Mesh Loader");
     ImGui::InputText("fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
-    ImGui::Text("Number vertices: %d", getNBVertices());
-    ImGui::Text("Number faces: %d", getNBFaces());
-    ImGui::Text("Smooth Normal "); ImGui::SameLine();
-    ImGui::Checkbox("smoothNormal",&smoothNormals);
+    this->Mesh::createUI();
 
     ImGui::PopItemWidth();
 }

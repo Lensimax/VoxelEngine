@@ -148,11 +148,51 @@ unsigned int Mesh::getNBFaces(){
 
 
 void Mesh::createUI(){
-    ImGui::Text("Mesh");
     ImGui::Text("Number vertices: %d", getNBVertices());
     ImGui::Text("Number faces: %d", getNBFaces());
     ImGui::Text("Smooth Normal "); ImGui::SameLine();
     ImGui::Checkbox("smoothNormal",&smoothNormals);
+
+
+    if (ImGui::TreeNode("Vertices")){
+
+        ImGui::Columns(3, "Vertices"); // 4-ways, with border
+        ImGui::Separator();
+        ImGui::Text("X"); ImGui::NextColumn();
+        ImGui::Text("Y"); ImGui::NextColumn();
+        ImGui::Text("Z"); ImGui::NextColumn();
+        ImGui::Separator();
+        for(unsigned int i=0; i<nb_vertices; i++){
+            ImGui::Text("%4f",vertices[i].x); ImGui::NextColumn();
+            ImGui::Text("%4f",vertices[i].y); ImGui::NextColumn();
+            ImGui::Text("%4f", vertices[i].z); ImGui::NextColumn();
+        }
+
+        ImGui::Columns(1);
+        ImGui::Separator();
+        ImGui::TreePop();
+
+    }
+
+    if (ImGui::TreeNode("Faces")){
+
+        ImGui::Columns(3, "Face"); // 4-ways, with border
+        ImGui::Separator();
+        ImGui::Text("V1"); ImGui::NextColumn();
+        ImGui::Text("V2"); ImGui::NextColumn();
+        ImGui::Text("V3"); ImGui::NextColumn();
+        ImGui::Separator();
+        for(unsigned int i=0; i<nb_faces; i++){
+            ImGui::Text("%d",faces[3*i]); ImGui::NextColumn();
+            ImGui::Text("%d",faces[3*i+1]); ImGui::NextColumn();
+            ImGui::Text("%d", faces[3*i+2]); ImGui::NextColumn();
+        }
+
+        ImGui::Columns(1);
+        ImGui::Separator();
+        ImGui::TreePop();
+
+    }
 }
 
 
