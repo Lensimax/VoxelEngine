@@ -32,6 +32,7 @@ MainRenderer::MainRenderer(){
 
     createVAOQuad();
     createFBOSceneRender();
+    wireActived = false;
 
 }
 
@@ -126,11 +127,27 @@ void MainRenderer::initializeGL(){
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
+    glEnable(GL_POLYGON_OFFSET_LINE);
+    glPolygonOffset(-1,-1);
+
+    // Cull triangles which normal is not towards the camera
+    glDisable(GL_CULL_FACE);
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
     /* to print GLSL version */
     //std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 
 
+}
+
+void MainRenderer::toggleWire(){
+    if(wireActived){
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    wireActived = !wireActived;
 }
 
 

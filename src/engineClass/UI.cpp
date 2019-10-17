@@ -9,19 +9,23 @@
 UI::UI(){
     selected = -1;
     hasToBeDisplayed = true;
+    scene = NULL;
+    mainRenderer = NULL;
 }
 
 UI::~UI(){
 
 }
 
-void UI::drawUI(Scene *scene){
+void UI::drawUI(){
     if(!hasToBeDisplayed){
         return;
     }
     createInfoWindow();
 
-    createUISceneManager(scene);
+    if(scene != NULL){
+        createUISceneManager(scene);
+    }
 }
 
 
@@ -56,6 +60,10 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Add Cube", "WIP")) { /* Do stuff */ }
             if (ImGui::MenuItem("Add Sphere", "WIP")) { /* Do stuff */ }
             if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selected); }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("View")){
+            if (ImGui::MenuItem("Toggle wire frame", "WIP")) { /*if(mainRenderer != NULL) mainRenderer->toggleWire();*/ }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
@@ -132,4 +140,15 @@ int UI::getSelected(){
 
 void UI::toggleHasToBeDisplayed(){
     hasToBeDisplayed = !hasToBeDisplayed;
+}
+
+
+
+void UI::set(Scene *sc){
+    scene = sc;
+}
+
+
+void UI::set(MainRenderer *main){
+    mainRenderer = main;
 }
