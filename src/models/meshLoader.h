@@ -16,6 +16,7 @@ class MeshLoader : public Mesh {
 
         void createMesh(char *filename);
         void cleanup();
+        void readOFFfile(char *filename);
 
         char currentFilename[1024];
 };

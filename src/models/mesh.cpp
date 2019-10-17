@@ -12,7 +12,6 @@
 
 
 
-
 // calcul le 1-voisinage des sommets
 void Mesh::collect_one_ring (std::vector<std::vector<unsigned int> > & one_ring, std::vector<std::vector<unsigned int> > triangles, unsigned int nbVertices) {
     one_ring = std::vector<std::vector<unsigned int>>(nbVertices);
@@ -333,6 +332,228 @@ void Mesh::computeNormalsWithAngles(){
 
 
 }
+
+
+//////////////////// SMOOTHING VERTICES ///////////////////
+
+
+
+// calcul de la curvature uniform pour un sommet
+glm::vec3 vunicurvature(glm::vec3 vertex, std::vector<unsigned short> one_ring, const std::vector<glm::vec3> & vertices){
+
+    glm::vec3 curvature = glm::vec3(0.0);
+
+
+    for(unsigned int i=0; i<one_ring.size(); i++){
+        curvature += vertices[one_ring[i]];
+    }
+    if(one_ring.size() != 0){
+        curvature /= one_ring.size();
+    }
+    curvature -= vertex;
+
+
+
+    return curvature;
+}
+
+// calcul de la curvature pour le maillage
+std::vector<glm::vec3> calc_uniform_curvature(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short> > & triangles, std::vector<std::vector<unsigned short> > one_ring){
+
+
+
+    std::vector<glm::vec3> curvature = std::vector<glm::vec3>(vertices.size());
+
+    for(unsigned int i=0; i<vertices.size(); i++){
+
+        curvature[i] = vunicurvature(vertices[i], one_ring[i], vertices);
+
+    }
+
+    return curvature;
+}
+
+
+
+//////////////////
+//// QUESTION 2 //
+//////////////////
+
+
+// maximum de 3 valeurs
+float Mesh::max3v(float a, float b, float c){
+    if(a > b){
+        if(a > c){
+            return a;
+        } else {
+            return c;
+        }
+    } else {
+        if(b > c){
+            return b;
+        } else {
+            return c;
+        }
+    }
+}
+
+// cotangents calcul
+float Mesh::cot(float theta){
+    return cos(theta)/sin(theta);
+}
+
+
+// calcul de la qualité des triangles en fonction du plus petit angle
+float Mesh::calc_triangle_quality(const std::vector<glm::vec3> & vertices, std::vector<unsigned short> triangles){
+
+    assert(triangles.size() == 3);
+
+    glm::vec3 p1 = vertices[triangles[0]];
+    glm::vec3 p2 = vertices[triangles[1]];
+    glm::vec3 p3 = vertices[triangles[2]];
+
+    glm::vec3 a = p2-p1;
+    glm::vec3 b = p3-p1;
+    glm::vec3 c = p3-p2;
+
+    float r = (2*length(a)*length(b)*length(c))/(4*length(cross(a,b)));
+
+
+    float maxSide = max3v(length(a),length(b),length(c));
+
+    assert(maxSide != 0.0f);
+    return r/maxSide;
+}
+
+
+// calcul de la qualité du maillage
+std::vector<float> Mesh::calc_quality_mesh(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short> > & triangles){
+
+    std::vector<float> quality = std::vector<float>(triangles.size());
+
+    for(unsigned int i=0; i<triangles.size(); i++){
+        quality[i] = calc_triangle_quality(vertices, triangles[i]);
+    }
+
+    return quality;
+}
+
+
+
+// calcul des poids avec les cotangents
+float Mesh::calc_weights(const std::vector<glm::vec3> & vertices, std::vector<std::vector<unsigned short> > one_ring, unsigned int v, unsigned int vi){
+
+    // on récupère les deux sommets communs avec les deux sommets courants
+    std::vector<unsigned int> same_vertices = std::vector<unsigned int>();
+
+    for(unsigned int i=0; i<one_ring[v].size(); i++){
+        for(unsigned int j=0; j<one_ring[vi].size(); j++){
+            if(one_ring[v][i] == one_ring[vi][j]){
+                same_vertices.push_back(one_ring[vi][j]);
+            }
+        }
+    }
+
+    // si le il n'y a pas de voisins on renvoie 1
+    if(same_vertices.size() != 2){
+        //fprintf(stderr, "Error mesh invalid\n");
+        return 1;
+    }
+    assert(same_vertices.size() == 2);
+
+    // calcul des angles
+    unsigned int p0 = same_vertices[0];
+    unsigned int p1 = same_vertices[1];
+
+    float alpha = glm::dot(glm::normalize(vertices[v] - vertices[p0]), glm::normalize(vertices[vi] - vertices[p0]));
+    float beta = glm::dot(glm::normalize(vertices[v] - vertices[p1]), glm::normalize(vertices[vi] - vertices[p1]));
+
+    alpha = cos(alpha);
+    beta = cos(beta);
+
+    assert(alpha >= 0 && beta >= 0);
+
+    float ret = 0.5f*(cot(alpha)+cot(beta));
+
+    return ret;
+
+}
+
+
+// calcul la curvature pour tous les sommets
+std::vector<glm::vec3> Mesh::calc_mean_curvature (const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short> > & triangles, std::vector<std::vector<unsigned short> > one_ring) {
+
+    std::vector<glm::vec3> curvature = std::vector<glm::vec3>(vertices.size());
+    glm::vec3 tmp;
+    float sum, w;
+
+    for(unsigned int i=0; i<vertices.size(); i++) { // pour chaque sommets
+
+        sum = 0;
+        tmp = glm::vec3(0);
+
+        // pour chacun de ses voisins
+        for(unsigned int j=0; j<one_ring[i].size(); j++){
+            // on calcul le poids avec les cotangents
+            w = calc_weights(vertices, one_ring, i, one_ring[i][j]);
+            tmp += w * (vertices[one_ring[i][j]] - vertices[i]);
+            sum += w;
+        }
+
+        // on moyenne
+        curvature[i] = tmp/sum;
+
+    }
+    return curvature;
+
+}
+
+
+
+
+
+// applique le smoothing un nombre "itération" fois
+std::vector<glm::vec3> Mesh::smoothing(const std::vector<glm::vec3> & meshvertices, const std::vector<std::vector<unsigned short> > & triangles,
+        std::vector<std::vector<unsigned short> > one_ring, unsigned int iterations, std::string type_smooth, 
+        std::vector<glm::vec3> & meshcurvature,std::vector<float> & qualityVertex){
+
+    std::vector<glm::vec3> changedVertices = meshvertices;
+    std::vector<glm::vec3> curvature;
+
+
+    // SMOOTHING
+    for(unsigned int i=0; i<iterations; i++){ // pour chaque itération
+
+        std::vector<glm::vec3> currentVertices = std::vector<glm::vec3>(meshvertices.size());
+
+        // on calcule la curvature en fonction du type de smoothing
+        if(type_smooth == uniformSmoothingString){
+            curvature = calc_uniform_curvature(changedVertices, triangles, one_ring);
+        } else if(type_smooth == laplaceSmoothingString){
+            curvature = calc_mean_curvature(changedVertices, triangles, one_ring);
+        } else {
+            return meshvertices;
+        }
+
+        // on met à jour les sommets
+        for(unsigned int j=0; j<changedVertices.size(); j++){
+            currentVertices[j] = changedVertices[j] + 0.5f * curvature[j];
+        }
+
+        changedVertices = currentVertices;
+
+    }
+
+    qualityVertex.resize(meshvertices.size());
+    qualityVertex = calc_quality_mesh(changedVertices, triangles);
+
+    meshcurvature = curvature;
+
+    return changedVertices;
+
+}
+
+
 
 
 

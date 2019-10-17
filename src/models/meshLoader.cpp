@@ -11,6 +11,9 @@ MeshLoader::MeshLoader(char *filename) {
 
     sprintf(currentFilename, "%s", filename);
     createMesh(currentFilename);
+
+    backupVertices = vertices;
+    backupFaces = faces;
 }
 
 void MeshLoader::recreate(){
@@ -23,8 +26,41 @@ void MeshLoader::recreate(){
 }
 
 void MeshLoader::createMesh(char *filename){
+
+    readOFFfile(filename);
+
+
+    computeCenter();
+
+
+    // computing radius
+    computeRadius();
+
+    computeNormals();
+
+
+    // computing colors as normals
+    colors.resize(nb_vertices);
+    for(unsigned int i=0;i<nb_vertices;i++) {
+        colors[i] = (normals[i]+1.0f)/2.0f;
+    }
+
+    computeUVCoord();
+
+
+    computeTangents();
+
+
+}
+
+
+
+/// Read vertices and faces from the file "filename" at the format OFF
+void MeshLoader::readOFFfile(char *filename){
+
     unsigned int tmp;
     unsigned int i,j;
+
     FILE *file;
     int   error;
 
@@ -63,41 +99,15 @@ void MeshLoader::createMesh(char *filename){
         error = fscanf(file,"%d %d %d %d\n",&tmp,&(faces[j]),&(faces[j+1]),&(faces[j+2]));
         if(error==EOF) {
             printf("Unable to read faces of %s\n",filename);
-        // MeshLoader_delete(MeshLoader);
-        // return NULL;
         }
 
         if(tmp!=3) {
           printf("Error : face %d is not a triangle (%d polygonal face!)\n",i/3,tmp);
-        // MeshLoader_delete(MeshLoader);
-        // return NULL;
         }
         j += 3;
     }
 
     fclose(file);
-
-    computeCenter();
-
-
-    // computing radius
-    computeRadius();
-
-    computeNormals();
-
-
-    // computing colors as normals
-    colors.resize(nb_vertices);
-    for(i=0;i<nb_vertices;i++) {
-      colors[i] = (normals[i]+1.0f)/2.0f;
-    }
-
-    computeUVCoord();
-
-
-    computeTangents();
-
-
 }
 
 void MeshLoader::createUI(){
