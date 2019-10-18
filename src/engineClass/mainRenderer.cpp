@@ -53,7 +53,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
     Light *l = scene->getLight();
     if(l == NULL){
-        l = new DirectionnalLight();
+        l = new DirectionnalLight(scene->addNewId());
     }
 
 

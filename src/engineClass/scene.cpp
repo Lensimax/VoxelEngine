@@ -10,11 +10,13 @@
 
 Scene::Scene(){
 
+    IDObject = 0;
+
 
     objectsEngine = std::vector<EngineObject*>();
 
 
-    objectsEngine.push_back(new MeshObject("Object Loaded", (char*)"../data/models/monkey.off", new Transform()));
+    objectsEngine.push_back(new MeshObject(addNewId(),"Object Loaded", (char*)"../data/models/monkey.off", new Transform()));
 
     // objectsEngine.push_back(new Sphere());
 
@@ -22,11 +24,11 @@ Scene::Scene(){
 
 
 
-    Camera *cam = new CameraProj();
+    Camera *cam = new CameraProj(addNewId());
 
     objectsEngine.push_back(cam);
 
-    objectsEngine.push_back(new DirectionnalLight("Light", glm::vec3(8, 0.0, 1)));
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
 
 }
 
@@ -75,11 +77,11 @@ std::vector<std::string> Scene::getNameOfAllObjects(){
 }
 
 void Scene::addMeshObject(){
-    objectsEngine.push_back(new MeshObject());
+    objectsEngine.push_back(new MeshObject(addNewId()));
 }
 
 void Scene::addPlane(){
-    objectsEngine.push_back(new Plane());
+    objectsEngine.push_back(new Plane(addNewId()));
 }
 
 
@@ -89,4 +91,10 @@ void Scene::deleteObject(int index){
         objectsEngine.erase (objectsEngine.begin()+index);
         delete(obj);
     }
+}
+
+
+int Scene::addNewId(){
+    IDObject++;
+    return IDObject-1;
 }

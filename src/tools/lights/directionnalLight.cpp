@@ -2,7 +2,8 @@
 
 #include "directionnalLight.h"
 
-DirectionnalLight::DirectionnalLight(std::string name, glm::vec3 l){
+DirectionnalLight::DirectionnalLight(int id, std::string name, glm::vec3 l){
+    setID(id);
     setName(name);
     light = l;
     intensity = 1.0;

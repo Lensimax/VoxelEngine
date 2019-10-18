@@ -37,9 +37,13 @@ class Scene {
 
 
         std::vector<EngineObject*> objectsEngine;
+        int addNewId();
 
     private:
         void deleteScene();
+
+        int IDObject = 0;
+
 
 };
 
