@@ -15,6 +15,7 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+
 #include "../tools/lights/directionnalLight.h"
 
 #include "mainRenderer.h"
@@ -58,13 +59,23 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        if(DrawableObject* o = dynamic_cast<DrawableObject*>(scene->objectsEngine[i])) { // safe cast
-            o->draw(c->getView(), c->getProj(), l);
-        }
+        drawRecursive(scene->objectsEngine[i], c, l);
+
     }
 
 
 
+}
+
+void MainRenderer::drawRecursive(EngineObject *obj, Camera *c, Light *l){
+
+    if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
+        o->draw(c->getView(), c->getProj(), l);
+    }
+
+    for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
+        drawRecursive(obj->listOfChildren[i], c, l);
+    }
 }
 
 
