@@ -93,7 +93,7 @@ void Lambertian::createUI(){
     ImGui::DragFloat("specdeg", &specularDeg, 0.01f, 0.001f, 10000, "%.3f");
 
     ImGui::Text("debug Normal "); ImGui::SameLine();
-    ImGui::Checkbox("",&activeDebugNormal);
+    ImGui::Checkbox("debugNormal",&activeDebugNormal);
 
     // to hide label of the input
     ImGui::PopItemWidth();

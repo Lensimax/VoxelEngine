@@ -17,17 +17,21 @@ uniform vec4 light;
 out vec4 normal;
 out vec4 normalView;
 out vec4 eyeView;
+out vec4 vertex;
 
 out vec4 lightVec;
 
 void main() {
+	vertex = vec4(position, 1.0);
+
 	mat4 mv = viewMat * modelMat;
 
 	gl_Position = projMat*mv*vec4(position, 1.0);
 
-	normal = normalize(vec4(vertNormal,0.0));
+	// normal = normalize(vec4(vertNormal,0.0));
+	normal = vec4(vertNormal,1.0);
 	normalView = normalize(normalMatrix*normal);
-	eyeView = normalize(mv*vec4(position,1.0));
+	eyeView = normalize(mv*vec4(position,0.0));
 
 	lightVec = light;
 }

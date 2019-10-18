@@ -11,7 +11,7 @@
 #endif
 
 
-#include "../engineObject.h"
+#include "../engineClass/engineObject.h"
 
 class Camera : public EngineObject {
 

@@ -36,3 +36,8 @@ To build :
 * Run ```mingw64```
 * Go to ```build``` directory
 * Compile with ```mingw32-make```
+
+### Ressources
+
+* https://sonarlearning.co.uk/coursepage.php?topic=game&course=ext-bb-3d-ged
+* https://www.3dgep.com/courses/

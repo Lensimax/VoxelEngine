@@ -2,6 +2,16 @@
 #ifndef MESH_H
 #define MESH_H
 
+#ifndef GLM_H
+#define GLM_H
+#include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+#endif
+
+#include <vector>
+
 
 class Mesh {
 
@@ -9,50 +19,56 @@ public:
 
      virtual ~Mesh() = default;
 
-     float *getVertices();
-     unsigned int *getFaces();
-     float *getNormals();
+     void *getVertices();
+     void *getFaces();
+     void *getNormals();
 
      unsigned int getNBVertices();
      unsigned int getNBFaces();
 
      virtual void createUI();
-     virtual void recreate();
+     virtual void recreate() = 0;
 
-     float *getCenter();
+     glm::vec3 getCenter();
 
 
      // length
 
 
     protected:
-     unsigned int *get_face(unsigned int i);
-     float        *get_vertex(unsigned int i);
-     float        *get_normal(unsigned int i);
-     float        *get_tangent(unsigned int i);
-     float        *get_coord(unsigned int i);
-     float        *get_color(unsigned int i);
+     std::vector<unsigned int> get_face(unsigned int i);
+     glm::vec3        get_vertex(unsigned int i);
+     glm::vec3        get_normal(unsigned int i);
+     glm::vec3        get_tangent(unsigned int i);
+     glm::vec2        get_coord(unsigned int i);
+     glm::vec3        get_color(unsigned int i);
 
      unsigned int  nb_vertices;
      unsigned int  nb_faces;
 
      // data
-     float        *vertices;
-     float        *normals;
-     float        *tangents;
-     float        *colors;
-     float        *coords;
-     unsigned int *faces;
+     std::vector<glm::vec3> vertices;
+     std::vector<glm::vec3> normals;
+     std::vector<glm::vec3> tangents;
+     std::vector<glm::vec3> colors;
+     std::vector<glm::vec2> coords;
+     std::vector<unsigned int> faces;
 
      // info
-     float         center[3];
-     float         radius;
+     glm::vec3      center;
+     float          radius;
 
-     virtual void computeNormals();
-     virtual void computeTangents();
-     virtual void computeCenter();
-     virtual void computeRadius();
-     virtual void computeUVCoord();
+     void computeNormals();
+     void computeTangents();
+     void computeCenter();
+     void computeRadius();
+     void computeUVCoord();
+     void computeColor();
+
+     void computeSmoothNormals();
+     void computeNormalsWithAngles();
+
+     bool smoothNormals = false;
 
 };
 

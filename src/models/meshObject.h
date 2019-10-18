@@ -22,20 +22,18 @@
 
 // #include "cubeMesh.h"
 
-#define POSITION_ATTRIB 0
-#define VERTEX_NORMAL_ATTRIB 1
 
-const std::string defaultFilename = "exampleModels/monkey.off";
+const std::string defaultFilename = "../data/models/monkey.off";
 
 class MeshObject : public DrawableObject {
     public:
 
-        MeshObject(std::string n = "MeshObject", char *filename = (char*)defaultFilename.c_str(),Transform *t = new Transform(), Material *m = new Lambertian());
+        MeshObject(int id, std::string n = "MeshObject", char *filename = (char*)"../data/models/monkey.off",Transform *t = new Transform(), Material *m = new Lambertian());
         ~MeshObject();
 
 
-        virtual float *getVertices();
-        virtual unsigned int *getTriangles();
+        /*virtual float *getVertices();
+        virtual unsigned int *getTriangles();*/
         virtual int nbVertices();
         virtual int nbTriangles();
 

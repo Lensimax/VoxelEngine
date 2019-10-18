@@ -6,79 +6,236 @@
 
 #include <iostream>
 
+#define M_PI 3.1415926
 
-unsigned int *Mesh::get_face(unsigned int i) {
-  return &(faces[3*i]);
+using namespace std;
+
+// a partir d'un triangle calcul la normales du triangle puis la renvoie sous forme de vec3
+glm::vec3 computeNormalOfOneTriangle(vector<unsigned int> triangle, vector<glm::vec3> indexed_vertices){
+
+    unsigned int i0,i1,i2;
+    glm::vec3 p0, p1, p2;
+
+    i0 = triangle[0]; i1 = triangle[1]; i2=triangle[2];
+
+    p0 = indexed_vertices[i0]; p1 = indexed_vertices[i1]; p2 = indexed_vertices[i2];
+
+    glm::vec3 normal = glm::cross(p1-p0, p2-p0)/glm::length(glm::cross(p1-p0, p2-p0));
+
+    return normal;
 }
 
-float *Mesh::get_vertex(unsigned int i) {
-  return &(vertices[3*i]);
+void compute_triangle_normals (std::vector<glm::vec3> & triangle_normals, vector<vector<unsigned int> > triangles, vector<glm::vec3> indexed_vertices){
+
+    triangle_normals = std::vector<glm::vec3>(triangles.size());
+
+    for(unsigned int i=0; i<triangles.size(); i++){
+        glm::vec3 n = computeNormalOfOneTriangle(triangles[i], indexed_vertices);
+        triangle_normals[i] = n;
+    }
+
 }
 
-float *Mesh::get_normal(unsigned int i) {
-  return &(normals[3*i]);
+
+
+// calcul le 1-voisinage des sommets
+void collect_one_ring (std::vector<std::vector<unsigned int> > & one_ring, vector<vector<unsigned int> > triangles, unsigned int nbVertices) {
+    one_ring = vector<vector<unsigned int>>(nbVertices);
+
+    for(unsigned int i=0; i<triangles.size(); i++){ // pour chaque triangle
+
+        for(unsigned int j=0; j<triangles[i].size(); j++){ // pour chaque sommet dans le triangle
+
+            unsigned int currentV = triangles[i][j];
+            one_ring[currentV].push_back(i);
+        }
+    }
+
 }
 
-float *Mesh::get_tangent(unsigned int i) {
-  return &(tangents[3*i]);
+bool alreadyExist(unsigned int num, vector<unsigned int> vec){
+    for(unsigned int i=0; i<vec.size(); i++){
+        if(vec[i] == num){
+            return true;
+        }
+    }
+    return false;
 }
 
-float *Mesh::get_coord(unsigned int i) {
-  return &(coords[2*i]);
+
+void compute_vertex_valences (vector<int> & valences, vector<vector<unsigned int>> one_ring, vector<vector<unsigned int> > triangles) {
+    valences = vector<int>(one_ring.size());
+
+    vector<unsigned int> vecVertex;
+
+    for(unsigned int i=0; i<one_ring.size(); i++){ // pour chaque sommet
+
+        unsigned int current = i;
+
+        vecVertex = vector<unsigned int>();
+        valences[i] = 0;
+
+        for(unsigned int j=0; j<one_ring[i].size(); j++){ // pour chaque triangle adjacent
+            for(unsigned int k=0; k<triangles[one_ring[i][j]].size(); k++){
+                unsigned int vert = triangles[one_ring[i][j]][k];
+                if(vert != current && !alreadyExist(vert, vecVertex)){
+                    vecVertex.push_back(vert);
+                    valences[i]++;
+                }
+            }
+        }
+    }
+
 }
 
-float *Mesh::get_color(unsigned int i) {
-  return &(colors[3*i]);
+int maxValue(vector<int> vec){
+    int max = 0;
+
+    for(unsigned int i=0; i<vec.size(); i++){
+        if(max < vec[i]){
+            max = vec[i];
+        }
+    }
+    return max;
 }
 
-float *Mesh::getVertices(){
+
+std::vector<unsigned int> Mesh::get_face(unsigned int i) {
+    std::vector<unsigned int> face = std::vector<unsigned int>(3);
+    face[0] = faces[i*3]; face[1] = faces[i*3 +1]; face[2] = faces[i*3+2];
+    return face;
+}
+
+glm::vec3 Mesh::get_vertex(unsigned int i) {
+  return vertices[i];
+}
+
+glm::vec3 Mesh::get_normal(unsigned int i) {
+  return normals[i];
+}
+
+glm::vec3 Mesh::get_tangent(unsigned int i) {
+  return tangents[i];
+}
+
+glm::vec2 Mesh::get_coord(unsigned int i) {
+  return coords[i];
+}
+
+glm::vec3 Mesh::get_color(unsigned int i) {
+  return colors[i];
+}
+
+void *Mesh::getVertices(){
     return &(vertices[0]);
 }
 
-unsigned int *Mesh::getFaces(){
+void *Mesh::getFaces(){
     return &(faces[0]);
 }
 
+void *Mesh::getNormals(){
+    return &(normals[0]);
+}
+
 unsigned int Mesh::getNBVertices(){
-    return nb_vertices;
+    return vertices.size();
 }
 
 unsigned int Mesh::getNBFaces(){
-    return nb_faces;
+    return faces.size()/3;
 }
 
-float *Mesh::getNormals(){
-    return normals;
-}
 
 void Mesh::createUI(){
     ImGui::Text("Mesh");
-    ImGui::Text("Number vertices: %d", nb_vertices);
-    ImGui::Text("Number faces: %d", nb_faces);
+    ImGui::Text("Number vertices: %d", getNBVertices());
+    ImGui::Text("Number faces: %d", getNBFaces());
+    ImGui::Text("Smooth Normal "); ImGui::SameLine();
+    ImGui::Checkbox("smoothNormal",&smoothNormals);
 }
 
-void Mesh::recreate(){
 
-}
-
-float *Mesh::getCenter(){
+glm::vec3 Mesh::getCenter(){
     return center;
 }
 
+void Mesh::computeSmoothNormals(){
+    vector<vector<unsigned int>> one_ring;
+    vector<glm::vec3> triangle_normals;
+    vector<int> valences;
+
+    vector<vector<unsigned int>> triangles;
+    triangles.resize(getNBFaces());
+    for(unsigned int i=0; i<triangles.size(); i++){
+        triangles[i] = get_face(i);
+    }
+
+    compute_triangle_normals(triangle_normals, triangles, vertices);
+    collect_one_ring(one_ring,triangles, vertices.size());
+    compute_vertex_valences (valences, one_ring, triangles);
+
+    normals.resize(vertices.size());
+
+    unsigned int i0, i1, i2;
+    glm::vec3 p0,p1,p2;
+
+    for(unsigned int i=0; i<normals.size(); i++){ // pour chaque sommet
+        glm::vec3 n = glm::vec3(0.);
+        float sumalpha = 0;
+        for(unsigned int j=0; j<one_ring[i].size(); j++){ // pour chaque triangle dans le voisinage
+
+            // calcul angle
+            i0 = triangles[one_ring[i][j]][0]; i1 = triangles[one_ring[i][j]][1]; i2 = triangles[one_ring[i][j]][2];
+            p0 = vertices[i0]; p1 = vertices[i1]; p2 = vertices[i2];
+
+            if(i == i1){
+                p1 = vertices[i0];
+                p0 = vertices[i1];
+            } else if(i == i2) {
+                p2 = vertices[i0];
+                p0 = vertices[i2];
+            }
+
+            float alpha = glm::acos(glm::dot(p1-p0, p2-p0)/(glm::length(p1-p0)*glm::length(p2-p0)));
+
+            n += alpha*triangle_normals[one_ring[i][j]];
+            sumalpha += alpha;
+        }
+
+
+        n /= sumalpha;
+        n /= one_ring[i].size();
+        normals[i] = n;
+
+    }
+
+
+}
 
 void Mesh::computeNormals(){
-    float *nf;
+    if(smoothNormals){
+        computeSmoothNormals();
+    } else {
+        computeNormalsWithAngles();
+    }
+}
 
-    float *v1, *v2, *v3;
-    float v12[3];
-    float v13[3];
-    unsigned int *f;
-    float norm;
-    float *nv;
+void Mesh::computeNormalsWithAngles(){
+    std::vector<glm::vec3> nf;
+
+    normals.resize(nb_vertices);
+
+    glm::vec3 v1, v2, v3;
+    glm::vec3 v12;
+    glm::vec3 v13;
+    std::vector<unsigned int> f;
+
+    std::vector<float> nv;
 
     // computing normals per faces
-    nf = (float *)malloc(3*nb_faces*sizeof(float));
-    for(unsigned int i=0;i<nb_faces;++i) {
+    nf.resize(3*nb_faces);
+    for(unsigned int i=0;i<nb_faces;i++) {
         f = get_face(i);
 
         // the three vertices of the current face
@@ -87,199 +244,118 @@ void Mesh::computeNormals(){
         v3 = get_vertex(f[2]);
 
         // the two vectors of the current face
-        v12[0] = v2[0]-v1[0];
-        v12[1] = v2[1]-v1[1];
-        v12[2] = v2[2]-v1[2];
-
-        v13[0] = v3[0]-v1[0];
-        v13[1] = v3[1]-v1[1];
-        v13[2] = v3[2]-v1[2];
+        v12 = v2-v1;
+        v13 = v3-v1;
 
         // cross product
-        nf[3*i  ] = v12[1]*v13[2] - v12[2]*v13[1];
-        nf[3*i+1] = v12[2]*v13[0] - v12[0]*v13[2];
-        nf[3*i+2] = v12[0]*v13[1] - v12[1]*v13[0];
-
-        // normalization
-        norm = sqrt(nf[3*i]*nf[3*i]+nf[3*i+1]*nf[3*i+1]+nf[3*i+2]*nf[3*i+2]);
-        if(norm == 0.0f){
-            fprintf(stderr, "division by 0\n");
-        }
-        nf[3*i  ] /= norm;
-        nf[3*i+1] /= norm;
-        nf[3*i+2] /= norm;
+        nf[3*i] = glm::cross(v12, v13);
+        nf[3*i] = glm::normalize(nf[3*i]);
     }
 
     // computing normals per vertex
-    nv = (float *)malloc(nb_vertices*sizeof(float));
-    for(unsigned int i=0;i<nb_vertices;++i) {
+    nv.resize(nb_vertices);
+    for(unsigned int i=0;i<nb_vertices;i++) {
         // initialization
-        normals[3*i  ] = 0.0;
-        normals[3*i+1] = 0.0;
-        normals[3*i+2] = 0.0;
+        normals[i] = glm::vec3(0);
         nv[i] = 0.0;
     }
-    for(unsigned int i=0;i<nb_faces;++i) {
+
+    for(unsigned int i=0;i<nb_faces;i++) {
         // face normals average
         f = get_face(i);
         //n = &(nf[3*i]);
 
-        normals[3*f[0]  ] += nf[3*i  ];
-        normals[3*f[0]+1] += nf[3*i+1];
-        normals[3*f[0]+2] += nf[3*i+2];
+        normals[f[0]] += nf[3*i];
+        normals[f[1]] += nf[3*i];
+        normals[f[2]] += nf[3*i];
         nv[f[0]] ++;
-
-        normals[3*f[1]  ] += nf[3*i  ];
-        normals[3*f[1]+1] += nf[3*i+1];
-        normals[3*f[1]+2] += nf[3*i+2];
         nv[f[1]] ++;
-
-        normals[3*f[2]  ] += nf[3*i  ];
-        normals[3*f[2]+1] += nf[3*i+1];
-        normals[3*f[2]+2] += nf[3*i+2];
         nv[f[2]] ++;
+
     }
 
-    for(unsigned int i=0;i<nb_vertices;++i) {
+    for(unsigned int i=0;i<nb_vertices;i++) {
         // normalization
-        normals[3*i  ] /= -nv[i];
-        normals[3*i+1] /= -nv[i];
-        normals[3*i+2] /= -nv[i];
+        if(nv[i] != 0.0){
+            normals[i] /= -nv[i];
+        }
     }
 
-    free(nf);
-    free(nv);
 
 }
 
 void Mesh::computeUVCoord(){
     // computing spherical uv coordinates
 
-    float *v1;
-    float c[3];
-    float norm, r;
+    coords.resize(nb_vertices);
+
+    glm::vec3 v1;
+    glm::vec3 c;
+    float r;
 
 
-    for(unsigned int i=0;i<nb_vertices;++i) {
+    for(unsigned int i=0;i<nb_vertices;i++) {
       v1 = get_vertex(i);
 
       // direction between center and current point
-      c[0] = v1[0]-center[0];
-      c[1] = v1[1]-center[1];
-      c[2] = v1[2]-center[2];
+      c = v1-center;
 
       // normalization
-      norm = sqrt(c[0]*c[0]+c[1]*c[1]+c[2]*c[2]);
-      c[0] /= norm;
-      c[1] /= norm;
-      c[2] /= norm;
+      c = glm::normalize(c);
 
+      glm::vec2 coord;
       // elevation & azimuth remapped between 0 and 1
-      r = c[2]/sqrt(c[0]*c[0]+c[2]*c[2]);
+      r = c.z/sqrt(c.x*c.x+c.z*c.z);
       if(r>=1.0f) r = 1.0f;
       if(r<=-1.0f) r = -1.0f;
-      coords[2*i  ] = asin(r);
-      if(c[0]<0.0) coords[2*i] = M_PI-coords[2*i];
-      coords[2*i] = (coords[2*i]+(M_PI/2.0))/(2.0*M_PI);
-      coords[2*i+1] = acos(c[1])/M_PI;
+      coord.x = asin(r);
+      if(c.x<0.0) coord.x = M_PI-coord.x;
+      coord.x = (coord.x+(M_PI/2.0))/(2.0*M_PI);
+      coord.y = acos(c.y)/M_PI;
+      coords[i] = coord;
     }
 }
 
 void Mesh::computeTangents(){
 
-    unsigned int *f;
-    float r;
-    float s1,s2,t1,t2;
-    float x1,x2,y1,y2,z1,z2;
-    float *w1, *w2, *w3;
-    float *v1, *v2, *v3;
-    float *t, *n;
-    float norm;
+    // TODO
 
-    // init tangents
-    for(unsigned int i=0;i<3*nb_vertices;++i) {
-      tangents[i] = 0.0f;
-    }
-    // iterate over faces
-    for(unsigned int i=0;i<nb_faces;++i) {
-      f = get_face(i);
+    tangents.resize(nb_vertices);
 
-      v1 = get_vertex(f[0]);
-      v2 = get_vertex(f[1]);
-      v3 = get_vertex(f[2]);
-
-      w1 = get_coord(f[0]);
-      w2 = get_coord(f[1]);
-      w3 = get_coord(f[2]);
-
-      x1 = v2[0] - v1[0];
-      x2 = v3[0] - v1[0];
-      y1 = v2[1] - v1[1];
-      y2 = v3[1] - v1[1];
-      z1 = v2[2] - v1[2];
-      z2 = v3[2] - v1[2];
-
-      s1 = w2[0] - w1[0];
-      s2 = w3[0] - w1[0];
-      t1 = w2[1] - w1[1];
-      t2 = w3[1] - w1[1];
-
-      r = 1.0f/(s1*t2 - s2*t1);
-
-      for(unsigned int j=0;j<3;++j) {
-        t = get_tangent(f[j]);
-        t[0] += (t2*x1-t1*x2)*r;
-        t[1] += (t2*y1-t1*y2)*r;
-        t[2] += (t2*z1-t1*z2)*r;
-      }
+    for(unsigned int i=0; i<nb_vertices; i++){
+        tangents[i] = glm::vec3(0);
     }
 
-    // normalize and project tangents
-    for(unsigned int i=0;i<nb_vertices;++i) {
-      n = get_normal(i);
-      t = get_tangent(i);
-
-      // project
-      r = n[0]*t[0]+n[1]*t[1]+n[2]*t[2];
-      t[0] = t[0]-n[0]*r;
-      t[1] = t[1]-n[1]*r;
-      t[2] = t[2]-n[2]*r;
-
-
-      // normalize
-      norm = sqrt(t[0]*t[0]+t[1]*t[1]+t[2]*t[2]);
-      t[0] /= norm;
-      t[1] /= norm;
-      t[2] /= norm;
-    }
 }
 
 void Mesh::computeCenter(){
     // computing center
-    float c[] = {0.0,0.0,0.0};
-    for(unsigned int i=0;i<nb_vertices*3;i+=3) {
-      c[0] += vertices[i  ];
-      c[1] += vertices[i+1];
-      c[2] += vertices[i+2];
+    glm::vec3 c = glm::vec3(0);
+    for(unsigned int i=0;i<nb_vertices;i++) {
+        c = vertices[i];
     }
-    center[0] = c[0]/(float)nb_vertices;
-    center[1] = c[1]/(float)nb_vertices;
-    center[2] = c[2]/(float)nb_vertices;
+    center = c/(float)nb_vertices;
 
 }
 
 void Mesh::computeRadius(){
 
     radius = 0.0;
-    float c[3];
+    glm::vec3 c;
     float r;
-    for(unsigned int i=0;i<nb_vertices*3;i+=3) {
-      c[0] = vertices[i  ]-center[0];
-      c[1] = vertices[i+1]-center[1];
-      c[2] = vertices[i+2]-center[2];
+    for(unsigned int i=0;i<nb_vertices;i++) {
+      c = vertices[i]-center;
 
-      r = sqrt(c[0]*c[0]+c[1]*c[1]+c[2]*c[2]);
+      r = sqrt(c.x*c.x+c.y*c.y+c.z*c.z);
       radius = r>radius ? r : radius;
     }
 
+}
+
+void Mesh::computeColor(){
+    colors.resize(nb_vertices);
+
+    for(unsigned int i=0; i<nb_vertices; i++){
+        colors[i] = glm::vec3(1,0,0);
+    }
 }
