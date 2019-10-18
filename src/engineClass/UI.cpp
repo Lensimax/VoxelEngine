@@ -7,7 +7,7 @@
 
 
 UI::UI(){
-    selected = -1;
+    selectedID = -1;
     hasToBeDisplayed = true;
     scene = NULL;
     mainRenderer = NULL;
@@ -41,7 +41,11 @@ void UI::createUISceneManager(Scene *scene){
     float sizeRight = 200;
 
 
-    std::vector<std::string> listOfObjects = scene->getNameOfAllObjects();
+    std::vector<std::string> listOfObjects;
+    std::vector<int> listOfID;
+    scene->getAllObjects(listOfObjects, listOfID);
+
+
     ImGui::Begin("Scene Manager", NULL, ImGuiWindowFlags_MenuBar);
 
 
@@ -55,11 +59,12 @@ void UI::createUISceneManager(Scene *scene){
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")){
+            if (ImGui::MenuItem("Add MeshObject", "Ctrl+T")) { scene->addEngineObject(); }
             if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { scene->addMeshObject(); }
             if (ImGui::MenuItem("Add Plane", "")) { scene->addPlane(); }
             if (ImGui::MenuItem("Add Cube", "WIP")) { /* Do stuff */ }
             if (ImGui::MenuItem("Add Sphere", "WIP")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selected); }
+            if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selectedID); }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("View")){
@@ -74,23 +79,30 @@ void UI::createUISceneManager(Scene *scene){
 
     ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
 
-    // on cherche celui selectionné
-    for (unsigned int i = 0; i < listOfObjects.size(); i++){
-        if (ImGui::Selectable(listOfObjects[i].c_str(), selected == (int)i))
-            selected = i;
-    }
 
+    // on cherche celui selectionné
+    char obj[1024];
+    for (unsigned int i = 0; i < listOfObjects.size(); i++){
+        sprintf(obj,"##obj %i", i); // hidden label
+        bool is_selected = listOfID[i] == selectedID;
+        if (ImGui::Selectable(obj, is_selected)){
+              selectedID = listOfID[i];
+        }
+        ImGui::SameLine();
+        ImGui::Text(listOfObjects[i].c_str());
+    }
 
     ImGui::EndChild();
 
     ImGui::SameLine();
 
+    // pour afficher le détail de l'objet selectionné
     ImGui::BeginChild("right", ImVec2(0, -ImGui::GetFrameHeight()),true); // pass width here
 
-    if(selected > -1){
+    if(selectedID > -1){
         char idInspector[10];
         sprintf(idInspector, "right");
-        scene->createUIAtID(selected, idInspector);
+        scene->createUIAtID(selectedID, idInspector);
     }
 
     ImGui::EndChild();
@@ -134,7 +146,7 @@ void UI::DrawSplitter(int split_vertically, float thickness, float* size0, float
 }
 
 int UI::getSelected(){
-    return selected;
+    return selectedID;
 }
 
 

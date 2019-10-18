@@ -61,20 +61,27 @@ Light *Scene::getLight(){
 }
 
 void Scene::createUIAtID(int indexItem, char *ID){
-    if(indexItem >= 0 && indexItem < (int)objectsEngine.size()){
-        objectsEngine[indexItem]->createUI(ID);
-    }
-}
-
-std::vector<std::string> Scene::getNameOfAllObjects(){
-    std::vector<std::string> list = std::vector<std::string>();
 
     for(unsigned int i=0; i<objectsEngine.size(); i++){
-        list.push_back(objectsEngine[i]->getName());
+        if(objectsEngine[i]->getID() == indexItem){
+            objectsEngine[i]->createUI(ID);
+            return;
+        }
+    }
+}
+
+void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & ids){
+    names.resize(objectsEngine.size());
+    ids.resize(objectsEngine.size());
+
+
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        names[i] = objectsEngine[i]->getName();
+        ids[i] = objectsEngine[i]->getID();
     }
 
-    return list;
 }
+
 
 void Scene::addMeshObject(){
     objectsEngine.push_back(new MeshObject(addNewId()));
@@ -84,12 +91,20 @@ void Scene::addPlane(){
     objectsEngine.push_back(new Plane(addNewId()));
 }
 
+void Scene::addEngineObject(){
+    objectsEngine.push_back(new EngineObject(addNewId()));
+}
 
-void Scene::deleteObject(int index){
-    if(index >= 0 && index < objectsEngine.size()){
-        EngineObject *obj = objectsEngine[index];
-        objectsEngine.erase (objectsEngine.begin()+index);
-        delete(obj);
+
+
+void Scene::deleteObject(int id){
+
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        if(objectsEngine[i]->getID() == id){
+            delete(objectsEngine[i]);
+            objectsEngine.erase(objectsEngine.begin()+i);
+            return;
+        }
     }
 }
 

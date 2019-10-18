@@ -27,7 +27,7 @@ private:
 
 
     bool hasToBeDisplayed;
-    int selected = -1;
+    int selectedID = -1;
 
     Scene *scene;
     MainRenderer *mainRenderer;
