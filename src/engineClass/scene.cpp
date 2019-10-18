@@ -15,8 +15,11 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
+    MeshObject *obj = new MeshObject(addNewId(),"Object Loaded", (char*)"../data/models/monkey.off", new Transform());
+    obj->addChild(new MeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off"));
 
-    objectsEngine.push_back(new MeshObject(addNewId(),"Object Loaded", (char*)"../data/models/monkey.off", new Transform()));
+
+    objectsEngine.push_back(obj);
 
     // objectsEngine.push_back(new Sphere());
 
