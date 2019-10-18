@@ -23,7 +23,7 @@
 
 
 
-Plane::Plane(std::string n, unsigned int size, float width, float gridZ, Transform *t, Material *m){
+Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ, Transform *t, Material *m){
     transform = t;
 
     mesh = new MeshGrid(size, width, gridZ);
@@ -36,8 +36,8 @@ Plane::Plane(std::string n, unsigned int size, float width, float gridZ, Transfo
 
     material = m;
 
-    name = n;
-
+    setName(n);
+    setID(id);
 }
 
 

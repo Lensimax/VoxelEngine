@@ -6,11 +6,11 @@
 
 class DirectionnalLight : public Light {
     public:
-        DirectionnalLight(std::string name = "Directionnal Light", glm::vec3 l = glm::vec3(0.f,-1.0f,0.0f));
+        DirectionnalLight(int id, std::string name = "Directionnal Light", glm::vec3 l = glm::vec3(0.f,-1.0f,0.0f));
 
         virtual glm::vec3 getLight();
 
-        void createUI(char *ID);
+        void createUI(char *ID) override;
 
     private:
         glm::vec3 light;

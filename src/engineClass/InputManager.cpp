@@ -34,10 +34,12 @@ void InputManager::update(){
 
         if(io.KeyCtrl && ImGui::IsKeyPressed('N')){
             scene->addMeshObject();
+        } else if(io.KeyCtrl && ImGui::IsKeyPressed('T')){
+            scene->addEngineObject();
         }
     }
 
-    if(ImGui::IsKeyPressed('H')){
+    if(io.KeyCtrl && ImGui::IsKeyPressed('H')){
         if(ui != NULL){
             ui->toggleHasToBeDisplayed();
         }

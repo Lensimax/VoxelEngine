@@ -28,7 +28,7 @@ const std::string defaultFilename = "../data/models/monkey.off";
 class MeshObject : public DrawableObject {
     public:
 
-        MeshObject(std::string n = "MeshObject", char *filename = (char*)"../data/models/monkey.off",Transform *t = new Transform(), Material *m = new Lambertian());
+        MeshObject(int id, std::string n = "MeshObject", char *filename = (char*)"../data/models/monkey.off",Transform *t = new Transform(), Material *m = new Lambertian());
         ~MeshObject();
 
 

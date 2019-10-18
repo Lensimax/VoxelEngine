@@ -11,7 +11,6 @@
 #endif
 
 
-#include "transform.h"
 #include "../tools/lights/light.h"
 #include "../engineClass/engineObject.h"
 
@@ -42,12 +41,10 @@ class DrawableObject : public EngineObject {
 
 
 
-        Transform *getTransform();
 
 
 
     protected:
-        Transform *transform;
 };
 
 #endif

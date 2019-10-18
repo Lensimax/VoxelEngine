@@ -32,6 +32,8 @@ class MainRenderer {
 
         GLuint getTextureID();
 
+        void toggleWire();
+
     private:
 
         void renderTheScene(Scene *scene, int width, int height);
@@ -65,6 +67,8 @@ class MainRenderer {
 
         GLuint _vaoQuad;
         GLuint _quad;
+
+        bool wireActived;
 
 };
 

@@ -29,17 +29,23 @@ class Scene {
         Camera *getCamera();
         Light *getLight();
         void createUIAtID(int indexItem, char *ID);
-        std::vector<std::string> getNameOfAllObjects();
+        void getAllObjects(std::vector<std::string> & names, std::vector<int> & ids);
+
 
         void addMeshObject();
         void addPlane();
-        void deleteObject(int index);
+        void addEngineObject();
+        void deleteObject(int id);
 
 
         std::vector<EngineObject*> objectsEngine;
+        int addNewId();
 
     private:
         void deleteScene();
+
+        int IDObject = 0;
+
 
 };
 

@@ -3,8 +3,9 @@
 #include <imgui.h>
 
 
-CameraProj::CameraProj(std::string name, glm::vec3 pos, glm::vec3 u, glm::vec3 direction, float fov, float aspectP, float n, float f){
+CameraProj::CameraProj(int id, std::string name, glm::vec3 pos, glm::vec3 u, glm::vec3 direction, float fov, float aspectP, float n, float f){
     setName(name);
+    setID(id);
 
     setAxis(pos, u, direction);
 

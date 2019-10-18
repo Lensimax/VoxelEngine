@@ -17,15 +17,25 @@ uniform vec4 light;
 out vec4 normal;
 out vec4 normalView;
 out vec4 eyeView;
+out vec4 vertex;
 
 out vec4 lightVec;
 
 void main() {
+	vertex = vec4(position, 1.0);
+
 	mat4 mv = viewMat * modelMat;
 
 	vec4 vertexPosition_cameraspace = mv*vec4(position, 1.0);
 
+<<<<<<< HEAD
 	gl_Position = projMat*vertexPosition_cameraspace;
+=======
+	// normal = normalize(vec4(vertNormal,0.0));
+	normal = vec4(vertNormal,1.0);
+	normalView = normalize(normalMatrix*normal);
+	eyeView = normalize(mv*vec4(position,0.0));
+>>>>>>> 887645bd755534202b95c746707c5885f3f6e50e
 
 	mat4 normalMat = inverse(mv);
 	normal = vec4(vertNormal,0);
