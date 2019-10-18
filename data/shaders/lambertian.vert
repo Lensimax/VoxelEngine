@@ -23,7 +23,9 @@ out vec4 lightVec;
 void main() {
 	mat4 mv = viewMat * modelMat;
 
-	gl_Position = projMat*mv*vec4(position, 1.0);
+	vec4 vertexPosition_cameraspace = mv*vec4(position, 1.0);
+
+	gl_Position = projMat*vertexPosition_cameraspace;
 
 	mat4 normalMat = inverse(mv);
 	normal = vec4(vertNormal,0);
@@ -31,7 +33,10 @@ void main() {
 
 	// normal = normalize(vec4(vertNormal,0.0));
 	// normalView = normalize(normalMatrix*normal);
-	eyeView = normalize(mv*vec4(position,1.0));
+	eyeView = vec4(0) - vertexPosition_cameraspace;
 
-	lightVec = light;
+	vec4 LightPosition_cameraspace = viewMat * light;
+	vec4 LightDirection_cameraspace = LightPosition_cameraspace + eyeView;
+
+	lightVec = LightDirection_cameraspace;
 }
