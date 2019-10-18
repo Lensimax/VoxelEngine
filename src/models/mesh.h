@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include <stdio.h>
 
 
 class Mesh {
@@ -63,15 +64,22 @@ public:
      // degree de chaque sommet
      std::vector<int> valences;
 
+     std::vector<glm::vec3> curvature;
+     std::vector<float> trianglesQuality;
+
      // info
      glm::vec3      center;
      float          radius;
+
+     void initialize();
 
      void computeTangents();
      void computeCenter();
      void computeRadius();
      void computeUVCoord();
      void computeColor();
+
+     void computeAllInfo();
 
 
      /// COMPUTE VALENCE + ONE RING
@@ -89,24 +97,30 @@ public:
      void compute_triangle_normals(std::vector<glm::vec3> & triangle_normals, std::vector<std::vector<unsigned int> > triangles, std::vector<glm::vec3> indexed_vertices);
      glm::vec3 computeNormalOfOneTriangle(std::vector<unsigned int> triangle, std::vector<glm::vec3> indexed_vertices);
 
-     bool smoothNormals = false;
+
+     const char uniformSmoothingString[1024] = "Uniform";
+     const char laplaceSmoothingString[1024] = "Bel Trami";
+
+     
+     char type_smoothing[1024] = "Uniform";
+    bool smoothNormals = false;
 
 
 
      /////// SMOOTHING VERTICES ///////
 
-     const std::string uniformSmoothingString = "Uniform";
-     const std::string laplaceSmoothingString = "Bel Trami";
+     int nbSmoothingIteration = 0;
 
-     std::vector<glm::vec3> smoothing(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short> > & triangles,
-        std::vector<std::vector<unsigned short> > one_ring, unsigned int iterations, std::string type_smooth, 
-        std::vector<glm::vec3> & curvature,std::vector<float> & qualityVertex);
 
-     std::vector<glm::vec3> calc_mean_curvature (const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short>> & triangles, std::vector<std::vector<unsigned short>> one_ring);
-     float calc_weights(const std::vector<glm::vec3> & vertices, std::vector<std::vector<unsigned short> > one_ring, unsigned int v, unsigned int vi);
+     std::vector<glm::vec3> smoothing(const std::vector<glm::vec3> & meshvertices, const std::vector<std::vector<unsigned int> > & triangles,
+        std::vector<std::vector<unsigned int> > one_ring, unsigned int iterations, char type_smooth[], 
+        std::vector<glm::vec3> & meshcurvature,std::vector<float> & qualityVertex);
 
-     std::vector<float> calc_quality_mesh(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short> > & triangles);
-     float calc_triangle_quality(const std::vector<glm::vec3> & vertices, std::vector<unsigned short> triangles);
+     std::vector<glm::vec3> calc_mean_curvature (const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned int>> & triangles, std::vector<std::vector<unsigned int>> one_ring);
+     float calc_weights(const std::vector<glm::vec3> & vertices, std::vector<std::vector<unsigned int> > one_ring, unsigned int v, unsigned int vi);
+
+     std::vector<float> calc_quality_mesh(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned int> > & triangles);
+     float calc_triangle_quality(const std::vector<glm::vec3> & vertices, std::vector<unsigned int> triangles);
      float max3v(float a, float b, float c);
      float cot(float theta);
 };

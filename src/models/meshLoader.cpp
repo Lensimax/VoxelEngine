@@ -8,6 +8,7 @@
 
 
 MeshLoader::MeshLoader(char *filename) {
+    initialize();
 
     sprintf(currentFilename, "%s", filename);
     sprintf(backupFilename, "%s", filename);
@@ -34,6 +35,8 @@ void MeshLoader::recreate(){
         sprintf(backupFilename, "%s", currentFilename);
         backupVertices = vertices;
         backupFaces = faces;
+        // nb_vertices;
+        // nb_faces;
     }
 
     computeAllInfo();
@@ -41,32 +44,7 @@ void MeshLoader::recreate(){
     
 }
 
-void MeshLoader::computeAllInfo(){
 
-
-
-    computeCenter();
-
-
-    // computing radius
-    computeRadius();
-
-    computeNormals();
-
-
-    // computing colors as normals
-    colors.resize(nb_vertices);
-    for(unsigned int i=0;i<nb_vertices;i++) {
-        colors[i] = (normals[i]+1.0f)/2.0f;
-    }
-
-    computeUVCoord();
-
-
-    computeTangents();
-
-
-}
 
 
 

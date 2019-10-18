@@ -10,6 +10,11 @@
 #define M_PI 3.1415926
 #endif
 
+void Mesh::initialize(){
+    smoothNormals = false;
+    nbSmoothingIteration = 0;
+    sprintf(type_smoothing, "%s",uniformSmoothingString);
+}
 
 
 // calcul le 1-voisinage des sommets
@@ -120,6 +125,47 @@ unsigned int Mesh::getNBFaces(){
     return faces.size()/3;
 }
 
+void Mesh::computeAllInfo(){
+
+    // pas opti !!!!
+    std::vector<std::vector<unsigned int>> triangles;
+    triangles.resize(faces.size()/3);
+    for(unsigned int i=0; i<triangles.size(); i++){
+        triangles[i].resize(3);
+        for(unsigned int j=0; j<3; j++){
+            triangles[i][j] = faces[3*i +j];
+        }
+    }
+
+    collect_one_ring (oneRing, triangles, nb_vertices);
+    compute_vertex_valences(valences, oneRing, triangles);
+
+
+    vertices = smoothing(vertices, triangles,oneRing, nbSmoothingIteration, type_smoothing, curvature,trianglesQuality);
+
+    computeCenter();
+
+
+    // computing radius
+    computeRadius();
+
+    computeNormals();
+
+
+    // computing colors as normals
+    colors.resize(nb_vertices);
+    for(unsigned int i=0;i<nb_vertices;i++) {
+        colors[i] = (normals[i]+1.0f)/2.0f;
+    }
+
+    computeUVCoord();
+
+
+    computeTangents();
+
+
+}
+
 
 void Mesh::createUI(){
     ImGui::Text("Number vertices: %d", getNBVertices());
@@ -128,6 +174,28 @@ void Mesh::createUI(){
     ImGui::Checkbox("smoothNormal",&smoothNormals);
 
 
+    ImGui::Text("Smoothing vertices");
+    ImGui::Separator();
+    char items[2][1024];
+    sprintf(items[0], "%s", uniformSmoothingString);
+    sprintf(items[1], "%s", laplaceSmoothingString);
+    // Here our selection is a single pointer stored outside the object.
+    if (ImGui::BeginCombo("type smoothing", type_smoothing, 0)) // The second parameter is the label previewed before opening the combo.
+    {
+        for (int n = 0; n < 2; n++)
+        {
+            bool is_selected = (type_smoothing == items[n]);
+            if (ImGui::Selectable(items[n], is_selected))
+                sprintf(type_smoothing, "%s", items[n]);
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)
+        }
+        ImGui::EndCombo();
+    }
+    ImGui::InputInt("number of iterations", &nbSmoothingIteration, 1, 100);
+
+
+    ImGui::Separator();
     if (ImGui::TreeNode("Vertices")){
 
         ImGui::Columns(3, "Vertices"); // 4-ways, with border
@@ -339,7 +407,7 @@ void Mesh::computeNormalsWithAngles(){
 
 
 // calcul de la curvature uniform pour un sommet
-glm::vec3 vunicurvature(glm::vec3 vertex, std::vector<unsigned short> one_ring, const std::vector<glm::vec3> & vertices){
+glm::vec3 vunicurvature(glm::vec3 vertex, std::vector<unsigned int> one_ring, const std::vector<glm::vec3> & vertices){
 
     glm::vec3 curvature = glm::vec3(0.0);
 
@@ -358,7 +426,7 @@ glm::vec3 vunicurvature(glm::vec3 vertex, std::vector<unsigned short> one_ring, 
 }
 
 // calcul de la curvature pour le maillage
-std::vector<glm::vec3> calc_uniform_curvature(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short> > & triangles, std::vector<std::vector<unsigned short> > one_ring){
+std::vector<glm::vec3> calc_uniform_curvature(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned int> > & triangles, std::vector<std::vector<unsigned int> > one_ring){
 
 
 
@@ -404,7 +472,7 @@ float Mesh::cot(float theta){
 
 
 // calcul de la qualité des triangles en fonction du plus petit angle
-float Mesh::calc_triangle_quality(const std::vector<glm::vec3> & vertices, std::vector<unsigned short> triangles){
+float Mesh::calc_triangle_quality(const std::vector<glm::vec3> & vertices, std::vector<unsigned int> triangles){
 
     assert(triangles.size() == 3);
 
@@ -427,7 +495,7 @@ float Mesh::calc_triangle_quality(const std::vector<glm::vec3> & vertices, std::
 
 
 // calcul de la qualité du maillage
-std::vector<float> Mesh::calc_quality_mesh(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short> > & triangles){
+std::vector<float> Mesh::calc_quality_mesh(const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned int> > & triangles){
 
     std::vector<float> quality = std::vector<float>(triangles.size());
 
@@ -441,7 +509,7 @@ std::vector<float> Mesh::calc_quality_mesh(const std::vector<glm::vec3> & vertic
 
 
 // calcul des poids avec les cotangents
-float Mesh::calc_weights(const std::vector<glm::vec3> & vertices, std::vector<std::vector<unsigned short> > one_ring, unsigned int v, unsigned int vi){
+float Mesh::calc_weights(const std::vector<glm::vec3> & vertices, std::vector<std::vector<unsigned int> > one_ring, unsigned int v, unsigned int vi){
 
     // on récupère les deux sommets communs avec les deux sommets courants
     std::vector<unsigned int> same_vertices = std::vector<unsigned int>();
@@ -481,7 +549,7 @@ float Mesh::calc_weights(const std::vector<glm::vec3> & vertices, std::vector<st
 
 
 // calcul la curvature pour tous les sommets
-std::vector<glm::vec3> Mesh::calc_mean_curvature (const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned short> > & triangles, std::vector<std::vector<unsigned short> > one_ring) {
+std::vector<glm::vec3> Mesh::calc_mean_curvature (const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned int> > & triangles, std::vector<std::vector<unsigned int> > one_ring) {
 
     std::vector<glm::vec3> curvature = std::vector<glm::vec3>(vertices.size());
     glm::vec3 tmp;
@@ -513,8 +581,8 @@ std::vector<glm::vec3> Mesh::calc_mean_curvature (const std::vector<glm::vec3> &
 
 
 // applique le smoothing un nombre "itération" fois
-std::vector<glm::vec3> Mesh::smoothing(const std::vector<glm::vec3> & meshvertices, const std::vector<std::vector<unsigned short> > & triangles,
-        std::vector<std::vector<unsigned short> > one_ring, unsigned int iterations, std::string type_smooth, 
+std::vector<glm::vec3> Mesh::smoothing(const std::vector<glm::vec3> & meshvertices, const std::vector<std::vector<unsigned int> > & triangles,
+        std::vector<std::vector<unsigned int> > one_ring, unsigned int iterations, char type_smooth[], 
         std::vector<glm::vec3> & meshcurvature,std::vector<float> & qualityVertex){
 
     std::vector<glm::vec3> changedVertices = meshvertices;
@@ -527,9 +595,9 @@ std::vector<glm::vec3> Mesh::smoothing(const std::vector<glm::vec3> & meshvertic
         std::vector<glm::vec3> currentVertices = std::vector<glm::vec3>(meshvertices.size());
 
         // on calcule la curvature en fonction du type de smoothing
-        if(type_smooth == uniformSmoothingString){
+        if(strcmp(type_smooth, uniformSmoothingString) == 0){
             curvature = calc_uniform_curvature(changedVertices, triangles, one_ring);
-        } else if(type_smooth == laplaceSmoothingString){
+        } else if(strcmp(type_smooth, laplaceSmoothingString) == 0){
             curvature = calc_mean_curvature(changedVertices, triangles, one_ring);
         } else {
             return meshvertices;
