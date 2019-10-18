@@ -3,6 +3,7 @@
 
 
 #include <string>
+#include <vector>
 #include "../models/transform.h"
 
 class EngineObject {
@@ -18,14 +19,21 @@ class EngineObject {
         int getID();
         void setID(int i);
 
+        void addChild(EngineObject *obj);
+        void removeChild(int id);
+        void deleteAllChildren();
+
 
         Transform *getTransform();
+
+        std::vector<EngineObject*> listOfChildren;
 
     protected:
 
         std::string name;
         int ID;
         Transform *transform;
+
 
 };
 

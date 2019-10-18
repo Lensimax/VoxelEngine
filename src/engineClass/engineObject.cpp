@@ -35,6 +35,40 @@ Transform *EngineObject::getTransform(){
     return transform;
 }
 
+void EngineObject::addChild(EngineObject *obj){
+
+    listOfChildren.push_back(obj);
+}
+
+
+// trouve l'enfant avec l'ID correspondant et le supprime en récursif
+void EngineObject::removeChild(int id){
+    for(unsigned int i=0; i<listOfChildren.size(); i++){
+        if(listOfChildren[i]->getID() == id){
+
+            listOfChildren[i]->deleteAllChildren();
+            delete(listOfChildren[i]);
+            listOfChildren.erase(listOfChildren.begin()+i);
+            return;
+        }
+    }
+}
+
+
+// supprime tous les enfants de ce gameobject en récursif
+void EngineObject::deleteAllChildren(){
+    for(unsigned int i=listOfChildren.size()-1; i >=0; i--){
+        if(listOfChildren[i]->listOfChildren.size() == 0){ // n'a pas d'enfant
+            delete(listOfChildren[i]);
+            listOfChildren.erase(listOfChildren.begin()+i);
+        } else {
+            listOfChildren[i]->deleteAllChildren();
+            delete(listOfChildren[i]);
+        }
+    }
+}
+
+
 
 void EngineObject::createUI(char *ID){
 
