@@ -95,6 +95,9 @@ void Scene::addEngineObject(){
     objectsEngine.push_back(new EngineObject(addNewId()));
 }
 
+void Scene::addSphere(){
+    objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", (char*)"../data/models/sphere.off"));
+}
 
 
 void Scene::deleteObject(int id){

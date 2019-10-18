@@ -63,7 +63,7 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { scene->addMeshObject(); }
             if (ImGui::MenuItem("Add Plane", "")) { scene->addPlane(); }
             if (ImGui::MenuItem("Add Cube", "WIP")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Add Sphere", "WIP")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Add Sphere")) { scene->addSphere();}
             if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selectedID); }
             ImGui::EndMenu();
         }

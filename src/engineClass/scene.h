@@ -35,6 +35,7 @@ class Scene {
         void addMeshObject();
         void addPlane();
         void addEngineObject();
+        void addSphere();
         void deleteObject(int id);
 
 
