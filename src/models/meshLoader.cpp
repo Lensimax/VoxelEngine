@@ -10,6 +10,7 @@
 MeshLoader::MeshLoader(char *filename) {
 
     sprintf(currentFilename, "%s", filename);
+    sprintf(backupFilename, "%s", filename);
     readOFFfile(filename);
 
     backupVertices = vertices;
@@ -19,15 +20,25 @@ MeshLoader::MeshLoader(char *filename) {
 }
 
 void MeshLoader::recreate(){
-    if(fopen(currentFilename,"r") == NULL) {
-        return;
+
+    if(strcmp(currentFilename, backupFilename) == 0){ // meme fichier
+        cleanup();
+        vertices = backupVertices;
+        faces = backupFaces;
+    } else {
+        if(fopen(currentFilename,"r") == NULL) {
+            return;
+        }
+        cleanup();
+        readOFFfile(currentFilename);
+        sprintf(backupFilename, "%s", currentFilename);
+        backupVertices = vertices;
+        backupFaces = faces;
     }
 
-    cleanup();
-
-    vertices = backupVertices;
-    faces = backupFaces;
     computeAllInfo();
+    
+    
 }
 
 void MeshLoader::computeAllInfo(){

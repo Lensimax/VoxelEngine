@@ -19,6 +19,7 @@ class MeshLoader : public Mesh {
         void readOFFfile(char *filename);
 
         char currentFilename[1024];
+        char backupFilename[1024];
 };
 
 
