@@ -151,7 +151,7 @@ void Mesh::computeAllInfo(){
     inflateBoundingBox();
 
 
-    vertices = smoothing(vertices, triangles,oneRing, nbSmoothingIteration, type_smoothing, curvature,trianglesQuality);
+    // vertices = smoothing(vertices, triangles,oneRing, nbSmoothingIteration, type_smoothing, curvature,trianglesQuality);
 
     computeNormals();
 
@@ -844,6 +844,10 @@ void Mesh::drawDebug(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projection
 
 }
 
+void drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3){
+    
+}
+
 
 void Mesh::drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
     Shader *shader = new Shader();
@@ -896,8 +900,6 @@ void Mesh::simplify(){
     // pour avoir les bonnes normales même après modification
     computeNormals();
 
-    printf("Après compute normales\n", );
-
     glm::vec3 minGrid = getMin();
     glm::vec3 maxGrid = getMax();
 
@@ -908,7 +910,8 @@ void Mesh::simplify(){
 
     // calcul des sommets dans les ceullues
 
-    std::vector<std::vector<std::vector<std::vector<unsigned int>>>> listOfCell;
+    std::vector<unsigned int>  listOfCell[resol][resol][resol];
+    // std::vector<std::vector<std::vector<std::vector<unsigned int>>>> listOfCell;
 
     for(unsigned int i=0; i<backupVertices.size(); i++){
         std::vector<int> cell = indexOffCell(minGrid, offset, backupVertices[i]);
@@ -916,7 +919,11 @@ void Mesh::simplify(){
 
         // on ajout le sommet a la cellule correspondante
         listOfCell[cell[0]][cell[1]][cell[2]].push_back(i);
+        printf("i : %i cell: %i %i %i\n", cell[0],cell[1],cell[2]);
     }
+
+
+    printf("avec calcul correspondant\n");
 
     ///// calcul du représentant///////
 
@@ -953,9 +960,11 @@ void Mesh::simplify(){
         }
     }
 
+    printf("Après calcul correspondant\n");
+
     /// SUPRESSION DES TRIANGLES ////
 
-    /*std::vector<unsigned int> newTriangles;
+    std::vector<unsigned int> newTriangles = std::vector<unsigned int>();
     glm::vec3 v1, v2, v3;
     std::vector<int> cell1,cell2,cell3;
 
@@ -979,6 +988,7 @@ void Mesh::simplify(){
     std::vector<glm::vec3> newVertices;
     std::vector<glm::vec3> newNormals;
     newVertices.resize(resol*resol*resol);
+    newNormals.resize(resol*resol*resol);
     unsigned int ind = 0;
     for(unsigned int i=0; i<resol; i++){
         for(unsigned int j=0; j<resol; j++){
@@ -992,9 +1002,14 @@ void Mesh::simplify(){
     vertices = newVertices;
     normals = newNormals;
     faces = newTriangles;
+    printf("size face %d\n", faces.size());
+    printf("size vertices %d\n", vertices.size());
+
+    nb_faces = faces.size();
+    nb_vertices = vertices.size();
 
     computeAllInfoWithoutNormals();
-*/
+
 
 }
 

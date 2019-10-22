@@ -25,7 +25,7 @@ void InputManager::update(){
     if(scene != NULL && ui != NULL){
 
         // suppr
-        
+
         // if(ImGui::IsKeyPressed(ImGuiKey_Delete)){
         if(ImGui::IsKeyPressed(261)){ // 0x105
             scene->deleteObject(ui->getSelected());
@@ -37,7 +37,7 @@ void InputManager::update(){
         }
     }
 
-    if(ImGui::IsKeyPressed('H')){
+    if(io.KeyCtrl && ImGui::IsKeyPressed('H')){
         if(ui != NULL){
             ui->toggleHasToBeDisplayed();
         }

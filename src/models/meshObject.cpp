@@ -81,7 +81,7 @@ void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
     glUseProgram(0);
 
-    // mesh->drawDebug(transform->getModelMat(),viewMat, projectionMat);
+    mesh->drawDebug(transform->getModelMat(),viewMat, projectionMat);
 
     if(showboundingbox){
         drawBoxWithMatricess(mesh->getMin(), mesh->getMax(), viewMat, projectionMat);
