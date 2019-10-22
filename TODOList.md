@@ -13,3 +13,5 @@
 * shadows
 * rotator
 * customable pipeline
+* sortie de message sur une console
+* defautl imgui.ini

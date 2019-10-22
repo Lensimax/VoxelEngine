@@ -10,7 +10,6 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
-// #include "../material/material.h"
 #include "../material/lambertian.h"
 
 #include "mesh.h"
