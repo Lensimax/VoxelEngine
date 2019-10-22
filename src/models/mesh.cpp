@@ -787,8 +787,28 @@ glm::vec3 Mesh::getMax(){
 
 void Mesh::drawDebug(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
 
+    glm::vec3 minGrid = getMin();
+    glm::vec3 maxGrid = getMax();
+
     if(resolution <= 1){
-        drawGridForSimplification(getMin(), getMax(),modelMat, viewMat, projectionMat);
+        drawGridForSimplification(minGrid, maxGrid,modelMat, viewMat, projectionMat);
+    } else {
+
+        glm::vec3 offset;
+        offset.x = (maxGrid.x - minGrid.x)/(float)resolution;
+        offset.y = (maxGrid.y - minGrid.y)/(float)resolution;
+        offset.y = (maxGrid.y - minGrid.y)/(float)resolution;
+
+        for(int i=0; i<resolution; i++){
+            for(int j=0; j<resolution; j++){
+                for(int k=0; k<resolution; k++){
+                    glm::vec3 mi = minGrid + glm::vec3(i*offset.x, j*offset.y, k*(-offset.z));
+                    glm::vec3 ma = minGrid + glm::vec3((i+1)*offset.x, (j+1)*offset.y, (k+1)*(-offset.z));
+
+                    drawGridForSimplification(mi, ma, modelMat, viewMat, projectionMat);
+                }
+            }
+        }
     }
 
 
