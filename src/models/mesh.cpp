@@ -797,13 +797,14 @@ void Mesh::drawDebug(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projection
         glm::vec3 offset;
         offset.x = (maxGrid.x - minGrid.x)/(float)resolution;
         offset.y = (maxGrid.y - minGrid.y)/(float)resolution;
-        offset.y = (maxGrid.y - minGrid.y)/(float)resolution;
+        offset.z = ((maxGrid.z - minGrid.z)/(float)resolution);
 
         for(int i=0; i<resolution; i++){
             for(int j=0; j<resolution; j++){
                 for(int k=0; k<resolution; k++){
-                    glm::vec3 mi = minGrid + glm::vec3(i*offset.x, j*offset.y, k*(-offset.z));
-                    glm::vec3 ma = minGrid + glm::vec3((i+1)*offset.x, (j+1)*offset.y, (k+1)*(-offset.z));
+                    // glm::vec3 start = glm::vec3(minGrid.)
+                    glm::vec3 mi = minGrid + glm::vec3(i*offset.x, j*offset.y, k*(offset.z));
+                    glm::vec3 ma = minGrid + glm::vec3((i+1)*offset.x, (j+1)*offset.y, (k+1)*(offset.z));
 
                     drawGridForSimplification(mi, ma, modelMat, viewMat, projectionMat);
                 }
