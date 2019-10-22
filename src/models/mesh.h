@@ -144,6 +144,7 @@ public:
      // renvoie dans quelle cellule le sommet se trouve
      std::vector<int> indexOffCell(glm::vec3 start, glm::vec3 offset, glm::vec3 vertex);
      void computeAllInfoWithoutNormals();
+     void drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4);
 };
 
 

@@ -844,8 +844,14 @@ void Mesh::drawDebug(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projection
 
 }
 
-void drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3){
-    
+void Mesh::drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4){
+    glVertex3f(v1.x, v1.y, v1.z);
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v3.x, v3.y, v3.z);
+    glVertex3f(v4.x, v4.y, v4.z);
 }
 
 
@@ -862,20 +868,20 @@ void Mesh::drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::
 
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
-    glBegin(GL_QUADS);
+    glBegin(GL_TRIANGLES);
 
     // front face
-    glVertex3f(minimum.x,maximum.y,maximum.z); glVertex3f(maximum.x,maximum.y,maximum.z); glVertex3f(maximum.x,minimum.y,maximum.z); glVertex3f(minimum.x,minimum.y,maximum.z);
+    drawQuadWithTriangle(glm::vec3(minimum.x,maximum.y,maximum.z), glm::vec3(maximum.x,maximum.y,maximum.z), glm::vec3(maximum.x,minimum.y,maximum.z), glm::vec3(minimum.x,minimum.y,maximum.z));
     // back face
-    glVertex3f(maximum.x,maximum.y,minimum.z); glVertex3f(minimum.x,maximum.y,minimum.z); glVertex3f(minimum.x,minimum.y,minimum.z); glVertex3f(maximum.x,minimum.y,minimum.z);
+    drawQuadWithTriangle(glm::vec3(maximum.x,maximum.y,minimum.z), glm::vec3(minimum.x,maximum.y,minimum.z), glm::vec3(minimum.x,minimum.y,minimum.z), glm::vec3(maximum.x,minimum.y,minimum.z));
     // left face
-    glVertex3f(minimum.x,maximum.y,minimum.z); glVertex3f(minimum.x,minimum.y,maximum.z); glVertex3f(minimum.x,minimum.y,maximum.z); glVertex3f(minimum.x,minimum.y,minimum.z);
+    drawQuadWithTriangle(glm::vec3(minimum.x,maximum.y,minimum.z), glm::vec3(minimum.x,minimum.y,maximum.z), glm::vec3(minimum.x,minimum.y,maximum.z), glm::vec3(minimum.x,minimum.y,minimum.z));
     // right face
-    glVertex3f(maximum.x,maximum.y,maximum.z); glVertex3f(maximum.x,maximum.y,minimum.z); glVertex3f(maximum.x,minimum.y,minimum.z); glVertex3f(maximum.x,minimum.y,maximum.z);
+    drawQuadWithTriangle(glm::vec3(maximum.x,maximum.y,maximum.z), glm::vec3(maximum.x,maximum.y,minimum.z), glm::vec3(maximum.x,minimum.y,minimum.z), glm::vec3(maximum.x,minimum.y,maximum.z));
     // bottom face
-    glVertex3f(minimum.x,minimum.y,maximum.z); glVertex3f(maximum.x,minimum.y,maximum.z); glVertex3f(maximum.x,minimum.y,minimum.z); glVertex3f(minimum.x,minimum.y,minimum.z);
+    drawQuadWithTriangle(glm::vec3(minimum.x,minimum.y,maximum.z), glm::vec3(maximum.x,minimum.y,maximum.z), glm::vec3(maximum.x,minimum.y,minimum.z), glm::vec3(minimum.x,minimum.y,minimum.z));
     // top face
-    glVertex3f(minimum.x,maximum.y,minimum.z); glVertex3f(maximum.x,maximum.y,minimum.z); glVertex3f(maximum.x,maximum.y,maximum.z); glVertex3f(minimum.x,maximum.y,maximum.z);
+    drawQuadWithTriangle(glm::vec3(minimum.x,maximum.y,minimum.z), glm::vec3(maximum.x,maximum.y,minimum.z), glm::vec3(maximum.x,maximum.y,maximum.z), glm::vec3(minimum.x,maximum.y,maximum.z));
 
     glEnd();
 

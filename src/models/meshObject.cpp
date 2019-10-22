@@ -160,6 +160,16 @@ void MeshObject::createUI(char *ID){
     ImGui::EndChild();
 }
 
+void drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4){
+    glVertex3f(v1.x, v1.y, v1.z);
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v3.x, v3.y, v3.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+}
+
 // draw box that move with the object
 void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 viewMat, glm::mat4 projectionMat){
 
@@ -177,20 +187,21 @@ void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 vi
 
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
-    glBegin(GL_QUADS);
+    glBegin(GL_TRIANGLES);
 
     // front face
-    glVertex3f(min.x,max.y,max.z); glVertex3f(max.x,max.y,max.z); glVertex3f(max.x,min.y,max.z); glVertex3f(min.x,min.y,max.z);
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,max.z), glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(min.x,min.y,max.z));
     // back face
-    glVertex3f(max.x,max.y,min.z); glVertex3f(min.x,max.y,min.z); glVertex3f(min.x,min.y,min.z); glVertex3f(max.x,min.y,min.z);
+    drawQuadWithTriangle(glm::vec3(max.x,max.y,min.z), glm::vec3(min.x,max.y,min.z), glm::vec3(min.x,min.y,min.z), glm::vec3(max.x,min.y,min.z));
     // left face
-    glVertex3f(min.x,max.y,min.z); glVertex3f(min.x,min.y,max.z); glVertex3f(min.x,min.y,max.z); glVertex3f(min.x,min.y,min.z);
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,min.z), glm::vec3(min.x,min.y,max.z), glm::vec3(min.x,min.y,max.z), glm::vec3(min.x,min.y,min.z));
     // right face
-    glVertex3f(max.x,max.y,max.z); glVertex3f(max.x,max.y,min.z); glVertex3f(max.x,min.y,min.z); glVertex3f(max.x,min.y,max.z);
+    drawQuadWithTriangle(glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,max.y,min.z), glm::vec3(max.x,min.y,min.z), glm::vec3(max.x,min.y,max.z));
     // bottom face
-    glVertex3f(min.x,min.y,max.z); glVertex3f(max.x,min.y,max.z); glVertex3f(max.x,min.y,min.z); glVertex3f(min.x,min.y,min.z);
+    drawQuadWithTriangle(glm::vec3(min.x,min.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(max.x,min.y,min.z), glm::vec3(min.x,min.y,min.z));
     // top face
-    glVertex3f(min.x,max.y,min.z); glVertex3f(max.x,max.y,min.z); glVertex3f(max.x,max.y,max.z); glVertex3f(min.x,max.y,max.z);
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,min.z), glm::vec3(max.x,max.y,min.z), glm::vec3(max.x,max.y,max.z), glm::vec3(min.x,max.y,max.z));
+
 
     glEnd();
 
