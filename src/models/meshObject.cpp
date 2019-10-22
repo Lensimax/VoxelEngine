@@ -46,6 +46,8 @@ MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m)
 
     name = n;
 
+    showboundingbox = true;
+
 }
 
 
@@ -79,21 +81,10 @@ void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
     glUseProgram(0);
 
-    Shader *shader = new Shader();
-    shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
+    if(showboundingbox){
+        drawBoxWithMatricess(mesh->getMin(), mesh->getMax(), viewMat, projectionMat);
+    }
 
-    glUseProgram(shader->id());
-
-
-    glm::mat4 modelMat = transform->getModelMat();
-
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
-
-    drawBoundingBox();
-
-    glUseProgram(0);
 
 }
 
@@ -151,6 +142,8 @@ void MeshObject::createUI(char *ID){
         mesh->recreate();
         createVAO();
     }
+    ImGui::Text("Show bounding box "); ImGui::SameLine();
+    ImGui::Checkbox("##showboundingbox",&showboundingbox);
     ImGui::Separator();
 
     transform->createUI();
@@ -161,52 +154,43 @@ void MeshObject::createUI(char *ID){
     ImGui::EndChild();
 }
 
-void MeshObject::drawBoundingBox(){
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+// draw box that move with the object
+void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 viewMat, glm::mat4 projectionMat){
 
-    glm::vec3 min = mesh->getMin();
-    glm::vec3 max = mesh->getMax();
+    Shader *shader = new Shader();
+    shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
+
+    glUseProgram(shader->id());
+
+
+    glm::mat4 modelMat = transform->getModelMat();
+
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
     glBegin(GL_QUADS);
 
     // front face
-    glVertex3f(min.x,max.y,max.z);
-    glVertex3f(max.x,max.y,max.z);
-    glVertex3f(max.x,min.y,max.z);
-    glVertex3f(min.x,min.y,max.z);
-
+    glVertex3f(min.x,max.y,max.z); glVertex3f(max.x,max.y,max.z); glVertex3f(max.x,min.y,max.z); glVertex3f(min.x,min.y,max.z);
     // back face
-    glVertex3f(max.x,max.y,min.z);
-    glVertex3f(min.x,max.y,min.z);
-    glVertex3f(min.x,min.y,min.z);
-    glVertex3f(max.x,min.y,min.z);
-
+    glVertex3f(max.x,max.y,min.z); glVertex3f(min.x,max.y,min.z); glVertex3f(min.x,min.y,min.z); glVertex3f(max.x,min.y,min.z);
     // left face
-    glVertex3f(min.x,max.y,min.z);
-    glVertex3f(min.x,min.y,max.z);
-    glVertex3f(min.x,min.y,max.z);
-    glVertex3f(min.x,min.y,min.z);
-
+    glVertex3f(min.x,max.y,min.z); glVertex3f(min.x,min.y,max.z); glVertex3f(min.x,min.y,max.z); glVertex3f(min.x,min.y,min.z);
     // right face
-    glVertex3f(max.x,max.y,max.z);
-    glVertex3f(max.x,max.y,min.z);
-    glVertex3f(max.x,min.y,min.z);
-    glVertex3f(max.x,min.y,max.z);
-
+    glVertex3f(max.x,max.y,max.z); glVertex3f(max.x,max.y,min.z); glVertex3f(max.x,min.y,min.z); glVertex3f(max.x,min.y,max.z);
     // bottom face
-    glVertex3f(min.x,min.y,max.z);
-    glVertex3f(max.x,min.y,max.z);
-    glVertex3f(max.x,min.y,min.z);
-    glVertex3f(min.x,min.y,min.z);
-
+    glVertex3f(min.x,min.y,max.z); glVertex3f(max.x,min.y,max.z); glVertex3f(max.x,min.y,min.z); glVertex3f(min.x,min.y,min.z);
     // top face
-    glVertex3f(min.x,max.y,min.z);
-    glVertex3f(max.x,max.y,min.z);
-    glVertex3f(max.x,max.y,max.z);
-    glVertex3f(min.x,max.y,max.z);
+    glVertex3f(min.x,max.y,min.z); glVertex3f(max.x,max.y,min.z); glVertex3f(max.x,max.y,max.z); glVertex3f(min.x,max.y,max.z);
 
     glEnd();
 
+    glUseProgram(0);
+
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
 
 }
