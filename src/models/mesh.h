@@ -42,8 +42,7 @@ public:
       void drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
 
 
-     // length
-
+     void simplify();
 
     protected:
      std::vector<unsigned int> get_face(unsigned int i);
@@ -141,11 +140,10 @@ public:
 
      /// SIMPLIFICATION /////
      int resolution = 1;
-     void simplify(unsigned int resol);
 
      // renvoie dans quelle cellule le sommet se trouve
      std::vector<int> indexOffCell(glm::vec3 start, glm::vec3 offset, glm::vec3 vertex);
-
+     void computeAllInfoWithoutNormals();
 };
 
 

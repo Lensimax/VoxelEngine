@@ -153,10 +153,6 @@ void Mesh::computeAllInfo(){
 
     vertices = smoothing(vertices, triangles,oneRing, nbSmoothingIteration, type_smoothing, curvature,trianglesQuality);
 
-
-
-
-
     computeNormals();
 
     // computing colors as normals
@@ -172,6 +168,39 @@ void Mesh::computeAllInfo(){
 
 
 
+}
+
+void Mesh::computeAllInfoWithoutNormals(){
+
+        // pas opti !!!!
+        std::vector<std::vector<unsigned int>> triangles;
+        triangles.resize(faces.size()/3);
+        for(unsigned int i=0; i<triangles.size(); i++){
+            triangles[i].resize(3);
+            for(unsigned int j=0; j<3; j++){
+                triangles[i][j] = faces[3*i +j];
+            }
+        }
+
+        collect_one_ring (oneRing, triangles, nb_vertices);
+        compute_vertex_valences(valences, oneRing, triangles);
+
+        computeCenter();
+        computeRadius();
+
+        computeBoundingBox();
+        inflateBoundingBox();
+
+        vertices = smoothing(vertices, triangles,oneRing, nbSmoothingIteration, type_smoothing, curvature,trianglesQuality);
+
+        // computing colors as normals
+        colors.resize(nb_vertices);
+        for(unsigned int i=0;i<nb_vertices;i++) {
+            colors[i] = (normals[i]+1.0f)/2.0f;
+        }
+
+        computeUVCoord();
+        computeTangents();
 }
 
 
@@ -852,13 +881,22 @@ void Mesh::drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::
 }
 
 
+
+
 // modifie "vertices" et "faces"
 // simplification du maillage
-void Mesh::simplify(unsigned int resol){
+void Mesh::simplify(){
+
+    unsigned int resol = resolution;
 
     if(resol <= 1){
         return;
     }
+
+    // pour avoir les bonnes normales même après modification
+    computeNormals();
+
+    printf("Après compute normales\n", );
 
     glm::vec3 minGrid = getMin();
     glm::vec3 maxGrid = getMax();
@@ -872,8 +910,8 @@ void Mesh::simplify(unsigned int resol){
 
     std::vector<std::vector<std::vector<std::vector<unsigned int>>>> listOfCell;
 
-    for(unsigned int i=0; i<vertices.size(); i++){
-        std::vector<int> cell = indexOffCell(minGrid, offset, vertices[i]);
+    for(unsigned int i=0; i<backupVertices.size(); i++){
+        std::vector<int> cell = indexOffCell(minGrid, offset, backupVertices[i]);
         assert(cell.size() == 3 && cell[0] >= 0 && cell[1] >= 0 && cell[2] >= 0 && cell[0] <= resol && cell[1] <= resol && cell[2] <= resol);
 
         // on ajout le sommet a la cellule correspondante
@@ -900,7 +938,7 @@ void Mesh::simplify(unsigned int resol){
                 // pour chaque element dans la cellule
                 for(unsigned int n = 0; n<nbElt; n++){
                     int index = listOfCell[i][j][k][n];
-                    pos += vertices[index];
+                    pos += backupVertices[index];
                     normal += normals[index];
                 }
                 pos /= (float)nbElt;
@@ -917,7 +955,7 @@ void Mesh::simplify(unsigned int resol){
 
     /// SUPRESSION DES TRIANGLES ////
 
-    std::vector<unsigned int> newTriangles;
+    /*std::vector<unsigned int> newTriangles;
     glm::vec3 v1, v2, v3;
     std::vector<int> cell1,cell2,cell3;
 
@@ -928,8 +966,35 @@ void Mesh::simplify(unsigned int resol){
         cell1 = indexOffCell(minGrid, offset, v1);
         cell2 = indexOffCell(minGrid, offset, v2);
         cell3 = indexOffCell(minGrid, offset, v3);
+
+        if(cell1 != cell2 && cell2 != cell3 && cell1 != cell3){ // si ce n'est pas la même cellule
+            newTriangles.push_back(newIndex[cell1[0]][cell1[1]][cell1[2]]);
+            newTriangles.push_back(newIndex[cell2[0]][cell2[1]][cell2[2]]);
+            newTriangles.push_back(newIndex[cell3[0]][cell3[1]][cell3[2]]);
+        }
     }
 
+    /// CREATION DU NOUVEAU TABLEAU DE SOMMETS
+
+    std::vector<glm::vec3> newVertices;
+    std::vector<glm::vec3> newNormals;
+    newVertices.resize(resol*resol*resol);
+    unsigned int ind = 0;
+    for(unsigned int i=0; i<resol; i++){
+        for(unsigned int j=0; j<resol; j++){
+            for(unsigned int k=0; k<resol; k++){
+                newVertices[ind] = correspondingPoints[i][j][k][0];
+                newNormals[ind] = correspondingPoints[i][j][k][1];
+            }
+        }
+    }
+
+    vertices = newVertices;
+    normals = newNormals;
+    faces = newTriangles;
+
+    computeAllInfoWithoutNormals();
+*/
 
 }
 
