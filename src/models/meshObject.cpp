@@ -78,6 +78,23 @@ void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
     glBindVertexArray(0);
 
     glUseProgram(0);
+
+    Shader *shader = new Shader();
+    shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
+
+    glUseProgram(shader->id());
+
+
+    glm::mat4 modelMat = transform->getModelMat();
+
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    drawBoundingBox();
+
+    glUseProgram(0);
+
 }
 
 void MeshObject::createVAO(){
@@ -116,7 +133,7 @@ void MeshObject::deleteVAO(){
 
 void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
-    glm::mat4 modelMat = transform->getMat4();
+    glm::mat4 modelMat = transform->getModelMat();
 
 
     // send the transformation matrix
@@ -145,42 +162,51 @@ void MeshObject::createUI(char *ID){
 }
 
 void MeshObject::drawBoundingBox(){
-    const float myVar = 0;
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+
+    glm::vec3 min = mesh->getMin();
+    glm::vec3 max = mesh->getMax();
 
     glBegin(GL_QUADS);
 
+    // front face
+    glVertex3f(min.x,max.y,max.z);
+    glVertex3f(max.x,max.y,max.z);
+    glVertex3f(max.x,min.y,max.z);
+    glVertex3f(min.x,min.y,max.z);
 
-    glVertex3f(myVar,myVar,myVar);
-    glVertex3f(-myVar,myVar,myVar);
-    glVertex3f(-myVar,-myVar,myVar);
-    glVertex3f(myVar,-myVar,myVar);
+    // back face
+    glVertex3f(max.x,max.y,min.z);
+    glVertex3f(min.x,max.y,min.z);
+    glVertex3f(min.x,min.y,min.z);
+    glVertex3f(max.x,min.y,min.z);
 
-    glVertex3f(myVar,myVar,-myVar);
-    glVertex3f(-myVar,myVar,-myVar);
-    glVertex3f(-myVar,-myVar,-myVar);
-    glVertex3f(myVar,-myVar,-myVar);
+    // left face
+    glVertex3f(min.x,max.y,min.z);
+    glVertex3f(min.x,min.y,max.z);
+    glVertex3f(min.x,min.y,max.z);
+    glVertex3f(min.x,min.y,min.z);
 
-    glVertex3f(myVar,myVar,myVar);
-    glVertex3f(myVar,-myVar,myVar);
-    glVertex3f(myVar,-myVar,-myVar);
-    glVertex3f(myVar,myVar,-myVar);
+    // right face
+    glVertex3f(max.x,max.y,max.z);
+    glVertex3f(max.x,max.y,min.z);
+    glVertex3f(max.x,min.y,min.z);
+    glVertex3f(max.x,min.y,max.z);
 
-    glVertex3f(-myVar,myVar,myVar);
-    glVertex3f(-myVar,-myVar,myVar);
-    glVertex3f(-myVar,-myVar,-myVar);
-    glVertex3f(-myVar,myVar,-myVar);
+    // bottom face
+    glVertex3f(min.x,min.y,max.z);
+    glVertex3f(max.x,min.y,max.z);
+    glVertex3f(max.x,min.y,min.z);
+    glVertex3f(min.x,min.y,min.z);
 
-    glVertex3f(myVar,myVar,myVar);
-    glVertex3f(-myVar,myVar,myVar);
-    glVertex3f(-myVar,myVar,-myVar);
-    glVertex3f(myVar,myVar,-myVar);
-
-    glVertex3f(myVar,-myVar,myVar);
-    glVertex3f(-myVar,-myVar,myVar);
-    glVertex3f(-myVar,-myVar,-myVar);
-    glVertex3f(myVar,-myVar,-myVar);
+    // top face
+    glVertex3f(min.x,max.y,min.z);
+    glVertex3f(max.x,max.y,min.z);
+    glVertex3f(max.x,max.y,max.z);
+    glVertex3f(min.x,max.y,max.z);
 
     glEnd();
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 }
