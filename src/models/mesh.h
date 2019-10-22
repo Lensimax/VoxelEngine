@@ -33,6 +33,11 @@ public:
 
      glm::vec3 getCenter();
 
+     glm::vec3 getMin();
+     glm::vec3 getMax();
+
+
+
 
      // length
 
@@ -47,6 +52,9 @@ public:
 
      unsigned int  nb_vertices;
      unsigned int  nb_faces;
+
+     float maxX, maxY, maxZ;
+     float minX, minY, minZ;
 
      // data
      std::vector<glm::vec3> vertices;
@@ -78,6 +86,8 @@ public:
      void computeRadius();
      void computeUVCoord();
      void computeColor();
+     void computeBoundingBox();
+     void inflateBoundingBox();
 
      void computeAllInfo();
 
@@ -101,7 +111,7 @@ public:
      const char uniformSmoothingString[1024] = "Uniform";
      const char laplaceSmoothingString[1024] = "Bel Trami";
 
-     
+
      char type_smoothing[1024] = "Uniform";
     bool smoothNormals = false;
 
@@ -113,7 +123,7 @@ public:
 
 
      std::vector<glm::vec3> smoothing(const std::vector<glm::vec3> & meshvertices, const std::vector<std::vector<unsigned int> > & triangles,
-        std::vector<std::vector<unsigned int> > one_ring, unsigned int iterations, char type_smooth[], 
+        std::vector<std::vector<unsigned int> > one_ring, unsigned int iterations, char type_smooth[],
         std::vector<glm::vec3> & meshcurvature,std::vector<float> & qualityVertex);
 
      std::vector<glm::vec3> calc_mean_curvature (const std::vector<glm::vec3> & vertices, const std::vector<std::vector<unsigned int>> & triangles, std::vector<std::vector<unsigned int>> one_ring);

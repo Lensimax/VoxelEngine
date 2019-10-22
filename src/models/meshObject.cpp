@@ -143,3 +143,44 @@ void MeshObject::createUI(char *ID){
 
     ImGui::EndChild();
 }
+
+void MeshObject::drawBoundingBox(){
+    const float myVar = 0;
+    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+
+    glBegin(GL_QUADS);
+
+
+    glVertex3f(myVar,myVar,myVar);
+    glVertex3f(-myVar,myVar,myVar);
+    glVertex3f(-myVar,-myVar,myVar);
+    glVertex3f(myVar,-myVar,myVar);
+
+    glVertex3f(myVar,myVar,-myVar);
+    glVertex3f(-myVar,myVar,-myVar);
+    glVertex3f(-myVar,-myVar,-myVar);
+    glVertex3f(myVar,-myVar,-myVar);
+
+    glVertex3f(myVar,myVar,myVar);
+    glVertex3f(myVar,-myVar,myVar);
+    glVertex3f(myVar,-myVar,-myVar);
+    glVertex3f(myVar,myVar,-myVar);
+
+    glVertex3f(-myVar,myVar,myVar);
+    glVertex3f(-myVar,-myVar,myVar);
+    glVertex3f(-myVar,-myVar,-myVar);
+    glVertex3f(-myVar,myVar,-myVar);
+
+    glVertex3f(myVar,myVar,myVar);
+    glVertex3f(-myVar,myVar,myVar);
+    glVertex3f(-myVar,myVar,-myVar);
+    glVertex3f(myVar,myVar,-myVar);
+
+    glVertex3f(myVar,-myVar,myVar);
+    glVertex3f(-myVar,-myVar,myVar);
+    glVertex3f(-myVar,-myVar,-myVar);
+    glVertex3f(myVar,-myVar,-myVar);
+
+    glEnd();
+
+}

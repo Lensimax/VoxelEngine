@@ -12,6 +12,7 @@ class MeshLoader : public Mesh {
 
         void recreate() override;
         void createUI() override;
+
     private:
 
         void cleanup();

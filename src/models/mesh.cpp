@@ -14,6 +14,8 @@ void Mesh::initialize(){
     smoothNormals = false;
     nbSmoothingIteration = 0;
     sprintf(type_smoothing, "%s",uniformSmoothingString);
+    maxX = 0; maxY = 0; maxZ = 0;
+    minX = 0; minY = 0; minZ = 0;
 }
 
 
@@ -140,17 +142,20 @@ void Mesh::computeAllInfo(){
     collect_one_ring (oneRing, triangles, nb_vertices);
     compute_vertex_valences(valences, oneRing, triangles);
 
+    computeCenter();
+    computeRadius();
+
+    computeBoundingBox();
+    inflateBoundingBox();
+
 
     vertices = smoothing(vertices, triangles,oneRing, nbSmoothingIteration, type_smoothing, curvature,trianglesQuality);
 
-    computeCenter();
 
 
-    // computing radius
-    computeRadius();
+
 
     computeNormals();
-
 
     // computing colors as normals
     colors.resize(nb_vertices);
@@ -164,6 +169,7 @@ void Mesh::computeAllInfo(){
     computeTangents();
 
 
+
 }
 
 
@@ -174,7 +180,7 @@ void Mesh::createUI(){
     ImGui::Checkbox("smoothNormal",&smoothNormals);
 
 
-    ImGui::Text("Smoothing vertices");
+    /*ImGui::Text("Smoothing vertices");
     ImGui::Separator();
     char items[2][1024];
     sprintf(items[0], "%s", uniformSmoothingString);
@@ -192,7 +198,8 @@ void Mesh::createUI(){
         }
         ImGui::EndCombo();
     }
-    ImGui::InputInt("number of iterations", &nbSmoothingIteration, 1, 100);
+
+    ImGui::InputInt("number of iterations", &nbSmoothingIteration, 1, 100);*/
 
 
     ImGui::Separator();
@@ -233,8 +240,16 @@ void Mesh::createUI(){
         ImGui::Columns(1);
         ImGui::Separator();
         ImGui::TreePop();
-
     }
+
+    ImGui::Text("Bounding Box");
+    ImGui::Text("min: %f, %f, %f", minX, minY, minZ);
+    ImGui::Text("max: %f, %f, %f", maxX, maxY, maxZ);
+
+
+    ImGui::Text("center: %f, %f, %f", center.x, center.y,center.z);
+    ImGui::Text("radius: %f", radius);
+
 }
 
 
@@ -582,7 +597,7 @@ std::vector<glm::vec3> Mesh::calc_mean_curvature (const std::vector<glm::vec3> &
 
 // applique le smoothing un nombre "itération" fois
 std::vector<glm::vec3> Mesh::smoothing(const std::vector<glm::vec3> & meshvertices, const std::vector<std::vector<unsigned int> > & triangles,
-        std::vector<std::vector<unsigned int> > one_ring, unsigned int iterations, char type_smooth[], 
+        std::vector<std::vector<unsigned int> > one_ring, unsigned int iterations, char type_smooth[],
         std::vector<glm::vec3> & meshcurvature,std::vector<float> & qualityVertex){
 
     std::vector<glm::vec3> changedVertices = meshvertices;
@@ -709,4 +724,51 @@ void Mesh::computeColor(){
     for(unsigned int i=0; i<nb_vertices; i++){
         colors[i] = glm::vec3(1,0,0);
     }
+}
+
+
+////// COMPUTE BOUNDING BOX /////
+
+void Mesh::computeBoundingBox(){
+    assert(vertices.size() > 0);
+
+    maxX = vertices[0].x; maxY = vertices[0].y; maxZ = vertices[0].z;
+    minX = vertices[0].x; minY = vertices[0].y; minZ = vertices[0].z;
+
+    for(unsigned int i=0; i<vertices.size(); i++){
+        if(vertices[i].x > maxX){
+            maxX = vertices[i].x;
+        } else if(vertices[i].x < minX){
+            minX = vertices[i].x;
+        }
+        if(vertices[i].y > maxY){
+            maxY = vertices[i].y;
+        } else if(vertices[i].y < minY){
+            minY = vertices[i].y;
+        }
+        if(vertices[i].z > maxZ){
+            maxZ = vertices[i].z;
+        } else if(vertices[i].z < minZ){
+            minZ = vertices[i].z;
+        }
+    }
+
+
+
+}
+
+void Mesh::inflateBoundingBox(){
+    const float percent = 0.1f;
+    maxX += percent*radius; maxY += percent*radius; maxZ += percent*radius;
+    minX -= percent*radius; minY -= percent*radius; minZ -= percent*radius;
+}
+
+
+glm::vec3 Mesh::getMin(){
+    return glm::vec3(minX, minY, minZ);
+}
+
+
+glm::vec3 Mesh::getMax(){
+    return glm::vec3(maxX, maxY, maxZ);
 }

@@ -48,7 +48,7 @@ class MeshObject : public DrawableObject {
 
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
 
-
+        void drawBoundingBox();
 
         std::vector<float> vertices;
         std::vector<int> triangles;
