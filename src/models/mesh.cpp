@@ -822,7 +822,6 @@ void Mesh::drawDebug(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projection
     if(resolution <= 1){
         drawGridForSimplification(minGrid, maxGrid,modelMat, viewMat, projectionMat);
     } else {
-
         glm::vec3 offset;
         offset.x = (maxGrid.x - minGrid.x)/(float)resolution;
         offset.y = (maxGrid.y - minGrid.y)/(float)resolution;
@@ -897,9 +896,8 @@ void Mesh::drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::
 // simplification du maillage
 void Mesh::simplify(){
 
-    unsigned int resol = resolution;
 
-    if(resol <= 1){
+    if(resolution <= 1){
         return;
     }
 
@@ -910,18 +908,18 @@ void Mesh::simplify(){
     glm::vec3 maxGrid = getMax();
 
     glm::vec3 offset;
-    offset.x = (maxGrid.x - minGrid.x)/(float)resol;
-    offset.y = (maxGrid.y - minGrid.y)/(float)resol;
-    offset.z = ((maxGrid.z - minGrid.z)/(float)resol);
+    offset.x = (maxGrid.x - minGrid.x)/(float)resolution;
+    offset.y = (maxGrid.y - minGrid.y)/(float)resolution;
+    offset.z = ((maxGrid.z - minGrid.z)/(float)resolution);
 
     // calcul des sommets dans les ceullues
 
-    std::vector<unsigned int>  listOfCell[resol][resol][resol];
+    std::vector<unsigned int>  listOfCell[resolution][resolution][resolution];
     // std::vector<std::vector<std::vector<std::vector<unsigned int>>>> listOfCell;
 
     for(unsigned int i=0; i<backupVertices.size(); i++){
         std::vector<int> cell = indexOffCell(minGrid, offset, backupVertices[i]);
-        assert(cell.size() == 3 && cell[0] >= 0 && cell[1] >= 0 && cell[2] >= 0 && cell[0] <= resol && cell[1] <= resol && cell[2] <= resol);
+        assert(cell.size() == 3 && cell[0] >= 0 && cell[1] >= 0 && cell[2] >= 0 && cell[0] <= resolution && cell[1] <= resolution && cell[2] <= resolution);
 
         // on ajout le sommet a la cellule correspondante
         listOfCell[cell[0]][cell[1]][cell[2]].push_back(i);
@@ -929,19 +927,28 @@ void Mesh::simplify(){
     }
 
 
-    printf("avec calcul correspondant\n");
+    printf("après calcul correspondant\n");
 
     ///// calcul du représentant///////
 
-    glm::vec3 correspondingPoints[resol][resol][resol][2];
-    unsigned int newIndex[resol][resol][resol];
+    std::vector<std::vector<std::vector<std::vector<glm::vec3>>>> correspondingPoints;
+    std::vector<std::vector<std::vector<unsigned int>>> newIndex;
+
+    correspondingPoints.resize(resolution); newIndex.resize(resolution);
+
+    printf("après alocation\n");
 
     unsigned int newI = 0;
 
     // pour chaque cellule
-    for(unsigned int i=0; i<resol; i++){
-        for(unsigned int j=0; j<resol; j++){
-            for(unsigned int k=0; k<resol; k++){
+    for(unsigned int i=0; i<resolution; i++){
+        correspondingPoints[i].resize(resolution); newIndex[i].resize(resolution);
+        for(unsigned int j=0; j<resolution; j++){
+            correspondingPoints[i][j].resize(resolution); newIndex[i][j].resize(resolution);
+            for(unsigned int k=0; k<resolution; k++){
+                correspondingPoints[i][j][k].resize(2);
+
+                printf("size at %u, %u, %u : %u\n", i,j,k, listOfCell[i][j][k].size());
 
                 // premier element : position ; deuxième : normale
                 glm::vec3 pos = glm::vec3(0);
@@ -991,16 +998,18 @@ void Mesh::simplify(){
 
     /// CREATION DU NOUVEAU TABLEAU DE SOMMETS
 
-    std::vector<glm::vec3> newVertices;
-    std::vector<glm::vec3> newNormals;
-    newVertices.resize(resol*resol*resol);
-    newNormals.resize(resol*resol*resol);
+    std::vector<glm::vec3> newVertices = std::vector<glm::vec3>();
+    std::vector<glm::vec3> newNormals = std::vector<glm::vec3>();
+    newNormals.resize(resolution*resolution*resolution);
     unsigned int ind = 0;
-    for(unsigned int i=0; i<resol; i++){
-        for(unsigned int j=0; j<resol; j++){
-            for(unsigned int k=0; k<resol; k++){
-                newVertices[ind] = correspondingPoints[i][j][k][0];
-                newNormals[ind] = correspondingPoints[i][j][k][1];
+    for(unsigned int i=0; i<resolution; i++){
+        for(unsigned int j=0; j<resolution; j++){
+            for(unsigned int k=0; k<resolution; k++){
+                if(listOfCell[i][j][k].size() != 0){
+                    newVertices.push_back(correspondingPoints[i][j][k][0]);
+                    newNormals.push_back(correspondingPoints[i][j][k][1]);
+                    ind++;
+                }
             }
         }
     }
@@ -1011,7 +1020,7 @@ void Mesh::simplify(){
     printf("size face %d\n", faces.size());
     printf("size vertices %d\n", vertices.size());
 
-    nb_faces = faces.size();
+    nb_faces = faces.size()/3;
     nb_vertices = vertices.size();
 
     computeAllInfoWithoutNormals();
