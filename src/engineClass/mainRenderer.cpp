@@ -56,12 +56,15 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         l = new DirectionnalLight();
     }
 
-
+    if(wireActived){
+        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    }
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         if(DrawableObject* o = dynamic_cast<DrawableObject*>(scene->objectsEngine[i])) { // safe cast
             o->draw(c->getView(), c->getProj(), l);
         }
     }
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 
 
@@ -142,11 +145,6 @@ void MainRenderer::initializeGL(){
 }
 
 void MainRenderer::toggleWire(){
-    if(wireActived){
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    } else {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
     wireActived = !wireActived;
 }
 
