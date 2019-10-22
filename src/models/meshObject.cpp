@@ -46,7 +46,7 @@ MeshObject::MeshObject(std::string n, char *filename, Transform *t, Material *m)
 
     name = n;
 
-    showboundingbox = true;
+    showboundingbox = false;
 
 }
 
@@ -80,6 +80,8 @@ void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
     glBindVertexArray(0);
 
     glUseProgram(0);
+
+    mesh->drawDebug(transform->getModelMat(),viewMat, projectionMat);
 
     if(showboundingbox){
         drawBoxWithMatricess(mesh->getMin(), mesh->getMax(), viewMat, projectionMat);

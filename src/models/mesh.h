@@ -37,6 +37,9 @@ public:
      glm::vec3 getMax();
 
 
+      // DEBUG
+      void drawDebug(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
+      void drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
 
 
      // length
@@ -92,6 +95,7 @@ public:
      void computeAllInfo();
 
 
+
      /// COMPUTE VALENCE + ONE RING
 
      int maxValue(std::vector<int> vec);
@@ -133,6 +137,11 @@ public:
      float calc_triangle_quality(const std::vector<glm::vec3> & vertices, std::vector<unsigned int> triangles);
      float max3v(float a, float b, float c);
      float cot(float theta);
+
+
+     /// SIMPLIFICATION /////
+     int resolution = 1;
+
 };
 
 

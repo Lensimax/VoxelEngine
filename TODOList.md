@@ -1,3 +1,5 @@
+# TODOLIST
+
 * Object importer (.obj)
 * pouvoir afficher les uv, normal, position, courbure dans un fenêtre séparé
 * custom shader
@@ -14,4 +16,5 @@
 * rotator
 * customable pipeline
 * sortie de message sur une console
-* defautl imgui.ini
+* imgui.ini par défaut
+* Les objets avec un maillage doivent hériter de "MeshObject"

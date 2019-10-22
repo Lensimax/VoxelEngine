@@ -1,6 +1,7 @@
 #include <imgui.h>
 
 #include "mesh.h"
+#include "../material/shader.h"
 
 #include <math.h>
 
@@ -16,6 +17,7 @@ void Mesh::initialize(){
     sprintf(type_smoothing, "%s",uniformSmoothingString);
     maxX = 0; maxY = 0; maxZ = 0;
     minX = 0; minY = 0; minZ = 0;
+    resolution = 1;
 }
 
 
@@ -200,6 +202,12 @@ void Mesh::createUI(){
     }
 
     ImGui::InputInt("number of iterations", &nbSmoothingIteration, 1, 100);*/
+
+
+    ////// SIMPLIFICATION DE SOMMETS ///
+    ImGui::Text("vertices simplification");
+    ImGui::Text("resolution : "); ImGui::SameLine();
+    ImGui::InputInt("##resolution", &resolution, 1, 100);
 
 
     ImGui::Separator();
@@ -771,4 +779,55 @@ glm::vec3 Mesh::getMin(){
 
 glm::vec3 Mesh::getMax(){
     return glm::vec3(maxX, maxY, maxZ);
+}
+
+
+///////// SIMPLIFICATION //////////
+
+
+void Mesh::drawDebug(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
+
+    if(resolution <= 1){
+        drawGridForSimplification(getMin(), getMax(),modelMat, viewMat, projectionMat);
+    }
+
+
+}
+
+
+void Mesh::drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
+    Shader *shader = new Shader();
+    shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
+
+    glUseProgram(shader->id());
+
+
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+
+    glBegin(GL_QUADS);
+
+    // front face
+    glVertex3f(minimum.x,maximum.y,maximum.z); glVertex3f(maximum.x,maximum.y,maximum.z); glVertex3f(maximum.x,minimum.y,maximum.z); glVertex3f(minimum.x,minimum.y,maximum.z);
+    // back face
+    glVertex3f(maximum.x,maximum.y,minimum.z); glVertex3f(minimum.x,maximum.y,minimum.z); glVertex3f(minimum.x,minimum.y,minimum.z); glVertex3f(maximum.x,minimum.y,minimum.z);
+    // left face
+    glVertex3f(minimum.x,maximum.y,minimum.z); glVertex3f(minimum.x,minimum.y,maximum.z); glVertex3f(minimum.x,minimum.y,maximum.z); glVertex3f(minimum.x,minimum.y,minimum.z);
+    // right face
+    glVertex3f(maximum.x,maximum.y,maximum.z); glVertex3f(maximum.x,maximum.y,minimum.z); glVertex3f(maximum.x,minimum.y,minimum.z); glVertex3f(maximum.x,minimum.y,maximum.z);
+    // bottom face
+    glVertex3f(minimum.x,minimum.y,maximum.z); glVertex3f(maximum.x,minimum.y,maximum.z); glVertex3f(maximum.x,minimum.y,minimum.z); glVertex3f(minimum.x,minimum.y,minimum.z);
+    // top face
+    glVertex3f(minimum.x,maximum.y,minimum.z); glVertex3f(maximum.x,maximum.y,minimum.z); glVertex3f(maximum.x,maximum.y,maximum.z); glVertex3f(minimum.x,maximum.y,maximum.z);
+
+    glEnd();
+
+    glUseProgram(0);
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+
 }
