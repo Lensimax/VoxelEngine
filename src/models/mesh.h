@@ -141,6 +141,10 @@ public:
 
      /// SIMPLIFICATION /////
      int resolution = 1;
+     void simplify(unsigned int resol);
+
+     // renvoie dans quelle cellule le sommet se trouve
+     std::vector<int> indexOffCell(glm::vec3 start, glm::vec3 offset, glm::vec3 vertex);
 
 };
 

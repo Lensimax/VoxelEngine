@@ -849,6 +849,101 @@ void Mesh::drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::
     glUseProgram(0);
 
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+}
 
 
+// modifie "vertices" et "faces"
+// simplification du maillage
+void Mesh::simplify(unsigned int resol){
+
+    if(resol <= 1){
+        return;
+    }
+
+    glm::vec3 minGrid = getMin();
+    glm::vec3 maxGrid = getMax();
+
+    glm::vec3 offset;
+    offset.x = (maxGrid.x - minGrid.x)/(float)resol;
+    offset.y = (maxGrid.y - minGrid.y)/(float)resol;
+    offset.z = ((maxGrid.z - minGrid.z)/(float)resol);
+
+    // calcul des sommets dans les ceullues
+
+    std::vector<std::vector<std::vector<std::vector<unsigned int>>>> listOfCell;
+
+    for(unsigned int i=0; i<vertices.size(); i++){
+        std::vector<int> cell = indexOffCell(minGrid, offset, vertices[i]);
+        assert(cell.size() == 3 && cell[0] >= 0 && cell[1] >= 0 && cell[2] >= 0 && cell[0] <= resol && cell[1] <= resol && cell[2] <= resol);
+
+        // on ajout le sommet a la cellule correspondante
+        listOfCell[cell[0]][cell[1]][cell[2]].push_back(i);
+    }
+
+    ///// calcul du représentant///////
+
+    glm::vec3 correspondingPoints[resol][resol][resol][2];
+    unsigned int newIndex[resol][resol][resol];
+
+    unsigned int newI = 0;
+
+    // pour chaque cellule
+    for(unsigned int i=0; i<resol; i++){
+        for(unsigned int j=0; j<resol; j++){
+            for(unsigned int k=0; k<resol; k++){
+
+                // premier element : position ; deuxième : normale
+                glm::vec3 pos = glm::vec3(0);
+                glm::vec3 normal = glm::vec3(0);
+                unsigned int nbElt = listOfCell[i][j][k].size();
+
+                // pour chaque element dans la cellule
+                for(unsigned int n = 0; n<nbElt; n++){
+                    int index = listOfCell[i][j][k][n];
+                    pos += vertices[index];
+                    normal += normals[index];
+                }
+                pos /= (float)nbElt;
+                normal /= (float)nbElt;
+                normal = glm::normalize(normal);
+                correspondingPoints[i][j][k][0] = pos;
+                correspondingPoints[i][j][k][1] = normal;
+
+                newIndex[i][j][k] = newI;
+                newI++;
+            }
+        }
+    }
+
+    /// SUPRESSION DES TRIANGLES ////
+
+    std::vector<unsigned int> newTriangles;
+    glm::vec3 v1, v2, v3;
+    std::vector<int> cell1,cell2,cell3;
+
+    for(unsigned int i=0; i<faces.size(); i+=3){ // pour chaque triangle
+
+        v1 = vertices[faces[i]]; v2 = vertices[faces[i+1]]; v3 = vertices[faces[i+2]];
+
+        cell1 = indexOffCell(minGrid, offset, v1);
+        cell2 = indexOffCell(minGrid, offset, v2);
+        cell3 = indexOffCell(minGrid, offset, v3);
+    }
+
+
+}
+
+
+// renvoie dans quelle cellule le sommet se trouve
+std::vector<int> Mesh::indexOffCell(glm::vec3 start, glm::vec3 offset, glm::vec3 vertex){
+    std::vector<int> indexCell;
+    indexCell.resize(3);
+
+    glm::vec3 distanceFromStart = vertex - start;
+
+    indexCell[0] = distanceFromStart.x / offset.x;
+    indexCell[1] = distanceFromStart.y / offset.y;
+    indexCell[2] = distanceFromStart.z / offset.z;
+
+    return indexCell;
 }
