@@ -907,8 +907,7 @@ std::vector<int> indexToCell(int resolution, int index){
 // simplification du maillage
 void Mesh::simplify(){
 
-
-    if(resolution <= 1){
+    if(resolution < 1){
         return;
     }
 
@@ -929,22 +928,102 @@ void Mesh::simplify(){
     std::vector<std::vector<glm::vec3>> listOfCell;
     listOfCell.resize(resolution*resolution*resolution);
 
-    for(unsigned int i=0; i<vertices.size(); i++){
-        cell1 = indexOffCell(minGrid, offset, vertices[i]);
+    for(unsigned int i=0; i<backupVertices.size(); i++){
+        cell1 = indexOffCell(minGrid, offset, backupVertices[i]);
         int index = cellToIndex(resolution, cell1[0], cell1[1], cell1[2]);
+        assert(index < resolution*resolution*resolution);
         if(listOfCell[index].empty()){
             listOfCell[index] = std::vector<glm::vec3>();
         }
-        std::vector<glm::vec3> v;
-        v.resize(3);
-        v[0] = vertices[i];
-        v[1] = normals[i];
-        v[2] = glm::vec3(cell1[0], cell1[1], cell1[2]);
+        listOfCell[index].push_back(backupVertices[i]);
+        listOfCell[index].push_back(normals[i]);
+        listOfCell[index].push_back(glm::vec3(cell1[0], cell1[1], cell1[2]));
+    }
+
+    // debug
+    /*for(unsigned int i=0; i<listOfCell.size(); i++){
+        if(!listOfCell[i].empty()){
+            printf("cell : %i\n", i);
+            for(unsigned int j=0; j<listOfCell[i].size(); j+=3){
+                printf("pos : %f, %f, %f normal : %f, %f, %f\n", listOfCell[i][j].x, listOfCell[i][j].y ,listOfCell[i][j].z, listOfCell[i][j+1].x, listOfCell[i][j+1].y, listOfCell[i][j+1].z);
+            }
+            printf("\n\n\n");
+        }
+    }*/
+
+
+    // calcul moyenne
+    unsigned int newIndex = 0;
+    for(unsigned int i=0; i<listOfCell.size(); i++){
+        if(!listOfCell[i].empty()){
+            glm::vec3 pos = glm::vec3(0);
+            glm::vec3 norm = glm::vec3(0);
+
+            for(unsigned int j=0; j<listOfCell[i].size(); j+=3){
+                pos += listOfCell[i][j];
+                norm += listOfCell[i][j+1];
+            }
+
+            pos /= listOfCell[i].size()/3;
+            norm /= listOfCell[i].size()/3;
+            norm = glm::normalize(norm);
+            listOfCell[i] = std::vector<glm::vec3>();
+            listOfCell[i].push_back(pos);
+            listOfCell[i].push_back(norm);
+            listOfCell[i].push_back(glm::vec3((float)newIndex));
+
+            newIndex++;
+        }
     }
 
 
+    /// SUPPRESSION DES TRIANGLES ////
 
+    std::vector<unsigned int> newTriangles = std::vector<unsigned int>();
 
+    unsigned int i1, i2, i3;
+    for(unsigned int i=0; i<backupFaces.size(); i+=3){ // pour chaque triangles
+        cell1 = indexOffCell(minGrid, offset, backupVertices[backupFaces[i]]);
+        cell2 = indexOffCell(minGrid, offset, backupVertices[backupFaces[i+1]]);
+        cell3 = indexOffCell(minGrid, offset, backupVertices[backupFaces[i+2]]);
+
+        if(cell1 == cell2 || cell2 == cell3 || cell3 == cell1){
+            // le triangle est supprimé
+        } else {
+            /// pas très propre
+            assert(listOfCell[cellToIndex(resolution, cell1[0], cell1[1], cell1[2])].size() == 3);
+            i1 = (unsigned int)listOfCell[cellToIndex(resolution, cell1[0], cell1[1], cell1[2])][2].x;
+            assert(listOfCell[cellToIndex(resolution, cell2[0], cell2[1], cell2[2])].size() == 3);
+            i2 = (unsigned int)listOfCell[cellToIndex(resolution, cell2[0], cell2[1], cell2[2])][2].x;
+            assert(listOfCell[cellToIndex(resolution, cell3[0], cell3[1], cell3[2])].size() == 3);
+            i3 = (unsigned int)listOfCell[cellToIndex(resolution, cell3[0], cell3[1], cell3[2])][2].x;
+            newTriangles.push_back(i1);
+            newTriangles.push_back(i2);
+            newTriangles.push_back(i3);
+        }
+    }
+
+    // creation des tableau de postion et normales des sommets
+    std::vector<glm::vec3> newVertices = std::vector<glm::vec3>();
+    std::vector<glm::vec3> newNormals = std::vector<glm::vec3>();
+
+    for(unsigned int i=0; i<listOfCell.size(); i++){
+        if(!listOfCell[i].empty()){
+            assert(listOfCell[i].size() == 3);
+            newVertices.push_back(listOfCell[i][0]);
+            newNormals.push_back(listOfCell[i][1]);
+        }
+    }
+
+    vertices = newVertices;
+    normals = newNormals;
+    faces = newTriangles;
+
+    nb_vertices = vertices.size();
+    nb_faces = faces.size()/3;
+
+    computeAllInfoWithoutNormals();
+/*
     for(unsigned int i=0; i<faces.size(); i+=3){ // pour chaque triangles
         cell1 = indexOffCell(minGrid, offset, vertices[faces[i]]);
         cell2 = indexOffCell(minGrid, offset, vertices[faces[i+1]]);
@@ -952,7 +1031,7 @@ void Mesh::simplify(){
 
 
     }
-
+*/
 
 }
 
