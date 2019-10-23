@@ -26,6 +26,8 @@ void MeshLoader::recreate(){
         cleanup();
         vertices = backupVertices;
         faces = backupFaces;
+        nb_vertices = backupVertices.size();
+        nb_faces = backupFaces.size()/3;
     } else {
         if(fopen(currentFilename,"r") == NULL) {
             return;
@@ -35,13 +37,13 @@ void MeshLoader::recreate(){
         sprintf(backupFilename, "%s", currentFilename);
         backupVertices = vertices;
         backupFaces = faces;
-        // nb_vertices;
-        // nb_faces;
+        nb_vertices = backupVertices.size();
+        nb_faces = backupFaces.size()/3;
     }
 
     computeAllInfo();
-    
-    
+
+
 }
 
 

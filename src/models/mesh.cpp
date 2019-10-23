@@ -192,7 +192,7 @@ void Mesh::computeAllInfoWithoutNormals(){
         computeBoundingBox();
         inflateBoundingBox();
 
-        vertices = smoothing(vertices, triangles,oneRing, nbSmoothingIteration, type_smoothing, curvature,trianglesQuality);
+        // vertices = smoothing(vertices, triangles,oneRing, nbSmoothingIteration, type_smoothing, curvature,trianglesQuality);
 
         // computing colors as normals
         colors.resize(nb_vertices);
@@ -911,8 +911,11 @@ void Mesh::simplify(){
         return;
     }
 
+    computeBoundingBox();
+    inflateBoundingBox();
+
     // pour avoir les bonnes normales même après modification
-    computeNormals();
+    // computeNormals();
 
     glm::vec3 minGrid = getMin();
     glm::vec3 maxGrid = getMax();
