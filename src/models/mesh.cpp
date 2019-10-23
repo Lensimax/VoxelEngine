@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include <iostream>
+#include <unordered_map>
 
 #ifndef M_PI
 #define M_PI 3.1415926
@@ -890,7 +891,17 @@ void Mesh::drawGridForSimplification(glm::vec3 minimum, glm::vec3 maximum, glm::
 }
 
 
+// calcul le numero de la cellule en fonction de la resolution
+int cellToIndex(int resolution, int i, int j, int k){
+    return i + j*resolution + k*resolution*resolution;
+}
 
+std::vector<int> indexToCell(int resolution, int index){
+    std::vector<int> v;
+    v.resize(3);
+
+
+}
 
 // modifie "vertices" et "faces"
 // simplification du maillage
@@ -912,118 +923,35 @@ void Mesh::simplify(){
     offset.y = (maxGrid.y - minGrid.y)/(float)resolution;
     offset.z = ((maxGrid.z - minGrid.z)/(float)resolution);
 
-    // calcul des sommets dans les ceullues
+    std::vector<int> cell1, cell2, cell3;
 
-    std::vector<unsigned int>  listOfCell[resolution][resolution][resolution];
-    // std::vector<std::vector<std::vector<std::vector<unsigned int>>>> listOfCell;
+    // calcul du correspondant
+    std::vector<std::vector<glm::vec3>> listOfCell;
+    listOfCell.resize(resolution*resolution*resolution);
 
-    for(unsigned int i=0; i<backupVertices.size(); i++){
-        std::vector<int> cell = indexOffCell(minGrid, offset, backupVertices[i]);
-        assert(cell.size() == 3 && cell[0] >= 0 && cell[1] >= 0 && cell[2] >= 0 && cell[0] <= resolution && cell[1] <= resolution && cell[2] <= resolution);
-
-        // on ajout le sommet a la cellule correspondante
-        listOfCell[cell[0]][cell[1]][cell[2]].push_back(i);
-        printf("i : %i cell: %i %i %i\n", cell[0],cell[1],cell[2]);
-    }
-
-
-    printf("après calcul correspondant\n");
-
-    ///// calcul du représentant///////
-
-    std::vector<std::vector<std::vector<std::vector<glm::vec3>>>> correspondingPoints;
-    std::vector<std::vector<std::vector<unsigned int>>> newIndex;
-
-    correspondingPoints.resize(resolution); newIndex.resize(resolution);
-
-    printf("après alocation\n");
-
-    unsigned int newI = 0;
-
-    // pour chaque cellule
-    for(unsigned int i=0; i<resolution; i++){
-        correspondingPoints[i].resize(resolution); newIndex[i].resize(resolution);
-        for(unsigned int j=0; j<resolution; j++){
-            correspondingPoints[i][j].resize(resolution); newIndex[i][j].resize(resolution);
-            for(unsigned int k=0; k<resolution; k++){
-                correspondingPoints[i][j][k].resize(2);
-
-                printf("size at %u, %u, %u : %u\n", i,j,k, listOfCell[i][j][k].size());
-
-                // premier element : position ; deuxième : normale
-                glm::vec3 pos = glm::vec3(0);
-                glm::vec3 normal = glm::vec3(0);
-                unsigned int nbElt = listOfCell[i][j][k].size();
-
-                // pour chaque element dans la cellule
-                for(unsigned int n = 0; n<nbElt; n++){
-                    int index = listOfCell[i][j][k][n];
-                    pos += backupVertices[index];
-                    normal += normals[index];
-                }
-                pos /= (float)nbElt;
-                normal /= (float)nbElt;
-                normal = glm::normalize(normal);
-                correspondingPoints[i][j][k][0] = pos;
-                correspondingPoints[i][j][k][1] = normal;
-
-                newIndex[i][j][k] = newI;
-                newI++;
-            }
+    for(unsigned int i=0; i<vertices.size(); i++){
+        cell1 = indexOffCell(minGrid, offset, vertices[i]);
+        int index = cellToIndex(resolution, cell1[0], cell1[1], cell1[2]);
+        if(listOfCell[index].empty()){
+            listOfCell[index] = std::vector<glm::vec3>();
         }
+        std::vector<glm::vec3> v;
+        v.resize(3);
+        v[0] = vertices[i];
+        v[1] = normals[i];
+        v[2] = glm::vec3(cell1[0], cell1[1], cell1[2]);
     }
 
-    printf("Après calcul correspondant\n");
 
-    /// SUPRESSION DES TRIANGLES ////
 
-    std::vector<unsigned int> newTriangles = std::vector<unsigned int>();
-    glm::vec3 v1, v2, v3;
-    std::vector<int> cell1,cell2,cell3;
 
-    for(unsigned int i=0; i<faces.size(); i+=3){ // pour chaque triangle
+    for(unsigned int i=0; i<faces.size(); i+=3){ // pour chaque triangles
+        cell1 = indexOffCell(minGrid, offset, vertices[faces[i]]);
+        cell2 = indexOffCell(minGrid, offset, vertices[faces[i+1]]);
+        cell3 = indexOffCell(minGrid, offset, vertices[faces[i+2]]);
 
-        v1 = vertices[faces[i]]; v2 = vertices[faces[i+1]]; v3 = vertices[faces[i+2]];
 
-        cell1 = indexOffCell(minGrid, offset, v1);
-        cell2 = indexOffCell(minGrid, offset, v2);
-        cell3 = indexOffCell(minGrid, offset, v3);
-
-        if(cell1 != cell2 && cell2 != cell3 && cell1 != cell3){ // si ce n'est pas la même cellule
-            newTriangles.push_back(newIndex[cell1[0]][cell1[1]][cell1[2]]);
-            newTriangles.push_back(newIndex[cell2[0]][cell2[1]][cell2[2]]);
-            newTriangles.push_back(newIndex[cell3[0]][cell3[1]][cell3[2]]);
-        }
     }
-
-    /// CREATION DU NOUVEAU TABLEAU DE SOMMETS
-
-    std::vector<glm::vec3> newVertices = std::vector<glm::vec3>();
-    std::vector<glm::vec3> newNormals = std::vector<glm::vec3>();
-    newNormals.resize(resolution*resolution*resolution);
-    unsigned int ind = 0;
-    for(unsigned int i=0; i<resolution; i++){
-        for(unsigned int j=0; j<resolution; j++){
-            for(unsigned int k=0; k<resolution; k++){
-                if(listOfCell[i][j][k].size() != 0){
-                    newVertices.push_back(correspondingPoints[i][j][k][0]);
-                    newNormals.push_back(correspondingPoints[i][j][k][1]);
-                    ind++;
-                }
-            }
-        }
-    }
-
-    vertices = newVertices;
-    normals = newNormals;
-    faces = newTriangles;
-    printf("size face %d\n", faces.size());
-    printf("size vertices %d\n", vertices.size());
-
-    nb_faces = faces.size()/3;
-    nb_vertices = vertices.size();
-
-    computeAllInfoWithoutNormals();
 
 
 }
