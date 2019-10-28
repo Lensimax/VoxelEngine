@@ -10,7 +10,7 @@
 class CameraProj : public Camera {
 
     public:
-        CameraProj(int id, std::string name = "Camera Projective", glm::vec3 pos = glm::vec3(0.0,0.0,5.0), glm::vec3 u = glm::vec3(0.0,1.0,0.0), glm::vec3 direction = glm::vec3(0.0,0.0,0.0), float fov = 45.f, float aspectP = 16.f/9.f, float n = 0.1f, float f = 10.f);
+        CameraProj(std::string name = "Camera Projective", glm::vec3 pos = glm::vec3(0.0,0.0,5.0), glm::vec3 u = glm::vec3(0.0,1.0,0.0), glm::vec3 direction = glm::vec3(0.0,0.0,0.0), float fov = 45.f, float aspectP = 16.f/9.f, float n = 0.1f, float f = 100.f);
 
         virtual glm::mat4 getProj();
 

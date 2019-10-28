@@ -1,6 +1,8 @@
 #ifndef UI_H
 #define UI_H
 
+#include <GLFW/glfw3.h>
+
 #include "scene.h"
 #include "mainRenderer.h"
 
@@ -18,6 +20,7 @@ public:
 
     void set(Scene *sc);
     void set(MainRenderer *main);
+    void set(GLFWwindow *win);
 
 private:
 
@@ -31,6 +34,7 @@ private:
 
     Scene *scene;
     MainRenderer *mainRenderer;
+    GLFWwindow* window;
 
 };
 

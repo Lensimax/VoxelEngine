@@ -74,7 +74,7 @@ int main(int, char**)
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1000, 600, "Green-Engine", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Green-Engine", NULL, NULL);
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
@@ -135,6 +135,7 @@ int main(int, char**)
     UI *ui = new UI();
     ui->set(scene);
     ui->set(renderer);
+    ui->set(window);
 
     InputManager *inputManager = new InputManager();
     inputManager->setUI(ui);

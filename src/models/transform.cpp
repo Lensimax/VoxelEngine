@@ -30,7 +30,7 @@ void Transform::scale(vec3 scale){
     this->vecScale = scale;
 }
 
-mat4 Transform::getMat4(){
+mat4 Transform::getModelMat(){
     mat4 model = mat4(1.0f);
     model = translate(model, vecPosition);
     // model = translate(model, center);

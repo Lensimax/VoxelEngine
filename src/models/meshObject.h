@@ -10,7 +10,6 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
-// #include "../material/material.h"
 #include "../material/lambertian.h"
 
 #include "mesh.h"
@@ -48,7 +47,7 @@ class MeshObject : public DrawableObject {
 
         void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
 
-
+        void drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 viewMat, glm::mat4 projectionMat);
 
         std::vector<float> vertices;
         std::vector<int> triangles;
@@ -58,6 +57,8 @@ class MeshObject : public DrawableObject {
         GLuint *buffers;
 
         Material *material;
+
+        bool showboundingbox;
 
         Mesh *mesh;
 

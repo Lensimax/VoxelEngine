@@ -99,7 +99,7 @@ void Plane::deleteVAO(){
 
 void Plane::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
-    glm::mat4 modelMat = transform->getMat4();
+    glm::mat4 modelMat = transform->getModelMat();
 
 
     // send the transformation matrix
