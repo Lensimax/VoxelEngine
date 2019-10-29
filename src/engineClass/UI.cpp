@@ -57,11 +57,16 @@ void UI::displayEngineNode(std::vector<EngineObject*> obj){
             ImGui::Text(obj[i]->getName().c_str());
         } else {
             bool node_open = ImGui::TreeNodeEx(strobj, node_flags);
-            if (ImGui::IsItemClicked()){
+            ImGui::SameLine();
+            // add selectable
+            bool is_selected = selectedID == id;
+            if(ImGui::Selectable(strobj, is_selected)){
                 selectedID = obj[i]->getID();
             }
             ImGui::SameLine();
             ImGui::Text(obj[i]->getName().c_str());
+
+            // if the node is open
             if(node_open){
                 displayEngineNode(obj[i]->listOfChildren);
 
