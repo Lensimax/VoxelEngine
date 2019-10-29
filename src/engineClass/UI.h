@@ -4,6 +4,8 @@
 #include "scene.h"
 #include "mainRenderer.h"
 
+#include <vector>
+
 
 class UI {
 public:
@@ -24,7 +26,7 @@ private:
     void createUISceneManager(Scene *scene);
     void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1);
     void createInfoWindow();
-    void displayEngineNode(EngineObject *obj);
+    void displayEngineNode(std::vector<EngineObject*> obj);
 
 
     bool hasToBeDisplayed;

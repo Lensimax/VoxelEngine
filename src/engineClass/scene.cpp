@@ -69,6 +69,19 @@ void Scene::createUIAtID(int indexItem, char *ID){
         if(objectsEngine[i]->getID() == indexItem){
             objectsEngine[i]->createUI(ID);
             return;
+        } else {
+            drawUIAtID(objectsEngine[i]->listOfChildren, indexItem, ID);
+        }
+    }
+}
+
+void Scene::drawUIAtID(std::vector<EngineObject*> objs, int indexItem, char *ID){
+    for(unsigned int i=0; i<objs.size(); i++){
+        if(objs[i]->getID() == indexItem){
+            objs[i]->createUI(ID);
+            return;
+        } else {
+            drawUIAtID(objs[i]->listOfChildren, indexItem, ID);
         }
     }
 }

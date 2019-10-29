@@ -7,7 +7,7 @@
 
 
 UI::UI(){
-    selectedID = -1;
+    selectedID = 0;
     hasToBeDisplayed = true;
     scene = NULL;
     mainRenderer = NULL;
@@ -36,7 +36,44 @@ void UI::createInfoWindow(){
 }
 
 
-void UI::displayEngineNode(EngineObject *obj){
+void UI::displayEngineNode(std::vector<EngineObject*> obj){
+
+    char strobj[1024]; // label object
+
+
+    for(unsigned int i=0; i<obj.size(); i++){
+        ImGuiTreeNodeFlags node_flags = 0;
+        int id = obj[i]->getID();
+
+        sprintf(strobj,"##obj %i", id); // hidden label
+
+
+        if(obj[i]->listOfChildren.size() == 0){
+            bool is_selected = selectedID == id;
+            if(ImGui::Selectable(strobj, is_selected)){
+                selectedID = obj[i]->getID();
+            }
+            ImGui::SameLine();
+            ImGui::Text(obj[i]->getName().c_str());
+        } else {
+            bool node_open = ImGui::TreeNodeEx(strobj, node_flags);
+            if (ImGui::IsItemClicked()){
+                selectedID = obj[i]->getID();
+            }
+            ImGui::SameLine();
+            ImGui::Text(obj[i]->getName().c_str());
+            if(node_open){
+                displayEngineNode(obj[i]->listOfChildren);
+
+                ImGui::TreePop();
+            }
+
+        }
+
+
+
+
+    }
 
 }
 
@@ -85,30 +122,9 @@ void UI::createUISceneManager(Scene *scene){
 
 
     // pour l'arbre de scene
-    int node_clicked;
-    char obj[1024]; // label object
+    // int node_clicked;
+    displayEngineNode(scene->objectsEngine);
 
-
-    for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        ImGuiTreeNodeFlags node_flags = 0;
-        sprintf(obj,"##obj %i", i); // hidden label
-
-        if(scene->objectsEngine[i]->listOfChildren.size() == 0){
-            node_flags = ImGuiTreeNodeFlags_NoTreePushOnOpen;
-        }
-
-        bool node_open = ImGui::TreeNodeEx(obj, node_flags);
-        if (ImGui::IsItemClicked()){
-            node_clicked = i;
-        }
-
-
-        ImGui::SameLine();
-        ImGui::Text(listOfObjects[i].c_str());
-
-    }
-
-    printf("Node clicked\n");
 
     /*const bool is_selected = (selection_mask & (1 << i)) != 0;
     if (is_selected)
