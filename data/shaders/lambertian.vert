@@ -11,7 +11,6 @@ uniform mat4 modelMat;
 uniform mat4 projMat;
 uniform mat4 viewMat;
 
-uniform mat4 lightMat4;
 uniform vec4 light;
 
 out vec4 normal;
@@ -31,7 +30,7 @@ void main() {
 	// normal = normalize(vec4(vertNormal,0.0));
 	normal = vec4(vertNormal,1.0);
 	normalView = normalize(normalMatrix*normal);
-	eyeView = normalize(mv*vec4(position,0.0));
+	eyeView = mv*vec4(position,1.0);
 
 	lightVec = light;
 }

@@ -16,7 +16,7 @@ in vec4 vertex;
 
 
 vec4 phong(vec3 l, vec3 n, vec3 e) {
-	float d = max(dot(-l,n),0.);
+	float d = max(dot(l,n),0.);
 	float s = pow(max(dot(reflect(l,n),e),0.),specularDegree);
 
 	vec4 renderedColor;

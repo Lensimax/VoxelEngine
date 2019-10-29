@@ -60,7 +60,7 @@ void UI::createUISceneManager(Scene *scene){
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")){
-            if (ImGui::MenuItem("Add MeshObject", "Ctrl+T")) { scene->addEngineObject(); }
+            if (ImGui::MenuItem("Add EngineObject", "Ctrl+T")) { scene->addEngineObject(); }
             if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { scene->addMeshObject(); }
             if (ImGui::MenuItem("Add Plane", "")) { scene->addPlane(); }
             if (ImGui::MenuItem("Add Cube", "WIP")) { /* Do stuff */ }
