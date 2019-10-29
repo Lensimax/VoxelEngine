@@ -27,10 +27,9 @@ void main() {
 
 	gl_Position = projMat*mv*vec4(position, 1.0);
 
-	// normal = normalize(vec4(vertNormal,0.0));
 	normal = vec4(vertNormal,1.0);
 	normalView = normalize(normalMatrix*normal);
-	eyeView = mv*vec4(position,1.0);
+	eyeView = (mv*vec4(position,1.0));
 
 	lightVec = light;
 }
