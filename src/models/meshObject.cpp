@@ -19,43 +19,12 @@
 
 #include "meshLoader.h"
 #include "meshObject.h"
-// #include "meshLoader.h"
-// #include "sphereMesh.h"
-// #include "cubeMesh.h"
-
-#include "meshQuad.h"
 
 #include <iostream>
 
 
 
-MeshObject::MeshObject(int id, std::string n, char *filename, Transform *t, Material *m){
-    transform = t;
 
-    mesh = new MeshLoader(filename);
-
-    // mesh = new MeshQuad();
-
-
-    glm::vec3 center = mesh->getCenter();
-    t->setCenter(center);
-
-    createVAO();
-
-    material = m;
-
-    setName(n);
-    setID(id);
-
-}
-
-
-MeshObject::~MeshObject(){
-    deleteVAO();
-    delete transform;
-    delete material;
-    delete mesh;
-}
 
 
 int MeshObject::nbVertices(){

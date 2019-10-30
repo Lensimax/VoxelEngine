@@ -5,36 +5,18 @@
 #include "../material/lambertian.h"
 
 #include "meshGrid.h"
-#include "drawableObject.h"
+#include "meshObject.h"
 
 
-class Plane : public DrawableObject {
-
+class Plane : public MeshObject {
 public:
 
     Plane(int id,std::string n = "Plane", unsigned int size = 16, float width = 1, float gridZ = 0, Transform *t = new Transform(), Material *m = new Lambertian());
     ~Plane();
 
-    virtual void createUI(char *ID);
-
-    virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
-
-    virtual int nbVertices();
-    virtual int nbTriangles();
 
 private:
-    void createVAO();
-    void deleteVAO();
 
-    void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
-
-
-    GLuint vertexArrayID;
-    GLuint *buffers;
-
-    Material *material;
-
-    Mesh *mesh;
 
 };
 

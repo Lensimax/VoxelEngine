@@ -3,7 +3,7 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../tools/cameraProj.h"
 
-#include "../models/meshObject.h"
+#include "../models/fileMeshObject.h"
 
 #include "../models/plane.h"
 
@@ -15,8 +15,8 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-    MeshObject *obj = new MeshObject(addNewId(),"Object Loaded", (char*)"../data/models/monkey.off", new Transform());
-    obj->addChild(new MeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off"));
+    FileMeshObject *obj = new FileMeshObject(addNewId(),"Object Loaded", (char*)"../data/models/monkey.off", new Transform());
+    obj->addChild(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off"));
 
 
     objectsEngine.push_back(obj);
@@ -100,7 +100,7 @@ void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & i
 
 
 void Scene::addMeshObject(){
-    objectsEngine.push_back(new MeshObject(addNewId()));
+    objectsEngine.push_back(new FileMeshObject(addNewId()));
 }
 
 void Scene::addPlane(){
@@ -112,7 +112,7 @@ void Scene::addEngineObject(){
 }
 
 void Scene::addSphere(){
-    objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", (char*)"../data/models/sphere.off"));
+    objectsEngine.push_back(new FileMeshObject(addNewId(), "Sphere", (char*)"../data/models/sphere.off"));
 }
 
 

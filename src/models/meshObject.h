@@ -23,23 +23,21 @@
 // #include "cubeMesh.h"
 
 
-const std::string defaultFilename = "../data/models/monkey.off";
 
 class MeshObject : public DrawableObject {
     public:
 
-        MeshObject(int id, std::string n = "MeshObject", char *filename = (char*)"../data/models/monkey.off",Transform *t = new Transform(), Material *m = new Lambertian());
-        ~MeshObject();
+        virtual ~MeshObject() = default;;
 
 
         /*virtual float *getVertices();
         virtual unsigned int *getTriangles();*/
-        virtual int nbVertices();
-        virtual int nbTriangles();
+        int nbVertices() override;
+        int nbTriangles() override;
 
-        virtual void createUI(char *ID);
+        void createUI(char *ID);
 
-        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
+        void draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 
 
     protected:
