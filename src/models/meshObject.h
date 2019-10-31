@@ -37,20 +37,15 @@ class MeshObject : public DrawableObject {
 
         void createUI(char *ID);
 
-        void draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
+        void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 
 
     protected:
         void createVAO();
         void deleteVAO();
 
-        void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
+        void setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
 
-
-
-        std::vector<float> vertices;
-        std::vector<int> triangles;
-        std::vector<float> normals;
 
         GLuint vertexArrayID;
         GLuint *buffers;

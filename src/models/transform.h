@@ -22,6 +22,7 @@ class Transform {
         void setCenter(vec3 center);
 
         mat4 getMat4();
+        mat4 getMat4(mat4 modelMat);
 
         void createUI();
 

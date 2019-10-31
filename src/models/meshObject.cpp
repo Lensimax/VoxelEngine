@@ -37,11 +37,11 @@ int MeshObject::nbTriangles(){
 
 
 
-void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+void MeshObject::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
     glUseProgram(material->shaderID());
 
-    setUniform(viewMat, projectionMat, light);
+    setUniform(modelMat, viewMat, projectionMat, light);
 
     glBindVertexArray(vertexArrayID);
     glDrawElements(GL_TRIANGLES,3*mesh->getNBFaces(),GL_UNSIGNED_INT,(void *)0);
@@ -84,13 +84,13 @@ void MeshObject::deleteVAO(){
     glDeleteVertexArrays(1,&vertexArrayID);
 }
 
-void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
+void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
-    glm::mat4 modelMat = transform->getMat4();
+    glm::mat4 model = transform->getMat4(modelMat);
 
 
     // send the transformation matrix
-    material->callUniform(modelMat, viewMat, projectionMat, light);
+    material->callUniform(model, viewMat, projectionMat, light);
 
 }
 

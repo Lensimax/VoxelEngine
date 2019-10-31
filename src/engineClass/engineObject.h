@@ -28,11 +28,11 @@ class EngineObject {
 
         std::vector<EngineObject*> listOfChildren;
 
+        Transform *transform;
     protected:
 
         std::string name;
         int ID;
-        Transform *transform;
 
 
 };
