@@ -86,11 +86,11 @@ void MeshObject::deleteVAO(){
 
 void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
-    glm::mat4 model = transform->getMat4(modelMat);
+    // glm::mat4 model = transform->getMat4(modelMat);
 
 
     // send the transformation matrix
-    material->callUniform(model, viewMat, projectionMat, light);
+    material->callUniform(modelMat, viewMat, projectionMat, light);
 
 }
 
