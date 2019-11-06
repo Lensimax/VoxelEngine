@@ -12,12 +12,14 @@ class MeshLoader : public Mesh {
 
         void recreate() override;
         void createUI() override;
+
     private:
 
-        void createMesh(char *filename);
         void cleanup();
+        void readOFFfile(char *filename);
 
         char currentFilename[1024];
+        char backupFilename[1024];
 };
 
 

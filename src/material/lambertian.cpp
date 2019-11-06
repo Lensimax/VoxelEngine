@@ -28,7 +28,7 @@ Lambertian::Lambertian(glm::vec4 color){
     specularDeg = 2;
     ambientColor = vec4(0.0,0.0,0.0,0.0);
     diffuseColor = color;
-    specularColor = vec4(141./255.,104./255.,43./255.,1.0);
+    specularColor = vec4(255./255.,255./255.,255./255.,1.0);
 
 }
 Lambertian::~Lambertian(){
@@ -54,6 +54,14 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
     // printf("y = %f\n", light[1]);
 
     if(!activeDebugNormal){
+
+        glm::vec4 lightVec;
+        glm::vec3 vec = light->getLight();
+        lightVec.x = vec.x;
+        lightVec.y = vec.y;
+        lightVec.z = vec.z;
+        lightVec.w = 1;
+
         glm::mat4 normalMatrix = viewMat * modelMat;
         normalMatrix = inverseTranspose(normalMatrix);
 
@@ -61,7 +69,7 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
         glUniformMatrix4fv(glGetUniformLocation(shaderID,"lightMat4"),1,GL_FALSE,&(modelMat[0][0]));
 
-        glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &light->getLight()[0]);
+        glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &(lightVec[0]));
 
 
         glUniform4fv(glGetUniformLocation(shaderID,"ambientColor"),1,&(ambientColor[0]));

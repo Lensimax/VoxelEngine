@@ -30,7 +30,7 @@ void Transform::scale(vec3 scale){
     this->vecScale = scale;
 }
 
-mat4 Transform::getMat4(){
+mat4 Transform::getModelMat(){
     mat4 model = mat4(1.0f);
     model = translate(model, vecPosition);
     // model = translate(model, center);
@@ -41,6 +41,18 @@ mat4 Transform::getMat4(){
 
     return model;
 }
+
+mat4 Transform::getModelMat(mat4 modelMat){
+    modelMat = translate(modelMat, vecPosition);
+    // modelMat = translate(modelMat, center);
+    modelMat = glm::scale(modelMat, vecScale);
+    modelMat = glm::rotate(modelMat, vecRotation[0], vec3(1.0,0.0,0.0));
+    modelMat = glm::rotate(modelMat, vecRotation[1], vec3(0.0,1.0,0.0));
+    modelMat = glm::rotate(modelMat, vecRotation[2], vec3(0.0,0.0,1.0));
+
+    return modelMat;
+}
+
 
 
 void Transform::createUI(){

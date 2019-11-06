@@ -3,7 +3,7 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../tools/cameraProj.h"
 
-#include "../models/meshObject.h"
+#include "../models/fileMeshObject.h"
 
 #include "../models/plane.h"
 
@@ -15,12 +15,16 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
+    FileMeshObject *obj = new FileMeshObject(addNewId(),"Object Loaded", (char*)"../data/models/suzanne.off", new Transform());
+    obj->addChild(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off"));
 
-    objectsEngine.push_back(new MeshObject(addNewId(),"Object Loaded", (char*)"../data/models/monkey.off", new Transform()));
+
+    objectsEngine.push_back(obj);
 
     // objectsEngine.push_back(new Sphere());
 
     // objectsEngine.push_back(new Cube());
+
 
 
 
@@ -66,6 +70,19 @@ void Scene::createUIAtID(int indexItem, char *ID){
         if(objectsEngine[i]->getID() == indexItem){
             objectsEngine[i]->createUI(ID);
             return;
+        } else {
+            drawUIAtID(objectsEngine[i]->listOfChildren, indexItem, ID);
+        }
+    }
+}
+
+void Scene::drawUIAtID(std::vector<EngineObject*> objs, int indexItem, char *ID){
+    for(unsigned int i=0; i<objs.size(); i++){
+        if(objs[i]->getID() == indexItem){
+            objs[i]->createUI(ID);
+            return;
+        } else {
+            drawUIAtID(objs[i]->listOfChildren, indexItem, ID);
         }
     }
 }
@@ -84,7 +101,7 @@ void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & i
 
 
 void Scene::addMeshObject(){
-    objectsEngine.push_back(new MeshObject(addNewId()));
+    objectsEngine.push_back(new FileMeshObject(addNewId()));
 }
 
 void Scene::addPlane(){
@@ -95,6 +112,9 @@ void Scene::addEngineObject(){
     objectsEngine.push_back(new EngineObject(addNewId()));
 }
 
+void Scene::addSphere(){
+    objectsEngine.push_back(new FileMeshObject(addNewId(), "Sphere", (char*)"../data/models/sphere.off"));
+}
 
 
 void Scene::deleteObject(int id){

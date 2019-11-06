@@ -19,43 +19,12 @@
 
 #include "meshLoader.h"
 #include "meshObject.h"
-// #include "meshLoader.h"
-// #include "sphereMesh.h"
-// #include "cubeMesh.h"
-
-#include "meshQuad.h"
 
 #include <iostream>
 
 
 
-MeshObject::MeshObject(int id, std::string n, char *filename, Transform *t, Material *m){
-    transform = t;
 
-    mesh = new MeshLoader(filename);
-
-    // mesh = new MeshQuad();
-
-
-    glm::vec3 center = mesh->getCenter();
-    t->setCenter(center);
-
-    createVAO();
-
-    material = m;
-
-    setName(n);
-    setID(id);
-
-}
-
-
-MeshObject::~MeshObject(){
-    deleteVAO();
-    delete transform;
-    delete material;
-    delete mesh;
-}
 
 
 int MeshObject::nbVertices(){
@@ -68,17 +37,25 @@ int MeshObject::nbTriangles(){
 
 
 
-void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+void MeshObject::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
     glUseProgram(material->shaderID());
 
-    setUniform(viewMat, projectionMat, light);
+    setUniform(modelMat, viewMat, projectionMat, light);
 
     glBindVertexArray(vertexArrayID);
     glDrawElements(GL_TRIANGLES,3*mesh->getNBFaces(),GL_UNSIGNED_INT,(void *)0);
     glBindVertexArray(0);
 
     glUseProgram(0);
+
+    // mesh->drawDebug(transform->getModelMat(),viewMat, projectionMat);
+
+    if(showboundingbox){
+        drawBoxWithMatricess(mesh->getMin(), mesh->getMax(),modelMat, viewMat, projectionMat);
+    }
+
+
 }
 
 void MeshObject::createVAO(){
@@ -115,9 +92,10 @@ void MeshObject::deleteVAO(){
     glDeleteVertexArrays(1,&vertexArrayID);
 }
 
-void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
+void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
-    glm::mat4 modelMat = transform->getMat4();
+    // glm::mat4 model = transform->getMat4(modelMat);
+
 
 
     // send the transformation matrix
@@ -131,10 +109,16 @@ void MeshObject::createUI(char *ID){
     ImGui::Text(name.c_str());
     ImGui::Separator();
     mesh->createUI();
+    if (ImGui::Button("Simplify")){
+        mesh->simplify();
+        createVAO();
+    }
     if (ImGui::Button("Recreate")){
         mesh->recreate();
         createVAO();
     }
+    ImGui::Text("Show bounding box "); ImGui::SameLine();
+    ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
     ImGui::Separator();
 
     transform->createUI();
@@ -143,4 +127,55 @@ void MeshObject::createUI(char *ID){
     ImGui::Separator();
 
     ImGui::EndChild();
+}
+
+void drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4){
+    glVertex3f(v1.x, v1.y, v1.z);
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v3.x, v3.y, v3.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+}
+
+// draw box that move with the object
+void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
+
+    Shader *shader = new Shader();
+    shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
+
+    glUseProgram(shader->id());
+
+
+
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+
+    glBegin(GL_TRIANGLES);
+
+    // front face
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,max.z), glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(min.x,min.y,max.z));
+    // back face
+    drawQuadWithTriangle(glm::vec3(max.x,max.y,min.z), glm::vec3(min.x,max.y,min.z), glm::vec3(min.x,min.y,min.z), glm::vec3(max.x,min.y,min.z));
+    // left face
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,min.z), glm::vec3(min.x,min.y,max.z), glm::vec3(min.x,min.y,max.z), glm::vec3(min.x,min.y,min.z));
+    // right face
+    drawQuadWithTriangle(glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,max.y,min.z), glm::vec3(max.x,min.y,min.z), glm::vec3(max.x,min.y,max.z));
+    // bottom face
+    drawQuadWithTriangle(glm::vec3(min.x,min.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(max.x,min.y,min.z), glm::vec3(min.x,min.y,min.z));
+    // top face
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,min.z), glm::vec3(max.x,max.y,min.z), glm::vec3(max.x,max.y,max.z), glm::vec3(min.x,max.y,max.z));
+
+
+    glEnd();
+
+    glUseProgram(0);
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+
 }

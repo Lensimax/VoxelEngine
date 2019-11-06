@@ -15,6 +15,7 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+
 #include "../tools/lights/directionnalLight.h"
 
 #include "mainRenderer.h"
@@ -56,15 +57,28 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         l = new DirectionnalLight(scene->addNewId());
     }
 
-
+    if(wireActived){
+        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    }
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        if(DrawableObject* o = dynamic_cast<DrawableObject*>(scene->objectsEngine[i])) { // safe cast
-            o->draw(c->getView(), c->getProj(), l);
-        }
+        drawRecursive(glm::mat4(1.0f), scene->objectsEngine[i], c, l);
+    }
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+
+
+}
+
+void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l){
+
+    glm::mat4 modelMatrix = obj->transform->getModelMat(modelMat);
+    if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
+        o->draw(modelMatrix, c->getView(), c->getProj(), l);
     }
 
-
-
+    for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
+        drawRecursive(modelMatrix, obj->listOfChildren[i], c, l);
+    }
 }
 
 
@@ -142,11 +156,6 @@ void MainRenderer::initializeGL(){
 }
 
 void MainRenderer::toggleWire(){
-    if(wireActived){
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    } else {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
     wireActived = !wireActived;
 }
 

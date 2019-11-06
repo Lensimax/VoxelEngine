@@ -8,23 +8,54 @@
 
 
 MeshLoader::MeshLoader(char *filename) {
+    initialize();
 
     sprintf(currentFilename, "%s", filename);
-    createMesh(currentFilename);
+    sprintf(backupFilename, "%s", filename);
+    readOFFfile(filename);
+
+    backupVertices = vertices;
+    backupFaces = faces;
+
+    computeAllInfo();
 }
 
 void MeshLoader::recreate(){
-    if(fopen(currentFilename,"r") == NULL) {
-        return;
+
+    if(strcmp(currentFilename, backupFilename) == 0){ // meme fichier
+        cleanup();
+        vertices = backupVertices;
+        faces = backupFaces;
+        nb_vertices = backupVertices.size();
+        nb_faces = backupFaces.size()/3;
+    } else {
+        if(fopen(currentFilename,"r") == NULL) {
+            return;
+        }
+        cleanup();
+        readOFFfile(currentFilename);
+        sprintf(backupFilename, "%s", currentFilename);
+        backupVertices = vertices;
+        backupFaces = faces;
+        nb_vertices = backupVertices.size();
+        nb_faces = backupFaces.size()/3;
     }
 
-    cleanup();
-    createMesh(currentFilename);
+    computeAllInfo();
+
+
 }
 
-void MeshLoader::createMesh(char *filename){
+
+
+
+
+/// Read vertices and faces from the file "filename" at the format OFF
+void MeshLoader::readOFFfile(char *filename){
+
     unsigned int tmp;
     unsigned int i,j;
+
     FILE *file;
     int   error;
 
@@ -63,41 +94,15 @@ void MeshLoader::createMesh(char *filename){
         error = fscanf(file,"%d %d %d %d\n",&tmp,&(faces[j]),&(faces[j+1]),&(faces[j+2]));
         if(error==EOF) {
             printf("Unable to read faces of %s\n",filename);
-        // MeshLoader_delete(MeshLoader);
-        // return NULL;
         }
 
         if(tmp!=3) {
           printf("Error : face %d is not a triangle (%d polygonal face!)\n",i/3,tmp);
-        // MeshLoader_delete(MeshLoader);
-        // return NULL;
         }
         j += 3;
     }
 
     fclose(file);
-
-    computeCenter();
-
-
-    // computing radius
-    computeRadius();
-
-    computeNormals();
-
-
-    // computing colors as normals
-    colors.resize(nb_vertices);
-    for(i=0;i<nb_vertices;i++) {
-      colors[i] = (normals[i]+1.0f)/2.0f;
-    }
-
-    computeUVCoord();
-
-
-    computeTangents();
-
-
 }
 
 void MeshLoader::createUI(){
@@ -105,10 +110,7 @@ void MeshLoader::createUI(){
 
     ImGui::Text("Mesh Loader");
     ImGui::InputText("fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
-    ImGui::Text("Number vertices: %d", getNBVertices());
-    ImGui::Text("Number faces: %d", getNBFaces());
-    ImGui::Text("Smooth Normal "); ImGui::SameLine();
-    ImGui::Checkbox("smoothNormal",&smoothNormals);
+    this->Mesh::createUI();
 
     ImGui::PopItemWidth();
 }

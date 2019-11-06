@@ -1607,10 +1607,10 @@ static void ShowDemoWindowWidgets()
         if (item_type == 10){ ret = ImGui::TreeNodeEx("ITEM: TreeNode w/ ImGuiTreeNodeFlags_OpenOnDoubleClick", ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_NoTreePushOnOpen); } // Testing tree node with ImGuiButtonFlags_PressedOnDoubleClick button policy.
         if (item_type == 11){ const char* items[] = { "Apple", "Banana", "Cherry", "Kiwi" }; static int current = 1; ret = ImGui::ListBox("ITEM: ListBox", &current, items, IM_ARRAYSIZE(items), IM_ARRAYSIZE(items)); }
 
-        // Display the value of IsItemHovered() and other common item state functions. 
+        // Display the value of IsItemHovered() and other common item state functions.
         // Note that the ImGuiHoveredFlags_XXX flags can be combined.
-        // Because BulletText is an item itself and that would affect the output of IsItemXXX functions, 
-        // we query every state in a single call to avoid storing them and to simplify the code 
+        // Because BulletText is an item itself and that would affect the output of IsItemXXX functions,
+        // we query every state in a single call to avoid storing them and to simplify the code
         ImGui::BulletText(
             "Return value = %d\n"
             "IsItemFocused() = %d\n"
@@ -1653,7 +1653,7 @@ static void ShowDemoWindowWidgets()
         if (embed_all_inside_a_child_window)
             ImGui::BeginChild("outer_child", ImVec2(0, ImGui::GetFontSize() * 20), true);
 
-        // Testing IsWindowFocused() function with its various flags. 
+        // Testing IsWindowFocused() function with its various flags.
         // Note that the ImGuiFocusedFlags_XXX flags can be combined.
         ImGui::BulletText(
             "IsWindowFocused() = %d\n"
