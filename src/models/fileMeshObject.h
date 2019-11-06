@@ -10,7 +10,7 @@ const std::string defaultFilename = "../data/models/monkey.off";
 
 class FileMeshObject : public MeshObject {
 public:
-    FileMeshObject(int id, std::string n = "MeshObject", char *filename = (char*)"../data/models/monkey.off",Transform *t = new Transform(), Material *m = new Lambertian());
+    FileMeshObject(int id, std::string n = "MeshObject", char *filename = (char*)"../data/models/suzanne.off", Transform *t = new Transform(), Material *m = new Lambertian());
     ~FileMeshObject();
 
 };
