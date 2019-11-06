@@ -6,7 +6,7 @@ Green-engine is a graphic engine from a student to learn how we create a graphic
 
 [Green engine](ressources/screenGreenEngine.PNG)
 
-#### Feature
+#### Features
 
 
 
@@ -18,7 +18,7 @@ Green-engine is a graphic engine from a student to learn how we create a graphic
 
 ##### On Linux
 
-Dependices :
+Dependencies :
 
 ```sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev```
 
@@ -28,7 +28,7 @@ To build :
 
 ##### On Windows
 
-Dependices :
+Dependencies :
 
 * mingw64 or mingw32
 * cmake
