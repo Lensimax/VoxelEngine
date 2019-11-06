@@ -22,37 +22,30 @@
 // #include "cubeMesh.h"
 
 
-const std::string defaultFilename = "../data/models/monkey.off";
 
 class MeshObject : public DrawableObject {
     public:
 
-        MeshObject(int id, std::string n = "MeshObject", char *filename = (char*)"../data/models/monkey.off",Transform *t = new Transform(), Material *m = new Lambertian());
-        ~MeshObject();
+        virtual ~MeshObject() = default;;
 
 
         /*virtual float *getVertices();
         virtual unsigned int *getTriangles();*/
-        virtual int nbVertices();
-        virtual int nbTriangles();
+        int nbVertices() override;
+        int nbTriangles() override;
 
-        virtual void createUI(char *ID);
+        void createUI(char *ID);
 
-        virtual void draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
+        void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 
 
     protected:
         void createVAO();
         void deleteVAO();
 
-        void setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
+        void setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
 
-        void drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 viewMat, glm::mat4 projectionMat);
-
-        std::vector<float> vertices;
-        std::vector<int> triangles;
-        std::vector<float> normals;
-
+        void drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
         GLuint vertexArrayID;
         GLuint *buffers;
 

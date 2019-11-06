@@ -19,45 +19,12 @@
 
 #include "meshLoader.h"
 #include "meshObject.h"
-// #include "meshLoader.h"
-// #include "sphereMesh.h"
-// #include "cubeMesh.h"
-
-#include "meshQuad.h"
 
 #include <iostream>
 
 
 
-MeshObject::MeshObject(int id, std::string n, char *filename, Transform *t, Material *m){
-    transform = t;
 
-    mesh = new MeshLoader(filename);
-
-    // mesh = new MeshQuad();
-
-
-    glm::vec3 center = mesh->getCenter();
-    t->setCenter(center);
-
-    createVAO();
-
-    material = m;
-
-    setName(n);
-    setID(id);
-
-    showboundingbox = false;
-
-}
-
-
-MeshObject::~MeshObject(){
-    deleteVAO();
-    delete transform;
-    delete material;
-    delete mesh;
-}
 
 
 int MeshObject::nbVertices(){
@@ -70,11 +37,11 @@ int MeshObject::nbTriangles(){
 
 
 
-void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+void MeshObject::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
     glUseProgram(material->shaderID());
 
-    setUniform(viewMat, projectionMat, light);
+    setUniform(modelMat, viewMat, projectionMat, light);
 
     glBindVertexArray(vertexArrayID);
     glDrawElements(GL_TRIANGLES,3*mesh->getNBFaces(),GL_UNSIGNED_INT,(void *)0);
@@ -85,7 +52,7 @@ void MeshObject::draw(glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
     // mesh->drawDebug(transform->getModelMat(),viewMat, projectionMat);
 
     if(showboundingbox){
-        drawBoxWithMatricess(mesh->getMin(), mesh->getMax(), viewMat, projectionMat);
+        drawBoxWithMatricess(mesh->getMin(), mesh->getMax(),modelMat, viewMat, projectionMat);
     }
 
 
@@ -125,9 +92,10 @@ void MeshObject::deleteVAO(){
     glDeleteVertexArrays(1,&vertexArrayID);
 }
 
-void MeshObject::setUniform(glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
+void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
-    glm::mat4 modelMat = transform->getModelMat();
+    // glm::mat4 model = transform->getMat4(modelMat);
+
 
 
     // send the transformation matrix
@@ -172,7 +140,7 @@ void drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4
 }
 
 // draw box that move with the object
-void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 viewMat, glm::mat4 projectionMat){
+void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
 
     Shader *shader = new Shader();
     shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
@@ -180,7 +148,6 @@ void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 vi
     glUseProgram(shader->id());
 
 
-    glm::mat4 modelMat = transform->getModelMat();
 
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));

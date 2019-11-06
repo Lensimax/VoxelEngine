@@ -11,6 +11,7 @@
 
 #include "../tools/lights/light.h"
 #include "scene.h"
+#include "../tools/lights/directionnalLight.h"
 #include "../material/shader.h"
 
 #include "../models/drawableObject.h"
@@ -37,6 +38,7 @@ class MainRenderer {
     private:
 
         void renderTheScene(Scene *scene, int width, int height);
+        void drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l);
 
         Camera *getCamera();
         Light *getLight();

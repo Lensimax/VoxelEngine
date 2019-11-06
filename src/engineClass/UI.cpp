@@ -7,7 +7,7 @@
 
 
 UI::UI(){
-    selectedID = -1;
+    selectedID = 0;
     hasToBeDisplayed = true;
     scene = NULL;
     mainRenderer = NULL;
@@ -37,6 +37,52 @@ void UI::createInfoWindow(){
 }
 
 
+void UI::displayEngineNode(std::vector<EngineObject*> obj){
+
+    char strobj[1024]; // label object
+
+
+    for(unsigned int i=0; i<obj.size(); i++){
+        ImGuiTreeNodeFlags node_flags = 0;
+        int id = obj[i]->getID();
+
+        sprintf(strobj,"##obj %i", id); // hidden label
+
+
+        if(obj[i]->listOfChildren.size() == 0){
+            bool is_selected = selectedID == id;
+            if(ImGui::Selectable(strobj, is_selected)){
+                selectedID = obj[i]->getID();
+            }
+            ImGui::SameLine();
+            ImGui::Text(obj[i]->getName().c_str());
+        } else {
+            bool node_open = ImGui::TreeNodeEx(strobj, node_flags);
+            ImGui::SameLine();
+            // add selectable
+            bool is_selected = selectedID == id;
+            if(ImGui::Selectable(strobj, is_selected)){
+                selectedID = obj[i]->getID();
+            }
+            ImGui::SameLine();
+            ImGui::Text(obj[i]->getName().c_str());
+
+            // if the node is open
+            if(node_open){
+                displayEngineNode(obj[i]->listOfChildren);
+
+                ImGui::TreePop();
+            }
+
+        }
+
+
+
+
+    }
+
+}
+
 void UI::createUISceneManager(Scene *scene){
     float sizeLeft = 200;
     float sizeRight = 200;
@@ -64,7 +110,7 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { scene->addMeshObject(); }
             if (ImGui::MenuItem("Add Plane", "")) { scene->addPlane(); }
             if (ImGui::MenuItem("Add Cube", "WIP")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Add Sphere", "WIP")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Add Sphere")) { scene->addSphere();}
             if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selectedID); }
             ImGui::EndMenu();
         }
@@ -88,8 +134,32 @@ void UI::createUISceneManager(Scene *scene){
     ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
 
 
+    // pour l'arbre de scene
+    // int node_clicked;
+    displayEngineNode(scene->objectsEngine);
+
+
+    /*const bool is_selected = (selection_mask & (1 << i)) != 0;
+    if (is_selected)
+        node_flags |= ImGuiTreeNodeFlags_Selected;
+    if (i < 3)
+    {
+        // Items 0..2 are Tree Node
+        bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Node %d", i);
+        if (ImGui::IsItemClicked())
+            node_clicked = i;
+        if (node_open)
+        {
+            ImGui::BulletText("Blah blah\nBlah Blah");
+            ImGui::TreePop();
+        }
+    }
+*/
+
+
+
     // on cherche celui selectionné
-    char obj[1024];
+    /*char obj[1024];
     for (unsigned int i = 0; i < listOfObjects.size(); i++){
         sprintf(obj,"##obj %i", i); // hidden label
         bool is_selected = listOfID[i] == selectedID;
@@ -99,7 +169,7 @@ void UI::createUISceneManager(Scene *scene){
         ImGui::SameLine();
         ImGui::Text(listOfObjects[i].c_str());
     }
-
+*/
     ImGui::EndChild();
 
     ImGui::SameLine();
