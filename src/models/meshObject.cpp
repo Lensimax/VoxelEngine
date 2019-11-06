@@ -118,7 +118,7 @@ void MeshObject::createUI(char *ID){
         createVAO();
     }
     ImGui::Text("Show bounding box "); ImGui::SameLine();
-    ImGui::Checkbox("##showboundingbox",&showboundingbox);
+    ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
     ImGui::Separator();
 
     transform->createUI();

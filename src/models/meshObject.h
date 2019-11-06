@@ -51,7 +51,7 @@ class MeshObject : public DrawableObject {
 
         Material *material;
 
-        bool showboundingbox;
+        bool showboundingbox = false;
 
         Mesh *mesh;
 
