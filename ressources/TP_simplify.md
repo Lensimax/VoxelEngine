@@ -44,6 +44,7 @@ Vous pouvez :
  * Faire tourner les objets, les déplacers, ...
  * Afficher l'objet avec des ```WireFrame``` en faisant ```View => Toggle wire frame```
  * Simplifier le maillage en changeant la **résolution** après "vertices simplification" et en appuyant sur le bouton simplify. Cette résolution correspond à la grille qui permet de simplifier le maillage.
+ * Avec ```CTRL + H``` vous pouvez cacher/montrer l'affichage des fenêtre.
 
  ## Structure du code
 
