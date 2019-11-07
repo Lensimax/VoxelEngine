@@ -55,4 +55,4 @@ include_directories(
         ${OPENGL_INCLUDE_DIR}
 )
 
-target_link_libraries(${PROJECT_NAME} glfw glm_static glad imgui ${CMAKE_DL_LIBS})
+target_link_libraries(${PROJECT_NAME} glfw glm glad imgui ${CMAKE_DL_LIBS})
