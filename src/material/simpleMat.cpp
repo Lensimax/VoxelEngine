@@ -47,7 +47,6 @@ void SimpleMat::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pro
 void SimpleMat::createUI(){
     // to hide label of the input
 
-    ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Material"); ImGui::SameLine();
     if (ImGui::Button("Refresh")){
         reloadShaders();
     }

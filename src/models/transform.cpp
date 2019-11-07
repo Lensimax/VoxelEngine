@@ -128,7 +128,7 @@ void Transform::createUI(){
     // to hide label of the input
     ImGui::PushItemWidth(-1);
 
-    ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Transform");
+    ImGui::Text("Transform");
     ImGui::Text("Position: "); ImGui::SameLine();
     ImGui::DragFloat3("position", &vecPosition[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Rotation: "); ImGui::SameLine();
