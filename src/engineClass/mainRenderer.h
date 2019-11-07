@@ -39,7 +39,7 @@ class MainRenderer {
     private:
 
         void renderTheScene(Scene *scene, int width, int height);
-        void drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l);
+        void drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l, float screenAspectRatio);
 
         Camera *getCamera();
         Light *getLight();

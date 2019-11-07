@@ -61,7 +61,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     }
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(glm::mat4(1.0f), scene->objectsEngine[i], c, l);
+        drawRecursive(glm::mat4(1.0f), scene->objectsEngine[i], c, l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
@@ -69,17 +69,17 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 }
 
-void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l){
+void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l, float screenAspectRatio){
 
     glm::mat4 matrixTochild = obj->getTransform()->getModelToChild(modelMat);
     glm::mat4 modelMatrix = obj->getTransform()->getModelMat(modelMat);
-    
+
     if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
-        o->draw(modelMatrix, c->getView(), c->getProj(), l);
+        o->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
     }
 
     for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
-        drawRecursive(matrixTochild, obj->listOfChildren[i], c, l);
+        drawRecursive(matrixTochild, obj->listOfChildren[i], c, l, screenAspectRatio);
     }
 }
 

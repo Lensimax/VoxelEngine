@@ -17,7 +17,7 @@ class Camera : public EngineObject {
 
 
     public:
-        virtual glm::mat4 getProj() = 0;
+        virtual glm::mat4 getProj(float aspect = 16./9.) = 0;
 
         glm::mat4 getView();
 

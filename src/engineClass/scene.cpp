@@ -17,7 +17,7 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-    Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.2), glm::vec3(0));
+    Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-1.5,0,0), glm::vec3(0.2), glm::vec3(0));
 
     FileMeshObject *Sun = new FileMeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new Lambertian(glm::vec4(1.,0.,0.,1.)));
     FileMeshObject *Earth = new FileMeshObject(addNewId(),"Earth", (char*)"../data/models/sphere.off", EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
