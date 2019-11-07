@@ -42,6 +42,8 @@ class Scene {
         void addSphere();
         void deleteObject(int id);
 
+        void loadSolarSystem();
+
 
         std::vector<EngineObject*> objectsEngine;
         int addNewId();

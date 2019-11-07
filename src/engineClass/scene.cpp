@@ -19,43 +19,21 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-    Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0.44,0,0));
-    Transform *MoonTransform = new Transform(glm::vec3(0),glm::vec3(0.9,0,0), glm::vec3(0.2), glm::vec3(0));
 
-    FileMeshObject *Sun = new FileMeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new SimpleMat());
-    FileMeshObject *Earth = new FileMeshObject(addNewId(),"Earth", (char*)"../data/models/sphere.off", EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
-    FileMeshObject *Moon = new FileMeshObject(addNewId(),"Moon", (char*)"../data/models/sphere.off", MoonTransform , new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
-
-    Sun->addChild(Earth);
-    Earth->addChild(Moon);
-
-    objectsEngine.push_back(Sun);
+    FileMeshObject *obj2 = new FileMeshObject(addNewId(),"Suzanne", (char*)"../data/models/monkey.off", new Transform());
+    obj2->addChild(new FileMeshObject(addNewId(),"Singe", (char*)"../data/models/monkey.off", new Transform(glm::vec3(0),glm::vec3(-3,0,-2)), new Lambertian(glm::vec4(1,1,0,1))));
+    objectsEngine.push_back(obj2);
 
 
-    //// SET ANIMATION OF SOLAR SYSTEM
-    Sun->getTransform()->setSameAsParent(true, false);
-    Sun->getTransform()->setChildAnimation(false, true, false);
+    objectsEngine.push_back(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(2.5,0,-4))));
 
-
-    Earth->getTransform()->setSameAsParent(true, false);
-    Earth->getTransform()->setAnimation(false,true,false);
-    Earth->getTransform()->setChildAnimation(false,true,false, 0.,-0.05,0.);
-
-
-
-    // FileMeshObject *obj2 = new FileMeshObject(addNewId(),"Object Loaded", (char*)"../data/models/sphere.off", new Transform());
-    // obj2->addChild(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(-2.5,0,0))));
-    // objectsEngine.push_back(obj2);
-
-    // objectsEngine.push_back(new Sphere());
-
-    // objectsEngine.push_back(new Cube());
 
     Camera *cam = new CameraProj(addNewId());
 
     objectsEngine.push_back(cam);
 
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
+
 
 }
 
@@ -175,4 +153,43 @@ void Scene::update(){
 
 void Scene::togglePause(){
     pause = !pause;
+}
+
+
+void Scene::loadSolarSystem(){
+    pause = false;
+
+    IDObject = 0;
+
+
+    objectsEngine = std::vector<EngineObject*>();
+
+    Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0.44,0,0));
+    Transform *MoonTransform = new Transform(glm::vec3(0),glm::vec3(0.9,0,0), glm::vec3(0.2), glm::vec3(0));
+
+    FileMeshObject *Sun = new FileMeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new SimpleMat());
+    FileMeshObject *Earth = new FileMeshObject(addNewId(),"Earth", (char*)"../data/models/sphere.off", EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
+    FileMeshObject *Moon = new FileMeshObject(addNewId(),"Moon", (char*)"../data/models/sphere.off", MoonTransform , new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
+
+    Sun->addChild(Earth);
+    Earth->addChild(Moon);
+
+    objectsEngine.push_back(Sun);
+
+
+    //// SET ANIMATION OF SOLAR SYSTEM
+    Sun->getTransform()->setSameAsParent(true, false);
+    Sun->getTransform()->setChildAnimation(false, true, false);
+
+
+    Earth->getTransform()->setSameAsParent(true, false);
+    Earth->getTransform()->setAnimation(false,true,false);
+    Earth->getTransform()->setChildAnimation(false,true,false, 0.,-0.05,0.);
+
+    Camera *cam = new CameraProj(addNewId());
+
+    objectsEngine.push_back(cam);
+
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
+
 }
