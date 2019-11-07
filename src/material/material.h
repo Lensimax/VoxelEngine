@@ -26,6 +26,8 @@ class Material {
     protected:
         Shader *shader;
 
+        void sendUniform(GLuint shaderID, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat);
+
 };
 
 #endif

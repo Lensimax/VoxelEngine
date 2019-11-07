@@ -45,9 +45,7 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
         shaderID = shader->id();
     }
 
-    glUniformMatrix4fv(glGetUniformLocation(shaderID,"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shaderID,"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shaderID,"projMat"),1,GL_FALSE,&(projMat[0][0]));
+    sendUniform(shaderID, modelMat, viewMat, projMat);
 
 
 
@@ -120,13 +118,13 @@ GLuint Lambertian::shaderID(){
 
 void Lambertian::createShader(){
     shader = new Shader();
-    shader->load("../data/shaders/lambertian.vert","../data/shaders/lambertian.frag");
+    shader->load(lambertianShaderVert,lambertianShaderFrag);
     debugNormalShader = new Shader();
-    debugNormalShader->load("../data/shaders/debugNormal.vert","../data/shaders/debugNormal.frag");
+    debugNormalShader->load(debugShaderVert,debugShaderFrag);
 }
 void Lambertian::reloadShaders(){
-    shader->reload("../data/shaders/lambertian.vert","../data/shaders/lambertian.frag");
-    debugNormalShader->reload("../data/shaders/debugNormal.vert","../data/shaders/debugNormal.frag");
+    shader->reload(lambertianShaderVert,lambertianShaderFrag);
+    debugNormalShader->reload(debugShaderVert, debugShaderFrag);
 }
 
 void Lambertian::deleteShader(){
