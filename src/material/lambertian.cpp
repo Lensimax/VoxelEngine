@@ -38,12 +38,7 @@ Lambertian::~Lambertian(){
 
 void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, Light *light){
 
-    GLuint shaderID;
-    if(activeDebugNormal){
-        shaderID = debugNormalShader->id();
-    } else {
-        shaderID = shader->id();
-    }
+    GLuint shaderID = getShaderID();
 
     sendUniform(shaderID, modelMat, viewMat, projMat);
 
@@ -105,7 +100,7 @@ void Lambertian::createUI(){
     ImGui::PopItemWidth();
 }
 
-GLuint Lambertian::shaderID(){
+GLuint Lambertian::getShaderID(){
     GLuint shaderID;
     if(activeDebugNormal){
         shaderID = debugNormalShader->id();

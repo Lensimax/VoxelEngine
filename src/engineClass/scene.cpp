@@ -7,6 +7,8 @@
 
 #include "../models/plane.h"
 
+#include "../material/simpleMat.h"
+
 
 Scene::Scene(){
 
@@ -20,7 +22,7 @@ Scene::Scene(){
     Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0));
     Transform *MoonTransform = new Transform(glm::vec3(0),glm::vec3(0.9,0,0), glm::vec3(0.2), glm::vec3(0));
 
-    FileMeshObject *Sun = new FileMeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new Lambertian(glm::vec4(1.,1.,0.,1.)));
+    FileMeshObject *Sun = new FileMeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new SimpleMat());
     FileMeshObject *Earth = new FileMeshObject(addNewId(),"Earth", (char*)"../data/models/sphere.off", EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
     FileMeshObject *Moon = new FileMeshObject(addNewId(),"Moon", (char*)"../data/models/sphere.off", MoonTransform , new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
 

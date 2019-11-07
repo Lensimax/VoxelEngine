@@ -39,7 +39,7 @@ int MeshObject::nbTriangles(){
 
 void MeshObject::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
-    glUseProgram(material->shaderID());
+    glUseProgram(material->getShaderID());
 
     setUniform(modelMat, viewMat, projectionMat, light);
 
