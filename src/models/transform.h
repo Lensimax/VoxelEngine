@@ -31,7 +31,7 @@ class Transform {
 
         void setAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
         void setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
-        void setSameMatrixAsParent(bool b);
+        void setSameAsParent(bool position, bool rotation);
 
     private:
 
@@ -39,7 +39,7 @@ class Transform {
 
         vec3 vecPosition, vecScale, vecRotation, center;
 
-        bool sameAsModelMat = true;
+        bool samePosition, sameRotation;
 
         vec3 positionToSend, scaleToSend, rotationToSend;
 

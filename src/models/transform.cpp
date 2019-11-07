@@ -12,9 +12,11 @@ Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
     this->center = center;
 
     this->positionToSend = position;
-    this->scaleToSend = scale;
-    this->rotationToSend = rotation;
-    sameAsModelMat = true;
+    this->scaleToSend = glm::vec3(1);
+    this->rotationToSend = glm::vec3(0);
+
+    samePosition = true; sameRotation = true;
+
 
     reset();
 
@@ -76,18 +78,28 @@ mat4 Transform::getModelMat(mat4 modelMat){
 }
 
 mat4 Transform::getModelToChild(mat4 modelMat){
-    if(sameAsModelMat){
-        return getModelMat(modelMat);
-    } else {
-        modelMat = translate(modelMat, positionToSend);
-        // modelMat = translate(modelMat, center);
-        //modelMat = glm::scale(modelMat, scaleToSend);
-        modelMat = glm::rotate(modelMat, rotationToSend[0]+animChildRotX, vec3(1.0,0.0,0.0));
-        modelMat = glm::rotate(modelMat, rotationToSend[1]+animChildRotY, vec3(0.0,1.0,0.0));
-        modelMat = glm::rotate(modelMat, rotationToSend[2]+animChildRotZ, vec3(0.0,0.0,1.0));
 
-        return modelMat;
+    mat4 model = modelMat;
+
+
+
+    if(!samePosition){
+        model = translate(model, positionToSend);
+    } else {
+        model = translate(model, vecPosition);
     }
+
+    if(!sameRotation){
+        model = glm::rotate(model, rotationToSend[0]+animChildRotX, vec3(1.0,0.0,0.0));
+        model = glm::rotate(model, rotationToSend[1]+animChildRotY, vec3(0.0,1.0,0.0));
+        model = glm::rotate(model, rotationToSend[2]+animChildRotZ, vec3(0.0,0.0,1.0));
+    } else {
+        model = glm::rotate(model, vecRotation[0]+animRotX, vec3(1.0,0.0,0.0));
+        model = glm::rotate(model, vecRotation[1]+animRotY, vec3(0.0,1.0,0.0));
+        model = glm::rotate(model, vecRotation[2]+animRotZ, vec3(0.0,0.0,1.0));
+    }
+
+    return model;
 
 }
 
@@ -147,14 +159,29 @@ void Transform::createUI(){
     bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)1, node_flags_child, "Model Matrix to child");
 
     if (node_open) {
-        ImGui::Text("Same matrix as parent");
+
+        ImGui::Text("Same position as parent");
+        ImGui::Checkbox("##TransformSamePositionAsParent", &samePosition);
+        if(!samePosition){
+            ImGui::SameLine(); ImGui::Text("Position: "); ImGui::SameLine();
+            ImGui::DragFloat3("##position", &positionToSend[0], 0.01f, lowestValue, highestValue, format);
+        }
+
+        ImGui::Text("Same rotation as parent");
+        ImGui::Checkbox("##TransformSameRotationAsParent", &sameRotation);
+        if(!sameRotation){
+            ImGui::SameLine(); ImGui::Text("Rotation: "); ImGui::SameLine();
+            ImGui::DragFloat3("##rotation", &rotationToSend[0], 0.01f, lowestValue, highestValue, format);
+        }
+
+        /*ImGui::Text("Same matrix as parent");
         ImGui::SameLine(); ImGui::Checkbox("##TransformSameAsParent", &sameAsModelMat);
         ImGui::Text("Position: "); ImGui::SameLine();
         ImGui::DragFloat3("position", &positionToSend[0], 0.01f, lowestValue, highestValue, format);
         ImGui::Text("Rotation: "); ImGui::SameLine();
         ImGui::DragFloat3("rotation", &rotationToSend[0], 0.01f, lowestValue, highestValue, format);
         ImGui::Text("Scale: "); ImGui::SameLine();
-        ImGui::DragFloat3("scale", &scaleToSend[0], 0.005f, 0.0f, highestValue, format);
+        ImGui::DragFloat3("scale", &scaleToSend[0], 0.005f, 0.0f, highestValue, format);*/
 
         int anim_node_flags_child = 0;
         bool node_open_anim_child = ImGui::TreeNodeEx((void*)(intptr_t)2, anim_node_flags_child, "Animation Child");
@@ -200,6 +227,7 @@ void Transform::setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX, fl
     animChildRotSpeedX = SpeedX; animChildRotSpeedY = SpeedY; animChildRotSpeedZ = SpeedZ;
 }
 
-void Transform::setSameMatrixAsParent(bool b){
-    sameAsModelMat = b;
+void Transform::setSameAsParent(bool position, bool rotation){
+    samePosition = position;
+    sameRotation = rotation;
 }

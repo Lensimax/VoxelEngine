@@ -19,7 +19,7 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-    Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0));
+    Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0.44,0,0));
     Transform *MoonTransform = new Transform(glm::vec3(0),glm::vec3(0.9,0,0), glm::vec3(0.2), glm::vec3(0));
 
     FileMeshObject *Sun = new FileMeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new SimpleMat());
@@ -33,10 +33,13 @@ Scene::Scene(){
 
 
     //// SET ANIMATION OF SOLAR SYSTEM
-    Sun->getTransform()->setSameMatrixAsParent(false);
-    Earth->getTransform()->setSameMatrixAsParent(false);
-    Earth->getTransform()->setChildAnimation(false,true,false, 0.,-0.05,0.);
+    Sun->getTransform()->setSameAsParent(true, false);
     Sun->getTransform()->setChildAnimation(false, true, false);
+
+
+    Earth->getTransform()->setSameAsParent(true, false);
+    Earth->getTransform()->setAnimation(false,true,false);
+    Earth->getTransform()->setChildAnimation(false,true,false, 0.,-0.05,0.);
 
 
 
