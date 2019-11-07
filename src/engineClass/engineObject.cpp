@@ -81,3 +81,7 @@ void EngineObject::createUI(char *ID){
     
     ImGui::EndChild();
 }
+
+void EngineObject::update(){
+    
+}

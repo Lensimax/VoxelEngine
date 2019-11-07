@@ -12,7 +12,7 @@ Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
     this->positionToSend = position;
     this->scaleToSend = scale;
     this->rotationToSend = rotation;
-    sameAsModelMat = false;
+    sameAsModelMat = true;
 }
 
 
@@ -59,7 +59,18 @@ mat4 Transform::getModelMat(mat4 modelMat){
 }
 
 mat4 Transform::getModelToChild(mat4 modelMat){
+    if(sameAsModelMat){
+        return getModelMat(modelMat);
+    } else {
+        modelMat = translate(modelMat, positionToSend);
+    // modelMat = translate(modelMat, center);
+        modelMat = glm::scale(modelMat, scaleToSend);
+        modelMat = glm::rotate(modelMat, rotationToSend[0], vec3(1.0,0.0,0.0));
+        modelMat = glm::rotate(modelMat, rotationToSend[1], vec3(0.0,1.0,0.0));
+        modelMat = glm::rotate(modelMat, rotationToSend[2], vec3(0.0,0.0,1.0));
 
+        return modelMat;
+    }
 
 }
 

@@ -71,13 +71,15 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l){
 
-    glm::mat4 modelMatrix = obj->transform->getModelMat(modelMat);
+    glm::mat4 matrixTochild = obj->getTransform()->getModelToChild(modelMat);
+    glm::mat4 modelMatrix = obj->getTransform()->getModelMat(modelMat);
+    
     if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
         o->draw(modelMatrix, c->getView(), c->getProj(), l);
     }
 
     for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
-        drawRecursive(modelMatrix, obj->listOfChildren[i], c, l);
+        drawRecursive(matrixTochild, obj->listOfChildren[i], c, l);
     }
 }
 

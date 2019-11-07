@@ -14,6 +14,8 @@ class EngineObject {
         virtual ~EngineObject() = default;
         virtual void createUI(char *ID);
 
+        virtual void update();
+
         void setName(std::string n);
         std::string getName();
         int getID();
@@ -28,8 +30,8 @@ class EngineObject {
 
         std::vector<EngineObject*> listOfChildren;
 
-        Transform *transform;
     protected:
+        Transform *transform;
 
         std::string name;
         int ID;

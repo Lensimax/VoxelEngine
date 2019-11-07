@@ -31,7 +31,7 @@ class Transform {
 
         vec3 vecPosition, vecScale, vecRotation, center;
 
-        bool sameAsModelMat = false;
+        bool sameAsModelMat = true;
 
         vec3 positionToSend, scaleToSend, rotationToSend;
 

@@ -35,6 +35,7 @@ class MainRenderer {
 
         void toggleWire();
 
+
     private:
 
         void renderTheScene(Scene *scene, int width, int height);
