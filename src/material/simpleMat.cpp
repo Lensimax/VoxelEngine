@@ -17,8 +17,6 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
-#include "SimpleMat.h"
-
 using namespace glm;
 
 SimpleMat::SimpleMat(glm::vec4 color){
