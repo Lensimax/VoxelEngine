@@ -3,6 +3,8 @@
 
 par Maxime Isnel
 
+lien du Git de [Green Engine](https://github.com/TheSpyGeek/Green-Engine) : https://github.com/TheSpyGeek/Green-Engine
+
 ## Compiler le code
 
 ##### Sur Linux
@@ -52,12 +54,13 @@ Pour dissocier ces deux matrices il faut aller sur l'interface => cliquer sur un
 
 Vous pouvez aussi animer la rotation de chaque objet dans la partie **Animation** (il y en une pour l'affichage de l'objet et une pour la matrice envoyée aux enfants). Vous pouvez cocher l'axe ou les axes que vous voulez faire tourner et à quelle vitesse. Vous pouvez "reset" l'animation en appuyant sur le bouton reset
 
-
+Pour vous assurer que la Terre tourne sur son axe et en étant incliné par rapport au soleil, vous pouvez activé les **WireFrame** (```View => Toggle wire frame```).
 
 ## Fonctionnalités
 
 Vous pouvez :
 
+ * Vous pouvez redimensionner la fenêtre de l'application et la fenêtre du **scene manager**
  * Ouvrir un arbe dans le **scene manager** si l'objet à des fils en clique sur la flèche
  * Ajouter des objets avec maillage en faisant ```Edit => Add MeshObject```. Vous pouvez ensuite changer le maillage chargé en changeant le chemin du fichier .OFF et en appuyant sur le bouton "Recreate"
  * Afficher l'objet avec des ```WireFrame``` en faisant ```View => Toggle wire frame```
