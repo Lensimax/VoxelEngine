@@ -45,5 +45,11 @@ void InputManager::update(){
         }
     }
 
+    if(io.KeyCtrl && ImGui::IsKeyPressed('P')){
+        if(scene != NULL){
+            scene->togglePause();
+        }
+    }
+
 
 }

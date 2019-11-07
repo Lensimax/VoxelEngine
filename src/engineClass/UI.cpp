@@ -95,7 +95,7 @@ void UI::createUISceneManager(Scene *scene){
 
     ImGui::Begin("Scene Manager", NULL, ImGuiWindowFlags_MenuBar);
 
-
+    if(scene == NULL) return;
 
     // Menu on the top
     if (ImGui::BeginMenuBar()){
@@ -123,6 +123,11 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("640*480")) { if(window != NULL) glfwSetWindowSize(window, 640, 480); }
             if (ImGui::MenuItem("1280*720")) { if(window != NULL) glfwSetWindowSize(window, 1280, 720); }
             if (ImGui::MenuItem("1920*1080")) { if(window != NULL) glfwSetWindowSize(window, 1920, 1080); }
+            ImGui::EndMenu();
+        }
+
+        if(ImGui::BeginMenu("Animation")){
+            if (ImGui::MenuItem("Pause/Resume", "CTRL+P")) { scene->togglePause(); }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();

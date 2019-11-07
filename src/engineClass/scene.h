@@ -46,12 +46,14 @@ class Scene {
         std::vector<EngineObject*> objectsEngine;
         int addNewId();
 
+        void togglePause();
+
     private:
         void deleteScene();
 
         int IDObject = 0;
 
-
+        bool pause;
 };
 
 #endif

@@ -80,8 +80,8 @@ mat4 Transform::getModelToChild(mat4 modelMat){
         return getModelMat(modelMat);
     } else {
         modelMat = translate(modelMat, positionToSend);
-    // modelMat = translate(modelMat, center);
-        modelMat = glm::scale(modelMat, scaleToSend);
+        // modelMat = translate(modelMat, center);
+        //modelMat = glm::scale(modelMat, scaleToSend);
         modelMat = glm::rotate(modelMat, rotationToSend[0]+animChildRotX, vec3(1.0,0.0,0.0));
         modelMat = glm::rotate(modelMat, rotationToSend[1]+animChildRotY, vec3(0.0,1.0,0.0));
         modelMat = glm::rotate(modelMat, rotationToSend[2]+animChildRotZ, vec3(0.0,0.0,1.0));
@@ -186,4 +186,20 @@ void Transform::createUI(){
 
     // to hide label of the input
     ImGui::PopItemWidth();
+}
+
+
+void Transform::setAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX, float SpeedY, float SpeedZ){
+    b_animRotX = b_X; b_animRotY = b_Y; b_animRotZ = b_Z;
+    animRotSpeedX = SpeedX; animRotSpeedY = SpeedY; animRotSpeedZ = SpeedZ;
+}
+
+
+void Transform::setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX, float SpeedY, float SpeedZ){
+    b_animChildRotX = b_X; b_animChildRotY = b_Y; b_animChildRotZ = b_Z;
+    animChildRotSpeedX = SpeedX; animChildRotSpeedY = SpeedY; animChildRotSpeedZ = SpeedZ;
+}
+
+void Transform::setSameMatrixAsParent(bool b){
+    sameAsModelMat = b;
 }

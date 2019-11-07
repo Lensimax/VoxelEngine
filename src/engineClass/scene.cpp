@@ -10,30 +10,38 @@
 
 Scene::Scene(){
 
+    pause = false;
+
     IDObject = 0;
 
 
     objectsEngine = std::vector<EngineObject*>();
 
-    FileMeshObject *obj = new FileMeshObject(addNewId(),"Object Loaded", (char*)"../data/models/suzanne.off", new Transform());
-    obj->addChild(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/suzanne.off", new Transform(glm::vec3(0),glm::vec3(-2.5,0,0))));
+    Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.2), glm::vec3(0));
 
-    objectsEngine.push_back(obj);
+    FileMeshObject *Sun = new FileMeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new Lambertian(glm::vec4(1.,0.,0.,1.)));
+    FileMeshObject *Earth = new FileMeshObject(addNewId(),"Earth", (char*)"../data/models/sphere.off", EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
+    FileMeshObject *Moon = new FileMeshObject(addNewId(),"Moon", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(-2.5,0,0)), new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
+
+    Sun->addChild(Earth);
+    Earth->addChild(Moon);
+
+    objectsEngine.push_back(Sun);
+
+
+    //// SET ANIMATION OF SOLAR SYSTEM
+    Sun->getTransform()->setSameMatrixAsParent(false);
+    Sun->getTransform()->setChildAnimation(false, true, false);
+
+
 
     // FileMeshObject *obj2 = new FileMeshObject(addNewId(),"Object Loaded", (char*)"../data/models/sphere.off", new Transform());
     // obj2->addChild(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(-2.5,0,0))));
     // objectsEngine.push_back(obj2);
 
-
-
-
-
     // objectsEngine.push_back(new Sphere());
 
     // objectsEngine.push_back(new Cube());
-
-
-
 
     Camera *cam = new CameraProj(addNewId());
 
@@ -149,7 +157,14 @@ void Scene::updateObj(EngineObject *obj){
 }
 
 void Scene::update(){
-    for(unsigned int i=0; i<objectsEngine.size(); i++){
-        updateObj(objectsEngine[i]);
+    if(!pause){
+        for(unsigned int i=0; i<objectsEngine.size(); i++){
+            updateObj(objectsEngine[i]);
+        }
     }
+}
+
+
+void Scene::togglePause(){
+    pause = !pause;
 }

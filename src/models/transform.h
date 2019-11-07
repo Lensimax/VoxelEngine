@@ -29,6 +29,10 @@ class Transform {
 
         void createUI();
 
+        void setAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
+        void setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
+        void setSameMatrixAsParent(bool b);
+
     private:
 
         void reset();
