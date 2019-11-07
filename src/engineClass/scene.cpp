@@ -16,10 +16,17 @@ Scene::Scene(){
     objectsEngine = std::vector<EngineObject*>();
 
     FileMeshObject *obj = new FileMeshObject(addNewId(),"Object Loaded", (char*)"../data/models/suzanne.off", new Transform());
-    obj->addChild(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(-2.5,0,0))));
-
+    obj->addChild(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/suzanne.off", new Transform(glm::vec3(0),glm::vec3(-2.5,0,0))));
 
     objectsEngine.push_back(obj);
+
+    // FileMeshObject *obj2 = new FileMeshObject(addNewId(),"Object Loaded", (char*)"../data/models/sphere.off", new Transform());
+    // obj2->addChild(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(-2.5,0,0))));
+    // objectsEngine.push_back(obj2);
+
+
+
+
 
     // objectsEngine.push_back(new Sphere());
 

@@ -18,6 +18,9 @@ Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
 
     reset();
 
+    animRotSpeedX = defaultSpeed, animRotSpeedY = defaultSpeed; animRotSpeedZ = defaultSpeed;
+    animChildRotSpeedX = defaultSpeed; animChildRotSpeedY = defaultSpeed; animChildRotSpeedZ = defaultSpeed;
+
     b_animRotX = false, b_animRotY = false; b_animRotZ = false;
     b_animChildRotX = false; b_animChildRotY = false; b_animChildRotZ = false;
 }
@@ -90,13 +93,13 @@ mat4 Transform::getModelToChild(mat4 modelMat){
 
 void Transform::update(){
 
-    if(b_animRotX){ animRotX += 0.01; }
-    if(b_animRotY){ animRotY += 0.01; }
-    if(b_animRotZ){ animRotZ += 0.01; }
+    if(b_animRotX){ animRotX += animRotSpeedX; }
+    if(b_animRotY){ animRotY += animRotSpeedY; }
+    if(b_animRotZ){ animRotZ += animRotSpeedZ; }
 
-    if(b_animChildRotX){ animChildRotX += 0.01; }
-    if(b_animChildRotY){ animChildRotY += 0.01; }
-    if(b_animChildRotZ){ animChildRotZ += 0.01; }
+    if(b_animChildRotX){ animChildRotX += animChildRotSpeedX; }
+    if(b_animChildRotY){ animChildRotY += animChildRotSpeedY; }
+    if(b_animChildRotZ){ animChildRotZ += animChildRotSpeedZ; }
 
 }
 
@@ -126,10 +129,16 @@ void Transform::createUI(){
     if (node_open_anim) {
         ImGui::Text("Rotation X : ");
         ImGui::SameLine(); ImGui::Checkbox("##RotX", &b_animRotX);
+        ImGui::SameLine(); ImGui::Text("speed X: "); ImGui::SameLine();
+        ImGui::DragFloat("speedX", &animRotSpeedX, 0.002f, lowestValue, highestValue, format);
         ImGui::Text("Rotation Y : ");
         ImGui::SameLine(); ImGui::Checkbox("##RotY", &b_animRotY);
+        ImGui::SameLine(); ImGui::Text("speed Y: "); ImGui::SameLine();
+        ImGui::DragFloat("speedY", &animRotSpeedY, 0.002f, lowestValue, highestValue, format);
         ImGui::Text("Rotation Z : ");
         ImGui::SameLine(); ImGui::Checkbox("##RotZ", &b_animRotZ);
+        ImGui::SameLine(); ImGui::Text("speed Z: "); ImGui::SameLine();
+        ImGui::DragFloat("speedZ", &animRotSpeedZ, 0.002f, lowestValue, highestValue, format);
 
         ImGui::TreePop();
     }
@@ -153,16 +162,26 @@ void Transform::createUI(){
         if (node_open_anim_child) {
             ImGui::Text("Rotation X : ");
             ImGui::SameLine(); ImGui::Checkbox("##ChildRotX", &b_animChildRotX);
+            ImGui::SameLine(); ImGui::Text("speed X: "); ImGui::SameLine();
+            ImGui::DragFloat("speedX", &animChildRotSpeedX, 0.002f, lowestValue, highestValue, format);
             ImGui::Text("Rotation Y : ");
             ImGui::SameLine(); ImGui::Checkbox("##ChildRotY", &b_animChildRotY);
+            ImGui::SameLine(); ImGui::Text("speed Y: "); ImGui::SameLine();
+            ImGui::DragFloat("speedY", &animChildRotSpeedY, 0.002f, lowestValue, highestValue, format);
             ImGui::Text("Rotation Z : ");
             ImGui::SameLine(); ImGui::Checkbox("##ChildRotZ", &b_animChildRotZ);
+            ImGui::SameLine(); ImGui::Text("speed Z: "); ImGui::SameLine();
+            ImGui::DragFloat("speedZ", &animChildRotSpeedZ, 0.002f, lowestValue, highestValue, format);
 
             ImGui::TreePop();
         }
 
 
         ImGui::TreePop();
+    }
+
+    if(ImGui::Button("Reset")){
+        reset();
     }
 
     // to hide label of the input

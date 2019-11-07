@@ -39,11 +39,18 @@ class Transform {
 
         vec3 positionToSend, scaleToSend, rotationToSend;
 
+
+        // To animate the transform
         float animRotX, animRotY, animRotZ;
         float animChildRotX, animChildRotY, animChildRotZ;
 
+        float animRotSpeedX, animRotSpeedY, animRotSpeedZ;
+        float animChildRotSpeedX, animChildRotSpeedY, animChildRotSpeedZ;
+
         bool b_animRotX, b_animRotY, b_animRotZ;
         bool b_animChildRotX, b_animChildRotY, b_animChildRotZ;
+
+        const float defaultSpeed = 0.01;
 
 };
 
