@@ -8,6 +8,11 @@ Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
     this->vecScale = scale;
     this->vecRotation = rotation;
     this->center = center;
+
+    this->positionToSend = position;
+    this->scaleToSend = scale;
+    this->rotationToSend = rotation;
+    sameAsModelMat = false;
 }
 
 
@@ -53,6 +58,11 @@ mat4 Transform::getModelMat(mat4 modelMat){
     return modelMat;
 }
 
+mat4 Transform::getModelToChild(mat4 modelMat){
+
+
+}
+
 
 
 void Transform::createUI(){
@@ -72,6 +82,23 @@ void Transform::createUI(){
     ImGui::DragFloat3("rotation", &vecRotation[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Scale: "); ImGui::SameLine();
     ImGui::DragFloat3("scale", &vecScale[0], 0.005f, 0.0f, highestValue, format);
+
+    int node_flags = 0;
+
+    bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)0, node_flags, "Model Matrice to child");
+
+    if (node_open) {
+        ImGui::Text("Same matrice as parent");
+        ImGui::SameLine(); ImGui::Checkbox("##TransformSameAsParent", &sameAsModelMat);
+        ImGui::Text("Position: "); ImGui::SameLine();
+        ImGui::DragFloat3("position", &positionToSend[0], 0.01f, lowestValue, highestValue, format);
+        ImGui::Text("Rotation: "); ImGui::SameLine();
+        ImGui::DragFloat3("rotation", &rotationToSend[0], 0.01f, lowestValue, highestValue, format);
+        ImGui::Text("Scale: "); ImGui::SameLine();
+        ImGui::DragFloat3("scale", &scaleToSend[0], 0.005f, 0.0f, highestValue, format);
+
+        ImGui::TreePop();
+    }
 
     // to hide label of the input
     ImGui::PopItemWidth();

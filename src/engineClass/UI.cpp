@@ -133,43 +133,9 @@ void UI::createUISceneManager(Scene *scene){
 
     ImGui::BeginChild("left", ImVec2(sizeLeft, 0), true); // pass width here
 
-
-    // pour l'arbre de scene
-    // int node_clicked;
     displayEngineNode(scene->objectsEngine);
 
 
-    /*const bool is_selected = (selection_mask & (1 << i)) != 0;
-    if (is_selected)
-        node_flags |= ImGuiTreeNodeFlags_Selected;
-    if (i < 3)
-    {
-        // Items 0..2 are Tree Node
-        bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Node %d", i);
-        if (ImGui::IsItemClicked())
-            node_clicked = i;
-        if (node_open)
-        {
-            ImGui::BulletText("Blah blah\nBlah Blah");
-            ImGui::TreePop();
-        }
-    }
-*/
-
-
-
-    // on cherche celui selectionné
-    /*char obj[1024];
-    for (unsigned int i = 0; i < listOfObjects.size(); i++){
-        sprintf(obj,"##obj %i", i); // hidden label
-        bool is_selected = listOfID[i] == selectedID;
-        if (ImGui::Selectable(obj, is_selected)){
-              selectedID = listOfID[i];
-        }
-        ImGui::SameLine();
-        ImGui::Text(listOfObjects[i].c_str());
-    }
-*/
     ImGui::EndChild();
 
     ImGui::SameLine();

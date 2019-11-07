@@ -23,6 +23,7 @@ class Transform {
 
         mat4 getModelMat();
         mat4 getModelMat(mat4 modelMat);
+        mat4 getModelToChild(mat4 modelMat);
 
         void createUI();
 
@@ -30,7 +31,9 @@ class Transform {
 
         vec3 vecPosition, vecScale, vecRotation, center;
 
+        bool sameAsModelMat = false;
 
+        vec3 positionToSend, scaleToSend, rotationToSend;
 
 };
 
