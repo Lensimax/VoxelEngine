@@ -4,7 +4,7 @@
 
 Green-engine is a graphic engine from a student to learn how we create a graphical engine.
 
-[Green engine](ressources/screenGreenEngine.PNG)
+![Green engine](ressources/screenGreenEngine.PNG)
 
 #### Features
 
@@ -30,8 +30,8 @@ To build :
 
 Dependencies :
 
-* mingw64 or mingw32
-* cmake
+* [Mingw](https://sourceforge.net/projects/mingw-w64/)
+* [Cmake](https://cmake.org/download/)
 
 To build :
 
