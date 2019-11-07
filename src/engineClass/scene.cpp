@@ -133,3 +133,16 @@ int Scene::addNewId(){
     IDObject++;
     return IDObject-1;
 }
+
+void Scene::updateObj(EngineObject *obj){
+    obj->update();
+    for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
+        updateObj(obj->listOfChildren[i]);
+    }
+}
+
+void Scene::update(){
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        updateObj(objectsEngine[i]);
+    }
+}

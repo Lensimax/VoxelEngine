@@ -21,6 +21,8 @@ class Transform {
         void scale(vec3 scale);
         void setCenter(vec3 center);
 
+        void update();
+
         mat4 getModelMat();
         mat4 getModelMat(mat4 modelMat);
         mat4 getModelToChild(mat4 modelMat);
@@ -34,6 +36,12 @@ class Transform {
         bool sameAsModelMat = true;
 
         vec3 positionToSend, scaleToSend, rotationToSend;
+
+        float animRotX, animRotY, animRotZ;
+        float animChildRotX, animChildRotY, animChildRotZ;
+
+        bool b_animRotX, b_animRotY, b_animRotZ;
+        bool b_animChildRotX, b_animChildRotY, b_animChildRotZ;
 
 };
 

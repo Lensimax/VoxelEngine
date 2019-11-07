@@ -78,10 +78,10 @@ void EngineObject::createUI(char *ID){
     ImGui::Separator();
     transform->createUI();
 
-    
+
     ImGui::EndChild();
 }
 
 void EngineObject::update(){
-    
+    transform->update();
 }

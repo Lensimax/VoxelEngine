@@ -164,6 +164,9 @@ int main(int, char**)
         ///////////////
 
         inputManager->update();
+
+        scene->update();
+
         ui->drawUI();
 
         // ImGui::ShowDemoWindow();

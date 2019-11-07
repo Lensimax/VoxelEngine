@@ -32,6 +32,9 @@ class Scene {
         void drawUIAtID(std::vector<EngineObject*> objs, int indexItem, char *ID);
         void getAllObjects(std::vector<std::string> & names, std::vector<int> & ids);
 
+        void update();
+        void updateObj(EngineObject *obj);
+
 
         void addMeshObject();
         void addPlane();
