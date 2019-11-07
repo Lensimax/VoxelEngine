@@ -86,7 +86,7 @@ void Lambertian::createUI(){
     // to hide label of the input
     ImGui::PushItemWidth(-1);
 
-    ImGui::Text("Material"); ImGui::SameLine();
+    ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Material"); ImGui::SameLine();
     if (ImGui::Button("Refresh")){
         reloadShaders();
     }

@@ -212,27 +212,6 @@ void Mesh::createUI(){
     ImGui::Checkbox("smoothNormal",&smoothNormals);
 
 
-    /*ImGui::Text("Smoothing vertices");
-    ImGui::Separator();
-    char items[2][1024];
-    sprintf(items[0], "%s", uniformSmoothingString);
-    sprintf(items[1], "%s", laplaceSmoothingString);
-    // Here our selection is a single pointer stored outside the object.
-    if (ImGui::BeginCombo("type smoothing", type_smoothing, 0)) // The second parameter is the label previewed before opening the combo.
-    {
-        for (int n = 0; n < 2; n++)
-        {
-            bool is_selected = (type_smoothing == items[n]);
-            if (ImGui::Selectable(items[n], is_selected))
-                sprintf(type_smoothing, "%s", items[n]);
-            if (is_selected)
-                ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)
-        }
-        ImGui::EndCombo();
-    }
-
-    ImGui::InputInt("number of iterations", &nbSmoothingIteration, 1, 100);*/
-
 
     ////// SIMPLIFICATION DE SOMMETS ///
     ImGui::Text("vertices simplification");

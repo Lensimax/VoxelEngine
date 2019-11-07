@@ -108,7 +108,7 @@ void MeshLoader::readOFFfile(char *filename){
 void MeshLoader::createUI(){
     ImGui::PushItemWidth(-1);
 
-    ImGui::Text("Mesh Loader");
+    ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Mesh Loader");
     ImGui::InputText("fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
     this->Mesh::createUI();
 

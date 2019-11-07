@@ -16,16 +16,22 @@ Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
     this->rotationToSend = rotation;
     sameAsModelMat = true;
 
-    animRotX = 0, animRotY = 0; animRotZ = 0;
-    animChildRotX = 0; animChildRotY = 0; animChildRotZ = 0;
+    reset();
 
     b_animRotX = false, b_animRotY = false; b_animRotZ = false;
     b_animChildRotX = false; b_animChildRotY = false; b_animChildRotZ = false;
 }
 
 
+
 Transform::~Transform(){
 
+}
+
+
+void Transform::reset(){
+    animRotX = 0, animRotY = 0; animRotZ = 0;
+    animChildRotX = 0; animChildRotY = 0; animChildRotZ = 0;
 }
 
 void Transform::setPosition(vec3 position){
@@ -107,7 +113,7 @@ void Transform::createUI(){
     // to hide label of the input
     ImGui::PushItemWidth(-1);
 
-    ImGui::Text("Transform");
+    ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Transform");
     ImGui::Text("Position: "); ImGui::SameLine();
     ImGui::DragFloat3("position", &vecPosition[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Rotation: "); ImGui::SameLine();

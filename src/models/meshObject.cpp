@@ -107,6 +107,10 @@ void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pro
 void MeshObject::createUI(char *ID){
     ImGui::BeginChild(ID);
     ImGui::Text(name.c_str());
+
+    ImGui::Separator();
+    transform->createUI();
+
     ImGui::Separator();
     mesh->createUI();
     if (ImGui::Button("Simplify")){
@@ -119,9 +123,6 @@ void MeshObject::createUI(char *ID){
     }
     ImGui::Text("Show bounding box "); ImGui::SameLine();
     ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
-    ImGui::Separator();
-
-    transform->createUI();
     ImGui::Separator();
     material->createUI();
     ImGui::Separator();

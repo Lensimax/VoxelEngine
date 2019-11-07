@@ -31,6 +31,8 @@ class Transform {
 
     private:
 
+        void reset();
+
         vec3 vecPosition, vecScale, vecRotation, center;
 
         bool sameAsModelMat = true;

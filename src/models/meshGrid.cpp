@@ -116,7 +116,7 @@ void MeshGrid::cleanup(){
 
 
 void MeshGrid::createUI(){
-    ImGui::Text("Mesh");
+	ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Mesh Grid");
 
 	// nbPointPerRowColumn, width, gridZ
 	ImGui::Text("Size :"); ImGui::SameLine();
