@@ -20,9 +20,9 @@ Scene::Scene(){
     objectsEngine = std::vector<EngineObject*>();
 
 
-    FileMeshObject *obj2 = new FileMeshObject(addNewId(),"Suzanne", (char*)"../data/models/monkey.off", new Transform());
-    obj2->addChild(new FileMeshObject(addNewId(),"Singe", (char*)"../data/models/monkey.off", new Transform(glm::vec3(0),glm::vec3(-3,0,-2)), new Lambertian(glm::vec4(1,1,0,1))));
-    objectsEngine.push_back(obj2);
+    FileMeshObject *obj = new FileMeshObject(addNewId(),"Suzanne", (char*)"../data/models/monkey.off", new Transform());
+    // obj2->addChild(new FileMeshObject(addNewId(),"Singe", (char*)"../data/models/monkey.off", new Transform(glm::vec3(0),glm::vec3(-3,0,-2)), new Lambertian(glm::vec4(1,1,0,1))));
+    objectsEngine.push_back(obj);
 
 
     objectsEngine.push_back(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(2.5,0,-4))));
