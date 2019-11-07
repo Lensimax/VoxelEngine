@@ -144,10 +144,10 @@ void Transform::createUI(){
     }
 
     int node_flags_child = 0;
-    bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)1, node_flags_child, "Model Matrice to child");
+    bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)1, node_flags_child, "Model Matrix to child");
 
     if (node_open) {
-        ImGui::Text("Same matrice as parent");
+        ImGui::Text("Same matrix as parent");
         ImGui::SameLine(); ImGui::Checkbox("##TransformSameAsParent", &sameAsModelMat);
         ImGui::Text("Position: "); ImGui::SameLine();
         ImGui::DragFloat3("position", &positionToSend[0], 0.01f, lowestValue, highestValue, format);
