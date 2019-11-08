@@ -58,10 +58,10 @@ mat4 Transform::getModelMat(){
     mat4 model = mat4(1.0f);
     model = translate(model, vecPosition);
     // model = translate(model, center);
-    model = glm::scale(model, vecScale);
     model = glm::rotate(model, vecRotation[0], vec3(1.0,0.0,0.0));
     model = glm::rotate(model, vecRotation[1], vec3(0.0,1.0,0.0));
     model = glm::rotate(model, vecRotation[2], vec3(0.0,0.0,1.0));
+    model = glm::scale(model, vecScale);
 
     return model;
 }
@@ -69,10 +69,10 @@ mat4 Transform::getModelMat(){
 mat4 Transform::getModelMat(mat4 modelMat){
     modelMat = translate(modelMat, vecPosition);
     // modelMat = translate(modelMat, center);
-    modelMat = glm::scale(modelMat, vecScale);
     modelMat = glm::rotate(modelMat, vecRotation[0]+animRotX, vec3(1.0,0.0,0.0));
     modelMat = glm::rotate(modelMat, vecRotation[1]+animRotY, vec3(0.0,1.0,0.0));
     modelMat = glm::rotate(modelMat, vecRotation[2]+animRotZ, vec3(0.0,0.0,1.0));
+    modelMat = glm::scale(modelMat, vecScale);
 
     return modelMat;
 }
@@ -207,7 +207,7 @@ void Transform::createUI(){
         ImGui::TreePop();
     }
 
-    if(ImGui::Button("Reset")){
+    if(ImGui::Button("Reset Animation")){
         reset();
     }
 
