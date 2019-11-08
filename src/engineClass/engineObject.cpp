@@ -3,6 +3,7 @@
 #include "engineObject.h"
 
 #include <stdio.h>
+#include <iostream>
 
 
 EngineObject::EngineObject(int id, std::string n, Transform *t){

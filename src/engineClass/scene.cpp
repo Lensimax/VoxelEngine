@@ -3,7 +3,7 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../tools/cameraProj.h"
 
-#include "../models/fileMeshObject.h"
+#include "../models/MeshObject.h"
 
 #include "../models/plane.h"
 
@@ -20,12 +20,12 @@ Scene::Scene(){
     objectsEngine = std::vector<EngineObject*>();
 
 
-    FileMeshObject *obj = new FileMeshObject(addNewId(),"Suzanne", (char*)"../data/models/suzanne.off", new Transform());
-    // obj2->addChild(new FileMeshObject(addNewId(),"Singe", (char*)"../data/models/monkey.off", new Transform(glm::vec3(0),glm::vec3(-3,0,-2)), new Lambertian(glm::vec4(1,1,0,1))));
+    MeshObject *obj = new MeshObject(addNewId(),"Suzanne", (char*)"../data/models/suzanne.off", new Transform());
+    // obj2->addChild(new MeshObject(addNewId(),"Singe", (char*)"../data/models/monkey.off", new Transform(glm::vec3(0),glm::vec3(-3,0,-2)), new Lambertian(glm::vec4(1,1,0,1))));
     objectsEngine.push_back(obj);
 
 
-    objectsEngine.push_back(new FileMeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(2.5,0,-4))));
+    objectsEngine.push_back(new MeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(2.5,0,-4))));
 
 
     Camera *cam = new CameraProj(addNewId());
@@ -73,7 +73,7 @@ Camera *Scene::getCamera(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         tmp = getCameraRecursive(objectsEngine[i]);
         if(tmp != NULL){ return tmp;}
-    }   
+    }
     return NULL;
 }
 
@@ -82,7 +82,7 @@ Light *Scene::getLight(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         tmp = getLightRecursive(objectsEngine[i]);
         if(tmp != NULL){ return tmp;}
-    }   
+    }
     return NULL;
 }
 
@@ -140,7 +140,7 @@ void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & i
 
 
 void Scene::addMeshObject(){
-    objectsEngine.push_back(new FileMeshObject(addNewId()));
+    objectsEngine.push_back(new MeshObject(addNewId()));
 }
 
 void Scene::addPlane(){
@@ -152,7 +152,7 @@ void Scene::addEngineObject(){
 }
 
 void Scene::addSphere(){
-    objectsEngine.push_back(new FileMeshObject(addNewId(), "Sphere", (char*)"../data/models/sphere.off"));
+    objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", (char*)"../data/models/sphere.off"));
 }
 
 
@@ -205,9 +205,9 @@ void Scene::loadSolarSystem(){
     Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0.44,0,0));
     Transform *MoonTransform = new Transform(glm::vec3(0),glm::vec3(0.9,0,0), glm::vec3(0.2), glm::vec3(0));
 
-    FileMeshObject *Sun = new FileMeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new SimpleMat());
-    FileMeshObject *Earth = new FileMeshObject(addNewId(),"Earth", (char*)"../data/models/sphere.off", EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
-    FileMeshObject *Moon = new FileMeshObject(addNewId(),"Moon", (char*)"../data/models/sphere.off", MoonTransform , new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
+    MeshObject *Sun = new MeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new SimpleMat());
+    MeshObject *Earth = new MeshObject(addNewId(),"Earth", (char*)"../data/models/sphere.off", EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
+    MeshObject *Moon = new MeshObject(addNewId(),"Moon", (char*)"../data/models/sphere.off", MoonTransform , new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
 
     Sun->addChild(Earth);
     Earth->addChild(Moon);

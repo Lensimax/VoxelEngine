@@ -7,6 +7,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <iostream>
+
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include <GL/gl3w.h>    // Initialize with gl3wInit()
@@ -42,8 +44,4 @@ Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ,
 
 
 Plane::~Plane(){
-    deleteVAO();
-    delete material;
-    delete mesh;
-    
 }
