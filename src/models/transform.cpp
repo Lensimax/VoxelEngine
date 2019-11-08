@@ -207,7 +207,7 @@ void Transform::createUI(){
         ImGui::TreePop();
     }
 
-    if(ImGui::Button("Reset")){
+    if(ImGui::Button("Reset Animation")){
         reset();
     }
 
