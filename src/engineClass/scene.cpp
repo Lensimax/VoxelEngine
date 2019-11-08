@@ -30,7 +30,11 @@ Scene::Scene(){
 
     Camera *cam = new CameraProj(addNewId());
 
-    objectsEngine.push_back(cam);
+
+    EngineObject *obj2 = new EngineObject(addNewId());
+    obj2->addChild(cam);
+
+    objectsEngine.push_back(obj2);
 
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
 
@@ -47,12 +51,29 @@ void Scene::deleteScene(){
     }
 }
 
-Camera *Scene::getCamera(){
-    for(unsigned int i=0; i<objectsEngine.size(); i++){
-        if(Camera* c = dynamic_cast<Camera*>(objectsEngine[i])) {
-            return c;
+Camera *Scene::getCameraRecursive(EngineObject *obj){
+    Camera *tmp = NULL;
+    if(Camera* c = dynamic_cast<Camera*>(obj)) {
+        return c;
+    } else {
+        if(obj->listOfChildren.size() == 0){
+            return NULL;
+        } else {
+            for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
+                tmp = getCameraRecursive(obj->listOfChildren[i]);
+                if(tmp != NULL){ return tmp;}
+            }
         }
+        return NULL;
     }
+}
+
+Camera *Scene::getCamera(){
+    Camera *tmp = NULL;
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        tmp = getCameraRecursive(objectsEngine[i]);
+        if(tmp != NULL){ return tmp;}
+    }   
     return NULL;
 }
 
