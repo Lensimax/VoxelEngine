@@ -53,6 +53,9 @@ class Scene {
     private:
         void deleteScene();
 
+        Camera *getCameraRecursive(EngineObject *obj);
+        Light *getLightRecursive(EngineObject *obj);
+
         int IDObject = 0;
 
         bool pause;

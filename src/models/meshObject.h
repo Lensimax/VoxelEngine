@@ -25,8 +25,9 @@
 
 class MeshObject : public DrawableObject {
     public:
-
-        virtual ~MeshObject() = default;;
+        MeshObject();
+        MeshObject(int id, std::string n = "Mesh Object", char *filename = "../data/models/monkey.off",  Transform *t = new Transform(), Material *m = new Lambertian());
+        ~MeshObject();
 
 
         /*virtual float *getVertices();
