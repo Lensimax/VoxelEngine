@@ -20,7 +20,7 @@ Scene::Scene(){
     objectsEngine = std::vector<EngineObject*>();
 
 
-    FileMeshObject *obj = new FileMeshObject(addNewId(),"Suzanne", (char*)"../data/models/monkey.off", new Transform());
+    FileMeshObject *obj = new FileMeshObject(addNewId(),"Suzanne", (char*)"../data/models/suzanne.off", new Transform());
     // obj2->addChild(new FileMeshObject(addNewId(),"Singe", (char*)"../data/models/monkey.off", new Transform(glm::vec3(0),glm::vec3(-3,0,-2)), new Lambertian(glm::vec4(1,1,0,1))));
     objectsEngine.push_back(obj);
 
@@ -78,12 +78,29 @@ Camera *Scene::getCamera(){
 }
 
 Light *Scene::getLight(){
+    Light *tmp = NULL;
     for(unsigned int i=0; i<objectsEngine.size(); i++){
-        if(Light* l = dynamic_cast<Light*>(objectsEngine[i])) {
-            return l;
-        }
-    }
+        tmp = getLightRecursive(objectsEngine[i]);
+        if(tmp != NULL){ return tmp;}
+    }   
     return NULL;
+}
+
+Light *Scene::getLightRecursive(EngineObject *obj){
+    Light *tmp = NULL;
+    if(Light* l = dynamic_cast<Light*>(obj)) {
+        return l;
+    } else {
+        if(obj->listOfChildren.size() == 0){
+            return NULL;
+        } else {
+            for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
+                tmp = getLightRecursive(obj->listOfChildren[i]);
+                if(tmp != NULL){ return tmp;}
+            }
+        }
+        return NULL;
+    }
 }
 
 void Scene::createUIAtID(int indexItem, char *ID){

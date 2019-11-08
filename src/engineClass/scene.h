@@ -54,6 +54,7 @@ class Scene {
         void deleteScene();
 
         Camera *getCameraRecursive(EngineObject *obj);
+        Light *getLightRecursive(EngineObject *obj);
 
         int IDObject = 0;
 
