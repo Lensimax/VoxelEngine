@@ -11,7 +11,7 @@ class EngineObject {
 
     public:
     	EngineObject(int id = -1, std::string n = "EngineObject", Transform *t = new Transform());
-        virtual ~EngineObject() = default;
+        virtual ~EngineObject();
         virtual void createUI(char *ID);
 
         virtual void update();

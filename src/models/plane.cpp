@@ -23,7 +23,7 @@
 
 
 
-Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ, Transform *t, Material *m){
+Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ, Transform *t, Material *m) {
     transform = t;
 
     mesh = new MeshGrid(size, width, gridZ);
@@ -43,7 +43,7 @@ Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ,
 
 Plane::~Plane(){
     deleteVAO();
-    delete transform;
     delete material;
     delete mesh;
+    
 }

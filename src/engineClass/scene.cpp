@@ -36,7 +36,7 @@ Scene::Scene(){
 
     objectsEngine.push_back(obj2);
 
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
+    obj2->addChild(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
 
 
 }

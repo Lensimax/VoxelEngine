@@ -11,10 +11,13 @@ EngineObject::EngineObject(int id, std::string n, Transform *t){
 	transform = t;
 }
 
-/*for(unsigned int i=0; i<listOfChildren.size(); i++){
-        listOfChildren[i]->deleteAllChildren();
-        delete(listOfChildren[i]);
-    }*/
+EngineObject::~EngineObject(){
+    delete transform;
+    for(unsigned int i=0; i<listOfChildren.size(); i++){
+        delete listOfChildren[i];
+    }
+}
+
 
 void EngineObject::setName(std::string n){
     name = n;
