@@ -58,10 +58,10 @@ mat4 Transform::getModelMat(){
     mat4 model = mat4(1.0f);
     model = translate(model, vecPosition);
     // model = translate(model, center);
-    model = glm::scale(model, vecScale);
     model = glm::rotate(model, vecRotation[0], vec3(1.0,0.0,0.0));
     model = glm::rotate(model, vecRotation[1], vec3(0.0,1.0,0.0));
     model = glm::rotate(model, vecRotation[2], vec3(0.0,0.0,1.0));
+    model = glm::scale(model, vecScale);
 
     return model;
 }
@@ -69,10 +69,10 @@ mat4 Transform::getModelMat(){
 mat4 Transform::getModelMat(mat4 modelMat){
     modelMat = translate(modelMat, vecPosition);
     // modelMat = translate(modelMat, center);
-    modelMat = glm::scale(modelMat, vecScale);
     modelMat = glm::rotate(modelMat, vecRotation[0]+animRotX, vec3(1.0,0.0,0.0));
     modelMat = glm::rotate(modelMat, vecRotation[1]+animRotY, vec3(0.0,1.0,0.0));
     modelMat = glm::rotate(modelMat, vecRotation[2]+animRotZ, vec3(0.0,0.0,1.0));
+    modelMat = glm::scale(modelMat, vecScale);
 
     return modelMat;
 }
@@ -128,7 +128,7 @@ void Transform::createUI(){
     // to hide label of the input
     ImGui::PushItemWidth(-1);
 
-    ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Transform");
+    ImGui::Text("Transform");
     ImGui::Text("Position: "); ImGui::SameLine();
     ImGui::DragFloat3("position", &vecPosition[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Rotation: "); ImGui::SameLine();
@@ -207,7 +207,7 @@ void Transform::createUI(){
         ImGui::TreePop();
     }
 
-    if(ImGui::Button("Reset")){
+    if(ImGui::Button("Reset Animation")){
         reset();
     }
 

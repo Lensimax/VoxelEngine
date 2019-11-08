@@ -56,6 +56,12 @@ Vous pouvez aussi animer la rotation de chaque objet dans la partie **Animation*
 
 Pour vous assurer que la Terre tourne sur son axe et en étant incliné par rapport au soleil, vous pouvez activé les **WireFrame** (```View => Toggle wire frame```).
 
+**Transform classe**
+
+dans le fichier ```src/models/Transform.cpp```
+
+Dans la classe Transform je stocke les vecteurs de position, rotation et scale, pour afficher l'objet mais aussi pour la matrice envoyée aux enfants. Il y a aussi`toute les variables nécéssaires à l'animation.
+
 ## Fonctionnalités
 
 Vous pouvez :

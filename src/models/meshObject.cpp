@@ -23,7 +23,35 @@
 #include <iostream>
 
 
+MeshObject::MeshObject(){
 
+}
+
+MeshObject::MeshObject(int id, std::string n, char *filename, Transform *t, Material *m){
+    transform = t;
+
+
+    mesh = new MeshLoader(filename);
+
+    glm::vec3 center = mesh->getCenter();
+    t->setCenter(center);
+
+    createVAO();
+
+
+    material = m;
+
+    setName(n);
+    setID(id);
+
+}
+
+
+MeshObject::~MeshObject(){
+    deleteVAO();
+    delete material;
+    delete mesh;
+}
 
 
 
@@ -105,6 +133,8 @@ void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pro
 
 
 void MeshObject::createUI(char *ID){
+    const int node_flags = 0;
+
     ImGui::BeginChild(ID);
     ImGui::Text(name.c_str());
 
@@ -112,19 +142,29 @@ void MeshObject::createUI(char *ID){
     transform->createUI();
 
     ImGui::Separator();
-    mesh->createUI();
-    if (ImGui::Button("Simplify")){
-        mesh->simplify();
-        createVAO();
+    bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);
+    if(node_mesh){
+        mesh->createUI();
+        if (ImGui::Button("Simplify")){
+            mesh->simplify();
+            createVAO();
+        }
+        if (ImGui::Button("Recreate")){
+            mesh->recreate();
+            createVAO();
+        }
+        ImGui::Text("Show bounding box "); ImGui::SameLine();
+        ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
+
+        ImGui::TreePop();
     }
-    if (ImGui::Button("Recreate")){
-        mesh->recreate();
-        createVAO();
-    }
-    ImGui::Text("Show bounding box "); ImGui::SameLine();
-    ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
+
     ImGui::Separator();
-    material->createUI();
+    bool node_material = ImGui::TreeNodeEx("Material", node_flags);
+    if(node_material){
+        material->createUI();
+        ImGui::TreePop();
+    }
     ImGui::Separator();
 
     ImGui::EndChild();

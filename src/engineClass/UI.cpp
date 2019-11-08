@@ -103,6 +103,10 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("New Scene", "WIP")) { /* Do stuff */ }
             if (ImGui::MenuItem("Load Scene", "WIP")) { /* Do stuff */ }
             if (ImGui::MenuItem("Save Scene", "WIP")) { /* Do stuff */ }
+            if (ImGui::BeginMenu("Scene Example")){
+                if (ImGui::MenuItem("Solar System")) { scene->loadSolarSystem(); }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")){

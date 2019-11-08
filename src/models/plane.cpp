@@ -7,6 +7,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <iostream>
+
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include <GL/gl3w.h>    // Initialize with gl3wInit()
@@ -23,7 +25,7 @@
 
 
 
-Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ, Transform *t, Material *m){
+Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ, Transform *t, Material *m) {
     transform = t;
 
     mesh = new MeshGrid(size, width, gridZ);
@@ -42,8 +44,4 @@ Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ,
 
 
 Plane::~Plane(){
-    deleteVAO();
-    delete transform;
-    delete material;
-    delete mesh;
 }

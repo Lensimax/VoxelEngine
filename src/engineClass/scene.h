@@ -42,6 +42,8 @@ class Scene {
         void addSphere();
         void deleteObject(int id);
 
+        void loadSolarSystem();
+
 
         std::vector<EngineObject*> objectsEngine;
         int addNewId();
@@ -50,6 +52,9 @@ class Scene {
 
     private:
         void deleteScene();
+
+        Camera *getCameraRecursive(EngineObject *obj);
+        Light *getLightRecursive(EngineObject *obj);
 
         int IDObject = 0;
 
