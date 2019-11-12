@@ -13,8 +13,27 @@ TextureMaterial::TextureMaterial(char file[2048]){
 
     createShader();
 
+    initTexture();
+
     createTexture(file);
 
+
+}
+
+TextureMaterial::~TextureMaterial(){
+    deleteShader();
+    stbi_image_free(imageBuffer);
+    glDeleteTextures(1,&_textureFBO);
+}
+
+void TextureMaterial::initTexture(){
+    glGenTextures(1,&_textureFBO);
+
+    glBindTexture(GL_TEXTURE_2D,_textureFBO);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void TextureMaterial::createTexture(char file[2048]){
@@ -33,10 +52,6 @@ void TextureMaterial::createTexture(char file[2048]){
 }
 
 
-TextureMaterial::~TextureMaterial(){
-    deleteShader();
-    stbi_image_free(imageBuffer);
-}
 
 void TextureMaterial::deleteShader(){
     delete shader;
@@ -47,9 +62,26 @@ void TextureMaterial::createImageBuffer(FILE *file){
 
     stbi_set_flip_vertically_on_load(true);
 
-    imageBuffer = stbi_load_from_file(file, &imageWidth, &imageWidth, &channels, STBI_rgb);
+    imageBuffer = stbi_load("../data/textures/pattern.jpg", &imageWidth, &imageWidth, &channels, STBI_rgb_alpha);
 
+    if(imageBuffer == nullptr){
+        errorMessage = "Couldn't load the texture from the file";
+        printf("raté\n");
+        exit(1);
+    }
 
+    glBindTexture(GL_TEXTURE_2D, _textureFBO);
+
+    if(channels == 3){
+        glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,imageWidth,imageHeight,0, GL_RGB,GL_UNSIGNED_BYTE,imageBuffer);
+    } else if(channels == 4){
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
+    }
+
+    // generate mipmaps
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void TextureMaterial::createUI(){
@@ -71,7 +103,10 @@ void TextureMaterial::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
 
     sendUniformMatrices(shaderID, modelMat, viewMat, projMat);
 
-    glUniform1i(glGetUniformLocation(shaderID,"tex"),1);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, _textureFBO);
+    glUniform1i(glGetUniformLocation(shaderID,"tex"),0);
 
 
 }

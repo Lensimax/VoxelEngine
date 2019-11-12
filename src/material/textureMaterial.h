@@ -36,6 +36,7 @@ private:
     void createTexture(char file[2048]);
 
     void createImageBuffer(FILE *file);
+    void initTexture();
 
     const char defaultTexture[2048] = "../data/textures/pattern.jpg";
 
@@ -45,6 +46,10 @@ private:
     int imageWidth,imageHeight, channels;
 
     std::string errorMessage;
+
+
+
+    GLuint _textureFBO;
 
 };
 
