@@ -16,11 +16,22 @@
 class TextureMaterial : public Material {
 
 public:
-    TextureMaterial(string file);
+    TextureMaterial(char file[2048]);
     ~TextureMaterial();
 
+    virtual void callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, Light *light);
+    virtual void createUI();
+    virtual GLuint getShaderID();
+    virtual void reloadShaders();
+
 private:
-    string filename;
+    char filename[2048];
+
+    void createShader();
+    void deleteShader();
+
+    const char * textureShaderVert = "../data/shaders/texture.vert";
+    const char * textureShaderFrag = "../data/shaders/texture.frag";
 
 };
 
