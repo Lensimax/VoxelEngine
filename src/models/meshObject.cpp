@@ -5,6 +5,7 @@
 
 #define POSITION_ATTRIB 0
 #define VERTEX_NORMAL_ATTRIB 1
+#define VERTEX_UV_ATTRIB 2
 
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -88,9 +89,9 @@ void MeshObject::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectio
 
 void MeshObject::createVAO(){
 
-    buffers = new GLuint[3];
+    buffers = new GLuint[4];
 
-    glGenBuffers(3, buffers);
+    glGenBuffers(4, buffers);
     glGenVertexArrays(1,&vertexArrayID);
 
     // create the VBO associated with the grid (the terrain)
@@ -109,8 +110,13 @@ void MeshObject::createVAO(){
     glEnableVertexAttribArray(VERTEX_NORMAL_ATTRIB);
     glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
     glBufferData(GL_ARRAY_BUFFER, mesh->getNBVertices()*3* sizeof(float), mesh->getNormals(), GL_STATIC_DRAW); //normals is std::vector<float>
-    glEnableVertexAttribArray(VERTEX_NORMAL_ATTRIB);
     glVertexAttribPointer(VERTEX_NORMAL_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    /* texture coordinates */
+    glEnableVertexAttribArray(VERTEX_UV_ATTRIB);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, mesh->getNBVertices()*2* sizeof(float), mesh->getUVs(), GL_STATIC_DRAW); //normals is std::vector<float>
+    glVertexAttribPointer(VERTEX_UV_ATTRIB, 2, GL_FLOAT, GL_FALSE, 0, 0);
     //indices
     glBindVertexArray(0);
 }
@@ -118,6 +124,7 @@ void MeshObject::createVAO(){
 void MeshObject::deleteVAO(){
     glDeleteBuffers(2,buffers);
     glDeleteVertexArrays(1,&vertexArrayID);
+    delete buffers;
 }
 
 void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){

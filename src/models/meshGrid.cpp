@@ -56,7 +56,7 @@ void MeshGrid::createMesh(int size, float w, float z){
     	for(unsigned int j=0; j<size; j++){
     		int arrayPos = i*size + j;
     		vec3 pos = vec3(startingWidth + i*offset, startingWidth + j*offset, gridZ);
-    		vec2 uv = vec2(i/size, j/size);
+    		vec2 uv = vec2((float)i/(float)size, (float)j/(float)size);
     		addVertex(arrayPos, pos, defaultNormal, defaultTangent, defaultColor, uv);
     	}
     }

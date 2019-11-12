@@ -40,7 +40,7 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
     GLuint shaderID = getShaderID();
 
-    sendUniform(shaderID, modelMat, viewMat, projMat);
+    sendUniformMatrices(shaderID, modelMat, viewMat, projMat);
 
 
 

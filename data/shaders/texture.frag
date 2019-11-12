@@ -10,5 +10,5 @@ in vec2 uv;
 
 void main(){
 
-	bufferColor = vec4(1,0,0,1);
+	bufferColor = vec4(uv.xy,0,1);
 }

@@ -122,6 +122,10 @@ void *Mesh::getNormals(){
     return &(normals[0]);
 }
 
+void *Mesh::getUVs(){
+    return &(coords[0]);
+}
+
 unsigned int Mesh::getNBVertices(){
     return vertices.size();
 }

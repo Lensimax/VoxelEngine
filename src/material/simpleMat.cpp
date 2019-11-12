@@ -37,7 +37,7 @@ void SimpleMat::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pro
 
     GLuint shaderID = shader->id();
 
-    sendUniform(shaderID, modelMat, viewMat, projMat);
+    sendUniformMatrices(shaderID, modelMat, viewMat, projMat);
 
     glUniform4fv(glGetUniformLocation(shaderID,"color"),1,&(color[0]));
 

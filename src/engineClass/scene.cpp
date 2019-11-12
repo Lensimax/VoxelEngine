@@ -9,6 +9,8 @@
 
 #include "../material/simpleMat.h"
 
+#include "../material/textureMaterial.h"
+
 
 Scene::Scene(){
 
@@ -20,23 +22,15 @@ Scene::Scene(){
     objectsEngine = std::vector<EngineObject*>();
 
 
-    MeshObject *obj = new MeshObject(addNewId(),"Suzanne", (char*)"../data/models/suzanne.off", new Transform());
-    // obj2->addChild(new MeshObject(addNewId(),"Singe", (char*)"../data/models/monkey.off", new Transform(glm::vec3(0),glm::vec3(-3,0,-2)), new Lambertian(glm::vec4(1,1,0,1))));
-    objectsEngine.push_back(obj);
+    Plane  *p = new Plane(addNewId(), "Plane", 16, 2, 0, new Transform(), new TextureMaterial("../data/textures/pattern.jpg"));
 
+    objectsEngine.push_back(p);
 
-    objectsEngine.push_back(new MeshObject(addNewId(),"Sphere", (char*)"../data/models/sphere.off", new Transform(glm::vec3(0),glm::vec3(2.5,0,-4))));
+    Camera *camera = new CameraProj(addNewId());
 
+    objectsEngine.push_back(camera);
 
-    Camera *cam = new CameraProj(addNewId());
-
-
-    EngineObject *obj2 = new EngineObject(addNewId());
-    obj2->addChild(cam);
-
-    objectsEngine.push_back(obj2);
-
-    obj2->addChild(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
 
 
 }

@@ -24,6 +24,7 @@ public:
      void *getVertices();
      void *getFaces();
      void *getNormals();
+     void *getUVs();
 
      unsigned int getNBVertices();
      unsigned int getNBFaces();

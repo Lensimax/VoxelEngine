@@ -10,6 +10,7 @@ uniform mat4 modelMat;
 uniform mat4 projMat;
 uniform mat4 viewMat;
 
+out vec2 uv;
 
 void main() {
 	uv = texCoord;
