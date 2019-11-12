@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "../images_loader/stb_image.h"
 
 
@@ -16,10 +17,19 @@ TextureMaterial::TextureMaterial(char file[2048]){
 
 TextureMaterial::~TextureMaterial(){
     deleteShader();
+    stbi_image_free(imageBuffer);
 }
 
 void TextureMaterial::deleteShader(){
     delete shader;
+}
+
+
+void TextureMaterial::createImageBuffer(char file[2048]){
+
+    stbi_set_flip_vertically_on_load(true);
+
+    imageBuffer = stbi_load(file, &imageWidth, &imageWidth, &channels, STBI_rgb);
 }
 
 void TextureMaterial::createUI(){

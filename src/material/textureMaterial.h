@@ -27,11 +27,19 @@ public:
 private:
     char filename[2048];
 
+    unsigned char *imageBuffer;
+
     void createShader();
     void deleteShader();
 
+    void createImageBuffer(char file[2048]);
+
+    const char defaultTexture[2048] = "../data/textures/pattern.jpg";
+
     const char * textureShaderVert = "../data/shaders/texture.vert";
     const char * textureShaderFrag = "../data/shaders/texture.frag";
+
+    int imageWidth,imageHeight, channels;
 
 };
 
