@@ -1,5 +1,8 @@
 #include "textureMaterial.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <imgui.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -10,8 +13,23 @@ TextureMaterial::TextureMaterial(char file[2048]){
 
     createShader();
 
-    sprintf(filename, "%s", file);
+    createTexture(file);
 
+}
+
+void TextureMaterial::createTexture(char file[2048]){
+
+    sprintf(filename, "%s", file);
+    FILE *f = fopen(filename, "r");
+    if(f){
+        createImageBuffer(f);
+        errorMessage ="";
+    } else {
+        f = fopen(defaultTexture, "r");
+        createImageBuffer(f);
+        errorMessage = "Couldn't find the texture file";
+    }
+    fclose(f);
 }
 
 
@@ -25,11 +43,13 @@ void TextureMaterial::deleteShader(){
 }
 
 
-void TextureMaterial::createImageBuffer(char file[2048]){
+void TextureMaterial::createImageBuffer(FILE *file){
 
     stbi_set_flip_vertically_on_load(true);
 
-    imageBuffer = stbi_load(file, &imageWidth, &imageWidth, &channels, STBI_rgb);
+    imageBuffer = stbi_load_from_file(file, &imageWidth, &imageWidth, &channels, STBI_rgb);
+
+
 }
 
 void TextureMaterial::createUI(){
@@ -37,10 +57,12 @@ void TextureMaterial::createUI(){
 
     if (ImGui::Button("Refresh")){
         reloadShaders();
+        createTexture(filename);
     }
 
     ImGui::Text("Texture: "); ImGui::SameLine();
-    ImGui::InputText("fileMeshLoader", filename, IM_ARRAYSIZE(filename));
+    ImGui::TextColored(ImVec4(1.0f,0.0f,0.0f,1.0f), errorMessage.c_str());
+    ImGui::InputText("##fileTexture", filename, IM_ARRAYSIZE(filename));
 }
 
 void TextureMaterial::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, Light *light){

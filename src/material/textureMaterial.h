@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
 
 
 #include "material.h"
@@ -31,8 +33,9 @@ private:
 
     void createShader();
     void deleteShader();
+    void createTexture(char file[2048]);
 
-    void createImageBuffer(char file[2048]);
+    void createImageBuffer(FILE *file);
 
     const char defaultTexture[2048] = "../data/textures/pattern.jpg";
 
@@ -40,6 +43,8 @@ private:
     const char * textureShaderFrag = "../data/shaders/texture.frag";
 
     int imageWidth,imageHeight, channels;
+
+    std::string errorMessage;
 
 };
 
