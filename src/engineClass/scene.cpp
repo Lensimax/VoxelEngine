@@ -3,7 +3,7 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../tools/cameraProj.h"
 
-#include "../models/MeshObject.h"
+#include "../models/meshObject.h"
 
 #include "../models/plane.h"
 

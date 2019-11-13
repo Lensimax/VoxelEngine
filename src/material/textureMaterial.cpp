@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <iostream>
+
 #include <imgui.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -60,23 +62,21 @@ void TextureMaterial::deleteShader(){
 
 void TextureMaterial::createImageBuffer(FILE *file){
 
-    stbi_set_flip_vertically_on_load(true);
+    // stbi_set_flip_vertically_on_load(true);
 
-    imageBuffer = stbi_load("../data/textures/pattern.jpg", &imageWidth, &imageWidth, &channels, STBI_rgb_alpha);
+    imageBuffer = stbi_load_from_file(file, &imageWidth, &imageHeight, &channels, STBI_rgb_alpha);
+
+    std::cout << "Width : " << imageWidth << " Height : " << imageHeight << '\n';
 
     if(imageBuffer == nullptr){
         errorMessage = "Couldn't load the texture from the file";
-        printf("raté\n");
-        exit(1);
+        createTexture((char*)defaultTexture);
     }
 
     glBindTexture(GL_TEXTURE_2D, _textureFBO);
 
-    if(channels == 3){
-        glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,imageWidth,imageHeight,0, GL_RGB,GL_UNSIGNED_BYTE,imageBuffer);
-    } else if(channels == 4){
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
-    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
 
     // generate mipmaps
     glGenerateMipmap(GL_TEXTURE_2D);
