@@ -15,6 +15,9 @@ TextureMaterial::TextureMaterial(char file[2048]){
 
     createShader();
 
+    imageBuffer = nullptr;
+
+    imageWidth = -1;
     initTexture();
 
     createTexture(file);
@@ -45,12 +48,16 @@ void TextureMaterial::createTexture(char file[2048]){
     if(f){
         createImageBuffer(f);
         errorMessage ="";
+        fclose(f);
     } else {
-        f = fopen(defaultTexture, "r");
-        createImageBuffer(f);
+        if(imageWidth < 0){ // we fill with a default texture
+            f = fopen(defaultTexture, "r");
+            createImageBuffer(f);
+            fclose(f);
+        }
         errorMessage = "Couldn't find the texture file";
     }
-    fclose(f);
+
 }
 
 
@@ -66,8 +73,6 @@ void TextureMaterial::createImageBuffer(FILE *file){
 
     imageBuffer = stbi_load_from_file(file, &imageWidth, &imageHeight, &channels, STBI_rgb_alpha);
 
-    std::cout << "Width : " << imageWidth << " Height : " << imageHeight << '\n';
-
     if(imageBuffer == nullptr){
         errorMessage = "Couldn't load the texture from the file";
         createTexture((char*)defaultTexture);
@@ -75,7 +80,7 @@ void TextureMaterial::createImageBuffer(FILE *file){
 
     glBindTexture(GL_TEXTURE_2D, _textureFBO);
 
-
+    // fill texture
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
 
     // generate mipmaps
