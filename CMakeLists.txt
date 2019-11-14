@@ -12,6 +12,7 @@ set(GLM_INCLUDE_DIR thirdparty/glm)
 set(GLFW_INCLUDE_DIR thirdparty/glfw/include)
 set(IMGUI_INCLUDE_DIR thirdparty/imgui)
 set(GLAD_INCLUDE_DIR thirdparty/glad/include)
+set(STB_IMAGE_DIR thirdparty/stb_image)
 
 # 3rd party libraries
 add_subdirectory(thirdparty)
@@ -56,6 +57,7 @@ include_directories(
         ${GLAD_INCLUDE_DIR}
         ${IMGUI_INCLUDE_DIR}
         ${OPENGL_INCLUDE_DIR}
+        ${STB_IMAGE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME} glfw glm glad imgui ${CMAKE_DL_LIBS})

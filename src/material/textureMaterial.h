@@ -9,7 +9,6 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
-#include <stdio.h>
 #include <stdlib.h>
 
 

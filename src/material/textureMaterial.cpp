@@ -8,7 +8,7 @@
 #include <imgui.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "../images_loader/stb_image.h"
+#include <stb_image.h>
 
 
 TextureMaterial::TextureMaterial(char file[2048]){
