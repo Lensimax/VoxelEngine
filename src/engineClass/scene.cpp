@@ -11,25 +11,12 @@
 
 #include "../material/textureMaterial.h"
 
+#include "../controlable/player.h"
+
 
 Scene::Scene(){
 
-    pause = false;
-
-    IDObject = 0;
-
-
-    objectsEngine = std::vector<EngineObject*>();
-
-    addTerrain();
-    
-
-    Camera *camera = new CameraProj(addNewId());
-
-    objectsEngine.push_back(camera);
-
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 0)));
-
+  loadTerrainPlayer();
 
 }
 
@@ -225,5 +212,25 @@ void Scene::loadSolarSystem(){
     objectsEngine.push_back(cam);
 
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
+
+}
+
+
+void Scene::loadTerrainPlayer(){
+    pause = false;
+
+    IDObject = 0;
+
+
+    objectsEngine = std::vector<EngineObject*>();
+
+    Plane *p = new Plane(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0,0,2), glm::vec3(1), glm::vec3(0.5,0,0)), new Lambertian(), new MeshGrid(32, 3, 0, 0.2, 5));
+    objectsEngine.push_back(p);
+
+    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,1,3));
+
+    objectsEngine.push_back(camera);
+
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
 
 }

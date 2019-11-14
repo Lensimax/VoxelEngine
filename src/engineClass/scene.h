@@ -44,6 +44,7 @@ class Scene {
         void deleteObject(int id);
 
         void loadSolarSystem();
+        void loadTerrainPlayer();
 
 
         std::vector<EngineObject*> objectsEngine;
