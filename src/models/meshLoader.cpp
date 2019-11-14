@@ -106,12 +106,10 @@ void MeshLoader::readOFFfile(char *filename){
 }
 
 void MeshLoader::createUI(){
-    ImGui::PushItemWidth(-1);
 
-    ImGui::InputText("fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
+    ImGui::InputText("##fileMeshLoader", currentFilename, IM_ARRAYSIZE(currentFilename));
     this->Mesh::createUI();
 
-    ImGui::PopItemWidth();
 }
 
 void MeshLoader::cleanup(){

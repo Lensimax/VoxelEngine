@@ -7,18 +7,23 @@
 
 using namespace glm;
 
-MeshGrid::MeshGrid(unsigned int size, float w, float y){
+MeshGrid::MeshGrid(unsigned int size, float w, float y, float amp, float freq, float pers, int octaves){
 	assert(size >= 1);
 	nbPointPerRowColumn = size;
 
 	width = w;
 	gridY = y;
 
+	amplitude = amp;
+	frequency = freq;
+	persistence = pers;
+	nboctaves = octaves;
+
 	nb_vertices = 0;
 	nb_faces = 0;
 
 
-    createMesh(nbPointPerRowColumn, width, gridY);
+	recreate();
 }
 
 
@@ -128,3 +133,76 @@ void MeshGrid::createUI(){
 
 	this->Mesh::createUI();
 }
+
+
+// CREATION DU BRUIT DE PERLIN
+
+glm::vec2 MeshGrid::hash(glm::vec2 p) {
+    p = glm::vec2( dot(p,glm::vec2(127.1f,311.7f)),
+        glm::dot(p,glm::vec2(269.5f,183.3f)) );
+
+    return -1.0f + 2.0f*glm::fract(glm::sin(p)*43758.5453123f);
+	
+
+}
+
+float MeshGrid::gnoise(glm::vec2 p) {
+    glm::vec2 i = glm::floor( p );
+    glm::vec2 f = glm::fract( p );
+
+    glm::vec2 u = f*f*(3.0f-2.0f*f);
+
+	
+
+    return glm::mix( glm::mix( glm::dot( hash( i + glm::vec2(0.0f,0.0f) ), f - glm::vec2(0.0f,0.0f) ),
+           glm::dot( hash( i + glm::vec2(1.0f,0.0f) ), f - glm::vec2(1.0f,0.0f) ), u.x),
+          glm::mix( glm::dot( hash( i + glm::vec2(0.0f,1.0f) ), f - glm::vec2(0.0f,1.0f) ),
+           glm::dot( hash( i + glm::vec2(1.0f,1.0f) ), f - glm::vec2(1.0f,1.0f) ), u.x), u.y);
+}
+
+float MeshGrid::pnoise(glm::vec2 p,float amplitude,float frequency,float persistence, int nboctaves) {
+    float a = amplitude;
+    float f = frequency;
+    float n = 0.0;
+
+    for(int i=0;i<nboctaves;++i) {
+	    n = n+a*gnoise(p*f);
+	    f = f*2.;
+	    a = a*persistence;
+    }
+
+    return n;
+}
+
+/***** CALCUL NORMAL *****/
+/*
+float value(in vec4 c) {
+	// gradient of what:
+
+	return c.x;// the height is stored in all channels (take the first one)
+}
+
+
+// calcul de la normale a partir du bruit
+vec4 normalPoint(vec3 point){
+
+
+	// vec2 ps = 1./vec2(textureSize(heightmap,0));
+	vec2 ps = vec2(0.01);
+
+	vec2 g = vec2(pnoise(point.xy+vec2(ps.x,0.0),amplitude,frequency,persistence,nboctaves) - pnoise(point.xy-vec2(ps.x,0.0),amplitude,frequency,persistence,nboctaves),
+		pnoise(point.xy+vec2(0.0,ps.y),amplitude,frequency,persistence,nboctaves) - pnoise(point.xy+vec2(0.0,ps.y),amplitude,frequency,persistence,nboctaves))/2.;
+
+	float scale = 100.;
+
+	vec3 n1 = vec3(1.,0.,g.x*scale);
+
+	vec3 n2 = vec3(0.,1.,-g.y*scale);
+
+	vec3 n = normalize(cross(n1,n2));
+
+
+	return vec4(n,point.z);
+}
+
+*/
