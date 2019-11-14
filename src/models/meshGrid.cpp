@@ -35,9 +35,15 @@ void MeshGrid::recreate(){
 	cleanup();
 	createMesh(nbPointPerRowColumn, width, gridY);
 	applyNoiseModification();
+	hasChanged = false;
 }
 
 
+void MeshGrid::update(){
+	if(hasChanged){
+		recreate();
+	}
+}
 
 void MeshGrid::createMesh(int size, float w, float y){
 	assert(size >= 1);
@@ -126,7 +132,7 @@ void MeshGrid::createUI(){
 
 	// nbPointPerRowColumn, width, gridY
 	ImGui::Text("Size :"); ImGui::SameLine();
-	ImGui::InputInt("##size", &nbPointPerRowColumn, 1, 10);
+	if(ImGui::InputInt("##size", &nbPointPerRowColumn, 1, 10)){}
 	ImGui::Text("Width :"); ImGui::SameLine();
 	ImGui::InputFloat("##width", &width, 0.01f, 1.0f, "%.3f");
 	ImGui::Text("Z plane :"); ImGui::SameLine();

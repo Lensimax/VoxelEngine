@@ -25,6 +25,8 @@ public:
 	void recreate() override;
 	void createUI();
 
+	void update() override;
+
 private:
 	void createMesh(int size, float width, float y);
 	void addVertex(unsigned int arrayPos, glm::vec3 pos, glm::vec3 n, glm::vec3 tangent, glm::vec3 col, glm::vec2 uv);
@@ -50,6 +52,8 @@ private:
 	float frequency;
 	float persistence;
 	int nboctaves;
+
+	bool hasChanged = true;
 
 };
 

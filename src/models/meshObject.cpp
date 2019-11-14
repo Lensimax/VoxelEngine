@@ -138,6 +138,11 @@ void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pro
 
 }
 
+void MeshObject::update(){
+    EngineObject::update();
+    mesh->update();
+}
+
 
 void MeshObject::createUI(char *ID){
     const int node_flags = 0;

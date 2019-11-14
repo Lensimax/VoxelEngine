@@ -46,6 +46,8 @@ bool Mesh::alreadyExist(unsigned int num, std::vector<unsigned int> vec){
     return false;
 }
 
+void Mesh::update(){
+}
 
 void Mesh::compute_vertex_valences (std::vector<int> & valences, std::vector<std::vector<unsigned int>> one_ring, std::vector<std::vector<unsigned int> > triangles) {
     valences = std::vector<int>(one_ring.size());

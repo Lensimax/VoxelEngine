@@ -45,6 +45,8 @@ public:
 
      void simplify();
 
+     virtual void update();
+
     protected:
      std::vector<unsigned int> get_face(unsigned int i);
      glm::vec3        get_vertex(unsigned int i);

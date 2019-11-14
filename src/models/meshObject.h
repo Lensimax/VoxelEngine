@@ -37,6 +37,8 @@ class MeshObject : public DrawableObject {
 
         void createUI(char *ID);
 
+        void update();
+
         void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 
 
