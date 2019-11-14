@@ -22,7 +22,7 @@ Scene::Scene(){
     objectsEngine = std::vector<EngineObject*>();
 
 
-    Plane  *p = new Plane(addNewId(), "Plane", 16, 2, 0, new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(-0.5,0,0)), new TextureMaterial("../data/textures/pattern.jpg"));
+    Plane  *p = new Plane(addNewId(), "Plane", 16, 2, 0, new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(-0.5,0,0)), new Lambertian());
 
     objectsEngine.push_back(p);
 
@@ -30,7 +30,7 @@ Scene::Scene(){
 
     objectsEngine.push_back(camera);
 
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 0)));
 
 
 }
