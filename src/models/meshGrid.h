@@ -39,9 +39,12 @@ private:
 	float gridY = 0.0f;
 
 	// NOISE IN THE MESH
+	void applyNoiseModification();
+
 	glm::vec2 hash(glm::vec2 p);
 	float gnoise(glm::vec2 p);
 	float pnoise(glm::vec2 p,float amplitude,float frequency,float persistence, int nboctaves);
+	glm::vec3 normalPoint(glm::vec3 point);
 
 	float amplitude;
 	float frequency;

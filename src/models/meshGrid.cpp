@@ -34,6 +34,7 @@ MeshGrid::~MeshGrid(){
 void MeshGrid::recreate(){
 	cleanup();
 	createMesh(nbPointPerRowColumn, width, gridY);
+	applyNoiseModification();
 }
 
 
@@ -125,15 +126,42 @@ void MeshGrid::createUI(){
 
 	// nbPointPerRowColumn, width, gridY
 	ImGui::Text("Size :"); ImGui::SameLine();
-	ImGui::InputInt("size", &nbPointPerRowColumn, 1, 10);
+	ImGui::InputInt("##size", &nbPointPerRowColumn, 1, 10);
 	ImGui::Text("Width :"); ImGui::SameLine();
-	ImGui::InputFloat("width", &width, 0.01f, 1.0f, "%.3f");
+	ImGui::InputFloat("##width", &width, 0.01f, 1.0f, "%.3f");
 	ImGui::Text("Z plane :"); ImGui::SameLine();
-	ImGui::InputFloat("gridY", &gridY, 0.01f, 1.0f, "%.3f");
+	ImGui::InputFloat("##gridY", &gridY, 0.01f, 1.0f, "%.3f");
+
+	bool node_mesh = ImGui::TreeNodeEx("Noise modifier", 0);
+    if(node_mesh){
+
+
+		ImGui::Text("Frequency :"); ImGui::SameLine();
+		ImGui::InputFloat("##frequency", &frequency, 0.01f, 100.0f, "%.3f");
+		ImGui::Text("Amplitude :"); ImGui::SameLine();
+		ImGui::InputFloat("##amplitude", &amplitude, 0.01f, 100.0f, "%.3f");
+		ImGui::Text("Persistence :"); ImGui::SameLine();
+		ImGui::InputFloat("##persistence", &persistence, 0.01f, 100.0f, "%.3f");
+		ImGui::Text("Number of octaves : "); ImGui::SameLine();
+		ImGui::InputInt("##NbOctaves", &nboctaves, 1, 20);
+
+        ImGui::TreePop();
+    }
 
 	this->Mesh::createUI();
 }
 
+void MeshGrid::applyNoiseModification(){
+
+	for(unsigned int i=0; i<vertices.size(); i++){
+		float height = pnoise(glm::vec2(vertices[i].x, vertices[i].z), amplitude, frequency, persistence, nboctaves);
+		glm::vec3 n = normalPoint(vertices[i]);
+
+		vertices[i].y = height;
+		normals[i] = n;
+	}
+
+}
 
 // CREATION DU BRUIT DE PERLIN
 
@@ -174,35 +202,32 @@ float MeshGrid::pnoise(glm::vec2 p,float amplitude,float frequency,float persist
     return n;
 }
 
-/***** CALCUL NORMAL *****/
-/*
-float value(in vec4 c) {
-	// gradient of what:
+// CALCUL NORMAL FROM NOISE
 
-	return c.x;// the height is stored in all channels (take the first one)
-}
+
 
 
 // calcul de la normale a partir du bruit
-vec4 normalPoint(vec3 point){
+glm::vec3 MeshGrid::normalPoint(glm::vec3 point){
 
 
 	// vec2 ps = 1./vec2(textureSize(heightmap,0));
-	vec2 ps = vec2(0.01);
+	glm::vec2 ps = glm::vec2(0.01f);
 
-	vec2 g = vec2(pnoise(point.xy+vec2(ps.x,0.0),amplitude,frequency,persistence,nboctaves) - pnoise(point.xy-vec2(ps.x,0.0),amplitude,frequency,persistence,nboctaves),
-		pnoise(point.xy+vec2(0.0,ps.y),amplitude,frequency,persistence,nboctaves) - pnoise(point.xy+vec2(0.0,ps.y),amplitude,frequency,persistence,nboctaves))/2.;
+	glm::vec2 p = glm::vec2(point.x, point.z);
 
-	float scale = 100.;
+	glm::vec2 g = glm::vec2(pnoise(p+glm::vec2(ps.x,0.0f),amplitude,frequency,persistence,nboctaves) - pnoise(p-glm::vec2(ps.x,0.0f),amplitude,frequency,persistence,nboctaves),
+		pnoise(p+glm::vec2(0.0f,ps.y),amplitude,frequency,persistence,nboctaves) - pnoise(p+glm::vec2(0.0f,ps.y),amplitude,frequency,persistence,nboctaves))/2.f;
 
-	vec3 n1 = vec3(1.,0.,g.x*scale);
+	float scale = 100.f;
 
-	vec3 n2 = vec3(0.,1.,-g.y*scale);
+	glm::vec3 n1 = glm::vec3(1.,0.,g.x*scale);
 
-	vec3 n = normalize(cross(n1,n2));
+	glm::vec3 n2 = glm::vec3(0.,1.,-g.y*scale);
+
+	glm::vec3 n = glm::normalize(glm::cross(n1,n2));
 
 
-	return vec4(n,point.z);
+	return n;
 }
 
-*/
