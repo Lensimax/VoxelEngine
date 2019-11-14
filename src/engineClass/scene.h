@@ -40,6 +40,7 @@ class Scene {
         void addPlane();
         void addEngineObject();
         void addSphere();
+        void addTerrain();
         void deleteObject(int id);
 
         void loadSolarSystem();

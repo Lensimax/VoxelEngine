@@ -21,10 +21,8 @@ Scene::Scene(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-
-    Plane  *p = new Plane(addNewId(), "Plane", 16, 2, 0, new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new Lambertian());
-
-    objectsEngine.push_back(p);
+    addTerrain();
+    
 
     Camera *camera = new CameraProj(addNewId());
 
@@ -149,6 +147,10 @@ void Scene::addSphere(){
     objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", (char*)"../data/models/sphere.off"));
 }
 
+void Scene::addTerrain(){
+    Plane *p = new Plane(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new Lambertian(), new MeshGrid(128, 3, 0, 0.2, 5));
+    objectsEngine.push_back(p);
+}
 
 void Scene::deleteObject(int id){
 

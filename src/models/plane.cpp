@@ -25,10 +25,10 @@
 
 
 
-Plane::Plane(int id, std::string n, unsigned int size, float width, float gridZ, Transform *t, Material *m) {
+Plane::Plane(int id, std::string n, Transform *t, Material *m, MeshGrid *meshG) {
     transform = t;
 
-    mesh = new MeshGrid(size, width, gridZ);
+    mesh = meshG;
 
 
     glm::vec3 center = mesh->getCenter();

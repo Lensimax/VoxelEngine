@@ -11,7 +11,7 @@
 class Plane : public MeshObject {
 public:
 
-    Plane(int id,std::string n = "Plane", unsigned int size = 16, float width = 1, float gridZ = 0, Transform *t = new Transform(), Material *m = new Lambertian());
+    Plane(int id,std::string n = "Plane", Transform *t = new Transform(), Material *m = new Lambertian(), MeshGrid *meshG = new MeshGrid());
     ~Plane();
 
 
