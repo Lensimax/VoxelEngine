@@ -120,7 +120,7 @@ void UI::createUISceneManager(Scene *scene){
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("View")){
-            if (ImGui::MenuItem("Toggle wire frame")) { if(mainRenderer != NULL) mainRenderer->toggleWire(); }
+            if (ImGui::MenuItem("Toggle wire frame","CTRL+F")) { if(mainRenderer != NULL) mainRenderer->toggleWire(); }
             ImGui::EndMenu();
         }
 

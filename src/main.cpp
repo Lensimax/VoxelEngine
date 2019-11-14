@@ -140,6 +140,7 @@ int main(int, char**)
     InputManager *inputManager = new InputManager();
     inputManager->setUI(ui);
     inputManager->setScene(scene);
+    inputManager->setRenderer(renderer);
 
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
