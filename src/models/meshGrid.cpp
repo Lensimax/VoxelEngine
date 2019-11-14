@@ -7,18 +7,18 @@
 
 using namespace glm;
 
-MeshGrid::MeshGrid(unsigned int size, float w, float z){
+MeshGrid::MeshGrid(unsigned int size, float w, float y){
 	assert(size >= 1);
 	nbPointPerRowColumn = size;
 
 	width = w;
-	gridZ = z;
+	gridY = y;
 
 	nb_vertices = 0;
 	nb_faces = 0;
 
 
-    createMesh(nbPointPerRowColumn, width, gridZ);
+    createMesh(nbPointPerRowColumn, width, gridY);
 }
 
 
@@ -28,12 +28,12 @@ MeshGrid::~MeshGrid(){
 
 void MeshGrid::recreate(){
 	cleanup();
-	createMesh(nbPointPerRowColumn, width, gridZ);
+	createMesh(nbPointPerRowColumn, width, gridY);
 }
 
 
 
-void MeshGrid::createMesh(int size, float w, float z){
+void MeshGrid::createMesh(int size, float w, float y){
 	assert(size >= 1);
 
 	const float startingWidth = -(width/2.0f);
@@ -55,7 +55,7 @@ void MeshGrid::createMesh(int size, float w, float z){
     for(unsigned int i=0; i<size; i++){
     	for(unsigned int j=0; j<size; j++){
     		int arrayPos = i*size + j;
-    		vec3 pos = vec3(startingWidth + i*offset, startingWidth + j*offset, gridZ);
+    		vec3 pos = vec3(startingWidth + i*offset, y, startingWidth + j*offset);
     		vec2 uv = vec2((float)i/(float)size, (float)j/(float)size);
     		addVertex(arrayPos, pos, defaultNormal, defaultTangent, defaultColor, uv);
     	}
@@ -89,7 +89,7 @@ void MeshGrid::createMesh(int size, float w, float z){
     }
 
 
-	center = glm::vec3(0,0,gridZ);
+	center = vec3(0,y,0);
 
 	radius = width/2;
 
@@ -118,13 +118,13 @@ void MeshGrid::cleanup(){
 void MeshGrid::createUI(){
 	ImGui::TextColored(ImVec4(1.0f,1.0f,0.0f,1.0f), "Mesh Grid");
 
-	// nbPointPerRowColumn, width, gridZ
+	// nbPointPerRowColumn, width, gridY
 	ImGui::Text("Size :"); ImGui::SameLine();
 	ImGui::InputInt("size", &nbPointPerRowColumn, 1, 10);
 	ImGui::Text("Width :"); ImGui::SameLine();
 	ImGui::InputFloat("width", &width, 0.01f, 1.0f, "%.3f");
 	ImGui::Text("Z plane :"); ImGui::SameLine();
-	ImGui::InputFloat("gridZ", &gridZ, 0.01f, 1.0f, "%.3f");
+	ImGui::InputFloat("gridY", &gridY, 0.01f, 1.0f, "%.3f");
 
 	this->Mesh::createUI();
 }
