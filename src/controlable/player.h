@@ -7,7 +7,7 @@
 class Player : public MeshObject {
 
 public:
-    Player(std::string name = "Player", Mesh *m = new MeshLoader("../data/models/sphere.off"), Material *mat = new Lambertian());
+    Player(int id, std::string name = "Player", Transform *t = new Transform(), Mesh *m = new MeshLoader("../data/models/sphere.off"), Material *mat = new Lambertian());
     ~Player();
 
     void update();
@@ -17,8 +17,6 @@ public:
 private:
 
     float distanceFromTerrain = 0.1f;
-    Mesh *mesh;
-    Material *material;
 
 };
 

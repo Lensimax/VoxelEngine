@@ -224,8 +224,13 @@ void Scene::loadTerrainPlayer(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-    Plane *p = new Plane(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0,0,2), glm::vec3(1), glm::vec3(0.5,0,0)), new Lambertian(), new MeshGrid(32, 3, 0, 0.2, 5));
+    Plane *p = new Plane(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new Lambertian(glm::vec4(0,0.6,0,1)), new MeshGrid(32, 3, 0, 0.2, 5));
     objectsEngine.push_back(p);
+
+
+    Player *player = new Player(addNewId(), "Player", new Transform(glm::vec3(0), glm::vec3(0, 0.2, 0), glm::vec3(0.1)), new MeshLoader("../data/models/sphere.off"), new SimpleMat());
+
+    p->addChild(player);
 
     Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,1,3));
 
