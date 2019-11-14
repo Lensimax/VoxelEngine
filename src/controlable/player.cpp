@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <iostream>
+
 Player::Player(int id, std::string name, Transform *t, Mesh *m, Material *mat){
 
     setName(name);
@@ -23,9 +25,22 @@ Player::~Player(){
 }
 
 void Player::update(){
+    ImGuiIO& io = ImGui::GetIO();
 
+    std::cout << "Update Player\n";
+    glm::vec3 pos = transform->getPosition();
+    if(ImGui::IsKeyPressed('H')){
+        pos.z -= speed;
+    }
+
+
+    transform->setPosition(pos);   
 }
 
 void Player::createUI(char *ID){
     MeshObject::createUI(ID);
+
+    ImGui::Separator();
+    ImGui::Text("Player Speed: ");
+    ImGui::DragFloat("near", &speed, 0.01f);  
 }

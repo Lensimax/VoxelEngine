@@ -10,13 +10,15 @@ public:
     Player(int id, std::string name = "Player", Transform *t = new Transform(), Mesh *m = new MeshLoader("../data/models/sphere.off"), Material *mat = new Lambertian());
     ~Player();
 
-    void update();
+    void update() override;
 
     void createUI(char *ID);
 
 private:
 
     float distanceFromTerrain = 0.1f;
+
+    float speed = 0.01f;
 
 };
 

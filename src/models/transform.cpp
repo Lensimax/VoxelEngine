@@ -231,3 +231,16 @@ void Transform::setSameAsParent(bool position, bool rotation){
     samePosition = position;
     sameRotation = rotation;
 }
+
+
+vec3 Transform::getPosition(){
+    return vecPosition;
+}
+
+vec3 Transform::getRotation(){
+    return vecRotation;
+}
+
+vec3 Transform::getScale(){
+    return vecScale;
+}
