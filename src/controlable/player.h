@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "../models/meshObject.h"
-#include "../models/meshLoader.h"
+#include "../models/mesh/meshLoader.h"
 
 class Player : public MeshObject {
 

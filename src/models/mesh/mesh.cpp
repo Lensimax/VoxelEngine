@@ -1,7 +1,8 @@
 #include <imgui.h>
 
 #include "mesh.h"
-#include "../material/shader.h"
+
+#include "../../material/shader.h"
 
 #include <math.h>
 

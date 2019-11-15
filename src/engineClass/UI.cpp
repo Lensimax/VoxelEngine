@@ -105,6 +105,7 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Save Scene", "WIP")) { /* Do stuff */ }
             if (ImGui::BeginMenu("Scene Example")){
                 if (ImGui::MenuItem("Solar System")) { scene->loadSolarSystem(); }
+                if (ImGui::MenuItem("Terrain + Player")) { scene->loadTerrainPlayer(); }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();

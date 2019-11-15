@@ -12,8 +12,8 @@
 
 #include "../material/lambertian.h"
 
-#include "mesh.h"
-#include "meshLoader.h"
+#include "mesh/mesh.h"
+#include "mesh/meshLoader.h"
 #include "drawableObject.h"
 
 #include <vector>
@@ -25,7 +25,7 @@
 class MeshObject : public DrawableObject {
     public:
         MeshObject();
-        MeshObject(int id, std::string n = "Mesh Object", Mesh *m = new MeshLoader("../data/models/monkey.off"),  Transform *t = new Transform(), Material *mat = new Lambertian());
+        MeshObject(int id, std::string n = "Mesh Object", Transform *t = new Transform(), Mesh *m = new MeshLoader("../data/models/sphere.off"), Material *mat = new Lambertian());
         ~MeshObject();
 
 

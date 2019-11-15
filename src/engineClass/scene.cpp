@@ -4,9 +4,8 @@
 #include "../tools/cameraProj.h"
 
 #include "../models/meshObject.h"
-#include "../models/meshCube.h"
-
-#include "../models/plane.h"
+#include "../models/mesh/meshCube.h"
+#include "../models/mesh/meshGrid.h"
 
 #include "../material/simpleMat.h"
 
@@ -19,7 +18,7 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    MeshObject *obj = new MeshObject(addNewId(), "Cube", new MeshCube(1.0f), new Transform(), new SimpleMat(glm::vec4(1,1,0,1)));
+    MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(1.0f), new SimpleMat(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(obj);
 
 }
@@ -127,7 +126,7 @@ void Scene::addMeshObject(){
 }
 
 void Scene::addPlane(){
-    objectsEngine.push_back(new Plane(addNewId()));
+    objectsEngine.push_back(new MeshObject(addNewId(), "Plane", new Transform(), new MeshGrid()));
 }
 
 void Scene::addEngineObject(){
@@ -135,11 +134,11 @@ void Scene::addEngineObject(){
 }
 
 void Scene::addSphere(){
-    objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", new MeshLoader("../data/models/sphere.off")));
+    objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", new Transform(), new MeshLoader("../data/models/sphere.off")));
 }
 
 void Scene::addTerrain(){
-    Plane *p = new Plane(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new Lambertian(), new MeshGrid(128, 3, 0, 0.2, 5));
+    MeshObject *p = new MeshObject(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new MeshGrid(128, 3, 0, 0.2, 5), new Lambertian());
     objectsEngine.push_back(p);
 }
 
@@ -192,9 +191,9 @@ void Scene::loadSolarSystem(){
     Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0.44,0,0));
     Transform *MoonTransform = new Transform(glm::vec3(0),glm::vec3(0.9,0,0), glm::vec3(0.2), glm::vec3(0));
 
-    MeshObject *Sun = new MeshObject(addNewId(),"Sun", new MeshLoader("../data/models/sphere.off"), new Transform(), new SimpleMat());
-    MeshObject *Earth = new MeshObject(addNewId(),"Earth", new MeshLoader("../data/models/sphere.off"), EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
-    MeshObject *Moon = new MeshObject(addNewId(),"Moon", new MeshLoader("../data/models/sphere.off"), MoonTransform , new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
+    MeshObject *Sun = new MeshObject(addNewId(),"Sun", new Transform(), new MeshLoader("../data/models/sphere.off"), new SimpleMat());
+    MeshObject *Earth = new MeshObject(addNewId(),"Earth", EarthTransform, new MeshLoader("../data/models/sphere.off"), new Lambertian(glm::vec4(0.,0.,1.,1.)));
+    MeshObject *Moon = new MeshObject(addNewId(),"Moon", MoonTransform, new MeshLoader("../data/models/sphere.off"), new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
 
     Sun->addChild(Earth);
     Earth->addChild(Moon);
@@ -242,7 +241,7 @@ void Scene::loadTerrainPlayer(){
 
     objectsEngine = std::vector<EngineObject*>();
 
-    Plane *p = new Plane(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new Lambertian(glm::vec4(0,0.6,0,1)), new MeshGrid(32, 3, 0, 0.2, 5));
+    MeshObject *p = new MeshObject(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new MeshGrid(32, 3, 0, 0.2, 5) ,new Lambertian(glm::vec4(0,0.6,0,1)));
     objectsEngine.push_back(p);
 
 

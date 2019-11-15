@@ -18,7 +18,6 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
-#include "meshLoader.h"
 #include "meshObject.h"
 
 #include <iostream>
@@ -28,7 +27,7 @@ MeshObject::MeshObject(){
 
 }
 
-MeshObject::MeshObject(int id, std::string n, Mesh *m, Transform *t, Material *mat){
+MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *mat){
     transform = t;
 
 
