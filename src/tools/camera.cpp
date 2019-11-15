@@ -1,5 +1,7 @@
 
 
+#include <imgui.h>
+
 #include "camera.h"
 
 
@@ -15,5 +17,24 @@ glm::mat4 Camera::getView(){
 
 
 glm::vec3 Camera::getLeftDir(){
-    return glm::normalize(glm::cross(directionOfView, up));
+    glm::vec3 v = directionOfView - position;
+    return glm::normalize(-glm::cross(v, up));
+}
+
+glm::vec3 Camera::getRightDir(){
+    glm::vec3 v = directionOfView - position;
+    return glm::normalize(glm::cross(v, up));
+}
+
+
+void Camera::update(){
+    if(ImGui::IsKeyPressed('J')){
+        glm::vec3 left = getLeftDir();
+        position = position + left*0.2f;
+    }
+
+    if(ImGui::IsKeyPressed('L')){
+        glm::vec3 right = getRightDir();
+        position = position + right*0.2f;
+    }
 }
