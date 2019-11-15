@@ -1,6 +1,7 @@
 #include "InputManager.h"
 #include <imgui.h>
 
+#include <stdio.h>
 
 InputManager::InputManager(){
 
@@ -16,6 +17,10 @@ void InputManager::setScene(Scene *sc){
 
 void InputManager::setUI(UI *u){
     ui = u;
+}
+
+void InputManager::setRenderer(MainRenderer *r){
+    renderer = r;
 }
 
 void InputManager::update(){
@@ -39,15 +44,21 @@ void InputManager::update(){
         }
     }
 
-    if(io.KeyCtrl && ImGui::IsKeyPressed('H')){
-        if(ui != NULL){
-            ui->toggleHasToBeDisplayed();
+    if(io.KeyCtrl){
+        if(ImGui::IsKeyPressed('P')){
+            if(scene != NULL){
+                scene->togglePause();
+            }
         }
-    }
-
-    if(io.KeyCtrl && ImGui::IsKeyPressed('P')){
-        if(scene != NULL){
-            scene->togglePause();
+        if(ImGui::IsKeyPressed('F')){
+            if(renderer != NULL){
+                renderer->toggleWire();
+            }
+        }
+        if(ImGui::IsKeyPressed('H')){
+            if(ui != NULL){
+                ui->toggleHasToBeDisplayed();
+            }
         }
     }
 

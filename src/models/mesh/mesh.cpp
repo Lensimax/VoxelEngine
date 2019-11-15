@@ -1,7 +1,8 @@
 #include <imgui.h>
 
 #include "mesh.h"
-#include "../material/shader.h"
+
+#include "../../material/shader.h"
 
 #include <math.h>
 
@@ -46,6 +47,8 @@ bool Mesh::alreadyExist(unsigned int num, std::vector<unsigned int> vec){
     return false;
 }
 
+void Mesh::update(){
+}
 
 void Mesh::compute_vertex_valences (std::vector<int> & valences, std::vector<std::vector<unsigned int>> one_ring, std::vector<std::vector<unsigned int> > triangles) {
     valences = std::vector<int>(one_ring.size());
@@ -120,6 +123,10 @@ void *Mesh::getFaces(){
 
 void *Mesh::getNormals(){
     return &(normals[0]);
+}
+
+void *Mesh::getUVs(){
+    return &(coords[0]);
 }
 
 unsigned int Mesh::getNBVertices(){

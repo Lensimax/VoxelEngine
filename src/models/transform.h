@@ -21,6 +21,10 @@ class Transform {
         void scale(vec3 scale);
         void setCenter(vec3 center);
 
+        vec3 getPosition();
+        vec3 getRotation();
+        vec3 getScale();
+
         void update();
 
         mat4 getModelMat();

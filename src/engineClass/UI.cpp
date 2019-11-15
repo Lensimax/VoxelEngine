@@ -105,6 +105,7 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Save Scene", "WIP")) { /* Do stuff */ }
             if (ImGui::BeginMenu("Scene Example")){
                 if (ImGui::MenuItem("Solar System")) { scene->loadSolarSystem(); }
+                if (ImGui::MenuItem("Terrain + Player")) { scene->loadTerrainPlayer(); }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -113,13 +114,14 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Add EngineObject", "Ctrl+T")) { scene->addEngineObject(); }
             if (ImGui::MenuItem("Add MeshObject", "Ctrl+N")) { scene->addMeshObject(); }
             if (ImGui::MenuItem("Add Plane", "")) { scene->addPlane(); }
-            if (ImGui::MenuItem("Add Cube", "WIP")) { /* Do stuff */ }
+            // if (ImGui::MenuItem("Add Cube", "WIP")) { /* Do stuff */ }
             if (ImGui::MenuItem("Add Sphere")) { scene->addSphere();}
+            if (ImGui::MenuItem("Add Terrain")) { scene->addTerrain();}
             if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selectedID); }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("View")){
-            if (ImGui::MenuItem("Toggle wire frame")) { if(mainRenderer != NULL) mainRenderer->toggleWire(); }
+            if (ImGui::MenuItem("Toggle wire frame","CTRL+F")) { if(mainRenderer != NULL) mainRenderer->toggleWire(); }
             ImGui::EndMenu();
         }
 

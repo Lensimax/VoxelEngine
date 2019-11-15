@@ -8,6 +8,30 @@ Green-engine is a graphic engine from a student to learn how we create a graphic
 
 #### Features
 
+###### Add 3D Object
+
+Object can be added in the menu ```Edit```
+
+* Add Mesh Object from ```.OFF``` file
+* Add a plane
+* Add a sphere
+* Add a terrain modified with ```Perlin``` noise
+
+###### Change transform
+
+* change position
+* change orientation
+* change scale
+* animate orientation
+
+###### Change tools position
+
+* change camera position, fov, orientation
+* change light position
+
+###### Display
+
+* Activate/Desactivate the display in wire frame
 
 
 #### How to clone

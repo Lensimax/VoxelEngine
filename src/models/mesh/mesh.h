@@ -24,6 +24,7 @@ public:
      void *getVertices();
      void *getFaces();
      void *getNormals();
+     void *getUVs();
 
      unsigned int getNBVertices();
      unsigned int getNBFaces();
@@ -43,6 +44,8 @@ public:
 
 
      void simplify();
+
+     virtual void update();
 
     protected:
      std::vector<unsigned int> get_face(unsigned int i);

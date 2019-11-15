@@ -12,21 +12,21 @@
 
 #include "../material/lambertian.h"
 
-#include "mesh.h"
+#include "mesh/mesh.h"
+#include "mesh/meshLoader.h"
 #include "drawableObject.h"
 
 #include <vector>
 
 #include <string>
 
-// #include "cubeMesh.h"
-
 
 
 class MeshObject : public DrawableObject {
     public:
-
-        virtual ~MeshObject() = default;;
+        MeshObject();
+        MeshObject(int id, std::string n = "Mesh Object", Transform *t = new Transform(), Mesh *m = new MeshLoader("../data/models/sphere.off"), Material *mat = new Lambertian());
+        ~MeshObject();
 
 
         /*virtual float *getVertices();
@@ -35,6 +35,8 @@ class MeshObject : public DrawableObject {
         int nbTriangles() override;
 
         void createUI(char *ID);
+
+        void update();
 
         void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 

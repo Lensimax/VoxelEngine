@@ -13,6 +13,7 @@ public:
 
     void setScene(Scene *sc);
     void setUI(UI *u);
+    void setRenderer(MainRenderer *r);
 
     void update();
 
@@ -21,6 +22,7 @@ private:
 
     Scene *scene = NULL;
     UI *ui = NULL;
+    MainRenderer *renderer = NULL;
 
 
 

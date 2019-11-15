@@ -12,6 +12,8 @@ set(GLM_INCLUDE_DIR thirdparty/glm)
 set(GLFW_INCLUDE_DIR thirdparty/glfw/include)
 set(IMGUI_INCLUDE_DIR thirdparty/imgui)
 set(GLAD_INCLUDE_DIR thirdparty/glad/include)
+set(STB_IMAGE_DIR thirdparty/stb_image)
+set(UTILITIES_DIR thirdparty/utilities)
 
 # 3rd party libraries
 add_subdirectory(thirdparty)
@@ -19,6 +21,9 @@ add_subdirectory(thirdparty)
 #find_package(glm)
 #find_package(glfw)
 #find_package(imgui)
+
+# pour ajouter le fichier par défaut de ImGui
+configure_file(data/default_imgui.ini imgui.ini  COPYONLY)
 
 
 
@@ -53,6 +58,8 @@ include_directories(
         ${GLAD_INCLUDE_DIR}
         ${IMGUI_INCLUDE_DIR}
         ${OPENGL_INCLUDE_DIR}
+        ${STB_IMAGE_DIR}
+        ${UTILITIES_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME} glfw glm glad imgui ${CMAKE_DL_LIBS})

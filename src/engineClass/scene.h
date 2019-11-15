@@ -40,9 +40,12 @@ class Scene {
         void addPlane();
         void addEngineObject();
         void addSphere();
+        void addTerrain();
         void deleteObject(int id);
 
         void loadSolarSystem();
+        void loadTerrainPlayer();
+        void loadDefaultScene();
 
 
         std::vector<EngineObject*> objectsEngine;
@@ -52,6 +55,9 @@ class Scene {
 
     private:
         void deleteScene();
+
+        Camera *getCameraRecursive(EngineObject *obj);
+        Light *getLightRecursive(EngineObject *obj);
 
         int IDObject = 0;
 

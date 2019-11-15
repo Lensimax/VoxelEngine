@@ -3,6 +3,7 @@
 #include <imgui.h>
 
 
+
 CameraProj::CameraProj(int id, std::string name, glm::vec3 pos, glm::vec3 u, glm::vec3 direction, float fov, float n, float f){
     setName(name);
     setID(id);
@@ -13,6 +14,8 @@ CameraProj::CameraProj(int id, std::string name, glm::vec3 pos, glm::vec3 u, glm
     near = n;
     far = f;
 }
+
+
 
 
 void CameraProj::createUI(char *ID){
