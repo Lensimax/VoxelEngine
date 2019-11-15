@@ -17,7 +17,7 @@ public:
 	~MeshCube();
 
 	void recreate() override;
-	//void createUI();
+	void createUI();
 
 
 private:

@@ -1,5 +1,7 @@
 #include "meshCube.h"
 
+#include <imgui.h>
+
 MeshCube::MeshCube(float w = 1.0f){
     width = w;
 
@@ -16,10 +18,13 @@ MeshCube::~MeshCube(){
 void MeshCube::recreate(){
     createMesh(width);
 }
-/*
-void MeshCube::createUI(){
 
-}*/
+void MeshCube::createUI(){
+    Mesh::createUI();
+
+    ImGui::Text("Width : ");
+    ImGui::DragFloat("##width", &width, 0.01f);  
+}
 
 
 void MeshCube::createMesh(float w){
@@ -40,14 +45,14 @@ void MeshCube::createMesh(float w){
 void MeshCube::createPositions(float w){
     vertices.resize(nb_vertices);
 
-    vertices[0] = glm::vec3(0,0,1);
-    vertices[1] = glm::vec3(1,0,1);
-    vertices[2] = glm::vec3(0,1,1);
-    vertices[3] = glm::vec3(1,1,1);
-    vertices[4] = glm::vec3(0,0,0);
-    vertices[5] = glm::vec3(1,0,0);
-    vertices[6] = glm::vec3(0,1,0);
-    vertices[7] = glm::vec3(1,1,0);
+    vertices[0] = glm::vec3(-w,-w,w);
+    vertices[1] = glm::vec3(w,-w,w);
+    vertices[2] = glm::vec3(-w,w,w);
+    vertices[3] = glm::vec3(w,w,w);
+    vertices[4] = glm::vec3(-w,-w,-w);
+    vertices[5] = glm::vec3(w,-w,-w);
+    vertices[6] = glm::vec3(-w,w,-w);
+    vertices[7] = glm::vec3(w,w,-w);
 }
 
 void MeshCube::createTriangles(){
