@@ -17,6 +17,8 @@ class CameraProj : public Camera {
 
         virtual void createUI(char *ID);
 
+        void update() override;
+
     protected:
 
         float fovy;

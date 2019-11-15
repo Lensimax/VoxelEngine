@@ -2,6 +2,10 @@
 
 #include <imgui.h>
 
+#include <iostream>
+
+#include <glm_display.h>
+
 
 CameraProj::CameraProj(int id, std::string name, glm::vec3 pos, glm::vec3 u, glm::vec3 direction, float fov, float n, float f){
     setName(name);
@@ -12,6 +16,19 @@ CameraProj::CameraProj(int id, std::string name, glm::vec3 pos, glm::vec3 u, glm
     fovy = fov;
     near = n;
     far = f;
+}
+
+
+
+void CameraProj::update(){
+    if(ImGui::IsKeyPressed('J')){
+        std::cout << "update Cam\n";
+        glm::vec3 left = getLeftDir();
+        std::cout << left;
+        //position = position + left*0.01f;
+        // std::cout << 
+
+    }
 }
 
 

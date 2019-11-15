@@ -24,7 +24,10 @@ class Camera : public EngineObject {
     protected:
         void setAxis(glm::vec3 pos, glm::vec3 u, glm::vec3 dir);
 
+        glm::vec3 getLeftDir();
+
         glm::vec3 position, up, directionOfView;
+        
 
 
 };
