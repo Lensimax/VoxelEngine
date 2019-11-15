@@ -13,20 +13,19 @@
 #include "../material/lambertian.h"
 
 #include "mesh.h"
+#include "meshLoader.h"
 #include "drawableObject.h"
 
 #include <vector>
 
 #include <string>
 
-// #include "cubeMesh.h"
-
 
 
 class MeshObject : public DrawableObject {
     public:
         MeshObject();
-        MeshObject(int id, std::string n = "Mesh Object", char *filename = "../data/models/monkey.off",  Transform *t = new Transform(), Material *m = new Lambertian());
+        MeshObject(int id, std::string n = "Mesh Object", Mesh *m = new MeshLoader("../data/models/monkey.off"),  Transform *t = new Transform(), Material *mat = new Lambertian());
         ~MeshObject();
 
 

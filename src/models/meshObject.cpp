@@ -28,11 +28,11 @@ MeshObject::MeshObject(){
 
 }
 
-MeshObject::MeshObject(int id, std::string n, char *filename, Transform *t, Material *m){
+MeshObject::MeshObject(int id, std::string n, Mesh *m, Transform *t, Material *mat){
     transform = t;
 
 
-    mesh = new MeshLoader(filename);
+    mesh = m;
 
     glm::vec3 center = mesh->getCenter();
     t->setCenter(center);
@@ -40,7 +40,7 @@ MeshObject::MeshObject(int id, std::string n, char *filename, Transform *t, Mate
     createVAO();
 
 
-    material = m;
+    material = mat;
 
     setName(n);
     setID(id);

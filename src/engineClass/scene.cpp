@@ -4,6 +4,7 @@
 #include "../tools/cameraProj.h"
 
 #include "../models/meshObject.h"
+#include "../models/meshCube.h"
 
 #include "../models/plane.h"
 
@@ -11,25 +12,15 @@
 
 #include "../material/textureMaterial.h"
 
+#include "../controlable/player.h"
+
 
 Scene::Scene(){
 
-    pause = false;
+    loadDefaultScene();
 
-    IDObject = 0;
-
-
-    objectsEngine = std::vector<EngineObject*>();
-
-    addTerrain();
-    
-
-    Camera *camera = new CameraProj(addNewId());
-
-    objectsEngine.push_back(camera);
-
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 0)));
-
+    MeshObject *obj = new MeshObject(addNewId(), "Cube", new MeshCube(1.0f), new Transform(), new SimpleMat(glm::vec4(1,1,0,1)));
+    objectsEngine.push_back(obj);
 
 }
 
@@ -144,7 +135,7 @@ void Scene::addEngineObject(){
 }
 
 void Scene::addSphere(){
-    objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", (char*)"../data/models/sphere.off"));
+    objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", new MeshLoader("../data/models/sphere.off")));
 }
 
 void Scene::addTerrain(){
@@ -201,9 +192,9 @@ void Scene::loadSolarSystem(){
     Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0.44,0,0));
     Transform *MoonTransform = new Transform(glm::vec3(0),glm::vec3(0.9,0,0), glm::vec3(0.2), glm::vec3(0));
 
-    MeshObject *Sun = new MeshObject(addNewId(),"Sun", (char*)"../data/models/sphere.off", new Transform(), new SimpleMat());
-    MeshObject *Earth = new MeshObject(addNewId(),"Earth", (char*)"../data/models/sphere.off", EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
-    MeshObject *Moon = new MeshObject(addNewId(),"Moon", (char*)"../data/models/sphere.off", MoonTransform , new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
+    MeshObject *Sun = new MeshObject(addNewId(),"Sun", new MeshLoader("../data/models/sphere.off"), new Transform(), new SimpleMat());
+    MeshObject *Earth = new MeshObject(addNewId(),"Earth", new MeshLoader("../data/models/sphere.off"), EarthTransform, new Lambertian(glm::vec4(0.,0.,1.,1.)));
+    MeshObject *Moon = new MeshObject(addNewId(),"Moon", new MeshLoader("../data/models/sphere.off"), MoonTransform , new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
 
     Sun->addChild(Earth);
     Earth->addChild(Moon);
@@ -225,5 +216,44 @@ void Scene::loadSolarSystem(){
     objectsEngine.push_back(cam);
 
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
+
+}
+
+void Scene::loadDefaultScene(){
+    pause = false;
+
+    IDObject = 0;
+
+    objectsEngine = std::vector<EngineObject*>();
+
+    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
+
+    objectsEngine.push_back(camera);
+
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
+}
+
+
+void Scene::loadTerrainPlayer(){
+    pause = false;
+
+    IDObject = 0;
+
+
+    objectsEngine = std::vector<EngineObject*>();
+
+    Plane *p = new Plane(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new Lambertian(glm::vec4(0,0.6,0,1)), new MeshGrid(32, 3, 0, 0.2, 5));
+    objectsEngine.push_back(p);
+
+
+    Player *player = new Player(addNewId(), "Player", new Transform(glm::vec3(0), glm::vec3(0, 0.2, 0), glm::vec3(0.1)), new MeshLoader("../data/models/sphere.off"), new SimpleMat());
+
+    p->addChild(player);
+
+    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,1,3));
+
+    objectsEngine.push_back(camera);
+
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
 
 }
