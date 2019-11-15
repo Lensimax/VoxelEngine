@@ -25,12 +25,19 @@ Player::~Player(){
 }
 
 void Player::update(){
-    ImGuiIO& io = ImGui::GetIO();
 
-    std::cout << "Update Player\n";
     glm::vec3 pos = transform->getPosition();
-    if(ImGui::IsKeyPressed('H')){
+    if(ImGui::IsKeyPressed('W')){
         pos.z -= speed;
+    }
+    if(ImGui::IsKeyPressed('S')){
+        pos.z += speed;
+    }
+    if(ImGui::IsKeyPressed('A')){
+        pos.x -= speed;
+    }
+    if(ImGui::IsKeyPressed('D')){
+        pos.x += speed;
     }
 
 
@@ -38,9 +45,24 @@ void Player::update(){
 }
 
 void Player::createUI(char *ID){
-    MeshObject::createUI(ID);
+    ImGui::BeginChild(ID);
+    ImGui::Text(name.c_str()); ImGui::SameLine();
+    ImGui::Text("id : %d", getID());
+    ImGui::Separator();
+    transform->createUI();
+
 
     ImGui::Separator();
     ImGui::Text("Player Speed: ");
-    ImGui::DragFloat("near", &speed, 0.01f);  
+    ImGui::DragFloat("##speed", &speed, 0.01f);  
+
+    ImGui::Separator();
+    bool node_material = ImGui::TreeNodeEx("Material", 0);
+    if(node_material){
+        material->createUI();
+        ImGui::TreePop();
+    }
+
+    ImGui::EndChild();
+
 }
