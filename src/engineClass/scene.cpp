@@ -4,6 +4,7 @@
 #include "../tools/cameraProj.h"
 
 #include "../models/meshObject.h"
+#include "../models/meshCube.h"
 
 #include "../models/plane.h"
 
@@ -16,7 +17,10 @@
 
 Scene::Scene(){
 
-  loadTerrainPlayer();
+    loadDefaultScene();
+
+    MeshObject *obj = new MeshObject(addNewId(), "Cube", new MeshCube(1.0f), new Transform(), new SimpleMat(glm::vec4(1,1,0,1)));
+    objectsEngine.push_back(obj);
 
 }
 
@@ -213,6 +217,20 @@ void Scene::loadSolarSystem(){
 
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
 
+}
+
+void Scene::loadDefaultScene(){
+    pause = false;
+
+    IDObject = 0;
+
+    objectsEngine = std::vector<EngineObject*>();
+
+    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
+
+    objectsEngine.push_back(camera);
+
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
 }
 
 
