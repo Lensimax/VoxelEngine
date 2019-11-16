@@ -4,6 +4,9 @@
 
 #include "camera.h"
 
+#include <iostream>
+#include <glm_display.h>
+
 
 void Camera::setAxis(glm::vec3 pos, glm::vec3 u, glm::vec3 dir){
     position = pos;
@@ -27,14 +30,15 @@ glm::vec3 Camera::getRightDir(){
 }
 
 
-void Camera::update(){
-    if(ImGui::IsKeyPressed('J')){
-        glm::vec3 left = getLeftDir();
-        position = position + left*0.2f;
-    }
 
-    if(ImGui::IsKeyPressed('L')){
-        glm::vec3 right = getRightDir();
-        position = position + right*0.2f;
-    }
+
+
+void Camera::update(){
+
+}
+
+
+void Camera::rotateAroundPoint(glm::vec2 v){
+
+
 }

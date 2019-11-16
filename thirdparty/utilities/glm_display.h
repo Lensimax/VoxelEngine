@@ -20,6 +20,11 @@ std::ostream & operator<<(std::ostream & out, const glm::vec4& v){
     return out;
 }
 
+std::ostream & operator<<(std::ostream & out, const glm::vec2& v){
+    out << "{" << v.x << ", " << v.y << "}";
+    return out;
+}
+
 
 std::ostream & operator<<(std::ostream & out, const glm::mat4& matrix){
 
