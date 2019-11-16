@@ -74,6 +74,8 @@ class MainRenderer {
 
         bool wireActived;
 
+        Transform *transformWorld;
+
 };
 
 #endif
