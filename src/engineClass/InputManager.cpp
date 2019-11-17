@@ -1,7 +1,7 @@
 #include "InputManager.h"
 #include <imgui.h>
 
-#include <stdio.h>
+#include <iostream>
 
 InputManager::InputManager(){
 
@@ -19,12 +19,29 @@ void InputManager::setUI(UI *u){
     ui = u;
 }
 
+void InputManager::createUI(){
+    ImGuiIO& io = ImGui::GetIO();
+
+    ImGui::Begin("Debug");
+    ImGui::Separator();
+
+    ImGui::Text("Mouse click position : ");
+    if(ImGui::IsMouseDown(0) && !io.WantCaptureMouse){
+        ImGui::SameLine(); ImGui::Text("(%3f, %3f)", io.MousePos.x, io.MousePos.y);
+    }
+    ImGui::End();
+}
+
 void InputManager::setRenderer(MainRenderer *r){
     renderer = r;
 }
 
 void InputManager::update(){
     ImGuiIO& io = ImGui::GetIO();
+
+    if (io.MouseClicked && !io.WantCaptureMouse){
+        // on est sur la fenetre 
+    }
 
 
     if(scene != NULL && ui != NULL){

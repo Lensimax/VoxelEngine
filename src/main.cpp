@@ -150,8 +150,9 @@ int main(int, char**)
         scene->update();
 
         ui->drawUI();
+        inputManager->createUI();
 
-        // ImGui::ShowDemoWindow();
+        ImGui::ShowDemoWindow();
 
 
         // Rendering

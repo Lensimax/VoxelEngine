@@ -15,6 +15,8 @@ public:
     void setUI(UI *u);
     void setRenderer(MainRenderer *r);
 
+    void createUI();
+
     void update();
 
 
