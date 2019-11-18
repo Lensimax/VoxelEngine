@@ -10,6 +10,7 @@ Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
     this->vecScale = scale;
     this->vecRotation = rotation;
     this->center = center;
+    this->translateAfter = glm::vec3(0);
 
     this->positionToSend = position;
     this->scaleToSend = glm::vec3(1);
@@ -63,6 +64,10 @@ void Transform::addTranslation(vec3 t){
     vecPosition += t;
 }
 
+void Transform::addTranslationAfter(vec3 t){
+    translateAfter += t;
+}
+
 mat4 Transform::getModelMat(){
     mat4 model = mat4(1.0f);
     model = translate(model, vecPosition);
@@ -70,6 +75,7 @@ mat4 Transform::getModelMat(){
     model = glm::rotate(model, vecRotation[0], vec3(1.0,0.0,0.0));
     model = glm::rotate(model, vecRotation[1], vec3(0.0,1.0,0.0));
     model = glm::rotate(model, vecRotation[2], vec3(0.0,0.0,1.0));
+    model = translate(model, translateAfter);
     model = glm::scale(model, vecScale);
 
     return model;
@@ -81,6 +87,7 @@ mat4 Transform::getModelMat(mat4 modelMat){
     modelMat = glm::rotate(modelMat, vecRotation[0]+animRotX, vec3(1.0,0.0,0.0));
     modelMat = glm::rotate(modelMat, vecRotation[1]+animRotY, vec3(0.0,1.0,0.0));
     modelMat = glm::rotate(modelMat, vecRotation[2]+animRotZ, vec3(0.0,0.0,1.0));
+    modelMat = translate(modelMat, translateAfter);
     modelMat = glm::scale(modelMat, vecScale);
 
     return modelMat;
@@ -107,6 +114,8 @@ mat4 Transform::getModelToChild(mat4 modelMat){
         model = glm::rotate(model, vecRotation[1]+animRotY, vec3(0.0,1.0,0.0));
         model = glm::rotate(model, vecRotation[2]+animRotZ, vec3(0.0,0.0,1.0));
     }
+
+    model = translate(model, translateAfter);    
 
     return model;
 

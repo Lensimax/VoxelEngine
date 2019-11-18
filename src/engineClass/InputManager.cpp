@@ -81,6 +81,14 @@ void InputManager::update(){
             }
         }
 
+        if(ImGui::IsMouseDown(1)){
+            glm::vec2 vectorTranslate = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
+            vectorTranslate.y *= -1;
+            vectorTranslate *= 0.01f;
+            renderer->getTransform()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
+        }
+
+
         if(ImGui::IsMouseDown(0)){
 
             // ROTATION OF the world

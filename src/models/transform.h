@@ -24,6 +24,7 @@ class Transform {
         void setCenter(vec3 center);
 
         void addTranslation(vec3 t);
+        void addTranslationAfter(vec3 t);
 
         vec3 getPosition();
         vec3 getRotation();
@@ -45,7 +46,7 @@ class Transform {
 
         void reset();
 
-        vec3 vecPosition, vecScale, vecRotation, center;
+        vec3 vecPosition, vecScale, vecRotation, center, translateAfter;
 
         bool samePosition, sameRotation;
 
