@@ -35,8 +35,6 @@ private:
     UI *ui = NULL;
     MainRenderer *renderer = NULL;
 
-    glm::vec2 startClick;
-
     glm::vec2 sensitivityRotateWorld;
 };
 

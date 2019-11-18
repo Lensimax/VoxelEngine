@@ -4,7 +4,6 @@
 #include <iostream>
 
 InputManager::InputManager(){
-    startClick = glm::vec2(-1);
     sensitivityRotateWorld = glm::vec2(1);
 }
 
@@ -43,40 +42,20 @@ void InputManager::createUI(){
     ImGui::Separator();
 
     if(ImGui::IsMouseDown(0) && !io.WantCaptureMouse){
-        if(startClick == glm::vec2(-1)){
-            startClick =  glm::vec2(io.MousePos.x, io.MousePos.y);
-        }
-        //glm::vec2 vectorMouse = glm::vec2(io.MousePos.x, io.MousePos.y) - startClick;
-        glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
-        vectorMouse *= sensitivityRotateWorld*0.01f;
-
-        if(renderer != NULL){
-            renderer->getTransform()->rotatefromScreen(vectorMouse);
-        }
-
-        ImGui::Text("Start click pos : (%3f, %3f)", startClick.x, startClick.y);
         ImGui::Text("Mouse click position : (%3f, %3f)", io.MousePos.x, io.MousePos.y);
-        ImGui::Text("Vector mouse : (%2f, %2f)\n", vectorMouse.x, vectorMouse.y);
+        ImGui::Text("Vector mouse : (%2f, %2f)\n", io.MouseDelta.x, io.MouseDelta.y);
     
+    } else {
+        ImGui::Text("Mouse click position : \n");
+        ImGui::Text("Vector mouse : \n");
     }
 
-    /*if(ImGui::IsMouseReleased(0)){
-        startClick = glm::vec2(-1);
-        if(renderer != NULL){
-            glm::vec2 vectorMouse = glm::vec2(io.MousePos.x, io.MousePos.y) - startClick;
-            vectorMouse.y *= -1;
-            vectorMouse.y /= (float)renderer->height();
-            vectorMouse.x /= (float)renderer->width();
-            vectorMouse *= 0.5;
-            renderer->getTransform()->rotatefromScreen(vectorMouse);
-        }
 
-    }*/
 
-    if(renderer != NULL){
+    /*if(renderer != NULL){
         ImGui::Separator();
         renderer->getTransform()->createUI();
-    }
+    }*/
 
     ImGui::End();
 }
@@ -88,9 +67,17 @@ void InputManager::setRenderer(MainRenderer *r){
 void InputManager::update(){
     ImGuiIO& io = ImGui::GetIO();
 
-    if (io.MouseClicked && !io.WantCaptureMouse){
-        // on est sur la fenetre 
+    if(ImGui::IsMouseDown(0) && !io.WantCaptureMouse){
+
+        // ROTATION OF the world
+        glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
+        vectorMouse *= sensitivityRotateWorld*0.01f;
+
+        if(renderer != NULL){
+            renderer->getTransform()->rotatefromScreen(vectorMouse);
+        }
     }
+
 
 
     if(scene != NULL && ui != NULL){
