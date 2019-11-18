@@ -24,6 +24,10 @@ public:
     void set(MainRenderer *main);
     void set(GLFWwindow *win);
 
+    inline bool hasToDisplayed(){
+        return hasToBeDisplayed;
+    }
+
 private:
 
     void createUISceneManager(Scene *scene);

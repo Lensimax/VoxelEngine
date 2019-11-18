@@ -4,6 +4,15 @@
 #include "scene.h"
 #include "UI.h"
 
+#ifndef GLM_H
+#define GLM_H
+#include <glm/gtx/perpendicular.hpp>
+#include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+#endif
+
 class InputManager {
 
 public:
@@ -26,9 +35,9 @@ private:
     UI *ui = NULL;
     MainRenderer *renderer = NULL;
 
+    glm::vec2 startClick;
 
-
-
+    glm::vec2 sensitivityRotateWorld;
 };
 
 

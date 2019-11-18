@@ -36,6 +36,18 @@ class MainRenderer {
 
         void toggleWire();
 
+        inline Transform *getTransform(){
+            return transformWorld;
+        }
+
+        inline unsigned int width(){
+            return widthScreen;
+        }
+
+        inline unsigned int height(){
+            return heightScreen;
+        }
+
 
     private:
 
@@ -75,6 +87,8 @@ class MainRenderer {
         bool wireActived;
 
         Transform *transformWorld;
+
+        unsigned int widthScreen, heightScreen;
 
 };
 

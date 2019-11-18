@@ -27,6 +27,8 @@ void UI::drawUI(){
     if(scene != NULL){
         createUISceneManager(scene);
     }
+
+   
 }
 
 

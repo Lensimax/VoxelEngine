@@ -37,15 +37,21 @@ MainRenderer::MainRenderer(){
 
     transformWorld = new Transform();
 
+    widthScreen = 0;
+    heightScreen = 0;
+
 }
 
 void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
+    widthScreen = width;
+    heightScreen = height;
 
     if(height == 0){
         fprintf(stderr, "Error height = 0\n");
         exit(1);
     }
+
 
 
     // CAMERA

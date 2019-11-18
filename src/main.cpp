@@ -118,11 +118,12 @@ int main(int, char**)
     Scene *scene = new Scene();
 
     UI *ui = new UI();
+    InputManager *inputManager = new InputManager();
+
     ui->set(scene);
     ui->set(renderer);
     ui->set(window);
-
-    InputManager *inputManager = new InputManager();
+    
     inputManager->setUI(ui);
     inputManager->setScene(scene);
     inputManager->setRenderer(renderer);
@@ -152,7 +153,7 @@ int main(int, char**)
         ui->drawUI();
         inputManager->createUI();
 
-        ImGui::ShowDemoWindow();
+        //ImGui::ShowDemoWindow();
 
 
         // Rendering

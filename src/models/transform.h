@@ -19,6 +19,7 @@ class Transform {
 
         void setPosition(vec3 position);
         void rotate(vec3 angle);
+        void rotatefromScreen(vec2 v);
         void scale(vec3 scale);
         void setCenter(vec3 center);
 

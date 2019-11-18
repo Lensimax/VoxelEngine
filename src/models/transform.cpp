@@ -46,6 +46,11 @@ void Transform::rotate(vec3 axis){
     this->vecRotation = axis;
 }
 
+void Transform::rotatefromScreen(vec2 v){
+    vecRotation.x += v.y;
+    vecRotation.y += v.x;
+}
+
 void Transform::setCenter(vec3 center) {
     this->center = center;
 }
