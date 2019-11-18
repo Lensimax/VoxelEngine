@@ -36,6 +36,7 @@ private:
     MainRenderer *renderer = NULL;
 
     glm::vec2 sensitivityRotateWorld;
+    float scrollZoomSensitivity;
 };
 
 

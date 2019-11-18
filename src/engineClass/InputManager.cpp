@@ -5,6 +5,7 @@
 
 InputManager::InputManager(){
     sensitivityRotateWorld = glm::vec2(1);
+    scrollZoomSensitivity = 1.f;
 }
 
 InputManager::~InputManager(){
@@ -33,6 +34,8 @@ void InputManager::createUI(){
     ImGui::Separator();
     ImGui::Text("Rotation world sensitivity : (x0.01)");
     ImGui::DragFloat2("##rotationsensitivity", &sensitivityRotateWorld[0], 0.01, 0.0, 100.);
+    ImGui::Text("Scroll zoom sensitivity : ");
+    ImGui::DragFloat("##scrollZoomSensitivity", &scrollZoomSensitivity, 0.01, 0.0, 100.);
 
     ImGui::End();
 
@@ -44,11 +47,14 @@ void InputManager::createUI(){
     if(ImGui::IsMouseDown(0) && !io.WantCaptureMouse){
         ImGui::Text("Mouse click position : (%3f, %3f)", io.MousePos.x, io.MousePos.y);
         ImGui::Text("Vector mouse : (%2f, %2f)\n", io.MouseDelta.x, io.MouseDelta.y);
-    
+        
     } else {
         ImGui::Text("Mouse click position : \n");
         ImGui::Text("Vector mouse : \n");
     }
+
+    ImGui::Text("Mouse wheel: %.1f", io.MouseWheel);
+    
 
 
 
@@ -67,16 +73,26 @@ void InputManager::setRenderer(MainRenderer *r){
 void InputManager::update(){
     ImGuiIO& io = ImGui::GetIO();
 
-    if(ImGui::IsMouseDown(0) && !io.WantCaptureMouse){
+    // WORLD CONTROL
+    if(!io.WantCaptureMouse){
+        if(io.MouseWheel != 0.0){
+            if(renderer != NULL){
+                renderer->getTransform()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
+            }
+        }
 
-        // ROTATION OF the world
-        glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
-        vectorMouse *= sensitivityRotateWorld*0.01f;
+        if(ImGui::IsMouseDown(0)){
 
-        if(renderer != NULL){
-            renderer->getTransform()->rotatefromScreen(vectorMouse);
+            // ROTATION OF the world
+            glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
+            vectorMouse *= sensitivityRotateWorld*0.01f;
+
+            if(renderer != NULL){
+                renderer->getTransform()->rotatefromScreen(vectorMouse);
+            }
         }
     }
+    
 
 
 

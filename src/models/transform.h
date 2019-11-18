@@ -23,6 +23,8 @@ class Transform {
         void scale(vec3 scale);
         void setCenter(vec3 center);
 
+        void addTranslation(vec3 t);
+
         vec3 getPosition();
         vec3 getRotation();
         vec3 getScale();

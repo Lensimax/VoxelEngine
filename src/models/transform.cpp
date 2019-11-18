@@ -59,6 +59,10 @@ void Transform::scale(vec3 scale){
     this->vecScale = scale;
 }
 
+void Transform::addTranslation(vec3 t){
+    vecPosition += t;
+}
+
 mat4 Transform::getModelMat(){
     mat4 model = mat4(1.0f);
     model = translate(model, vecPosition);
