@@ -37,15 +37,9 @@ class Scene {
         void updateObj(EngineObject *obj);
 
 
-        void addMeshObject();
-        void addPlane();
         void addEngineObject();
-        void addSphere();
-        void addTerrain();
         void deleteObject(int id);
 
-        void loadSolarSystem();
-        void loadTerrainPlayer();
         void loadDefaultScene();
 
 
@@ -53,6 +47,10 @@ class Scene {
         int addNewId();
 
         void togglePause();
+
+        inline Transform *getTransformWorld(){
+            return transformWorld;
+        }
 
     private:
         void deleteScene();
@@ -63,6 +61,8 @@ class Scene {
         int IDObject = 0;
 
         bool pause;
+
+        Transform *transformWorld;
 };
 
 #endif

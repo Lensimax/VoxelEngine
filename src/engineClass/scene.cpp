@@ -11,10 +11,11 @@
 
 #include "../material/textureMaterial.h"
 
-#include "../controlable/player.h"
 
 
 Scene::Scene(){
+
+
 
     loadDefaultScene();
 
@@ -31,6 +32,7 @@ void Scene::deleteScene(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         delete objectsEngine[i];
     }
+    delete transformWorld;
 }
 
 Camera *Scene::getCameraRecursive(EngineObject *obj){
@@ -121,26 +123,12 @@ void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & i
 }
 
 
-void Scene::addMeshObject(){
-    objectsEngine.push_back(new MeshObject(addNewId()));
-}
-
-void Scene::addPlane(){
-    objectsEngine.push_back(new MeshObject(addNewId(), "Plane", new Transform(), new MeshGrid()));
-}
 
 void Scene::addEngineObject(){
     objectsEngine.push_back(new EngineObject(addNewId()));
 }
 
-void Scene::addSphere(){
-    objectsEngine.push_back(new MeshObject(addNewId(), "Sphere", new Transform(), new MeshLoader("../data/models/sphere.off")));
-}
 
-void Scene::addTerrain(){
-    MeshObject *p = new MeshObject(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new MeshGrid(128, 3, 0, 0.2, 5), new Lambertian());
-    objectsEngine.push_back(p);
-}
 
 void Scene::deleteObject(int id){
 
@@ -167,6 +155,7 @@ void Scene::updateObj(EngineObject *obj){
 }
 
 void Scene::update(){
+    transformWorld->update();
     if(!pause){
         for(unsigned int i=0; i<objectsEngine.size(); i++){
             updateObj(objectsEngine[i]);
@@ -180,46 +169,10 @@ void Scene::togglePause(){
 }
 
 
-void Scene::loadSolarSystem(){
-    pause = false;
-
-    IDObject = 0;
-
-
-    objectsEngine = std::vector<EngineObject*>();
-
-    Transform *EarthTransform =  new Transform(glm::vec3(0),glm::vec3(-2.5,0,0), glm::vec3(0.5), glm::vec3(0.44,0,0));
-    Transform *MoonTransform = new Transform(glm::vec3(0),glm::vec3(0.9,0,0), glm::vec3(0.2), glm::vec3(0));
-
-    MeshObject *Sun = new MeshObject(addNewId(),"Sun", new Transform(), new MeshLoader("../data/models/sphere.off"), new SimpleMat());
-    MeshObject *Earth = new MeshObject(addNewId(),"Earth", EarthTransform, new MeshLoader("../data/models/sphere.off"), new Lambertian(glm::vec4(0.,0.,1.,1.)));
-    MeshObject *Moon = new MeshObject(addNewId(),"Moon", MoonTransform, new MeshLoader("../data/models/sphere.off"), new Lambertian(glm::vec4(0.1,0.1,0.1,1.0)));
-
-    Sun->addChild(Earth);
-    Earth->addChild(Moon);
-
-    objectsEngine.push_back(Sun);
-
-
-    //// SET ANIMATION OF SOLAR SYSTEM
-    Sun->getTransform()->setSameAsParent(true, false);
-    Sun->getTransform()->setChildAnimation(false, true, false);
-
-
-    Earth->getTransform()->setSameAsParent(true, false);
-    Earth->getTransform()->setAnimation(false,true,false);
-    Earth->getTransform()->setChildAnimation(false,true,false, 0.,-0.05,0.);
-
-    Camera *cam = new CameraProj(addNewId());
-
-    objectsEngine.push_back(cam);
-
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(8, 0.0, 1)));
-
-}
-
 void Scene::loadDefaultScene(){
     pause = false;
+
+    transformWorld = new Transform();
 
     IDObject = 0;
 
@@ -232,27 +185,3 @@ void Scene::loadDefaultScene(){
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
 }
 
-
-void Scene::loadTerrainPlayer(){
-    pause = false;
-
-    IDObject = 0;
-
-
-    objectsEngine = std::vector<EngineObject*>();
-
-    MeshObject *p = new MeshObject(addNewId(), "Terrain", new Transform(glm::vec3(0), glm::vec3(0), glm::vec3(1), glm::vec3(0.5,0,0)), new MeshGrid(32, 3, 0, 0.2, 5) ,new Lambertian(glm::vec4(0,0.6,0,1)));
-    objectsEngine.push_back(p);
-
-
-    Player *player = new Player(addNewId(), "Player", new Transform(glm::vec3(0), glm::vec3(0, 0.2, 0), glm::vec3(0.1)), new MeshLoader("../data/models/sphere.off"), new SimpleMat());
-
-    p->addChild(player);
-
-    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,1,3));
-
-    objectsEngine.push_back(camera);
-
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
-
-}

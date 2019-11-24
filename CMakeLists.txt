@@ -1,4 +1,4 @@
-set(PROJECT_NAME green-engine)
+set(PROJECT_NAME voxel-engine)
 
 
 project(${PROJECT_NAME})

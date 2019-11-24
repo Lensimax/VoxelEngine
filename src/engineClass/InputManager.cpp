@@ -77,7 +77,7 @@ void InputManager::update(){
     if(!io.WantCaptureMouse){
         if(io.MouseWheel != 0.0){
             if(renderer != NULL){
-                renderer->getTransform()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
+                scene->getTransformWorld()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
             }
         }
 
@@ -85,7 +85,7 @@ void InputManager::update(){
             glm::vec2 vectorTranslate = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
             vectorTranslate.y *= -1;
             vectorTranslate *= 0.01f;
-            renderer->getTransform()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
+            scene->getTransformWorld()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
         }
 
 
@@ -95,8 +95,8 @@ void InputManager::update(){
             glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
             vectorMouse *= sensitivityRotateWorld*0.01f;
 
-            if(renderer != NULL){
-                renderer->getTransform()->rotatefromScreen(vectorMouse);
+            if(scene != NULL){
+                scene->getTransformWorld()->rotatefromScreen(vectorMouse);
             }
         }
     }
@@ -114,9 +114,7 @@ void InputManager::update(){
 
         }
 
-        if(io.KeyCtrl && ImGui::IsKeyPressed('N')){
-            scene->addMeshObject();
-        } else if(io.KeyCtrl && ImGui::IsKeyPressed('T')){
+        if(io.KeyCtrl && ImGui::IsKeyPressed('T')){
             scene->addEngineObject();
         }
     }

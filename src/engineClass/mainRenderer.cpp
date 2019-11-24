@@ -35,8 +35,6 @@ MainRenderer::MainRenderer(){
     createFBOSceneRender();
     wireActived = false;
 
-    transformWorld = new Transform();
-
     widthScreen = 0;
     heightScreen = 0;
 
@@ -69,12 +67,12 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     }
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(transformWorld->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
+        drawRecursive(scene->getTransformWorld()->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 
-    transformWorld->update();
+    
 
 }
 
@@ -117,7 +115,6 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     glUseProgram(0);
 
 
-    // printf("Finished\n");
 }
 
 void MainRenderer::displaySceneOnTheScreen(int width, int height){
@@ -141,7 +138,6 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
 
 MainRenderer::~MainRenderer(){
     delete postProcessShader;
-    delete transformWorld;
     deleteVAOQuad();
     deleteFBOSceneRender();
 }
