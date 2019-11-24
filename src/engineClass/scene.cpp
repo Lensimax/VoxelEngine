@@ -5,7 +5,6 @@
 
 #include "../models/meshObject.h"
 #include "../models/mesh/meshCube.h"
-#include "../models/mesh/meshGrid.h"
 
 #include "../material/simpleMat.h"
 

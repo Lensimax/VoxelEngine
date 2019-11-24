@@ -156,10 +156,6 @@ void MeshObject::createUI(char *ID){
     bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);
     if(node_mesh){
         mesh->createUI();
-        if (ImGui::Button("Simplify")){
-            mesh->simplify();
-            createVAO();
-        }
         if (ImGui::Button("Recreate")){
             mesh->recreate();
             createVAO();
