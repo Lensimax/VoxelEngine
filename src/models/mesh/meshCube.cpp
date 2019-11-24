@@ -5,13 +5,16 @@
 MeshCube::MeshCube(float w = 1.0f){
     width = w;
 
-    createMesh(width);
+    // createMesh(width);
+
+    createPositions(3);
+    createVAO();
 
 }
 
 
 MeshCube::~MeshCube(){
-
+    deleteVAO();
 }
 
 
@@ -43,16 +46,83 @@ void MeshCube::createMesh(float w){
 }
 
 void MeshCube::createPositions(float w){
-    vertices.resize(nb_vertices);
 
-    vertices[0] = glm::vec3(-w,-w,w);
-    vertices[1] = glm::vec3(w,-w,w);
-    vertices[2] = glm::vec3(-w,w,w);
-    vertices[3] = glm::vec3(w,w,w);
-    vertices[4] = glm::vec3(-w,-w,-w);
-    vertices[5] = glm::vec3(w,-w,-w);
-    vertices[6] = glm::vec3(-w,w,-w);
-    vertices[7] = glm::vec3(w,w,-w);
+
+    static const float g_vertex_buffer_data[] = {
+    -1.0f,-1.0f,-1.0f, // triangle 1 : begin
+    -1.0f,-1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f, // triangle 1 : end
+    1.0f, 1.0f,-1.0f, // triangle 2 : begin
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f, // triangle 2 : end
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f
+    };
+
+    // vertices[0] = g_vertex_buffer_data;
+    nb_vertices = 12;
+    vertices.resize(nb_vertices);
+    normals.resize(nb_vertices);
+
+    vertices[0] = glm::vec3(-1.0f,-1.0f,-1.0f); // triangle 1 : begin
+    vertices[1] = glm::vec3(-1.0f,-1.0f, 1.0f);
+    vertices[2] = glm::vec3(-1.0f, 1.0f, 1.0f);
+    normals[0] = glm::vec3(-1.0f,0.0f,0.0f);
+    normals[1] = glm::vec3(-1.0f,0.0f, 0.0f);
+    normals[2] = glm::vec3(-1.0f, 0.0f, 0.0f);
+    
+
+    vertices[3] = glm::vec3(1.0f, 1.0f,-1.0f);
+    vertices[4] = glm::vec3(-1.0f,-1.0f,-1.0f);
+    vertices[5] = glm::vec3(-1.0f, 1.0f,-1.0f);
+    normals[3] = glm::vec3(0.0f,0.0f,-1.0f);
+    normals[4] = glm::vec3(0.0f,0.0f, -1.0f);
+    normals[5] = glm::vec3(0.0f, 0.0f, -1.0f);
+
+    vertices[6] = glm::vec3(1.0f,-1.0f, 1.0f);
+    vertices[7] = glm::vec3(-1.0f,-1.0f,-1.0f);
+    vertices[8] = glm::vec3(1.0f,-1.0f,-1.0f);
+    normals[6] = glm::vec3(0.0f,-1.0f,0.0f);
+    normals[7] = glm::vec3(0.0f,-1.0f, 0.0f);
+    normals[8] = glm::vec3(0.0f, -1.0f, 0.0f);
+
+    vertices[9] = glm::vec3(1.0f, 1.0f,-1.0f);
+    vertices[10] = glm::vec3(1.0f,-1.0f,-1.0f);
+    vertices[11] = glm::vec3(-1.0f,-1.0f,-1.0f);
+    normals[9] = glm::vec3(0.0f,0.0f,-1.0f);
+    normals[10] = glm::vec3(0.0f,0.0f, -1.0f);
+    normals[11] = glm::vec3(0.0f, 0.0f, -1.0f);
+
+
+    
 }
 
 void MeshCube::createTriangles(){

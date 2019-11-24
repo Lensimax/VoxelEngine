@@ -35,11 +35,6 @@ class DrawableObject : public EngineObject {
         /* draw the object in the screen */
         virtual void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) = 0;
 
-        /* create the buffers and the vertex array on the GPU */
-        virtual void createVAO() = 0;
-        /* delete it */
-        virtual void deleteVAO() = 0;
-
 
 
 

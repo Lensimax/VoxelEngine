@@ -36,7 +36,6 @@ MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *m
     glm::vec3 center = mesh->getCenter();
     t->setCenter(center);
 
-    createVAO();
 
 
     material = mat;
@@ -48,7 +47,6 @@ MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *m
 
 
 MeshObject::~MeshObject(){
-    deleteVAO();
     delete material;
     delete mesh;
 }
@@ -71,9 +69,7 @@ void MeshObject::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectio
 
     setUniform(modelMat, viewMat, projectionMat, light);
 
-    glBindVertexArray(vertexArrayID);
-    glDrawElements(GL_TRIANGLES,3*mesh->getNBFaces(),GL_UNSIGNED_INT,(void *)0);
-    glBindVertexArray(0);
+    mesh->drawVAO();
 
     glUseProgram(0);
 
@@ -86,45 +82,7 @@ void MeshObject::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectio
 
 }
 
-void MeshObject::createVAO(){
 
-    buffers = new GLuint[4];
-
-    glGenBuffers(4, buffers);
-    glGenVertexArrays(1,&vertexArrayID);
-
-    // create the VBO associated with the grid (the terrain)
-    glBindVertexArray(vertexArrayID);
-
-    glBindBuffer(GL_ARRAY_BUFFER,buffers[0]); // vertices
-    glBufferData(GL_ARRAY_BUFFER,mesh->getNBVertices()*3*sizeof(float),mesh->getVertices(),GL_STATIC_DRAW);
-    glEnableVertexAttribArray(POSITION_ATTRIB);
-    glVertexAttribPointer(POSITION_ATTRIB,3,GL_FLOAT,GL_FALSE,0,(void *)0);
-
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,buffers[1]); // indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,mesh->getNBFaces()*3*sizeof(unsigned int),mesh->getFaces(),GL_STATIC_DRAW);
-
-    /* normals */
-    glEnableVertexAttribArray(VERTEX_NORMAL_ATTRIB);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-    glBufferData(GL_ARRAY_BUFFER, mesh->getNBVertices()*3* sizeof(float), mesh->getNormals(), GL_STATIC_DRAW); //normals is std::vector<float>
-    glVertexAttribPointer(VERTEX_NORMAL_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-    /* texture coordinates */
-    glEnableVertexAttribArray(VERTEX_UV_ATTRIB);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
-    glBufferData(GL_ARRAY_BUFFER, mesh->getNBVertices()*2* sizeof(float), mesh->getUVs(), GL_STATIC_DRAW); //normals is std::vector<float>
-    glVertexAttribPointer(VERTEX_UV_ATTRIB, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    //indices
-    glBindVertexArray(0);
-}
-
-void MeshObject::deleteVAO(){
-    glDeleteBuffers(2,buffers);
-    glDeleteVertexArrays(1,&vertexArrayID);
-    delete buffers;
-}
 
 void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
@@ -158,7 +116,7 @@ void MeshObject::createUI(char *ID){
         mesh->createUI();
         if (ImGui::Button("Recreate")){
             mesh->recreate();
-            createVAO();
+            
         }
         ImGui::Text("Show bounding box "); ImGui::SameLine();
         ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);

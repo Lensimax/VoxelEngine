@@ -18,7 +18,7 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new SimpleMat(glm::vec4(1,1,0,1)));
+    MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(obj);
 
 }

@@ -1,5 +1,21 @@
 #include <imgui.h>
 
+
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+#include <GL/gl3w.h>    // Initialize with gl3wInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+#include <GL/glew.h>    // Initialize with glewInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+#include <glad/glad.h>  // Initialize with gladLoadGL()
+#else
+#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#endif
+
+
+#define POSITION_ATTRIB 0
+#define VERTEX_NORMAL_ATTRIB 1
+#define VERTEX_UV_ATTRIB 2
+
 #include "mesh.h"
 
 #include "../../material/shader.h"
@@ -176,4 +192,54 @@ glm::vec3 Mesh::getMin(){
 
 glm::vec3 Mesh::getMax(){
     return glm::vec3(maxX, maxY, maxZ);
+}
+
+
+void Mesh::createVAO(){
+
+    buffers = new GLuint[2];
+
+    glGenBuffers(2, buffers);
+    glGenVertexArrays(1,&vertexArrayID);
+
+    // create the VBO associated with the grid (the terrain)
+    glBindVertexArray(vertexArrayID);
+
+    glBindBuffer(GL_ARRAY_BUFFER,buffers[0]); // vertices
+    glBufferData(GL_ARRAY_BUFFER,getNBVertices()*3*sizeof(float),getVertices(),GL_STATIC_DRAW);
+    glEnableVertexAttribArray(POSITION_ATTRIB);
+    glVertexAttribPointer(POSITION_ATTRIB,3,GL_FLOAT,GL_FALSE,0,(void *)0);
+
+
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,buffers[1]); // indices
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER,mesh->getNBFaces()*3*sizeof(unsigned int),mesh->getFaces(),GL_STATIC_DRAW);
+
+    // normals
+    glEnableVertexAttribArray(VERTEX_NORMAL_ATTRIB);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*3* sizeof(float), getNormals(), GL_STATIC_DRAW); //normals is std::vector<float>
+    glVertexAttribPointer(VERTEX_NORMAL_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // texture coordinates
+    // glEnableVertexAttribArray(VERTEX_UV_ATTRIB);
+    // glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+    // glBufferData(GL_ARRAY_BUFFER, mesh->getNBVertices()*2* sizeof(float), mesh->getUVs(), GL_STATIC_DRAW); //normals is std::vector<float>
+    // glVertexAttribPointer(VERTEX_UV_ATTRIB, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    //indices
+    glBindVertexArray(0);
+}
+
+
+void Mesh::drawVAO(){
+
+    glBindVertexArray(vertexArrayID);
+    glDrawArrays(GL_TRIANGLES,0,getNBVertices());
+    glBindVertexArray(0);
+
+}
+
+void Mesh::deleteVAO(){
+    glDeleteBuffers(2,buffers);
+    glDeleteVertexArrays(1,&vertexArrayID);
+    delete buffers;
 }
