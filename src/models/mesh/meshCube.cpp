@@ -78,18 +78,19 @@ void MeshCube::createPositions(float w){
     -1.0f,-1.0f, 1.0f,
     1.0f,-1.0f, 1.0f,
 
+    //
     1.0f, 1.0f, 1.0f,
     1.0f,-1.0f,-1.0f,
     1.0f, 1.0f,-1.0f,
-
+    //
     1.0f,-1.0f,-1.0f,
     1.0f, 1.0f, 1.0f,
     1.0f,-1.0f, 1.0f,
-
+    //
     1.0f, 1.0f, 1.0f,
     1.0f, 1.0f,-1.0f,
     -1.0f, 1.0f,-1.0f,
-
+    //
     1.0f, 1.0f, 1.0f,
     -1.0f, 1.0f,-1.0f,
     -1.0f, 1.0f, 1.0f,
@@ -99,8 +100,10 @@ void MeshCube::createPositions(float w){
     1.0f,-1.0f, 1.0f
     };
 
+    glm::vec3 normal;
+
     // vertices[0] = g_vertex_buffer_data;
-    nb_vertices = 18;
+    nb_vertices = 36;
     vertices.resize(nb_vertices);
     normals.resize(nb_vertices);
 
@@ -146,6 +149,53 @@ void MeshCube::createPositions(float w){
     normals[15] = glm::vec3(0.0f,-1.0f, 0.0f);
     normals[16] = glm::vec3(0.0f,-1.0f, 0.0f);
     normals[17] = glm::vec3(0.0f,-1.0f,0.0f);
+
+    vertices[18] = glm::vec3(-1.0f, 1.0f, 1.0f);
+    vertices[19] = glm::vec3(-1.0f,-1.0f, 1.0f);
+    vertices[20] = glm::vec3(1.0f,-1.0f, 1.0f);
+    normal = glm::vec3(0,0,1);
+    normals[18] = normal;
+    normals[19] = normal;
+    normals[20] = normal;
+
+    vertices[21] = glm::vec3(1.0f, 1.0f, 1.0f);
+    vertices[22] = glm::vec3(1.0f,-1.0f,-1.0f);
+    vertices[23] = glm::vec3(1.0f, 1.0f,-1.0f);
+    normal = glm::vec3(1,0,0);
+    normals[21] = normal;
+    normals[22] = normal;
+    normals[23] = normal;
+
+    vertices[24] = glm::vec3(1.0f,-1.0f,-1.0f);
+    vertices[25] = glm::vec3(1.0f, 1.0f, 1.0f);
+    vertices[26] = glm::vec3(1.0f,-1.0f, 1.0f);
+    normal = glm::vec3(1,0,0);
+    normals[24] = normal;
+    normals[25] = normal;
+    normals[26] = normal;
+
+    vertices[27] = glm::vec3(1.0f, 1.0f, 1.0f);
+    vertices[28] = glm::vec3(1.0f, 1.0f,-1.0f);
+    vertices[29] = glm::vec3(-1.0f, 1.0f,-1.0f);
+    normal = glm::vec3(0,1,0);
+    normals[27] = normal;
+    normals[28] = normal;
+    normals[29] = normal;
+
+    vertices[30] = glm::vec3(1.0f, 1.0f, 1.0f);
+    vertices[31] = glm::vec3(-1.0f, 1.0f,-1.0f);
+    vertices[32] = glm::vec3(-1.0f, 1.0f, 1.0f);
+    normals[30] = normal;
+    normals[31] = normal;
+    normals[32] = normal;
+
+    vertices[33] = glm::vec3(1.0f, 1.0f, 1.0f);
+    vertices[34] = glm::vec3(-1.0f, 1.0f, 1.0f);
+    vertices[35] = glm::vec3(1.0f,-1.0f, 1.0);
+    normal = glm::vec3(0,0,1);
+    normals[33] = normal;
+    normals[34] = normal;
+    normals[35] = normal;
     
     
 }
