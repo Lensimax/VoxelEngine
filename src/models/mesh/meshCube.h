@@ -28,6 +28,8 @@ private:
     void createTriangles();
     void createInfo();
 
+    void createNormals();
+
     float width;
 
 };
