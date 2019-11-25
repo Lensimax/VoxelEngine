@@ -73,28 +73,34 @@ void MeshCube::createPositions(float w){
     1.0f,-1.0f, 1.0f,
     -1.0f,-1.0f, 1.0f,
     -1.0f,-1.0f,-1.0f,
+
     -1.0f, 1.0f, 1.0f,
     -1.0f,-1.0f, 1.0f,
     1.0f,-1.0f, 1.0f,
+
     1.0f, 1.0f, 1.0f,
     1.0f,-1.0f,-1.0f,
     1.0f, 1.0f,-1.0f,
+
     1.0f,-1.0f,-1.0f,
     1.0f, 1.0f, 1.0f,
     1.0f,-1.0f, 1.0f,
+
     1.0f, 1.0f, 1.0f,
     1.0f, 1.0f,-1.0f,
     -1.0f, 1.0f,-1.0f,
+
     1.0f, 1.0f, 1.0f,
     -1.0f, 1.0f,-1.0f,
     -1.0f, 1.0f, 1.0f,
+
     1.0f, 1.0f, 1.0f,
     -1.0f, 1.0f, 1.0f,
     1.0f,-1.0f, 1.0f
     };
 
     // vertices[0] = g_vertex_buffer_data;
-    nb_vertices = 15;
+    nb_vertices = 18;
     vertices.resize(nb_vertices);
     normals.resize(nb_vertices);
 
@@ -133,6 +139,13 @@ void MeshCube::createPositions(float w){
     normals[12] = glm::vec3(-1.0f,0.0f,0.0f);
     normals[13] = glm::vec3(-1.0f, 0.0f, 0.0f);
     normals[14] = glm::vec3(-1.0f, 0.0f,0.0f);
+
+    vertices[15] = glm::vec3(1.0f,-1.0f, 1.0f);
+    vertices[16] = glm::vec3(-1.0f,-1.0f, 1.0f);
+    vertices[17] = glm::vec3(-1.0f,-1.0f,-1.0f);
+    normals[15] = glm::vec3(0.0f,-1.0f, 0.0f);
+    normals[16] = glm::vec3(0.0f,-1.0f, 0.0f);
+    normals[17] = glm::vec3(0.0f,-1.0f,0.0f);
     
     
 }

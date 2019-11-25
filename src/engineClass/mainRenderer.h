@@ -36,6 +36,10 @@ class MainRenderer {
 
         void toggleWire();
 
+        inline void toggleCullFace(){
+            cullface = !cullface;
+        }
+
         inline unsigned int width(){
             return widthScreen;
         }
@@ -81,6 +85,7 @@ class MainRenderer {
         GLuint _quad;
 
         bool wireActived;
+        bool cullface;
 
         unsigned int widthScreen, heightScreen;
 

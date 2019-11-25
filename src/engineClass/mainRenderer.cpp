@@ -34,6 +34,7 @@ MainRenderer::MainRenderer(){
     createVAOQuad();
     createFBOSceneRender();
     wireActived = false;
+    cullface = true;
 
     widthScreen = 0;
     heightScreen = 0;
@@ -154,8 +155,12 @@ void MainRenderer::initializeGL(){
     glPolygonOffset(-1,-1);
 
     // Cull triangles which normal is not towards the camera
-    glDisable(GL_CULL_FACE);
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    if(cullface){
+        glEnable(GL_CULL_FACE);
+    } else {
+        glDisable(GL_CULL_FACE);
+    }
 
     /* to print GLSL version */
     //std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";

@@ -131,6 +131,11 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Pause/Resume", "CTRL+P")) { scene->togglePause(); }
             ImGui::EndMenu();
         }
+
+        if(ImGui::BeginMenu("Rendering Settings")){
+            if (ImGui::MenuItem("Toggle Cull Face")) { mainRenderer->toggleCullFace(); }
+            ImGui::EndMenu();
+        }
         ImGui::EndMenuBar();
     }
 
