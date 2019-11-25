@@ -36,6 +36,7 @@ void MeshCube::createMesh(float w){
 
     createPositions(w);
     createNormals();
+    createTangents();
     
     // createInfo();
 
@@ -159,6 +160,53 @@ void MeshCube::createNormals(){
     
 
 }
+
+void MeshCube::createTangents(){
+    unsigned int i;
+    glm::vec3 tangent;
+    tangents.resize(getNBVertices());
+
+    int index = 0;
+
+    tangent = glm::vec3(1,0,0);
+    for(i=0; i<6; i++ ){
+        tangents[index+i] = tangent;
+    }
+    index+=6;
+
+    tangent = glm::vec3(-1,0,0);
+    for(i=0; i<6; i++ ){
+        tangents[index+i] = tangent;
+    }
+    index+=6;
+
+    tangent = glm::vec3(0,0,1);
+    for(i=0; i<6; i++ ){
+        tangents[index+i] = tangent;
+    }
+    index+=6;
+
+    tangent = glm::vec3(0,0,-1);
+    for(i=0; i<6; i++ ){
+        tangents[index+i] = tangent;
+    }
+    index+=6;
+
+    tangent = glm::vec3(1,0,0);
+    for(i=0; i<6; i++ ){
+        tangents[index+i] = tangent;
+    }
+    index+=6;
+
+    tangent = glm::vec3(-1,0,0);
+    for(i=0; i<6; i++ ){
+        tangents[index+i] = tangent;
+    }
+    index+=6;
+    
+
+}
+
 
 
 

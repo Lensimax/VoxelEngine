@@ -27,6 +27,7 @@ private:
     void createPositions(float w);
 
     void createNormals();
+    void createTangents();
 
     float width;
 

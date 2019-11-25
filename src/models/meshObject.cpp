@@ -35,8 +35,6 @@ MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *m
 
     t->setCenter(glm::vec3(0));
 
-
-
     material = mat;
 
     setName(n);
@@ -153,7 +151,6 @@ void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 mo
     glUseProgram(shader->id());
 
 
-
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
@@ -180,7 +177,6 @@ void MeshObject::drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 mo
 
     glUseProgram(0);
 
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 
 }
