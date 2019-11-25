@@ -77,6 +77,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 }
 
+
 void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l, float screenAspectRatio){
 
     glm::mat4 matrixTochild = obj->getTransform()->getModelToChild(modelMat);

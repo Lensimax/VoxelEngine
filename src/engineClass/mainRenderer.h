@@ -48,6 +48,9 @@ class MainRenderer {
             return heightScreen;
         }
 
+        inline GLuint getRenderSceneID(){
+            return renderedSceneTextureID;
+        }
 
     private:
 
@@ -88,6 +91,8 @@ class MainRenderer {
         bool cullface;
 
         unsigned int widthScreen, heightScreen;
+
+        Camera *camera;
 
 };
 
