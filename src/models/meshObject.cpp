@@ -33,8 +33,7 @@ MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *m
 
     mesh = m;
 
-    glm::vec3 center = mesh->getCenter();
-    t->setCenter(center);
+    t->setCenter(glm::vec3(0));
 
 
 

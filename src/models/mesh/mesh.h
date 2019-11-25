@@ -5,7 +5,6 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include <GL/gl3w.h>    // Initialize with gl3wInit()
 #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
@@ -37,17 +36,20 @@ public:
      virtual ~Mesh() = default;
 
      void *getVertices();
-     void *getFaces();
      void *getNormals();
      void *getUVs();
 
-     unsigned int getNBVertices();
-     unsigned int getNBFaces();
+     unsigned int getNBVertices(){
+          return vertices.size();
+     }
+
+     inline unsigned int getNBFaces(){
+          return getNBVertices()/3;
+     }
 
      virtual void createUI();
      virtual void recreate() = 0;
 
-     glm::vec3 getCenter();
 
      glm::vec3 getMin();
      glm::vec3 getMax();
@@ -62,15 +64,12 @@ public:
      void deleteVAO();
 
     protected:
-     std::vector<unsigned int> get_face(unsigned int i);
      glm::vec3        get_vertex(unsigned int i);
      glm::vec3        get_normal(unsigned int i);
      glm::vec3        get_tangent(unsigned int i);
      glm::vec2        get_coord(unsigned int i);
      glm::vec3        get_color(unsigned int i);
 
-     unsigned int  nb_vertices;
-     unsigned int  nb_faces;
 
      float maxX, maxY, maxZ;
      float minX, minY, minZ;
@@ -81,13 +80,10 @@ public:
      std::vector<glm::vec3> tangents;
      std::vector<glm::vec3> colors;
      std::vector<glm::vec2> coords;
-     std::vector<unsigned int> faces;
 
      std::vector<glm::vec3> backupVertices;
-     std::vector<unsigned int> backupFaces;
 
    
-     glm::vec3      center;
      float          radius;
 
  

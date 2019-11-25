@@ -53,9 +53,8 @@ void MeshCube::createMesh(float w){
 
 void MeshCube::createPositions(float w){
 
+    const unsigned int nb_vertices = 36;
 
-    // vertices[0] = g_vertex_buffer_data;
-    nb_vertices = 36;
     vertices.resize(nb_vertices);
 
     // FRONT
@@ -118,7 +117,7 @@ void MeshCube::createPositions(float w){
 void MeshCube::createNormals(){
     unsigned int i;
     glm::vec3 normal;
-    normals.resize(nb_vertices);
+    normals.resize(getNBVertices());
 
     int index = 0;
 
@@ -163,16 +162,3 @@ void MeshCube::createNormals(){
 
 
 
-void MeshCube::createInfo(){
-    coords.resize(nb_vertices);
-    tangents.resize(nb_vertices);
-    normals.resize(nb_vertices);
-    colors.resize(nb_vertices);
-
-    for(unsigned int i=0; i<nb_vertices; i++){
-        coords[i] = glm::vec2(0);
-        normals[i] = glm::vec3(0,1,0);
-        tangents[i] = glm::vec3(0,0,1);
-        colors[i] = glm::vec3(1,1,0);
-    }
-}

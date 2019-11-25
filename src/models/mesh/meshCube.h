@@ -25,8 +25,6 @@ private:
 
 	void createMesh(float w);
     void createPositions(float w);
-    void createTriangles();
-    void createInfo();
 
     void createNormals();
 
