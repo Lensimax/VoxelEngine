@@ -61,58 +61,58 @@ void MeshCube::createPositions(float w){
     vertices.resize(nb_vertices);
 
     // FRONT
-    vertices[0] = glm::vec3(-1.0f, 1.0f, 1.0f);
-    vertices[1] = glm::vec3(-1.0f,-1.0f, 1.0f);
-    vertices[2] = glm::vec3(1.0f,-1.0f, 1.0f);
+    vertices[0] = glm::vec3(0, w, w);
+    vertices[1] = glm::vec3(0,0, w);
+    vertices[2] = glm::vec3(w,0, w);
     
-    vertices[3] = glm::vec3(1.0f, 1.0f, 1.0f);
-    vertices[4] = glm::vec3(-1.0f, 1.0f, 1.0f);
-    vertices[5] = glm::vec3(1.0f,-1.0f, 1.0);
+    vertices[3] = glm::vec3(w, w, w);
+    vertices[4] = glm::vec3(0, w, w);
+    vertices[5] = glm::vec3(w,0, w);
 
     // BACK
-    vertices[6] = glm::vec3(1.0f, 1.0f,-1.0f);
-    vertices[7] = glm::vec3(-1.0f,-1.0f,-1.0f);
-    vertices[8] = glm::vec3(-1.0f, 1.0f,-1.0f);
+    vertices[6] = glm::vec3(w, w,0);
+    vertices[7] = glm::vec3(0,0,0);
+    vertices[8] = glm::vec3(0, w,0);
 
-    vertices[9] = glm::vec3(1.0f, 1.0f,-1.0f);
-    vertices[10] = glm::vec3(1.0f,-1.0f,-1.0f);
-    vertices[11] = glm::vec3(-1.0f,-1.0f,-1.0f);
+    vertices[9] = glm::vec3(w, w,0);
+    vertices[10] = glm::vec3(w,0,0);
+    vertices[11] = glm::vec3(0,0,0);
 
     // LEFT
-    vertices[12] = glm::vec3(-1.0f,-1.0f,-1.0f);
-    vertices[13] = glm::vec3(-1.0f, 1.0f, 1.0f);
-    vertices[14] = glm::vec3(-1.0f, 1.0f,-1.0f);
+    vertices[12] = glm::vec3(0,0,0);
+    vertices[13] = glm::vec3(0, w, w);
+    vertices[14] = glm::vec3(0, w,0);
 
-    vertices[15] = glm::vec3(-1.0f,-1.0f,-1.0f);
-    vertices[16] = glm::vec3(-1.0f,-1.0f, 1.0f);
-    vertices[17] = glm::vec3(-1.0f, 1.0f, 1.0f);
+    vertices[15] = glm::vec3(0,0,0);
+    vertices[16] = glm::vec3(0,0, w);
+    vertices[17] = glm::vec3(0, w, w);
     
     // RIGHT
-    vertices[18] = glm::vec3(1.0f, 1.0f, 1.0f);
-    vertices[19] = glm::vec3(1.0f,-1.0f,-1.0f);
-    vertices[20] = glm::vec3(1.0f, 1.0f,-1.0f);
+    vertices[18] = glm::vec3(w, w, w);
+    vertices[19] = glm::vec3(w,0,0);
+    vertices[20] = glm::vec3(w, w,0);
 
-    vertices[21] = glm::vec3(1.0f,-1.0f,-1.0f);
-    vertices[22] = glm::vec3(1.0f, 1.0f, 1.0f);
-    vertices[23] = glm::vec3(1.0f,-1.0f, 1.0f);
+    vertices[21] = glm::vec3(w,0,0);
+    vertices[22] = glm::vec3(w, w, w);
+    vertices[23] = glm::vec3(w,0, w);
 
     // TOP
-    vertices[24] = glm::vec3(1.0f, 1.0f, 1.0f);
-    vertices[25] = glm::vec3(1.0f, 1.0f,-1.0f);
-    vertices[26] = glm::vec3(-1.0f, 1.0f,-1.0f);
+    vertices[24] = glm::vec3(w, w, w);
+    vertices[25] = glm::vec3(w, w,0);
+    vertices[26] = glm::vec3(0, w,0);
 
-    vertices[27] = glm::vec3(1.0f, 1.0f, 1.0f);
-    vertices[28] = glm::vec3(-1.0f, 1.0f,-1.0f);
-    vertices[29] = glm::vec3(-1.0f, 1.0f, 1.0f);
+    vertices[27] = glm::vec3(w, w, w);
+    vertices[28] = glm::vec3(0, w,0);
+    vertices[29] = glm::vec3(0, w, w);
 
     // BOTTOM
-    vertices[30] = glm::vec3(1.0f,-1.0f, 1.0f);
-    vertices[31] = glm::vec3(-1.0f,-1.0f,-1.0f);
-    vertices[32] = glm::vec3(1.0f,-1.0f,-1.0f);
+    vertices[30] = glm::vec3(w,0, w);
+    vertices[31] = glm::vec3(0,0,0);
+    vertices[32] = glm::vec3(w,0,0);
 
-    vertices[33] = glm::vec3(1.0f,-1.0f, 1.0f);
-    vertices[34] = glm::vec3(-1.0f,-1.0f, 1.0f);
-    vertices[35] = glm::vec3(-1.0f,-1.0f,-1.0f);
+    vertices[33] = glm::vec3(w,0, w);
+    vertices[34] = glm::vec3(0,0, w);
+    vertices[35] = glm::vec3(0,0,0);
     
     
 }

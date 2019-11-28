@@ -30,7 +30,7 @@ void VoxelGrid::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projection
     glUseProgram(material->getShaderID());
 
     for(unsigned int i=0; i<chunk.size(); i++){
-		/*for(unsigned int j=0; j<chunk[i].size(); j++){
+		for(unsigned int j=0; j<chunk[i].size(); j++){
 			for(unsigned int k=0; k<chunk[i][j].size(); k++){
 
 				glm::mat4 model = glm::translate(modelMat, glm::vec3(i*sizeOfOneCube, j*sizeOfOneCube, k*sizeOfOneCube));
@@ -40,12 +40,8 @@ void VoxelGrid::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projection
 			    mesh->drawVAO();
 
 			}
-		}*/
-		glm::mat4 model = glm::translate(modelMat, glm::vec3(i*sizeOfOneCube, 0, 0));
+		}
 
-	    setUniform(model, viewMat, projectionMat, light);
-
-	    mesh->drawVAO();
 	}
 
 
