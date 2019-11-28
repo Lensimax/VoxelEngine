@@ -4,6 +4,7 @@
 #include "../tools/cameraProj.h"
 
 #include "../models/meshObject.h"
+#include "../models/voxelGrid.h"
 #include "../models/mesh/meshCube.h"
 
 #include "../material/simpleMat.h"
@@ -18,7 +19,9 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
+    VoxelGrid *obj = new VoxelGrid(addNewId(), "VoxelGrid", new Transform(), 4);
+
+    //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(obj);
 
 }
