@@ -28,6 +28,8 @@ private:
 
     void createNormals();
     void createTangents();
+    void createUVs();
+    void createColors();
 
     float width;
 

@@ -37,6 +37,7 @@ void MeshCube::createMesh(float w){
     createPositions(w);
     createNormals();
     createTangents();
+    createUVs();
     
     // createInfo();
 
@@ -161,6 +162,17 @@ void MeshCube::createNormals(){
 
 }
 
+void MeshCube::createUVs(){
+
+    glm::vec2 uv = glm::vec2(0,0);
+    coords.resize(getNBVertices());
+
+    for(unsigned int i=0; i<getNBVertices(); i++){
+        coords[i] = uv;
+    }
+}
+
+
 void MeshCube::createTangents(){
     unsigned int i;
     glm::vec3 tangent;
@@ -204,6 +216,55 @@ void MeshCube::createTangents(){
     }
     index+=6;
     
+
+}
+
+void MeshCube::createColors(){
+
+    unsigned int i;
+
+    glm::vec3 color;
+
+    colors.resize(getNBVertices());
+
+
+        int index = 0;
+
+    color = glm::vec3(0,1,0);
+    for(i=0; i<6; i++ ){
+        colors[index+i] = color;
+    }
+    index+=6;
+
+    color = glm::vec3(1,1,0);
+    for(i=0; i<6; i++ ){
+        colors[index+i] = color;
+    }
+    index+=6;
+
+    color = glm::vec3(255.f/255.f,146.f/255.f,8.f/255.f);
+    for(i=0; i<6; i++ ){
+        colors[index+i] = color;
+    }
+    index+=6;
+
+    color = glm::vec3(1,0,0);
+    for(i=0; i<6; i++ ){
+        colors[index+i] = color;
+    }
+    index+=6;
+
+    color = glm::vec3(1,1,1);
+    for(i=0; i<6; i++ ){
+        colors[index+i] = color;
+    }
+    index+=6;
+
+    color = glm::vec3(0,0,1);
+    for(i=0; i<6; i++ ){
+        colors[index+i] = color;
+    }
+    index+=6;
 
 }
 

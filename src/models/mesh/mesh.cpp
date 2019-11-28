@@ -7,6 +7,7 @@
 #define POSITION_ATTRIB 0
 #define VERTEX_NORMAL_ATTRIB 1
 #define VERTEX_UV_ATTRIB 2
+#define VERTEX_COLOR_ATTRIB 3
 
 #include "mesh.h"
 
