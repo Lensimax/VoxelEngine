@@ -40,6 +40,8 @@ class Lambertian : public Material {
         float specularDeg;
         glm::vec4 ambientColor, specularColor, diffuseColor;
 
+        bool displayDiffuse = false;
+
         const char * lambertianShaderVert = "../data/shaders/lambertian.vert";
         const char * lambertianShaderFrag = "../data/shaders/lambertian.frag";
         const char * debugShaderVert = "../data/shaders/debugNormal.vert";

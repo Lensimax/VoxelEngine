@@ -64,7 +64,8 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
         glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &(lightVec[0]));
 
-
+        int boolUseDiffuse = displayDiffuse ? 1 : 0;
+        glUniform1i(glGetUniformLocation(shaderID,"boolUseDiffuse"), boolUseDiffuse);
         glUniform4fv(glGetUniformLocation(shaderID,"ambientColor"),1,&(ambientColor[0]));
         glUniform4fv(glGetUniformLocation(shaderID,"diffuseColor"),1,&(diffuseColor[0]));
         glUniform4fv(glGetUniformLocation(shaderID,"specularColor"),1,&(specularColor[0]));
@@ -82,18 +83,23 @@ void Lambertian::createUI(){
     if (ImGui::Button("Refresh")){
         reloadShaders();
     }
-    ImGui::Text("Diffuse Color: "); ImGui::SameLine();
-    ImGui::ColorEdit4("diffuse-color", (float *)&diffuseColor);
+
+    ImGui::Text("Display by diffuse color "); ImGui::SameLine();
+    ImGui::Checkbox("##diffuseBool",&displayDiffuse); 
+    if(displayDiffuse){
+        ImGui::Text("Diffuse Color: "); ImGui::SameLine();
+        ImGui::ColorEdit4("diffuse-color", (float *)&diffuseColor);
+    }   
     ImGui::Text("Ambient Color: "); ImGui::SameLine();
-    ImGui::ColorEdit4("ambient-color", (float *)&ambientColor);
+    ImGui::ColorEdit4("##ambient-color", (float *)&ambientColor);
     ImGui::Text("Specular Color: "); ImGui::SameLine();
-    ImGui::ColorEdit4("spec-color", (float *)&specularColor);
+    ImGui::ColorEdit4("##spec-color", (float *)&specularColor);
 
     ImGui::Text("Specular degree"); ImGui::SameLine();
-    ImGui::DragFloat("specdeg", &specularDeg, 0.01f, 0.001f, 10000, "%.3f");
+    ImGui::DragFloat("##specdeg", &specularDeg, 0.01f, 0.001f, 10000, "%.3f");
 
     ImGui::Text("debug Normal "); ImGui::SameLine();
-    ImGui::Checkbox("debugNormal",&activeDebugNormal);
+    ImGui::Checkbox("##debugNormal",&activeDebugNormal);
 
     // to hide label of the input
     ImGui::PopItemWidth();
