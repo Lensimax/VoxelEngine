@@ -1,11 +1,13 @@
 set(PROJECT_NAME voxel-engine)
 
+cmake_minimum_required(VERSION 2.8)
+
 
 project(${PROJECT_NAME})
 
 
-cmake_minimum_required(VERSION 2.8)
 
+###### BUILD THIRDPARTY #######
 
 # affectation des variables pour les includes
 set(GLM_INCLUDE_DIR thirdparty/glm)
@@ -26,6 +28,36 @@ add_subdirectory(thirdparty)
 configure_file(data/default_imgui.ini imgui.ini  COPYONLY)
 
 
+###### BUILD OPTION #######
+
+add_definitions(-std=c++11)
+
+add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
+add_definitions(-DGLFW_INCLUDE_NONE)
+
+# BUILD TYPE = Debug | Release
+if( NOT CMAKE_BUILD_TYPE )
+  set(CMAKE_BUILD_TYPE Debug)
+  message("BUILD TYPE = Debug | Release")
+endif()
+
+
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+        message("DEBUG MODE ACTIVATED")
+
+        add_definitions(-Wformat -Wall -g)
+
+endif()
+
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+        message("RELEASE MODE ACTIVATED")
+
+        add_definitions(-O3)
+
+endif()
+
+#### SET SOURCES ####
+
 
 # SRCS prends la valeur des sources
 file(GLOB_RECURSE SRCS
@@ -39,12 +71,7 @@ file(GLOB_RECURSE HEADERS
 	src/*.hpp
 )
 
-add_definitions( -ldl -Wformat -Wall)
-add_definitions(-std=c++11)
 
-
-add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
-add_definitions(-DGLFW_INCLUDE_NONE)
 
 
 
