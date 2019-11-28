@@ -41,7 +41,7 @@ void main(){
 	vec4 usedColor;
 	if(boolUseDiffuse == 1){
 		usedColor = diffuseColor;
-	} else if(boolUseDiffuse == 0){
+	} else {
 		usedColor = vec4(color,1);
 	}
 
