@@ -13,6 +13,8 @@ in vec4 normal;
 in vec4 normalView;
 in vec4 eyeView;
 in vec4 vertex;
+in vec2 uv;
+in vec3 color;
 
 
 vec4 phong(vec3 l, vec3 n, vec3 e) {
@@ -46,4 +48,6 @@ void main(){
 	} else {
 		bufferColor = diffuseColor;
 	}
+
+	bufferColor = vec4(color,1);
 }

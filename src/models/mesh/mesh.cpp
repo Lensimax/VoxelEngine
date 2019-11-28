@@ -57,6 +57,9 @@ void *Mesh::getUVs(){
     return &(coords[0]);
 }
 
+void *Mesh::getColors(){
+    return &(colors[0]);
+}
 
 
 void Mesh::createUI(){
@@ -149,9 +152,11 @@ glm::vec3 Mesh::getMax(){
 
 void Mesh::createVAO(){
 
-    buffers = new GLuint[2];
+    const int nbBuffer = 4;
 
-    glGenBuffers(2, buffers);
+    buffers = new GLuint[nbBuffer];
+
+    glGenBuffers(nbBuffer, buffers);
     glGenVertexArrays(1,&vertexArrayID);
 
     // create the VBO associated with the grid (the terrain)
@@ -173,11 +178,18 @@ void Mesh::createVAO(){
     glVertexAttribPointer(VERTEX_NORMAL_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // texture coordinates
-    // glEnableVertexAttribArray(VERTEX_UV_ATTRIB);
-    // glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
-    // glBufferData(GL_ARRAY_BUFFER, mesh->getNBVertices()*2* sizeof(float), mesh->getUVs(), GL_STATIC_DRAW); //normals is std::vector<float>
-    // glVertexAttribPointer(VERTEX_UV_ATTRIB, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    //indices
+    glEnableVertexAttribArray(VERTEX_UV_ATTRIB);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*2* sizeof(float), getUVs(), GL_STATIC_DRAW); //normals is std::vector<float>
+    glVertexAttribPointer(VERTEX_UV_ATTRIB, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // colors
+    glEnableVertexAttribArray(VERTEX_COLOR_ATTRIB);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*3* sizeof(float), getColors(), GL_STATIC_DRAW); //normals is std::vector<float>
+    glVertexAttribPointer(VERTEX_COLOR_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    
+
     glBindVertexArray(0);
 }
 

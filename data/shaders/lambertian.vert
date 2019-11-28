@@ -3,6 +3,9 @@
 // input attributes
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 vertNormal;
+layout(location = 2) in vec2 textureCoordinate;
+layout(location = 3) in vec3 vertColor;
+
 
 uniform mat4 normalMatrix;
 
@@ -17,6 +20,8 @@ out vec4 normal;
 out vec4 normalView;
 out vec4 eyeView;
 out vec4 vertex;
+out vec2 uv;
+out vec3 color;
 
 out vec4 lightVec;
 
@@ -32,4 +37,7 @@ void main() {
 	eyeView = (mv*vec4(position,1.0));
 
 	lightVec = light;
+
+	uv = textureCoordinate;
+	color = vertColor;
 }

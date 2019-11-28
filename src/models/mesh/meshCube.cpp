@@ -38,6 +38,7 @@ void MeshCube::createMesh(float w){
     createNormals();
     createTangents();
     createUVs();
+    createColors();
     
     // createInfo();
 
@@ -164,7 +165,8 @@ void MeshCube::createNormals(){
 
 void MeshCube::createUVs(){
 
-    glm::vec2 uv = glm::vec2(0,0);
+    // TODO ajouter les vrai UV
+    glm::vec2 uv = glm::vec2(0.5f,0);
     coords.resize(getNBVertices());
 
     for(unsigned int i=0; i<getNBVertices(); i++){

@@ -38,6 +38,7 @@ public:
      void *getVertices();
      void *getNormals();
      void *getUVs();
+     void *getColors();
 
      unsigned int getNBVertices(){
           return vertices.size();
