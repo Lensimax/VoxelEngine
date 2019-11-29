@@ -148,12 +148,13 @@ int main(int, char**)
         ///////////////
 
         inputManager->update();
-
         scene->update();
+        renderer->update();
+
 
         ui->drawUI();
         inputManager->createUI();
-        renderer->update();
+        renderer->createUI();
 
         /*if(firstFramePassed){
             ImGui::Image((void*)(intptr_t)renderer->getRenderSceneID(), ImVec2(512,512));

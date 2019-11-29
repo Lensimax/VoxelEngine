@@ -41,6 +41,8 @@ MainRenderer::MainRenderer(){
     widthScreen = 0;
     heightScreen = 0;
 
+    m_camera = new CameraProj(-1);
+
 }
 
 
@@ -50,6 +52,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
     assert(height > 0);
 
+    renderTheScene(scene, width, height);
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     
     widthScreen = width;
@@ -181,6 +184,20 @@ MainRenderer::~MainRenderer(){
 
 void MainRenderer::update(){
     m_transformEditor->update();
+}
+
+
+void MainRenderer::createUI(){
+    ImGui::Begin("Renderer Setting");
+
+    m_transformEditor->createUI();
+
+    ImGui::Separator();
+
+    m_camera->createUI("Renderer Setting");
+
+
+    ImGui::End();
 }
 
 
