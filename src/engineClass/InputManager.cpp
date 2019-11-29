@@ -37,6 +37,13 @@ void InputManager::createUI(){
     ImGui::Text("Scroll zoom sensitivity : ");
     ImGui::DragFloat("##scrollZoomSensitivity", &scrollZoomSensitivity, 0.01, 0.0, 100.);
 
+    if(scene != NULL){
+        ImGui::Separator();
+        scene->getTransformWorld()->createUI();
+
+    }
+
+
     ImGui::End();
 
 

@@ -112,6 +112,7 @@ void UI::createUISceneManager(Scene *scene){
         }
         if (ImGui::BeginMenu("Edit")){
             if (ImGui::MenuItem("Add EngineObject", "Ctrl+T")) { scene->addEngineObject(); }
+            if (ImGui::MenuItem("Add Cube")) { scene->addCube(); }
             if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selectedID); }
             ImGui::EndMenu();
         }

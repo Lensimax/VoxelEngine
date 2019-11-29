@@ -130,15 +130,14 @@ void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & i
 
 }
 
-
+///// CREATION DE PREFABS
 
 void Scene::addEngineObject(){
     objectsEngine.push_back(new EngineObject(addNewId()));
 }
 
-
 void Scene::addCube(){
-    objectsEngine.push_back(new EngineObject(addNewId()));
+    objectsEngine.push_back(new MeshObject(addNewId(),"Cube", new Transform(), new MeshCube(1.0f), new Lambertian()));
 }
 
 
