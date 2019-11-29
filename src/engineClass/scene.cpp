@@ -12,12 +12,17 @@
 #include "../material/textureMaterial.h"
 
 
+#include "../models/player.h"
+
 
 Scene::Scene(){
 
 
 
     loadDefaultScene();
+
+    Player *p = new Player(addNewId());
+    objectsEngine.push_back(p);
 
     VoxelGrid *obj = new VoxelGrid(addNewId(), "VoxelGrid", new Transform());
 
@@ -36,6 +41,7 @@ void Scene::deleteScene(){
     }
     delete transformWorld;
 }
+
 
 Camera *Scene::getCameraRecursive(EngineObject *obj){
     Camera *tmp = NULL;
