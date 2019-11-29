@@ -154,10 +154,10 @@ int main(int, char**)
         ui->drawUI();
         inputManager->createUI();
 
-        if(firstFramePassed){
+        /*if(firstFramePassed){
             ImGui::Image((void*)(intptr_t)renderer->getRenderSceneID(), ImVec2(512,512));
 
-        }
+        }*/
 
         //ImGui::ShowDemoWindow();
 
