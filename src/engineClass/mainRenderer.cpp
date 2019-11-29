@@ -231,8 +231,8 @@ void MainRenderer::initFBOSceneRender(int width, int height){
     glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,renderedSceneTextureID,0);
 
-    glBindTexture(GL_TEXTURE_2D,renderedDepth);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,renderedDepth,0);
+    /*glBindTexture(GL_TEXTURE_2D,renderedDepth);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,renderedDepth,0);*/
 
     /* on desactive le buffer */
     glBindFramebuffer(GL_FRAMEBUFFER,0);
