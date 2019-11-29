@@ -52,6 +52,12 @@ class MainRenderer {
             return renderedSceneTextureID;
         }
 
+        inline Transform *getTransformEditor(){
+            return m_transformEditor;
+        }
+
+        void update();
+
     private:
 
         void renderTheScene(Scene *scene, int width, int height);
@@ -92,7 +98,8 @@ class MainRenderer {
 
         unsigned int widthScreen, heightScreen;
 
-        Camera *camera;
+        Camera *m_camera;
+        Transform *m_transformEditor;
 
 };
 

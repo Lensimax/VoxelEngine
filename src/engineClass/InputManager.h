@@ -33,7 +33,7 @@ private:
 
     Scene *scene = NULL;
     UI *ui = NULL;
-    MainRenderer *renderer = NULL;
+    MainRenderer *m_renderer = NULL;
 
     glm::vec2 sensitivityRotateWorld;
     float scrollZoomSensitivity;

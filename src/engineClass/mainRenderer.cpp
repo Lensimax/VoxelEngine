@@ -24,9 +24,11 @@
 // #include "models/meshObject.h"
 
 
-#include <iostream>
+#include <iostream> 
 
 MainRenderer::MainRenderer(){
+
+    m_transformEditor = new Transform();
 
     postProcessShader = new Shader();
     postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
@@ -43,15 +45,12 @@ MainRenderer::MainRenderer(){
 
 void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
+    assert(height > 0);
+    
     widthScreen = width;
     heightScreen = height;
 
-    if(height == 0){
-        fprintf(stderr, "Error height = 0\n");
-        exit(1);
-    }
-
-
+    Transform *rootTransform = new Transform();
 
     // CAMERA
     Camera *c = scene->getCamera();
@@ -68,12 +67,12 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     }
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(scene->getTransformWorld()->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
+        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 
-    
+    delete rootTransform;    
 
 }
 
@@ -142,6 +141,12 @@ MainRenderer::~MainRenderer(){
     delete postProcessShader;
     deleteVAOQuad();
     deleteFBOSceneRender();
+    delete m_transformEditor;
+}
+
+
+void MainRenderer::update(){
+    m_transformEditor->update();
 }
 
 

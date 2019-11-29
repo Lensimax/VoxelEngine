@@ -39,7 +39,6 @@ void Scene::deleteScene(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         delete objectsEngine[i];
     }
-    delete transformWorld;
 }
 
 
@@ -166,7 +165,6 @@ void Scene::updateObj(EngineObject *obj){
 }
 
 void Scene::update(){
-    transformWorld->update();
     if(!pause){
         for(unsigned int i=0; i<objectsEngine.size(); i++){
             updateObj(objectsEngine[i]);
@@ -182,8 +180,6 @@ void Scene::togglePause(){
 
 void Scene::loadDefaultScene(){
     pause = false;
-
-    transformWorld = new Transform();
 
     IDObject = 0;
 

@@ -20,6 +20,10 @@ void InputManager::setUI(UI *u){
     ui = u;
 }
 
+void InputManager::setRenderer(MainRenderer *r){
+    m_renderer = r;
+}
+
 void InputManager::createUI(){
 
     if(ui == NULL){
@@ -39,7 +43,7 @@ void InputManager::createUI(){
 
     if(scene != NULL){
         ImGui::Separator();
-        scene->getTransformWorld()->createUI();
+        m_renderer->getTransformEditor()->createUI();
 
     }
 
@@ -61,21 +65,11 @@ void InputManager::createUI(){
     }
 
     ImGui::Text("Mouse wheel: %.1f", io.MouseWheel);
-    
-
-
-
-    /*if(renderer != NULL){
-        ImGui::Separator();
-        renderer->getTransform()->createUI();
-    }*/
 
     ImGui::End();
 }
 
-void InputManager::setRenderer(MainRenderer *r){
-    renderer = r;
-}
+
 
 void InputManager::update(){
     ImGuiIO& io = ImGui::GetIO();
@@ -83,8 +77,8 @@ void InputManager::update(){
     // WORLD CONTROL
     if(!io.WantCaptureMouse){
         if(io.MouseWheel != 0.0){
-            if(renderer != NULL){
-                scene->getTransformWorld()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
+            if(m_renderer != NULL){
+                m_renderer->getTransformEditor()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
             }
         }
 
@@ -92,7 +86,7 @@ void InputManager::update(){
             glm::vec2 vectorTranslate = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
             vectorTranslate.y *= -1;
             vectorTranslate *= 0.01f;
-            scene->getTransformWorld()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
+            m_renderer->getTransformEditor()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
         }
 
 
@@ -102,8 +96,8 @@ void InputManager::update(){
             glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
             vectorMouse *= sensitivityRotateWorld*0.01f;
 
-            if(scene != NULL){
-                scene->getTransformWorld()->rotatefromScreen(vectorMouse);
+            if(m_renderer != NULL){
+                m_renderer->getTransformEditor()->rotatefromScreen(vectorMouse);
             }
         }
     }
@@ -133,8 +127,8 @@ void InputManager::update(){
             }
         }
         if(ImGui::IsKeyPressed('F')){
-            if(renderer != NULL){
-                renderer->toggleWire();
+            if(m_renderer != NULL){
+                m_renderer->toggleWire();
             }
         }
         if(ImGui::IsKeyPressed('H')){
