@@ -71,3 +71,5 @@ To build :
 * https://sonarlearning.co.uk/coursepage.php?topic=game&course=ext-bb-3d-ged
 * https://www.3dgep.com/courses/
 * https://github.com/nothings/stb
+* https://jheer.github.io/barnes-hut/
+* https://www.youtube.com/watch?v=BP6NxVxDQIs
