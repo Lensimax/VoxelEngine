@@ -67,7 +67,6 @@ void VoxelGrid::createUI(char *ID){
     }
     ImGui::Separator();
 
-
 	ImGui::EndChild();
 }
     
