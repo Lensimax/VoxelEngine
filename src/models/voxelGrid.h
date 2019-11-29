@@ -15,6 +15,8 @@ public:
 
 	void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 
+	void createUI(char *ID) override;
+
 private:
 
 

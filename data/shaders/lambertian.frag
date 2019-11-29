@@ -45,6 +45,7 @@ void main(){
 		usedColor = vec4(color,1);
 	}
 
+
 	vec3 light = normalize(lightVec.xyz - vertex.xyz);
 	if(light != vec3(0,0,0)){
 		// normal, view and light directions (in camera space)

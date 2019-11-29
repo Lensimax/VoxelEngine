@@ -39,7 +39,7 @@ private:
 
 
     float sizeOfOneCube;
-    ChunkGrid<bool, 32> grid;
+    ChunkGrid<bool, 16> grid;
 };
 
 

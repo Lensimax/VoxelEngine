@@ -34,3 +34,38 @@ void VoxelGrid::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projection
 
 }
 
+
+
+void VoxelGrid::createUI(char *ID){
+    const int node_flags = 0;
+
+    ImGui::BeginChild(ID);
+    ImGui::Text(name.c_str());
+
+    ImGui::Separator();
+    transform->createUI();
+
+    ImGui::Separator();
+    bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);
+    if(node_mesh){
+        mesh->createUI();
+        if (ImGui::Button("Recreate")){
+            mesh->recreate();
+            
+        }
+        ImGui::Text("Show bounding box "); ImGui::SameLine();
+        ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
+
+        ImGui::TreePop();
+    }
+
+    ImGui::Separator();
+    bool node_material = ImGui::TreeNodeEx("Material", node_flags);
+    if(node_material){
+        material->createUI();
+        ImGui::TreePop();
+    }
+    ImGui::Separator();
+}
+    
+
