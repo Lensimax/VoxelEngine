@@ -1,5 +1,7 @@
 #include "player.h"
 
+#include <imgui.h>
+
 #include "../material/material.h"
 
 Player::Player(int id, Transform *t, Mesh *m, float sp) : m_speed(sp){
@@ -21,6 +23,23 @@ Player::~Player(){
 
 
 void Player::update(){
+
+    glm::vec3 pos = transform->getPosition();
+    if(ImGui::IsKeyPressed('W')){
+        pos.z -= m_speed;
+    }
+    if(ImGui::IsKeyPressed('S')){
+        pos.z += m_speed;
+    }
+    if(ImGui::IsKeyPressed('A')){
+        pos.x -= m_speed;
+    }
+    if(ImGui::IsKeyPressed('D')){
+        pos.x += m_speed;
+    }
+
+    transform->setPosition(pos); 
+
 
 }
 
