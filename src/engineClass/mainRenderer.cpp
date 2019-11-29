@@ -35,7 +35,7 @@ MainRenderer::MainRenderer(){
 
     createVAOQuad();
     createFBOSceneRender();
-    wireActived = false;
+    m_wireActivated = false;
     cullface = true;
 
     widthScreen = 0;
@@ -43,9 +43,14 @@ MainRenderer::MainRenderer(){
 
 }
 
+
+//// Fait le rendu de la scene dans la version du jeu
+
 void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
     assert(height > 0);
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     
     widthScreen = width;
     heightScreen = height;
@@ -63,16 +68,44 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         l = new DirectionnalLight(scene->addNewId());
     }
 
-    if(wireActived){
-        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-    }
+
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
     }
+
+
+    delete rootTransform; 
+
+}
+
+void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
+
+    assert(height > 0);
+    
+    widthScreen = width;
+    heightScreen = height;
+
+
+    // CAMERA
+    Camera *c = scene->getCamera();
+    if(c == NULL){
+        return;
+    }
+
+    Light *l = scene->getLight();
+    if(l == NULL){
+        l = new DirectionnalLight(scene->addNewId());
+    }
+
+    if(m_wireActivated){
+        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    }
+
+    for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
+        drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
+    }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
-
-    delete rootTransform;    
 
 }
 
@@ -108,7 +141,8 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render in texture
-    renderTheScene(scene, width, height);
+    // renderTheScene(scene, width, height);
+    renderTheSceneEditor(scene, width, height);
 
     // disable FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -172,10 +206,6 @@ void MainRenderer::initializeGL(){
     //std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 
 
-}
-
-void MainRenderer::toggleWire(){
-    wireActived = !wireActived;
 }
 
 
