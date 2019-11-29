@@ -8,15 +8,20 @@ class Player : public MeshObject {
 
 public:
     Player(){}
-    Player(int id, Transform *t = new Transform(), Mesh *m = new MeshCube(1.0f));
+    Player(int id, Transform *t = new Transform(), Mesh *m = new MeshCube(1.0f), float speed = 0.2f);
 
     ~Player();
 
-    void update() override; 
+    void createUI(char *ID) override;
+
+    void update() override;
 
 private:
 
+    float m_speed = 0.2f;
 
+
+    
 };
 
 #endif

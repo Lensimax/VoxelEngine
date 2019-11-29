@@ -38,6 +38,7 @@ class Scene {
 
 
         void addEngineObject();
+        void addCube();
         void deleteObject(int id);
 
         void loadDefaultScene();

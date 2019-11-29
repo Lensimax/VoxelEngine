@@ -9,7 +9,7 @@ VoxelGrid::VoxelGrid(int id, std::string n, Transform *t, float sizeCube){
 	this->sizeCube = sizeCube;
 
 	transform = t;
-	mesh = new MeshCube(sizeCube);
+	mesh = new MeshCube(sizeCube, false);
 	material = new Lambertian();
 
 	chunk = new Chunk(sizeCube);

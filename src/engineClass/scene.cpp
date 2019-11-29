@@ -27,7 +27,7 @@ Scene::Scene(){
     VoxelGrid *obj = new VoxelGrid(addNewId(), "VoxelGrid", new Transform());
 
     //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
-    objectsEngine.push_back(obj);
+    //objectsEngine.push_back(obj);
 
 }
 
@@ -136,6 +136,10 @@ void Scene::addEngineObject(){
     objectsEngine.push_back(new EngineObject(addNewId()));
 }
 
+
+void Scene::addCube(){
+    objectsEngine.push_back(new EngineObject(addNewId()));
+}
 
 
 void Scene::deleteObject(int id){
