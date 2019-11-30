@@ -77,7 +77,10 @@ public:
 	//// Accessors
 
 	float voxelSize() const;
+	
 
+	bool allNeighborsActivated(size_t x, size_t y, size_t z) const; // min(1, 1, 1), max(14, 14, 14)
+	
 	//// Drawing / OpenGL
 
 	void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light, Mesh *mesh, Material *material);
