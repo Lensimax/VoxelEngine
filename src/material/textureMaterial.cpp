@@ -11,15 +11,11 @@
 #include <stb_image.h>
 
 
-TextureMaterial::TextureMaterial(char file[2048]){
+TextureMaterial::TextureMaterial(char file[2048]) : m_imageBuffer(nullptr), m_imageWidth(-1), m_imageHeight(-1){
 
     createShader();
 
-    m_imageBuffer = nullptr;
-
-    m_imageWidth = -1;
     initTexture();
-
     createTexture(file);
 
 

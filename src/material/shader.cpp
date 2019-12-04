@@ -28,13 +28,13 @@
 
 using namespace std;
 
-Shader::Shader() : _programId(0) {
+Shader::Shader() : m_programId(0) {
 
 }
 
 Shader::~Shader() {
-    if(glIsProgram(_programId)) {
-        glDeleteProgram(_programId);
+    if(glIsProgram(m_programId)) {
+        glDeleteProgram(m_programId);
     }
 }
 
@@ -57,11 +57,11 @@ void Shader::load(const char *vertex_file_path, const char *fragment_file_path) 
     checkCompilation(fragmentId);
 
     // create, attach and link program object
-    _programId = glCreateProgram();
-    glAttachShader(_programId,vertexId);
-    glAttachShader(_programId,fragmentId);
-    glLinkProgram(_programId);
-    checkLinks(_programId);
+    m_programId = glCreateProgram();
+    glAttachShader(m_programId,vertexId);
+    glAttachShader(m_programId,fragmentId);
+    glLinkProgram(m_programId);
+    checkLinks(m_programId);
 
     // delete vertex and fragment ids
     glDeleteShader(vertexId);
@@ -72,9 +72,9 @@ void Shader::load(const char *vertex_file_path, const char *fragment_file_path) 
 void Shader::reload(const char *vertex_file_path, const char *fragment_file_path) {
 
     // check if the program already contains a shader
-    if(glIsProgram(_programId)) {
+    if(glIsProgram(m_programId)) {
         // delete it...
-        glDeleteProgram(_programId);
+        glDeleteProgram(m_programId);
     }
 
     // ... and reload it

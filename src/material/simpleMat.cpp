@@ -19,12 +19,11 @@
 
 using namespace glm;
 
-SimpleMat::SimpleMat(glm::vec4 color){
+SimpleMat::SimpleMat(glm::vec4 color) : m_color(color){
 
 
     createShader();
 
-    this->m_color = color;
 
 }
 SimpleMat::~SimpleMat(){
