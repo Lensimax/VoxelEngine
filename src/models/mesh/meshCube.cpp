@@ -4,8 +4,6 @@
 
 MeshCube::MeshCube(float w, bool center) : m_width(w), m_centered(center){
 
-    // createMesh(width);
-
     createMesh(m_width);
     createVAO();
 
