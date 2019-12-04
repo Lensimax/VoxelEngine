@@ -6,12 +6,7 @@
 #include <imgui_impl_opengl3.h>
 
 
-UI::UI(){
-    selectedID = 0;
-    hasToBeDisplayed = true;
-    scene = NULL;
-    mainRenderer = NULL;
-    window = NULL;
+UI::UI() : m_scene(NULL), m_mainRenderer(NULL), m_window(NULL), m_selectedID(0), m_hasToBeDisplayed(true) {
 }
 
 UI::~UI(){
@@ -19,13 +14,13 @@ UI::~UI(){
 }
 
 void UI::drawUI(){
-    if(!hasToBeDisplayed){
+    if(!m_hasToBeDisplayed){
         return;
     }
     createInfoWindow();
 
-    if(scene != NULL){
-        createUISceneManager(scene);
+    if(m_scene != NULL){
+        createUISceneManager(m_scene);
     }
 
    
@@ -52,9 +47,9 @@ void UI::displayEngineNode(std::vector<EngineObject*> obj){
 
 
         if(obj[i]->m_listOfChildren.size() == 0){
-            bool is_selected = selectedID == id;
+            bool is_selected = m_selectedID == id;
             if(ImGui::Selectable(strobj, is_selected)){
-                selectedID = obj[i]->getID();
+                m_selectedID = obj[i]->getID();
             }
             ImGui::SameLine();
             ImGui::Text(obj[i]->getName().c_str());
@@ -62,9 +57,9 @@ void UI::displayEngineNode(std::vector<EngineObject*> obj){
             bool node_open = ImGui::TreeNodeEx(strobj, node_flags);
             ImGui::SameLine();
             // add selectable
-            bool is_selected = selectedID == id;
+            bool is_selected = m_selectedID == id;
             if(ImGui::Selectable(strobj, is_selected)){
-                selectedID = obj[i]->getID();
+                m_selectedID = obj[i]->getID();
             }
             ImGui::SameLine();
             ImGui::Text(obj[i]->getName().c_str());
@@ -113,18 +108,18 @@ void UI::createUISceneManager(Scene *scene){
         if (ImGui::BeginMenu("Edit")){
             if (ImGui::MenuItem("Add EngineObject", "Ctrl+T")) { scene->addEngineObject(); }
             if (ImGui::MenuItem("Add Cube")) { scene->addCube(); }
-            if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(selectedID); }
+            if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(m_selectedID); }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("View")){
-            if (ImGui::MenuItem("Toggle wire frame","CTRL+F")) { if(mainRenderer != NULL) mainRenderer->toggleWire(); }
+            if (ImGui::MenuItem("Toggle wire frame","CTRL+F")) { if(m_mainRenderer != NULL) m_mainRenderer->toggleWire(); }
             ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu("Window")){
-            if (ImGui::MenuItem("640*480")) { if(window != NULL) glfwSetWindowSize(window, 640, 480); }
-            if (ImGui::MenuItem("1280*720")) { if(window != NULL) glfwSetWindowSize(window, 1280, 720); }
-            if (ImGui::MenuItem("1920*1080")) { if(window != NULL) glfwSetWindowSize(window, 1920, 1080); }
+            if (ImGui::MenuItem("640*480")) { if(m_window != NULL) glfwSetWindowSize(m_window, 640, 480); }
+            if (ImGui::MenuItem("1280*720")) { if(m_window != NULL) glfwSetWindowSize(m_window, 1280, 720); }
+            if (ImGui::MenuItem("1920*1080")) { if(m_window != NULL) glfwSetWindowSize(m_window, 1920, 1080); }
             ImGui::EndMenu();
         }
 
@@ -134,7 +129,7 @@ void UI::createUISceneManager(Scene *scene){
         }
 
         if(ImGui::BeginMenu("Rendering Settings")){
-            if (ImGui::MenuItem("Toggle Cull Face")) { mainRenderer->toggleCullface(); }
+            if (ImGui::MenuItem("Toggle Cull Face")) { m_mainRenderer->toggleCullface(); }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
@@ -155,10 +150,10 @@ void UI::createUISceneManager(Scene *scene){
     // pour afficher le détail de l'objet selectionné
     ImGui::BeginChild("right", ImVec2(0, -ImGui::GetFrameHeight()),true); // pass width here
 
-    if(selectedID > -1){
+    if(m_selectedID > -1){
         char idInspector[10];
         sprintf(idInspector, "right");
-        scene->createUIAtID(selectedID, idInspector);
+        scene->createUIAtID(m_selectedID, idInspector);
     }
 
     ImGui::EndChild();
@@ -202,25 +197,19 @@ void UI::DrawSplitter(int split_vertically, float thickness, float* size0, float
 }
 
 int UI::getSelected(){
-    return selectedID;
+    return m_selectedID;
 }
-
-
-void UI::toggleHasToBeDisplayed(){
-    hasToBeDisplayed = !hasToBeDisplayed;
-}
-
 
 
 void UI::set(Scene *sc){
-    scene = sc;
+    m_scene = sc;
 }
 
 
 void UI::set(MainRenderer *main){
-    mainRenderer = main;
+    m_mainRenderer = main;
 }
 
 void UI::set(GLFWwindow *win){
-    window = win;
+    m_window = win;
 }
