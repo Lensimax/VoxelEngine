@@ -5,27 +5,15 @@
 #include <stdio.h>
 
 
-Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
-    m_vecPosition = position;
-    m_vecScale = scale;
-    m_vecRotation = rotation;
-    m_center = center;
-    m_translateAfter = glm::vec3(0);
-
-    m_positionToSend = position;
-    m_scaleToSend = glm::vec3(1);
-    m_rotationToSend = glm::vec3(0);
-
-    m_samePosition = true; m_sameRotation = true;
+Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation) : m_vecPosition(position),m_vecScale(scale), m_vecRotation(rotation), m_center(center), m_translateAfter(glm::vec3(0)),
+                                        m_positionToSend(position), m_scaleToSend(glm::vec3(1)), m_rotationToSend(glm::vec3(0)), m_samePosition(true), m_sameRotation(true), 
+                                        m_animRotSpeedX(m_defaultSpeed), m_animRotSpeedY(m_defaultSpeed), m_animRotSpeedZ(m_defaultSpeed),
+                                        m_animChildRotSpeedX(m_defaultSpeed), m_animChildRotSpeedY(m_defaultSpeed), m_animChildRotSpeedZ(m_defaultSpeed), 
+                                        m_b_animRotX(false), m_b_animRotY(false), b_animRotZ(false), m_b_animChildRotX(false), m_b_animChildRotY(false), m_b_animChildRotZ(false){
 
 
     reset();
-
-    m_animRotSpeedX = m_defaultSpeed, m_animRotSpeedY = m_defaultSpeed; m_animRotSpeedZ = m_defaultSpeed;
-    m_animChildRotSpeedX = m_defaultSpeed; m_animChildRotSpeedY = m_defaultSpeed; m_animChildRotSpeedZ = m_defaultSpeed;
-
-    m_b_animRotX = false, m_b_animRotY = false; b_animRotZ = false;
-    m_b_animChildRotX = false; m_b_animChildRotY = false; m_b_animChildRotZ = false;
+    
 }
 
 
