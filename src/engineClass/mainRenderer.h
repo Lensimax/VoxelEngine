@@ -32,24 +32,29 @@ class MainRenderer {
         void initializeGL();
         void displaySceneOnTheScreen(int width, int height);
 
-        GLuint getTextureID();
 
-        void toggleWire();
 
-        inline void toggleCullFace(){
-            cullface = !cullface;
+        inline void toggleCullface(){
+            m_cullface = !m_cullface;
+        }
+
+        inline void toggleWire(){
+            m_wireActived = !m_wireActived;
+        }
+        GLuint getTextureID(){
+            return m_renderedSceneTextureID;
         }
 
         inline unsigned int width(){
-            return widthScreen;
+            return m_widthScreen;
         }
 
         inline unsigned int height(){
-            return heightScreen;
+            return m_heightScreen;
         }
 
         inline GLuint getRenderSceneID(){
-            return renderedSceneTextureID;
+            return m_renderedSceneTextureID;
         }
 
     private:
@@ -60,19 +65,19 @@ class MainRenderer {
         Camera *getCamera();
         Light *getLight();
 
-        glm::mat4 viewMat;
-        glm::mat4 projectionMat;
+        glm::mat4 m_viewMat;
+        glm::mat4 m_projectionMat;
 
         /* FBO */
 
-        GLuint fboRenderScene;
+        GLuint m_fboRenderScene;
 
         void createFBOSceneRender();
         void initFBOSceneRender(int width, int height);
         void deleteFBOSceneRender();
 
-        GLuint renderedSceneTextureID;
-        GLuint renderedDepth;
+        GLuint m_renderedSceneTextureID;
+        GLuint m_renderedDepth;
 
         /* final rendering */
 
@@ -81,18 +86,18 @@ class MainRenderer {
         void deleteVAOQuad();
         void drawQuad();
 
-        Shader *postProcessShader;
+        Shader *m_postProcessShader;
 
 
-        GLuint _vaoQuad;
-        GLuint _quad;
+        GLuint m_vaoQuad;
+        GLuint m_quad;
 
-        bool wireActived;
-        bool cullface;
+        bool m_wireActived;
+        bool m_cullface;
 
-        unsigned int widthScreen, heightScreen;
+        unsigned int m_widthScreen, m_heightScreen;
 
-        Camera *camera;
+        Camera *m_camera;
 
 };
 

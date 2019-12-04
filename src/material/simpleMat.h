@@ -34,10 +34,10 @@ class SimpleMat : public Material {
         void deleteShader();
 
 
-        glm::vec4 color;
+        glm::vec4 m_color;
 
-        const char * simpleShaderVert = "../data/shaders/simple.vert";
-        const char * simpleShaderFrag = "../data/shaders/simple.frag";
+        const char * m_simpleShaderVert = "../data/shaders/simple.vert";
+        const char * m_simpleShaderFrag = "../data/shaders/simple.frag";
 
 };
 

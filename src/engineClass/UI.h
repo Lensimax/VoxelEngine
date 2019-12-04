@@ -16,8 +16,7 @@ public:
 
     void drawUI();
 
-    void toggleHasToBeDisplayed();
-
+   
     int getSelected();
 
     void set(Scene *sc);
@@ -25,8 +24,12 @@ public:
     void set(GLFWwindow *win);
 
     inline bool hasToDisplayed(){
-        return hasToBeDisplayed;
+        return m_hasToBeDisplayed;
     }
+    inline void toggleHasToBeDisplayed(){
+        m_hasToBeDisplayed = !m_hasToBeDisplayed;
+    }
+
 
 private:
 
@@ -36,12 +39,12 @@ private:
     void displayEngineNode(std::vector<EngineObject*> obj);
 
 
-    bool hasToBeDisplayed;
-    int selectedID = -1;
+    bool m_hasToBeDisplayed;
+    int m_selectedID;
 
-    Scene *scene;
-    MainRenderer *mainRenderer;
-    GLFWwindow* window;
+    Scene *m_scene;
+    MainRenderer *m_mainRenderer;
+    GLFWwindow* m_window;
 
 };
 

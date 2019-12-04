@@ -5,27 +5,15 @@
 #include <stdio.h>
 
 
-Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation){
-    this->vecPosition = position;
-    this->vecScale = scale;
-    this->vecRotation = rotation;
-    this->center = center;
-    this->translateAfter = glm::vec3(0);
-
-    this->positionToSend = position;
-    this->scaleToSend = glm::vec3(1);
-    this->rotationToSend = glm::vec3(0);
-
-    samePosition = true; sameRotation = true;
+Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation) : m_vecPosition(position),m_vecScale(scale), m_vecRotation(rotation), m_center(center), m_translateAfter(glm::vec3(0)),
+                                        m_positionToSend(position), m_scaleToSend(glm::vec3(1)), m_rotationToSend(glm::vec3(0)), m_samePosition(true), m_sameRotation(true), 
+                                        m_animRotSpeedX(m_defaultSpeed), m_animRotSpeedY(m_defaultSpeed), m_animRotSpeedZ(m_defaultSpeed),
+                                        m_animChildRotSpeedX(m_defaultSpeed), m_animChildRotSpeedY(m_defaultSpeed), m_animChildRotSpeedZ(m_defaultSpeed), 
+                                        m_b_animRotX(false), m_b_animRotY(false), b_animRotZ(false), m_b_animChildRotX(false), m_b_animChildRotY(false), m_b_animChildRotZ(false){
 
 
     reset();
-
-    animRotSpeedX = defaultSpeed, animRotSpeedY = defaultSpeed; animRotSpeedZ = defaultSpeed;
-    animChildRotSpeedX = defaultSpeed; animChildRotSpeedY = defaultSpeed; animChildRotSpeedZ = defaultSpeed;
-
-    b_animRotX = false, b_animRotY = false; b_animRotZ = false;
-    b_animChildRotX = false; b_animChildRotY = false; b_animChildRotZ = false;
+    
 }
 
 
@@ -36,59 +24,59 @@ Transform::~Transform(){
 
 
 void Transform::reset(){
-    animRotX = 0, animRotY = 0; animRotZ = 0;
-    animChildRotX = 0; animChildRotY = 0; animChildRotZ = 0;
+    m_animRotX = 0, m_animRotY = 0; m_animRotZ = 0;
+    m_animChildRotX = 0; m_animChildRotY = 0; m_animChildRotZ = 0;
 }
 
 void Transform::setPosition(vec3 position){
-    this->vecPosition = position;
+    m_vecPosition = position;
 }
 void Transform::rotate(vec3 axis){
-    this->vecRotation = axis;
+    m_vecRotation = axis;
 }
 
 void Transform::rotatefromScreen(vec2 v){
-    vecRotation.x += v.y;
-    vecRotation.y += v.x;
+    m_vecRotation.x += v.y;
+    m_vecRotation.y += v.x;
 }
 
 void Transform::setCenter(vec3 center) {
-    this->center = center;
+    m_center = center;
 }
 
 void Transform::scale(vec3 scale){
-    this->vecScale = scale;
+    m_vecScale = scale;
 }
 
 void Transform::addTranslation(vec3 t){
-    vecPosition += t;
+    m_vecPosition += t;
 }
 
 void Transform::addTranslationAfter(vec3 t){
-    translateAfter += t;
+    m_translateAfter += t;
 }
 
 mat4 Transform::getModelMat(){
     mat4 model = mat4(1.0f);
-    model = translate(model, vecPosition);
+    model = translate(model, m_vecPosition);
     // model = translate(model, center);
-    model = glm::rotate(model, vecRotation[0], vec3(1.0,0.0,0.0));
-    model = glm::rotate(model, vecRotation[1], vec3(0.0,1.0,0.0));
-    model = glm::rotate(model, vecRotation[2], vec3(0.0,0.0,1.0));
-    model = translate(model, translateAfter);
-    model = glm::scale(model, vecScale);
+    model = glm::rotate(model, m_vecRotation[0], vec3(1.0,0.0,0.0));
+    model = glm::rotate(model, m_vecRotation[1], vec3(0.0,1.0,0.0));
+    model = glm::rotate(model, m_vecRotation[2], vec3(0.0,0.0,1.0));
+    model = translate(model, m_translateAfter);
+    model = glm::scale(model, m_vecScale);
 
     return model;
 }
 
 mat4 Transform::getModelMat(mat4 modelMat){
-    modelMat = translate(modelMat, vecPosition);
+    modelMat = translate(modelMat, m_vecPosition);
     // modelMat = translate(modelMat, center);
-    modelMat = glm::rotate(modelMat, vecRotation[0]+animRotX, vec3(1.0,0.0,0.0));
-    modelMat = glm::rotate(modelMat, vecRotation[1]+animRotY, vec3(0.0,1.0,0.0));
-    modelMat = glm::rotate(modelMat, vecRotation[2]+animRotZ, vec3(0.0,0.0,1.0));
-    modelMat = translate(modelMat, translateAfter);
-    modelMat = glm::scale(modelMat, vecScale);
+    modelMat = glm::rotate(modelMat, m_vecRotation[0]+m_animRotX, vec3(1.0,0.0,0.0));
+    modelMat = glm::rotate(modelMat, m_vecRotation[1]+m_animRotY, vec3(0.0,1.0,0.0));
+    modelMat = glm::rotate(modelMat, m_vecRotation[2]+m_animRotZ, vec3(0.0,0.0,1.0));
+    modelMat = translate(modelMat, m_translateAfter);
+    modelMat = glm::scale(modelMat, m_vecScale);
 
     return modelMat;
 }
@@ -99,23 +87,23 @@ mat4 Transform::getModelToChild(mat4 modelMat){
 
 
 
-    if(!samePosition){
-        model = translate(model, positionToSend);
+    if(!m_samePosition){
+        model = translate(model, m_positionToSend);
     } else {
-        model = translate(model, vecPosition);
+        model = translate(model, m_vecPosition);
     }
 
-    if(!sameRotation){
-        model = glm::rotate(model, rotationToSend[0]+animChildRotX, vec3(1.0,0.0,0.0));
-        model = glm::rotate(model, rotationToSend[1]+animChildRotY, vec3(0.0,1.0,0.0));
-        model = glm::rotate(model, rotationToSend[2]+animChildRotZ, vec3(0.0,0.0,1.0));
+    if(!m_sameRotation){
+        model = glm::rotate(model, m_rotationToSend[0]+m_animChildRotX, vec3(1.0,0.0,0.0));
+        model = glm::rotate(model, m_rotationToSend[1]+m_animChildRotY, vec3(0.0,1.0,0.0));
+        model = glm::rotate(model, m_rotationToSend[2]+m_animChildRotZ, vec3(0.0,0.0,1.0));
     } else {
-        model = glm::rotate(model, vecRotation[0]+animRotX, vec3(1.0,0.0,0.0));
-        model = glm::rotate(model, vecRotation[1]+animRotY, vec3(0.0,1.0,0.0));
-        model = glm::rotate(model, vecRotation[2]+animRotZ, vec3(0.0,0.0,1.0));
+        model = glm::rotate(model, m_vecRotation[0]+m_animRotX, vec3(1.0,0.0,0.0));
+        model = glm::rotate(model, m_vecRotation[1]+m_animRotY, vec3(0.0,1.0,0.0));
+        model = glm::rotate(model, m_vecRotation[2]+m_animRotZ, vec3(0.0,0.0,1.0));
     }
 
-    model = translate(model, translateAfter);    
+    model = translate(model, m_translateAfter);    
 
     return model;
 
@@ -123,13 +111,13 @@ mat4 Transform::getModelToChild(mat4 modelMat){
 
 void Transform::update(){
 
-    if(b_animRotX){ animRotX += animRotSpeedX; }
-    if(b_animRotY){ animRotY += animRotSpeedY; }
-    if(b_animRotZ){ animRotZ += animRotSpeedZ; }
+    if(m_b_animRotX){ m_animRotX += m_animRotSpeedX; }
+    if(m_b_animRotY){ m_animRotY += m_animRotSpeedY; }
+    if(b_animRotZ){ m_animRotZ += m_animRotSpeedZ; }
 
-    if(b_animChildRotX){ animChildRotX += animChildRotSpeedX; }
-    if(b_animChildRotY){ animChildRotY += animChildRotSpeedY; }
-    if(b_animChildRotZ){ animChildRotZ += animChildRotSpeedZ; }
+    if(m_b_animChildRotX){ m_animChildRotX += m_animChildRotSpeedX; }
+    if(m_b_animChildRotY){ m_animChildRotY += m_animChildRotSpeedY; }
+    if(m_b_animChildRotZ){ m_animChildRotZ += m_animChildRotSpeedZ; }
 
 }
 
@@ -148,27 +136,27 @@ void Transform::createUI(){
 
     ImGui::Text("Transform");
     ImGui::Text("Position: "); ImGui::SameLine();
-    ImGui::DragFloat3("position", &vecPosition[0], 0.01f, lowestValue, highestValue, format);
+    ImGui::DragFloat3("position", &m_vecPosition[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Rotation: "); ImGui::SameLine();
-    ImGui::DragFloat3("rotation", &vecRotation[0], 0.01f, lowestValue, highestValue, format);
+    ImGui::DragFloat3("rotation", &m_vecRotation[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Scale: "); ImGui::SameLine();
-    ImGui::DragFloat3("scale", &vecScale[0], 0.005f, 0.0f, highestValue, format);
+    ImGui::DragFloat3("scale", &m_vecScale[0], 0.005f, 0.0f, highestValue, format);
 
     bool node_open_anim = ImGui::TreeNodeEx((void*)(intptr_t)0, node_flags, "Animation");
 
     if (node_open_anim) {
         ImGui::Text("Rotation X : ");
-        ImGui::SameLine(); ImGui::Checkbox("##RotX", &b_animRotX);
+        ImGui::SameLine(); ImGui::Checkbox("##RotX", &m_b_animRotX);
         ImGui::SameLine(); ImGui::Text("speed X: "); ImGui::SameLine();
-        ImGui::DragFloat("speedX", &animRotSpeedX, 0.002f, lowestValue, highestValue, format);
+        ImGui::DragFloat("speedX", &m_animRotSpeedX, 0.002f, lowestValue, highestValue, format);
         ImGui::Text("Rotation Y : ");
-        ImGui::SameLine(); ImGui::Checkbox("##RotY", &b_animRotY);
+        ImGui::SameLine(); ImGui::Checkbox("##RotY", &m_b_animRotY);
         ImGui::SameLine(); ImGui::Text("speed Y: "); ImGui::SameLine();
-        ImGui::DragFloat("speedY", &animRotSpeedY, 0.002f, lowestValue, highestValue, format);
+        ImGui::DragFloat("speedY", &m_animRotSpeedY, 0.002f, lowestValue, highestValue, format);
         ImGui::Text("Rotation Z : ");
         ImGui::SameLine(); ImGui::Checkbox("##RotZ", &b_animRotZ);
         ImGui::SameLine(); ImGui::Text("speed Z: "); ImGui::SameLine();
-        ImGui::DragFloat("speedZ", &animRotSpeedZ, 0.002f, lowestValue, highestValue, format);
+        ImGui::DragFloat("speedZ", &m_animRotSpeedZ, 0.002f, lowestValue, highestValue, format);
 
         ImGui::TreePop();
     }
@@ -179,44 +167,44 @@ void Transform::createUI(){
     if (node_open) {
 
         ImGui::Text("Same position as parent");
-        ImGui::Checkbox("##TransformSamePositionAsParent", &samePosition);
-        if(!samePosition){
+        ImGui::Checkbox("##Transformm_samePositionAsParent", &m_samePosition);
+        if(!m_samePosition){
             ImGui::SameLine(); ImGui::Text("Position: "); ImGui::SameLine();
-            ImGui::DragFloat3("##position", &positionToSend[0], 0.01f, lowestValue, highestValue, format);
+            ImGui::DragFloat3("##position", &m_positionToSend[0], 0.01f, lowestValue, highestValue, format);
         }
 
         ImGui::Text("Same rotation as parent");
-        ImGui::Checkbox("##TransformSameRotationAsParent", &sameRotation);
-        if(!sameRotation){
+        ImGui::Checkbox("##Transformm_sameRotationAsParent", &m_sameRotation);
+        if(!m_sameRotation){
             ImGui::SameLine(); ImGui::Text("Rotation: "); ImGui::SameLine();
-            ImGui::DragFloat3("##rotation", &rotationToSend[0], 0.01f, lowestValue, highestValue, format);
+            ImGui::DragFloat3("##rotation", &m_rotationToSend[0], 0.01f, lowestValue, highestValue, format);
         }
 
         /*ImGui::Text("Same matrix as parent");
         ImGui::SameLine(); ImGui::Checkbox("##TransformSameAsParent", &sameAsModelMat);
         ImGui::Text("Position: "); ImGui::SameLine();
-        ImGui::DragFloat3("position", &positionToSend[0], 0.01f, lowestValue, highestValue, format);
+        ImGui::DragFloat3("position", &m_positionToSend[0], 0.01f, lowestValue, highestValue, format);
         ImGui::Text("Rotation: "); ImGui::SameLine();
-        ImGui::DragFloat3("rotation", &rotationToSend[0], 0.01f, lowestValue, highestValue, format);
+        ImGui::DragFloat3("rotation", &m_rotationToSend[0], 0.01f, lowestValue, highestValue, format);
         ImGui::Text("Scale: "); ImGui::SameLine();
-        ImGui::DragFloat3("scale", &scaleToSend[0], 0.005f, 0.0f, highestValue, format);*/
+        ImGui::DragFloat3("scale", &m_scaleToSend[0], 0.005f, 0.0f, highestValue, format);*/
 
         int anim_node_flags_child = 0;
         bool node_open_anim_child = ImGui::TreeNodeEx((void*)(intptr_t)2, anim_node_flags_child, "Animation Child");
 
         if (node_open_anim_child) {
             ImGui::Text("Rotation X : ");
-            ImGui::SameLine(); ImGui::Checkbox("##ChildRotX", &b_animChildRotX);
+            ImGui::SameLine(); ImGui::Checkbox("##ChildRotX", &m_b_animChildRotX);
             ImGui::SameLine(); ImGui::Text("speed X: "); ImGui::SameLine();
-            ImGui::DragFloat("speedX", &animChildRotSpeedX, 0.002f, lowestValue, highestValue, format);
+            ImGui::DragFloat("speedX", &m_animChildRotSpeedX, 0.002f, lowestValue, highestValue, format);
             ImGui::Text("Rotation Y : ");
-            ImGui::SameLine(); ImGui::Checkbox("##ChildRotY", &b_animChildRotY);
+            ImGui::SameLine(); ImGui::Checkbox("##ChildRotY", &m_b_animChildRotY);
             ImGui::SameLine(); ImGui::Text("speed Y: "); ImGui::SameLine();
-            ImGui::DragFloat("speedY", &animChildRotSpeedY, 0.002f, lowestValue, highestValue, format);
+            ImGui::DragFloat("speedY", &m_animChildRotSpeedY, 0.002f, lowestValue, highestValue, format);
             ImGui::Text("Rotation Z : ");
-            ImGui::SameLine(); ImGui::Checkbox("##ChildRotZ", &b_animChildRotZ);
+            ImGui::SameLine(); ImGui::Checkbox("##ChildRotZ", &m_b_animChildRotZ);
             ImGui::SameLine(); ImGui::Text("speed Z: "); ImGui::SameLine();
-            ImGui::DragFloat("speedZ", &animChildRotSpeedZ, 0.002f, lowestValue, highestValue, format);
+            ImGui::DragFloat("speedZ", &m_animChildRotSpeedZ, 0.002f, lowestValue, highestValue, format);
 
             ImGui::TreePop();
         }
@@ -235,30 +223,30 @@ void Transform::createUI(){
 
 
 void Transform::setAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX, float SpeedY, float SpeedZ){
-    b_animRotX = b_X; b_animRotY = b_Y; b_animRotZ = b_Z;
-    animRotSpeedX = SpeedX; animRotSpeedY = SpeedY; animRotSpeedZ = SpeedZ;
+    m_b_animRotX = b_X; m_b_animRotY = b_Y; b_animRotZ = b_Z;
+    m_animRotSpeedX = SpeedX; m_animRotSpeedY = SpeedY; m_animRotSpeedZ = SpeedZ;
 }
 
 
 void Transform::setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX, float SpeedY, float SpeedZ){
-    b_animChildRotX = b_X; b_animChildRotY = b_Y; b_animChildRotZ = b_Z;
-    animChildRotSpeedX = SpeedX; animChildRotSpeedY = SpeedY; animChildRotSpeedZ = SpeedZ;
+    m_b_animChildRotX = b_X; m_b_animChildRotY = b_Y; m_b_animChildRotZ = b_Z;
+    m_animChildRotSpeedX = SpeedX; m_animChildRotSpeedY = SpeedY; m_animChildRotSpeedZ = SpeedZ;
 }
 
 void Transform::setSameAsParent(bool position, bool rotation){
-    samePosition = position;
-    sameRotation = rotation;
+    m_samePosition = position;
+    m_sameRotation = rotation;
 }
 
 
 vec3 Transform::getPosition(){
-    return vecPosition;
+    return m_vecPosition;
 }
 
 vec3 Transform::getRotation(){
-    return vecRotation;
+    return m_vecRotation;
 }
 
 vec3 Transform::getScale(){
-    return vecScale;
+    return m_vecScale;
 }

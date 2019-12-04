@@ -10,7 +10,7 @@ class VoxelGrid : public MeshObject {
 
 public:
 	VoxelGrid(){}
-	VoxelGrid(int id, std::string n = "Voxel Grid", Transform *t = new Transform(), float sizeCube = 0.2f);
+	VoxelGrid(int id, std::string n = "Voxel Grid", Transform *t = new Transform(), float size = 0.2f);
 	~VoxelGrid();
 
 	void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
@@ -20,9 +20,9 @@ public:
 private:
 
 
-	Chunk *chunk;
+	Chunk *m_chunk;
 	
-	float sizeCube;
+	float m_sizeCube;
 
 };
 

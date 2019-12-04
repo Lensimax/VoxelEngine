@@ -14,7 +14,7 @@
 
 class MeshCube : public Mesh {
 public:
-    MeshCube(float w);
+    MeshCube(float w = 1.0f, bool center = true);
 	~MeshCube();
 
 	void recreate() override;
@@ -27,11 +27,12 @@ private:
     void createPositions(float w);
 
     void createNormals();
-    void createTangents();
+    void createm_tangents();
     void createUVs();
     void createColors();
 
-    float width;
+    float m_width;
+    bool m_centered;
 
 };
 

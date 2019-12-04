@@ -3,9 +3,7 @@
 
 #include <iostream>
 
-InputManager::InputManager(){
-    sensitivityRotateWorld = glm::vec2(1);
-    scrollZoomSensitivity = 1.f;
+InputManager::InputManager() : m_sensitivityRotateWorld(glm::vec2(1)), m_scrollZoomSensitivity(1.f) {
 }
 
 InputManager::~InputManager(){
@@ -13,19 +11,19 @@ InputManager::~InputManager(){
 }
 
 void InputManager::setScene(Scene *sc){
-    scene = sc;
+    m_scene = sc;
 }
 
 void InputManager::setUI(UI *u){
-    ui = u;
+    m_ui = u;
 }
 
 void InputManager::createUI(){
 
-    if(ui == NULL){
+    if(m_ui == NULL){
         return;
     } else {
-        if(!ui->hasToDisplayed()){ return; }
+        if(!m_ui->hasToDisplayed()){ return; }
     }
 
     ImGui::Begin("Settings");
@@ -33,9 +31,16 @@ void InputManager::createUI(){
     ImGui::Text("Input Manager");
     ImGui::Separator();
     ImGui::Text("Rotation world sensitivity : (x0.01)");
-    ImGui::DragFloat2("##rotationsensitivity", &sensitivityRotateWorld[0], 0.01, 0.0, 100.);
+    ImGui::DragFloat2("##rotationsensitivity", &m_sensitivityRotateWorld[0], 0.01, 0.0, 100.);
     ImGui::Text("Scroll zoom sensitivity : ");
-    ImGui::DragFloat("##scrollZoomSensitivity", &scrollZoomSensitivity, 0.01, 0.0, 100.);
+    ImGui::DragFloat("##m_scrollZoomSensitivity", &m_scrollZoomSensitivity, 0.01, 0.0, 100.);
+
+    if(m_scene != NULL){
+        ImGui::Separator();
+        m_scene->getTransformWorld()->createUI();
+
+    }
+
 
     ImGui::End();
 
@@ -67,7 +72,7 @@ void InputManager::createUI(){
 }
 
 void InputManager::setRenderer(MainRenderer *r){
-    renderer = r;
+    m_renderer = r;
 }
 
 void InputManager::update(){
@@ -76,8 +81,8 @@ void InputManager::update(){
     // WORLD CONTROL
     if(!io.WantCaptureMouse){
         if(io.MouseWheel != 0.0){
-            if(renderer != NULL){
-                scene->getTransformWorld()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
+            if(m_renderer != NULL){
+                m_scene->getTransformWorld()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
             }
         }
 
@@ -85,7 +90,7 @@ void InputManager::update(){
             glm::vec2 vectorTranslate = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
             vectorTranslate.y *= -1;
             vectorTranslate *= 0.01f;
-            scene->getTransformWorld()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
+            m_scene->getTransformWorld()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
         }
 
 
@@ -93,10 +98,10 @@ void InputManager::update(){
 
             // ROTATION OF the world
             glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
-            vectorMouse *= sensitivityRotateWorld*0.01f;
+            vectorMouse *= m_sensitivityRotateWorld*0.01f;
 
-            if(scene != NULL){
-                scene->getTransformWorld()->rotatefromScreen(vectorMouse);
+            if(m_scene != NULL){
+                m_scene->getTransformWorld()->rotatefromScreen(vectorMouse);
             }
         }
     }
@@ -104,35 +109,35 @@ void InputManager::update(){
 
 
 
-    if(scene != NULL && ui != NULL){
+    if(m_scene != NULL && m_ui != NULL){
 
         // suppr
 
         // if(ImGui::IsKeyPressed(ImGuiKey_Delete)){
         if(ImGui::IsKeyPressed(261)){ // 0x105
-            scene->deleteObject(ui->getSelected());
+            m_scene->deleteObject(m_ui->getSelected());
 
         }
 
         if(io.KeyCtrl && ImGui::IsKeyPressed('T')){
-            scene->addEngineObject();
+            m_scene->addEngineObject();
         }
     }
 
     if(io.KeyCtrl){
         if(ImGui::IsKeyPressed('P')){
-            if(scene != NULL){
-                scene->togglePause();
+            if(m_scene != NULL){
+                m_scene->togglePause();
             }
         }
         if(ImGui::IsKeyPressed('F')){
-            if(renderer != NULL){
-                renderer->toggleWire();
+            if(m_renderer != NULL){
+                m_renderer->toggleWire();
             }
         }
         if(ImGui::IsKeyPressed('H')){
-            if(ui != NULL){
-                ui->toggleHasToBeDisplayed();
+            if(m_ui != NULL){
+                m_ui->toggleHasToBeDisplayed();
             }
         }
     }

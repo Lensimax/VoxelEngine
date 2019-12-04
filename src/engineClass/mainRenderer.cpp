@@ -26,25 +26,20 @@
 
 #include <iostream>
 
-MainRenderer::MainRenderer(){
+MainRenderer::MainRenderer() : m_wireActived(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0) {
 
-    postProcessShader = new Shader();
-    postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
+    m_postProcessShader = new Shader();
+    m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
 
     createVAOQuad();
     createFBOSceneRender();
-    wireActived = false;
-    cullface = true;
-
-    widthScreen = 0;
-    heightScreen = 0;
 
 }
 
 void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
-    widthScreen = width;
-    heightScreen = height;
+    m_widthScreen = width;
+    m_heightScreen = height;
 
     if(height == 0){
         fprintf(stderr, "Error height = 0\n");
@@ -64,7 +59,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         l = new DirectionnalLight(scene->addNewId());
     }
 
-    if(wireActived){
+    if(m_wireActived){
         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     }
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
@@ -87,8 +82,8 @@ void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *
         o->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
     }
 
-    for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
-        drawRecursive(matrixTochild, obj->listOfChildren[i], c, l, screenAspectRatio);
+    for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+        drawRecursive(matrixTochild, obj->m_listOfChildren[i], c, l, screenAspectRatio);
     }
 }
 
@@ -101,7 +96,7 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
 
     initFBOSceneRender(width, height);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, fboRenderScene);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_fboRenderScene);
     glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
     initializeGL();
@@ -122,12 +117,12 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
 void MainRenderer::displaySceneOnTheScreen(int width, int height){
     glViewport(0,0,width,height);
 
-    glUseProgram(postProcessShader->id());
+    glUseProgram(m_postProcessShader->id());
 
     // send rendered scene to the post process shader
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
-    glUniform1i(glGetUniformLocation(postProcessShader->id(), "sceneRendered"), 0);
+    glBindTexture(GL_TEXTURE_2D,m_renderedSceneTextureID);
+    glUniform1i(glGetUniformLocation(m_postProcessShader->id(), "sceneRendered"), 0);
 
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
@@ -139,7 +134,7 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
 }
 
 MainRenderer::~MainRenderer(){
-    delete postProcessShader;
+    delete m_postProcessShader;
     deleteVAOQuad();
     deleteFBOSceneRender();
 }
@@ -157,7 +152,7 @@ void MainRenderer::initializeGL(){
 
     // Cull triangles which normal is not towards the camera
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-    if(cullface){
+    if(m_cullface){
         glEnable(GL_CULL_FACE);
     } else {
         glDisable(GL_CULL_FACE);
@@ -169,48 +164,45 @@ void MainRenderer::initializeGL(){
 
 }
 
-void MainRenderer::toggleWire(){
-    wireActived = !wireActived;
-}
 
 
 void MainRenderer::createVAOQuad(){
     const GLfloat quadData[] = {-1.0f,-1.0f,0.0f, 1.0f,-1.0f,0.0f, -1.0f,1.0f,0.0f, -1.0f,1.0f,0.0f, 1.0f,-1.0f,0.0f, 1.0f,1.0f,0.0f };
 
-    glGenBuffers(1,&_quad);
-    glGenVertexArrays(1,&_vaoQuad);
+    glGenBuffers(1,&m_quad);
+    glGenVertexArrays(1,&m_vaoQuad);
 
-    glBindVertexArray(_vaoQuad);
-    glBindBuffer(GL_ARRAY_BUFFER,_quad); // vertices
+    glBindVertexArray(m_vaoQuad);
+    glBindBuffer(GL_ARRAY_BUFFER,m_quad); // vertices
     glBufferData(GL_ARRAY_BUFFER, sizeof(quadData),quadData,GL_STATIC_DRAW);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
     glEnableVertexAttribArray(0);
 }
 
 void MainRenderer::deleteVAOQuad(){
-    glDeleteBuffers(1,&_quad);
-    glDeleteVertexArrays(1,&_vaoQuad);
+    glDeleteBuffers(1,&m_quad);
+    glDeleteVertexArrays(1,&m_vaoQuad);
 }
 
 
 void MainRenderer::drawQuad(){
-    glBindVertexArray(_vaoQuad);
+    glBindVertexArray(m_vaoQuad);
     glDrawArrays(GL_TRIANGLES,0,6);
     glBindVertexArray(0);
 }
 
 
 void MainRenderer::createFBOSceneRender(){
-    glGenFramebuffers(1, &fboRenderScene);
-    glGenTextures(1,&renderedSceneTextureID);
-    glGenTextures(1,&renderedDepth);
+    glGenFramebuffers(1, &m_fboRenderScene);
+    glGenTextures(1,&m_renderedSceneTextureID);
+    glGenTextures(1,&m_renderedDepth);
 
 }
 
 void MainRenderer::initFBOSceneRender(int width, int height){
 
     /* la taille est égale au nombre de cases de la grille */
-    glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
+    glBindTexture(GL_TEXTURE_2D,m_renderedSceneTextureID);
 
 
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F,width,height,0,GL_RGBA,GL_FLOAT,NULL);
@@ -219,31 +211,29 @@ void MainRenderer::initFBOSceneRender(int width, int height){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glBindTexture(GL_TEXTURE_2D, renderedDepth);
+    glBindTexture(GL_TEXTURE_2D, m_renderedDepth);
     glTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT24,width,height,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glBindFramebuffer(GL_FRAMEBUFFER,fboRenderScene);
+    glBindFramebuffer(GL_FRAMEBUFFER,m_fboRenderScene);
 
-    glBindTexture(GL_TEXTURE_2D,renderedSceneTextureID);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,renderedSceneTextureID,0);
+    glBindTexture(GL_TEXTURE_2D,m_renderedSceneTextureID);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,m_renderedSceneTextureID,0);
 
-    glBindTexture(GL_TEXTURE_2D,renderedDepth);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,renderedDepth,0);
+    glBindTexture(GL_TEXTURE_2D,m_renderedDepth);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,m_renderedDepth,0);
 
     /* on desactive le buffer */
     glBindFramebuffer(GL_FRAMEBUFFER,0);
 }
 
 void MainRenderer::deleteFBOSceneRender(){
-    glDeleteFramebuffers(1,&fboRenderScene);
-    glDeleteTextures(1, &renderedSceneTextureID);
-    glDeleteTextures(1,&renderedDepth);
+    glDeleteFramebuffers(1,&m_fboRenderScene);
+    glDeleteTextures(1, &m_renderedSceneTextureID);
+    glDeleteTextures(1,&m_renderedDepth);
 }
 
-GLuint MainRenderer::getTextureID(){
-    return renderedSceneTextureID;
-}
+

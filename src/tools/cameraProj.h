@@ -19,9 +19,9 @@ class CameraProj : public Camera {
 
     protected:
 
-        float fovy;
-        float near;
-        float far;
+        float m_fovy;
+        float m_near;
+        float m_far;
 
 };
 
