@@ -31,12 +31,12 @@ public:
 
 private:
 
-    Scene *scene = NULL;
-    UI *ui = NULL;
-    MainRenderer *renderer = NULL;
+    Scene *m_scene = NULL;
+    UI *m_ui = NULL;
+    MainRenderer *m_renderer = NULL;
 
-    glm::vec2 sensitivityRotateWorld;
-    float scrollZoomSensitivity;
+    glm::vec2 m_sensitivityRotateWorld;
+    float m_scrollZoomSensitivity;
 };
 
 
