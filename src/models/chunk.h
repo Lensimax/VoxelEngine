@@ -17,29 +17,78 @@
 
 #include <array>
 
-template<class T, size_t N>
-using ChunkGrid = std::array<std::array<std::array<T, N>, N>, N>;
 
-class Chunk {
+///////////////////////// Voxel
+
+
+using Voxel = bool;
+/*
+struct Voxel {
+	
+	bool activated;
+
+	//// Accessors 
+
+	operator=(bool activated);
+
+	constexpr float size() const;
+	operator bool() const;
+
+	//// Static functions
+
+	static constexpr float size() const;
+}
+*/
+
+
+///////////////////////// CubicGrid
+
+
+template<class T, size_t N>
+struct CubicGrid : public std::array<T, N * N * N>
+{
+	//// Accessors
+
+	constexpr size_t width()  const;
+	constexpr size_t height() const;
+	constexpr size_t depth()  const;
+
+	// Les coordonnées n'ont pas le droit  d'être négatives
+	T&       operator()(size_t x, size_t y, size_t z);       // Accès comme un tableau à 3 dimensions
+	const T& operator()(size_t x, size_t y, size_t z) const;
+
+	//// Booleans
+
+	bool on_bounds(size_t x, size_t y, size_t z) const;	
+};
+
+
+///////////////////////// Chunk
+
+
+class Chunk : public CubicGrid<Voxel, 16> {
 
 public:
-    Chunk(float size);
-    ~Chunk();
+	
+	//// Constructors
+
+	Chunk(float voxelSize);
+
+	//// Accessors
+
+	float voxelSize() const;
+	
+
+	bool allNeighborsActivated(size_t x, size_t y, size_t z) const; // min(1, 1, 1), max(14, 14, 14)
+	
+	//// Drawing / OpenGL
 
 	void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light, Mesh *mesh, Material *material);
-
-    void setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light, Material *material);
-
-    bool getCell(unsigned int i, unsigned int j, unsigned int k);
+	void setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light, Material *material);
 
 private:
 
-	void createChunk();
-
-
-
-    float sizeOfOneCube;
-    ChunkGrid<bool, 16> grid;
+	float m_voxelSize;
 };
 
 
