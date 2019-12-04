@@ -27,7 +27,7 @@ private:
     void createPositions(float w);
 
     void createNormals();
-    void createTangents();
+    void createm_tangents();
     void createUVs();
     void createColors();
 

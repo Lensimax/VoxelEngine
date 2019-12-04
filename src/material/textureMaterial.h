@@ -27,9 +27,9 @@ public:
     virtual void reloadShaders();
 
 private:
-    char filename[2048];
+    char m_filename[2048];
 
-    unsigned char *imageBuffer;
+    unsigned char *m_imageBuffer;
 
     void createShader();
     void deleteShader();
@@ -38,18 +38,18 @@ private:
     void createImageBuffer(FILE *file);
     void initTexture();
 
-    const char defaultTexture[2048] = "../data/textures/pattern.jpg";
+    const char m_defaultTexture[2048] = "../data/textures/pattern.jpg";
 
-    const char * textureShaderVert = "../data/shaders/texture.vert";
-    const char * textureShaderFrag = "../data/shaders/texture.frag";
+    const char * m_textureShaderVert = "../data/shaders/texture.vert";
+    const char * m_textureShaderFrag = "../data/shaders/texture.frag";
 
-    int imageWidth,imageHeight, channels;
+    int m_imageWidth,m_imageHeight, m_channels;
 
-    std::string errorMessage;
+    std::string m_errorMessage;
 
 
 
-    GLuint _textureFBO;
+    GLuint m_textureFBO;
 
 };
 

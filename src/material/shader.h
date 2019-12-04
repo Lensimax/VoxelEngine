@@ -23,11 +23,11 @@ class Shader {
 
     void reload(const char *vertex_file_path, const char *fragment_file_path);
 
-    inline GLuint id() {return _programId;}
+    inline GLuint id() {return m_programId;}
 
     private:
 
-    GLuint _programId;
+    GLuint m_programId;
 
     // string containing the source code of the input file
     std::string getCode(const char *file_path);

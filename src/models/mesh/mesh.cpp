@@ -23,45 +23,6 @@
 #endif
 
 
-
-glm::vec3 Mesh::get_vertex(unsigned int i) {
-  return vertices[i];
-}
-
-glm::vec3 Mesh::get_normal(unsigned int i) {
-  return normals[i];
-}
-
-glm::vec3 Mesh::get_tangent(unsigned int i) {
-  return tangents[i];
-}
-
-glm::vec2 Mesh::get_coord(unsigned int i) {
-  return coords[i];
-}
-
-glm::vec3 Mesh::get_color(unsigned int i) {
-  return colors[i];
-}
-
-void *Mesh::getVertices(){
-    return &(vertices[0]);
-}
-
-
-void *Mesh::getNormals(){
-    return &(normals[0]);
-}
-
-void *Mesh::getUVs(){
-    return &(coords[0]);
-}
-
-void *Mesh::getColors(){
-    return &(colors[0]);
-}
-
-
 void Mesh::createUI(){
     ImGui::Text("Number vertices: %d", getNBVertices());
     ImGui::Text("Number faces: %d", getNBFaces());
@@ -77,9 +38,9 @@ void Mesh::createUI(){
         ImGui::Text("Z"); ImGui::NextColumn();
         ImGui::Separator();
         for(unsigned int i=0; i<getNBVertices(); i++){
-            ImGui::Text("%4f",vertices[i].x); ImGui::NextColumn();
-            ImGui::Text("%4f",vertices[i].y); ImGui::NextColumn();
-            ImGui::Text("%4f", vertices[i].z); ImGui::NextColumn();
+            ImGui::Text("%4f",m_vertices[i].x); ImGui::NextColumn();
+            ImGui::Text("%4f",m_vertices[i].y); ImGui::NextColumn();
+            ImGui::Text("%4f",m_vertices[i].z); ImGui::NextColumn();
         }
 
         ImGui::Columns(1);
@@ -89,11 +50,11 @@ void Mesh::createUI(){
     }
 
     ImGui::Text("Bounding Box");
-    ImGui::Text("min: %f, %f, %f", minX, minY, minZ);
-    ImGui::Text("max: %f, %f, %f", maxX, maxY, maxZ);
+    ImGui::Text("min: %f, %f, %f", m_minX, m_minY, m_minZ);
+    ImGui::Text("max: %f, %f, %f", m_maxX, m_maxY, m_maxZ);
 
 
-    ImGui::Text("radius: %f", radius);
+    ImGui::Text("radius: %f", m_radius);
 
 }
 
@@ -102,26 +63,26 @@ void Mesh::createUI(){
 ////// COMPUTE BOUNDING BOX /////
 
 void Mesh::computeBoundingBox(){
-    assert(vertices.size() > 0);
+    assert(m_vertices.size() > 0);
 
-    maxX = vertices[0].x; maxY = vertices[0].y; maxZ = vertices[0].z;
-    minX = vertices[0].x; minY = vertices[0].y; minZ = vertices[0].z;
+    m_maxX = m_vertices[0].x; m_maxY = m_vertices[0].y; m_maxZ = m_vertices[0].z;
+    m_minX = m_vertices[0].x; m_minY = m_vertices[0].y; m_minZ = m_vertices[0].z;
 
-    for(unsigned int i=0; i<vertices.size(); i++){
-        if(vertices[i].x > maxX){
-            maxX = vertices[i].x;
-        } else if(vertices[i].x < minX){
-            minX = vertices[i].x;
+    for(unsigned int i=0; i<m_vertices.size(); i++){
+        if(m_vertices[i].x > m_maxX){
+            m_maxX = m_vertices[i].x;
+        } else if(m_vertices[i].x < m_minX){
+            m_minX = m_vertices[i].x;
         }
-        if(vertices[i].y > maxY){
-            maxY = vertices[i].y;
-        } else if(vertices[i].y < minY){
-            minY = vertices[i].y;
+        if(m_vertices[i].y > m_maxY){
+            m_maxY = m_vertices[i].y;
+        } else if(m_vertices[i].y < m_minY){
+            m_minY = m_vertices[i].y;
         }
-        if(vertices[i].z > maxZ){
-            maxZ = vertices[i].z;
-        } else if(vertices[i].z < minZ){
-            minZ = vertices[i].z;
+        if(m_vertices[i].z > m_maxZ){
+            m_maxZ = m_vertices[i].z;
+        } else if(m_vertices[i].z < m_minZ){
+            m_minZ = m_vertices[i].z;
         }
     }
 
@@ -135,18 +96,18 @@ void Mesh::update(){
 
 void Mesh::inflateBoundingBox(){
     const float percent = 0.1f;
-    maxX += percent*radius; maxY += percent*radius; maxZ += percent*radius;
-    minX -= percent*radius; minY -= percent*radius; minZ -= percent*radius;
+    m_maxX += percent*m_radius; m_maxY += percent*m_radius; m_maxZ += percent*m_radius;
+    m_minX -= percent*m_radius; m_minY -= percent*m_radius; m_minZ -= percent*m_radius;
 }
 
 
 glm::vec3 Mesh::getMin(){
-    return glm::vec3(minX, minY, minZ);
+    return glm::vec3(m_minX, m_minY, m_minZ);
 }
 
 
 glm::vec3 Mesh::getMax(){
-    return glm::vec3(maxX, maxY, maxZ);
+    return glm::vec3(m_maxX, m_maxY, m_maxZ);
 }
 
 
@@ -154,39 +115,39 @@ void Mesh::createVAO(){
 
     const int nbBuffer = 4;
 
-    buffers = new GLuint[nbBuffer];
+    m_buffers = new GLuint[nbBuffer];
 
-    glGenBuffers(nbBuffer, buffers);
-    glGenVertexArrays(1,&vertexArrayID);
+    glGenBuffers(nbBuffer, m_buffers);
+    glGenVertexArrays(1,&m_vertexArrayID);
 
     // create the VBO associated with the grid (the terrain)
-    glBindVertexArray(vertexArrayID);
+    glBindVertexArray(m_vertexArrayID);
 
-    glBindBuffer(GL_ARRAY_BUFFER,buffers[0]); // vertices
+    glBindBuffer(GL_ARRAY_BUFFER,m_buffers[0]); // vertices
     glBufferData(GL_ARRAY_BUFFER,getNBVertices()*3*sizeof(float),getVertices(),GL_STATIC_DRAW);
     glEnableVertexAttribArray(POSITION_ATTRIB);
     glVertexAttribPointer(POSITION_ATTRIB,3,GL_FLOAT,GL_FALSE,0,(void *)0);
 
 
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,buffers[1]); // indices
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_buffers[1]); // indices
     // glBufferData(GL_ELEMENT_ARRAY_BUFFER,mesh->getNBFaces()*3*sizeof(unsigned int),mesh->getFaces(),GL_STATIC_DRAW);
 
-    // normals
+    // m_normals
     glEnableVertexAttribArray(VERTEX_NORMAL_ATTRIB);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*3* sizeof(float), getNormals(), GL_STATIC_DRAW); //normals is std::vector<float>
+    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*3* sizeof(float), getNormals(), GL_STATIC_DRAW); //m_normals is std::vector<float>
     glVertexAttribPointer(VERTEX_NORMAL_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // texture coordinates
     glEnableVertexAttribArray(VERTEX_UV_ATTRIB);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*2* sizeof(float), getUVs(), GL_STATIC_DRAW); //normals is std::vector<float>
+    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[2]);
+    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*2* sizeof(float), getUVs(), GL_STATIC_DRAW); //m_normals is std::vector<float>
     glVertexAttribPointer(VERTEX_UV_ATTRIB, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // colors
+    // m_colors
     glEnableVertexAttribArray(VERTEX_COLOR_ATTRIB);
-    glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
-    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*3* sizeof(float), getColors(), GL_STATIC_DRAW); //normals is std::vector<float>
+    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[3]);
+    glBufferData(GL_ARRAY_BUFFER, getNBVertices()*3* sizeof(float), getColors(), GL_STATIC_DRAW); //m_normals is std::vector<float>
     glVertexAttribPointer(VERTEX_COLOR_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
     
 
@@ -196,14 +157,14 @@ void Mesh::createVAO(){
 
 void Mesh::drawVAO(){
 
-    glBindVertexArray(vertexArrayID);
+    glBindVertexArray(m_vertexArrayID);
     glDrawArrays(GL_TRIANGLES,0,getNBVertices());
     glBindVertexArray(0);
 
 }
 
 void Mesh::deleteVAO(){
-    glDeleteBuffers(2,buffers);
-    glDeleteVertexArrays(1,&vertexArrayID);
-    delete buffers;
+    glDeleteBuffers(4,m_buffers);
+    glDeleteVertexArrays(1,&m_vertexArrayID);
+    delete m_buffers;
 }

@@ -13,7 +13,7 @@ class DirectionnalLight : public Light {
         void createUI(char *ID) override;
 
     private:
-        glm::vec3 light;
+        glm::vec3 m_light;
 };
 
 #endif

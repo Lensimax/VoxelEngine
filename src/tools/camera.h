@@ -31,7 +31,7 @@ class Camera : public EngineObject {
         glm::vec3 getRightDir();
         void rotateAroundPoint(glm::vec2 v);
 
-        glm::vec3 position, up, directionOfView;
+        glm::vec3 m_position, m_up, m_directionOfView;
         
 
 
