@@ -51,7 +51,7 @@ void UI::displayEngineNode(std::vector<EngineObject*> obj){
         sprintf(strobj,"##obj %i", id); // hidden label
 
 
-        if(obj[i]->listOfChildren.size() == 0){
+        if(obj[i]->m_listOfChildren.size() == 0){
             bool is_selected = selectedID == id;
             if(ImGui::Selectable(strobj, is_selected)){
                 selectedID = obj[i]->getID();
@@ -71,7 +71,7 @@ void UI::displayEngineNode(std::vector<EngineObject*> obj){
 
             // if the node is open
             if(node_open){
-                displayEngineNode(obj[i]->listOfChildren);
+                displayEngineNode(obj[i]->m_listOfChildren);
 
                 ImGui::TreePop();
             }

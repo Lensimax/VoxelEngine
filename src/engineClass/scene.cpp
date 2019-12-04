@@ -48,11 +48,11 @@ Camera *Scene::getCameraRecursive(EngineObject *obj){
     if(Camera* c = dynamic_cast<Camera*>(obj)) {
         return c;
     } else {
-        if(obj->listOfChildren.size() == 0){
+        if(obj->m_listOfChildren.size() == 0){
             return NULL;
         } else {
-            for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
-                tmp = getCameraRecursive(obj->listOfChildren[i]);
+            for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+                tmp = getCameraRecursive(obj->m_listOfChildren[i]);
                 if(tmp != NULL){ return tmp;}
             }
         }
@@ -83,11 +83,11 @@ Light *Scene::getLightRecursive(EngineObject *obj){
     if(Light* l = dynamic_cast<Light*>(obj)) {
         return l;
     } else {
-        if(obj->listOfChildren.size() == 0){
+        if(obj->m_listOfChildren.size() == 0){
             return NULL;
         } else {
-            for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
-                tmp = getLightRecursive(obj->listOfChildren[i]);
+            for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+                tmp = getLightRecursive(obj->m_listOfChildren[i]);
                 if(tmp != NULL){ return tmp;}
             }
         }
@@ -102,7 +102,7 @@ void Scene::createUIAtID(int indexItem, char *ID){
             objectsEngine[i]->createUI(ID);
             return;
         } else {
-            drawUIAtID(objectsEngine[i]->listOfChildren, indexItem, ID);
+            drawUIAtID(objectsEngine[i]->m_listOfChildren, indexItem, ID);
         }
     }
 }
@@ -113,7 +113,7 @@ void Scene::drawUIAtID(std::vector<EngineObject*> objs, int indexItem, char *ID)
             objs[i]->createUI(ID);
             return;
         } else {
-            drawUIAtID(objs[i]->listOfChildren, indexItem, ID);
+            drawUIAtID(objs[i]->m_listOfChildren, indexItem, ID);
         }
     }
 }
@@ -160,8 +160,8 @@ int Scene::addNewId(){
 
 void Scene::updateObj(EngineObject *obj){
     obj->update();
-    for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
-        updateObj(obj->listOfChildren[i]);
+    for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+        updateObj(obj->m_listOfChildren[i]);
     }
 }
 

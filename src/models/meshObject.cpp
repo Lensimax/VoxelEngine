@@ -28,7 +28,7 @@ MeshObject::MeshObject(){
 }
 
 MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *mat){
-    transform = t;
+    m_transform = t;
 
 
     mesh = m;
@@ -102,10 +102,10 @@ void MeshObject::createUI(char *ID){
     const int node_flags = 0;
 
     ImGui::BeginChild(ID);
-    ImGui::Text(name.c_str());
+    ImGui::Text(m_name.c_str());
 
     ImGui::Separator();
-    transform->createUI();
+    m_transform->createUI();
 
     ImGui::Separator();
     bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);

@@ -9,7 +9,7 @@ Player::Player(int id, Transform *t, Mesh *m, float sp) : m_speed(sp){
     setID(id);
     setName("Player");
 
-    transform = t;
+    m_transform = t;
     mesh = m;
     material = new Lambertian();
 }
@@ -24,7 +24,7 @@ Player::~Player(){
 
 void Player::update(){
 
-    glm::vec3 pos = transform->getPosition();
+    glm::vec3 pos = m_transform->getPosition();
     if(ImGui::IsKeyPressed('W')){
         pos.z -= m_speed;
     }
@@ -38,7 +38,7 @@ void Player::update(){
         pos.x += m_speed;
     }
 
-    transform->setPosition(pos); 
+    m_transform->setPosition(pos); 
 
 
 }
@@ -48,10 +48,10 @@ void Player::createUI(char *ID){
     const int node_flags = 0;
 
     ImGui::BeginChild(ID);
-    ImGui::Text(name.c_str());
+    ImGui::Text(m_name.c_str());
 
     ImGui::Separator();
-    transform->createUI();
+    m_transform->createUI();
 
 
     ImGui::Separator();

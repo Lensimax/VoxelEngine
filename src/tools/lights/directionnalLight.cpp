@@ -21,7 +21,7 @@ void DirectionnalLight::createUI(char *ID){
     const char *format = "%.3f";
 
     ImGui::BeginChild(ID);
-    ImGui::Text(name.c_str());
+    ImGui::Text(m_name.c_str());
     ImGui::Separator();
 
 

@@ -87,8 +87,8 @@ void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *
         o->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
     }
 
-    for(unsigned int i=0; i<obj->listOfChildren.size(); i++){
-        drawRecursive(matrixTochild, obj->listOfChildren[i], c, l, screenAspectRatio);
+    for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+        drawRecursive(matrixTochild, obj->m_listOfChildren[i], c, l, screenAspectRatio);
     }
 }
 

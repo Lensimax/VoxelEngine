@@ -8,7 +8,7 @@ VoxelGrid::VoxelGrid(int id, std::string n, Transform *t, float sizeCube){
 
 	this->sizeCube = sizeCube;
 
-	transform = t;
+	m_transform = t;
 	mesh = new MeshCube(sizeCube, false);
 	material = new Lambertian();
 
@@ -40,10 +40,10 @@ void VoxelGrid::createUI(char *ID){
     const int node_flags = 0;
 
     ImGui::BeginChild(ID);
-    ImGui::Text(name.c_str());
+    ImGui::Text(m_name.c_str());
 
     ImGui::Separator();
-    transform->createUI();
+    m_transform->createUI();
 
     ImGui::Separator();
     bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);
