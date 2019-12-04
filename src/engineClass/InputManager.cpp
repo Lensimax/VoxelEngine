@@ -3,9 +3,7 @@
 
 #include <iostream>
 
-InputManager::InputManager(){
-    m_sensitivityRotateWorld = glm::vec2(1);
-    m_scrollZoomSensitivity = 1.f;
+InputManager::InputManager() : m_sensitivityRotateWorld(glm::vec2(1)), m_scrollZoomSensitivity(1.f) {
 }
 
 InputManager::~InputManager(){

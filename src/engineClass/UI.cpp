@@ -134,7 +134,7 @@ void UI::createUISceneManager(Scene *scene){
         }
 
         if(ImGui::BeginMenu("Rendering Settings")){
-            if (ImGui::MenuItem("Toggle Cull Face")) { mainRenderer->toggleCullFace(); }
+            if (ImGui::MenuItem("Toggle Cull Face")) { mainRenderer->toggleCullface(); }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
