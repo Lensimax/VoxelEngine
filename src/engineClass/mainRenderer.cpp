@@ -26,25 +26,20 @@
 
 #include <iostream>
 
-MainRenderer::MainRenderer(){
+MainRenderer::MainRenderer() : m_wireActived(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0) {
 
     m_postProcessShader = new Shader();
     m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
 
     createVAOQuad();
     createFBOSceneRender();
-    m_wireActived = false;
-    m_cullface = true;
-
-    widthScreen = 0;
-    heightScreen = 0;
 
 }
 
 void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
-    widthScreen = width;
-    heightScreen = height;
+    m_widthScreen = width;
+    m_heightScreen = height;
 
     if(height == 0){
         fprintf(stderr, "Error height = 0\n");

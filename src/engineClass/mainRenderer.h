@@ -46,11 +46,11 @@ class MainRenderer {
         }
 
         inline unsigned int width(){
-            return widthScreen;
+            return m_widthScreen;
         }
 
         inline unsigned int height(){
-            return heightScreen;
+            return m_heightScreen;
         }
 
         inline GLuint getRenderSceneID(){
@@ -95,9 +95,9 @@ class MainRenderer {
         bool m_wireActived;
         bool m_cullface;
 
-        unsigned int widthScreen, heightScreen;
+        unsigned int m_widthScreen, m_heightScreen;
 
-        Camera *camera;
+        Camera *m_camera;
 
 };
 
