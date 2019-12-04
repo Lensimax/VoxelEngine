@@ -35,18 +35,7 @@ public:
 
      virtual ~Mesh() = default;
 
-     void *getVertices();
-     void *getNormals();
-     void *getUVs();
-     void *getColors();
-
-     unsigned int getNBVertices(){
-          return vertices.size();
-     }
-
-     inline unsigned int getNBFaces(){
-          return getNBVertices()/3;
-     }
+     
 
      virtual void createUI();
      virtual void recreate() = 0;
@@ -64,36 +53,47 @@ public:
 
      void deleteVAO();
 
+     
+
+     inline void *getVertices(){ return &(m_vertices[0]);}
+     inline void *getNormals(){ return &(m_normals[0]);}
+     inline void *getUVs(){ return &(m_coords[0]);}
+     inline void *getColors(){ return &(m_colors[0]);}
+
+     inline unsigned int getNBVertices(){ return m_vertices.size();}
+
+     inline unsigned int getNBFaces(){ return getNBVertices()/3; }
+
+     inline glm::vec3 get_vertex(unsigned int i) { return m_vertices[i];}
+     inline glm::vec3 get_normal(unsigned int i) { return m_normals[i];}
+     inline glm::vec3 get_tangent(unsigned int i) { return m_tangents[i];}
+     inline glm::vec2 get_coord(unsigned int i) { return m_coords[i];}
+     inline glm::vec3 get_color(unsigned int i) { return m_colors[i];}
     protected:
-     glm::vec3        get_vertex(unsigned int i);
-     glm::vec3        get_normal(unsigned int i);
-     glm::vec3        get_tangent(unsigned int i);
-     glm::vec2        get_coord(unsigned int i);
-     glm::vec3        get_color(unsigned int i);
 
 
-     float maxX, maxY, maxZ;
-     float minX, minY, minZ;
+     float m_maxX, m_maxY, m_maxZ;
+     float m_minX, m_minY, m_minZ;
 
      // data
-     std::vector<glm::vec3> vertices;
-     std::vector<glm::vec3> normals;
-     std::vector<glm::vec3> tangents;
-     std::vector<glm::vec3> colors;
-     std::vector<glm::vec2> coords;
+     std::vector<glm::vec3> m_vertices;
+     std::vector<glm::vec3> m_normals;
+     std::vector<glm::vec3> m_tangents;
+     std::vector<glm::vec3> m_colors;
+     std::vector<glm::vec2> m_coords;
 
-     std::vector<glm::vec3> backupVertices;
+     std::vector<glm::vec3> m_backupVertices;
 
    
-     float          radius;
+     float          m_radius;
 
  
 
      void computeBoundingBox();
      void inflateBoundingBox();
 
-     GLuint vertexArrayID;
-     GLuint *buffers;
+     GLuint m_vertexArrayID;
+     GLuint *m_buffers;
 
 
 };
