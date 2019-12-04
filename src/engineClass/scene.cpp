@@ -17,8 +17,6 @@
 
 Scene::Scene(){
 
-
-
     loadDefaultScene();
 
     Player *p = new Player(addNewId());
@@ -39,7 +37,7 @@ void Scene::deleteScene(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         delete objectsEngine[i];
     }
-    delete transformWorld;
+    delete m_transformWorld;
 }
 
 
@@ -154,8 +152,8 @@ void Scene::deleteObject(int id){
 
 
 int Scene::addNewId(){
-    IDObject++;
-    return IDObject-1;
+    m_idObject++;
+    return m_idObject-1;
 }
 
 void Scene::updateObj(EngineObject *obj){
@@ -166,8 +164,8 @@ void Scene::updateObj(EngineObject *obj){
 }
 
 void Scene::update(){
-    transformWorld->update();
-    if(!pause){
+    m_transformWorld->update();
+    if(!m_pause){
         for(unsigned int i=0; i<objectsEngine.size(); i++){
             updateObj(objectsEngine[i]);
         }
@@ -176,16 +174,16 @@ void Scene::update(){
 
 
 void Scene::togglePause(){
-    pause = !pause;
+    m_pause = !m_pause;
 }
 
 
 void Scene::loadDefaultScene(){
-    pause = false;
+    m_pause = false;
 
-    transformWorld = new Transform();
+    m_transformWorld = new Transform();
 
-    IDObject = 0;
+    m_idObject = 0;
 
     objectsEngine = std::vector<EngineObject*>();
 
