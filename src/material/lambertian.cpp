@@ -105,24 +105,24 @@ GLuint Lambertian::getShaderID(){
     if(m_activeDebugNormal){
         shaderID = m_debugNormalShader->id();
     } else {
-        shaderID = shader->id();
+        shaderID = m_shader->id();
     }
     return shaderID;
 }
 
 
 void Lambertian::createShader(){
-    shader = new Shader();
-    shader->load(m_lambertianShaderVert,m_lambertianShaderFrag);
+    m_shader = new Shader();
+    m_shader->load(m_lambertianShaderVert,m_lambertianShaderFrag);
     m_debugNormalShader = new Shader();
     m_debugNormalShader->load(m_debugShaderVert,m_debugShaderFrag);
 }
 void Lambertian::reloadShaders(){
-    shader->reload(m_lambertianShaderVert,m_lambertianShaderFrag);
+    m_shader->reload(m_lambertianShaderVert,m_lambertianShaderFrag);
     m_debugNormalShader->reload(m_debugShaderVert, m_debugShaderFrag);
 }
 
 void Lambertian::deleteShader(){
-    delete shader; shader = NULL;
+    delete m_shader; m_shader = NULL;
     delete m_debugNormalShader; m_debugNormalShader = NULL;
 }

@@ -24,7 +24,7 @@ class Material {
         virtual GLuint getShaderID() = 0;
         virtual void reloadShaders() = 0;
     protected:
-        Shader *shader;
+        Shader *m_shader;
 
         void sendUniformMatrices(GLuint shaderID, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat);
 

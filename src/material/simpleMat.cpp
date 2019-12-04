@@ -24,7 +24,7 @@ SimpleMat::SimpleMat(glm::vec4 color){
 
     createShader();
 
-    this->color = color;
+    this->m_color = color;
 
 }
 SimpleMat::~SimpleMat(){
@@ -35,11 +35,11 @@ SimpleMat::~SimpleMat(){
 void SimpleMat::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, Light *light){
 
 
-    GLuint shaderID = shader->id();
+    GLuint shaderID = m_shader->id();
 
     sendUniformMatrices(shaderID, modelMat, viewMat, projMat);
 
-    glUniform4fv(glGetUniformLocation(shaderID,"color"),1,&(color[0]));
+    glUniform4fv(glGetUniformLocation(shaderID,"color"),1,&(m_color[0]));
 
 }
 
@@ -51,23 +51,23 @@ void SimpleMat::createUI(){
         reloadShaders();
     }
     ImGui::Text("Color: "); ImGui::SameLine();
-    ImGui::ColorEdit4("##color", (float *)&color);
+    ImGui::ColorEdit4("##color", (float *)&m_color);
 }
 
 
 GLuint SimpleMat::getShaderID(){
-    return shader->id();
+    return m_shader->id();
 }
 
 
 void SimpleMat::createShader(){
-    shader = new Shader();
-    shader->load(simpleShaderVert,simpleShaderFrag);
+    m_shader = new Shader();
+    m_shader->load(m_simpleShaderVert,m_simpleShaderFrag);
 }
 void SimpleMat::reloadShaders(){
-    shader->reload(simpleShaderVert,simpleShaderFrag);
+    m_shader->reload(m_simpleShaderVert,m_simpleShaderFrag);
 }
 
 void SimpleMat::deleteShader(){
-    delete shader; shader = NULL;
+    delete m_shader; m_shader = NULL;
 }
