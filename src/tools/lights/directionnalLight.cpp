@@ -2,17 +2,16 @@
 
 #include "directionnalLight.h"
 
-DirectionnalLight::DirectionnalLight(int id, std::string name, glm::vec3 l){
+DirectionnalLight::DirectionnalLight(int id, std::string name, glm::vec3 l) : m_light(l){
     setID(id);
     setName(name);
-    light = l;
-    intensity = 1.0;
+    m_intensity = 1.0;
 }
 
 
 
 glm::vec3 DirectionnalLight::getLight(){
-    return light;
+    return m_light;
 }
 
 void DirectionnalLight::createUI(char *ID){
@@ -28,10 +27,10 @@ void DirectionnalLight::createUI(char *ID){
     ImGui::PushItemWidth(-1);
 
     ImGui::Text("Direction: "); ImGui::SameLine();
-    ImGui::DragFloat3("directionLight", &light[0], 0.01f, lowestValue, highestValue, format);
+    ImGui::DragFloat3("directionLight", &m_light[0], 0.01f, lowestValue, highestValue, format);
 
     ImGui::Text("Intensity: "); ImGui::SameLine();
-    ImGui::DragFloat("intensity", &intensity, 0.01f, 0.0, 2.0, "%.3f");
+    ImGui::DragFloat("intensity", &m_intensity, 0.01f, 0.0, 2.0, "%.3f");
 
 
     ImGui::PopItemWidth();
