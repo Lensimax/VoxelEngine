@@ -1,33 +1,32 @@
 #include "voxelGrid.h"
 
 
-VoxelGrid::VoxelGrid(int id, std::string n, Transform *t, float sizeCube){
-	assert(sizeCube > 0.0f);
+VoxelGrid::VoxelGrid(int id, std::string n, Transform *t, float size) : m_sizeCube(size){
+	assert(m_sizeCube > 0.0f);
 	setID(id);
 	setName(n);
 
-	this->sizeCube = sizeCube;
 
 	m_transform = t;
-	mesh = new MeshCube(sizeCube, false);
-	material = new Lambertian();
+	m_mesh = new MeshCube(m_sizeCube, false);
+	m_material = new Lambertian();
 
-	chunk = new Chunk(sizeCube);
+	m_chunk = new Chunk(m_sizeCube);
 }
 
 
 
 VoxelGrid::~VoxelGrid(){
-	delete chunk;
+	delete m_chunk;
 }
 
 
 void VoxelGrid::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
 
-    glUseProgram(material->getShaderID());
+    glUseProgram(m_material->getShaderID());
 
-	chunk->draw(modelMat, viewMat, projectionMat, light, mesh, material);
+	m_chunk->draw(modelMat, viewMat, projectionMat, light, m_mesh, m_material);
 
     glUseProgram(0);
 
@@ -48,13 +47,13 @@ void VoxelGrid::createUI(char *ID){
     ImGui::Separator();
     bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);
     if(node_mesh){
-        mesh->createUI();
+        m_mesh->createUI();
         if (ImGui::Button("Recreate")){
-            mesh->recreate();
+            m_mesh->recreate();
             
         }
         ImGui::Text("Show bounding box "); ImGui::SameLine();
-        ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
+        ImGui::Checkbox("##showboundingbox"+getID(),&m_showboundingbox);
 
         ImGui::TreePop();
     }
@@ -62,7 +61,7 @@ void VoxelGrid::createUI(char *ID){
     ImGui::Separator();
     bool node_material = ImGui::TreeNodeEx("Material", node_flags);
     if(node_material){
-        material->createUI();
+        m_material->createUI();
         ImGui::TreePop();
     }
     ImGui::Separator();

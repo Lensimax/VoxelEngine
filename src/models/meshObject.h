@@ -49,11 +49,11 @@ class MeshObject : public DrawableObject {
         void drawBoxWithMatricess(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
 
 
-        Material *material;
+        Material *m_material;
 
-        bool showboundingbox = false;
+        bool m_showboundingbox = false;
 
-        Mesh *mesh;
+        Mesh *m_mesh;
 
 };
 

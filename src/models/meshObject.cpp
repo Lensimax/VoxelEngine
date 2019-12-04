@@ -27,16 +27,10 @@ MeshObject::MeshObject(){
 
 }
 
-MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *mat){
+MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *mat) : m_mesh(m), m_material(mat){
     m_transform = t;
 
-
-    mesh = m;
-
     t->setCenter(glm::vec3(0));
-
-    material = mat;
-
     setName(n);
     setID(id);
 
@@ -44,36 +38,36 @@ MeshObject::MeshObject(int id, std::string n, Transform *t, Mesh *m, Material *m
 
 
 MeshObject::~MeshObject(){
-    delete material;
-    delete mesh;
+    delete m_material;
+    delete m_mesh;
 }
 
 
 
 int MeshObject::nbVertices(){
-    return mesh->getNBVertices();
+    return m_mesh->getNBVertices();
 }
 
 int MeshObject::nbTriangles(){
-    return mesh->getNBFaces();
+    return m_mesh->getNBFaces();
 }
 
 
 
 void MeshObject::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
-    glUseProgram(material->getShaderID());
+    glUseProgram(m_material->getShaderID());
 
     setUniform(modelMat, viewMat, projectionMat, light);
 
-    mesh->drawVAO();
+    m_mesh->drawVAO();
 
     glUseProgram(0);
 
-    // mesh->drawDebug(transform->getModelMat(),viewMat, projectionMat);
+    // m_mesh->drawDebug(transform->getModelMat(),viewMat, projectionMat);
 
-    if(showboundingbox){
-        drawBoxWithMatricess(mesh->getMin(), mesh->getMax(),modelMat, viewMat, projectionMat);
+    if(m_showboundingbox){
+        drawBoxWithMatricess(m_mesh->getMin(), m_mesh->getMax(),modelMat, viewMat, projectionMat);
     }
 
 
@@ -88,13 +82,13 @@ void MeshObject::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pro
 
 
     // send the transformation matrix
-    material->callUniform(modelMat, viewMat, projectionMat, light);
+    m_material->callUniform(modelMat, viewMat, projectionMat, light);
 
 }
 
 void MeshObject::update(){
     EngineObject::update();
-    mesh->update();
+    m_mesh->update();
 }
 
 
@@ -110,13 +104,13 @@ void MeshObject::createUI(char *ID){
     ImGui::Separator();
     bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);
     if(node_mesh){
-        mesh->createUI();
+        m_mesh->createUI();
         if (ImGui::Button("Recreate")){
-            mesh->recreate();
+            m_mesh->recreate();
             
         }
         ImGui::Text("Show bounding box "); ImGui::SameLine();
-        ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
+        ImGui::Checkbox("##m_showboundingbox"+getID(),&m_showboundingbox);
 
         ImGui::TreePop();
     }
@@ -124,7 +118,7 @@ void MeshObject::createUI(char *ID){
     ImGui::Separator();
     bool node_material = ImGui::TreeNodeEx("Material", node_flags);
     if(node_material){
-        material->createUI();
+        m_material->createUI();
         ImGui::TreePop();
     }
     ImGui::Separator();

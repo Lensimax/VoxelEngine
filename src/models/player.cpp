@@ -10,8 +10,8 @@ Player::Player(int id, Transform *t, Mesh *m, float sp) : m_speed(sp){
     setName("Player");
 
     m_transform = t;
-    mesh = m;
-    material = new Lambertian();
+    m_mesh = m;
+    m_material = new Lambertian();
 }
 
 
@@ -63,13 +63,13 @@ void Player::createUI(char *ID){
     ImGui::Separator();
     bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);
     if(node_mesh){
-        mesh->createUI();
+        m_mesh->createUI();
         if (ImGui::Button("Recreate")){
-            mesh->recreate();
+            m_mesh->recreate();
             
         }
         ImGui::Text("Show bounding box "); ImGui::SameLine();
-        ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
+        ImGui::Checkbox("##showboundingbox"+getID(),&m_showboundingbox);
 
         ImGui::TreePop();
     }
@@ -77,7 +77,7 @@ void Player::createUI(char *ID){
     ImGui::Separator();
     bool node_material = ImGui::TreeNodeEx("Material", node_flags);
     if(node_material){
-        material->createUI();
+        m_material->createUI();
         ImGui::TreePop();
     }
     ImGui::Separator();
