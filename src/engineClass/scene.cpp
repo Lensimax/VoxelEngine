@@ -37,7 +37,6 @@ void Scene::deleteScene(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         delete objectsEngine[i];
     }
-    delete m_transformWorld;
 }
 
 
@@ -164,7 +163,6 @@ void Scene::updateObj(EngineObject *obj){
 }
 
 void Scene::update(){
-    m_transformWorld->update();
     if(!m_pause){
         for(unsigned int i=0; i<objectsEngine.size(); i++){
             updateObj(objectsEngine[i]);

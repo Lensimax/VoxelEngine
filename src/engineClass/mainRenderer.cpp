@@ -28,6 +28,8 @@
 
 MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0) {
 
+    m_transformEditor = new Transform();
+
     m_postProcessShader = new Shader();
     m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
 
