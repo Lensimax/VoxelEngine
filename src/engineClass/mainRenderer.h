@@ -61,8 +61,12 @@ class MainRenderer {
             return m_heightScreen;
         }
 
-        inline GLuint getRenderSceneID(){
+        inline GLuint getGameTextureID(){
             return m_renderedSceneTextureID;
+        }
+
+        inline GLuint getEditorTextureID(){
+            return m_editorTextureID;
         }
 
         inline Transform *getTransformEditor(){
@@ -87,21 +91,13 @@ class MainRenderer {
 
         GLuint m_fboRenderScene;
         GLuint m_renderedSceneTextureID;
-        GLuint m_testID;
+        GLuint m_editorTextureID;
         GLuint m_renderedDepth;
 
         void createFBOSceneRender();
         void initFBOSceneRender(int width, int height);
         void deleteFBOSceneRender();
 
-        // FBO Editeur
-        GLuint m_fboEditor;
-        GLuint m_editorTextureID;
-        GLuint m_editorDepth;
-
-        void createFBOEditorRender();
-        void initFBOEditorRender(int width, int height);
-        void deleteFBOEditorRender();
 
         /* final rendering */
         

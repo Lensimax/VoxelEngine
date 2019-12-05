@@ -158,7 +158,7 @@ int main(int, char**)
 
         if(firstFramePassed){
             ImGui::Begin("Game");
-            ImGui::Image((void*)(intptr_t)renderer->getRenderSceneID(), ImVec2(426,240));
+            ImGui::Image((void*)(intptr_t)renderer->getGameTextureID(), ImVec2(426,240));
             ImGui::End();
         }
 
