@@ -17,6 +17,7 @@
 
 #include "../models/drawableObject.h"
 #include "../tools/camera.h"
+#include "../tools/cameraProj.h"
 
 #include <vector>
 #include <string>

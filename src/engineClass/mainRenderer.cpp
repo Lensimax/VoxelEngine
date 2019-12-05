@@ -41,7 +41,7 @@ MainRenderer::MainRenderer(){
     widthScreen = 0;
     heightScreen = 0;
 
-    m_camera = new CameraProj(-1);
+    m_camera = new CameraProj(-1, "Camera Editor");
 
 }
 

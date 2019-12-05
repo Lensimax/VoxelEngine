@@ -17,7 +17,7 @@ CameraProj::CameraProj(int id, std::string name, glm::vec3 pos, glm::vec3 u, glm
 
 
 
-void CameraProj::createUI(){
+void CameraProj::createUI(char *ID){
     const float lowestValue = -1000.0f;
     const float highestValue = 1000.0f;
     const char *format = "%.3f";
