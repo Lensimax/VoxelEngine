@@ -89,11 +89,6 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     heightScreen = height;
 
 
-    // CAMERA
-    Camera *c = scene->getCamera();
-    if(c == NULL){
-        return;
-    }
 
     Light *l = scene->getLight();
     if(l == NULL){
@@ -105,7 +100,7 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
+        drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camera, l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
