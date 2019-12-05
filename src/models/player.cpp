@@ -17,12 +17,13 @@ Player::Player(int id, Transform *t, Mesh *m, float sp) : m_speed(sp){
 
 
 Player::~Player(){
-
 }
 
 
 
 void Player::update(){
+    EngineObject::update();
+    m_mesh->update();
 
     glm::vec3 pos = m_transform->getPosition();
     if(ImGui::IsKeyPressed('W')){

@@ -18,6 +18,10 @@ void InputManager::setUI(UI *u){
     m_ui = u;
 }
 
+void InputManager::setRenderer(MainRenderer *r){
+    m_renderer = r;
+}
+
 void InputManager::createUI(){
 
     if(m_ui == NULL){
@@ -34,12 +38,6 @@ void InputManager::createUI(){
     ImGui::DragFloat2("##rotationsensitivity", &m_sensitivityRotateWorld[0], 0.01, 0.0, 100.);
     ImGui::Text("Scroll zoom sensitivity : ");
     ImGui::DragFloat("##m_scrollZoomSensitivity", &m_scrollZoomSensitivity, 0.01, 0.0, 100.);
-
-    if(m_scene != NULL){
-        ImGui::Separator();
-        m_scene->getTransformWorld()->createUI();
-
-    }
 
 
     ImGui::End();
@@ -59,20 +57,8 @@ void InputManager::createUI(){
     }
 
     ImGui::Text("Mouse wheel: %.1f", io.MouseWheel);
-    
-
-
-
-    /*if(renderer != NULL){
-        ImGui::Separator();
-        renderer->getTransform()->createUI();
-    }*/
 
     ImGui::End();
-}
-
-void InputManager::setRenderer(MainRenderer *r){
-    m_renderer = r;
 }
 
 void InputManager::update(){
@@ -82,7 +68,7 @@ void InputManager::update(){
     if(!io.WantCaptureMouse){
         if(io.MouseWheel != 0.0){
             if(m_renderer != NULL){
-                m_scene->getTransformWorld()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
+                m_renderer->getTransformEditor()->addTranslation(glm::vec3(0,0,io.MouseWheel*0.5));
             }
         }
 
@@ -90,7 +76,7 @@ void InputManager::update(){
             glm::vec2 vectorTranslate = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
             vectorTranslate.y *= -1;
             vectorTranslate *= 0.01f;
-            m_scene->getTransformWorld()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
+            m_renderer->getTransformEditor()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
         }
 
 
@@ -100,8 +86,8 @@ void InputManager::update(){
             glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
             vectorMouse *= m_sensitivityRotateWorld*0.01f;
 
-            if(m_scene != NULL){
-                m_scene->getTransformWorld()->rotatefromScreen(vectorMouse);
+            if(m_renderer != NULL){
+                m_renderer->getTransformEditor()->rotatefromScreen(vectorMouse);
             }
         }
     }

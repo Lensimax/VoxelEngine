@@ -49,9 +49,6 @@ class Scene {
 
         void togglePause();
 
-        inline Transform *getTransformWorld(){
-            return m_transformWorld;
-        }
 
     private:
         void deleteScene();
@@ -63,7 +60,6 @@ class Scene {
 
         bool m_pause;
 
-        Transform *m_transformWorld;
 };
 
 #endif

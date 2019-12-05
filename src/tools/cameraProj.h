@@ -15,7 +15,7 @@ class CameraProj : public Camera {
 
         virtual glm::mat4 getProj(float aspect = 16./9.);
 
-        virtual void createUI(char *ID);
+        void createUI(char *ID) override final;
 
     protected:
 

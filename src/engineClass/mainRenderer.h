@@ -17,6 +17,7 @@
 
 #include "../models/drawableObject.h"
 #include "../tools/camera.h"
+#include "../tools/cameraProj.h"
 
 #include <vector>
 #include <string>
@@ -34,13 +35,20 @@ class MainRenderer {
 
 
 
+
+        void update();
+        void createUI();
+
+
+
+        inline void toggleWire(){
+            m_wireActivated = !m_wireActivated;
+        }
+
         inline void toggleCullface(){
             m_cullface = !m_cullface;
         }
 
-        inline void toggleWire(){
-            m_wireActived = !m_wireActived;
-        }
         GLuint getTextureID(){
             return m_renderedSceneTextureID;
         }
@@ -53,13 +61,24 @@ class MainRenderer {
             return m_heightScreen;
         }
 
-        inline GLuint getRenderSceneID(){
+        inline GLuint getGameTextureID(){
             return m_renderedSceneTextureID;
         }
+
+        inline GLuint getEditorTextureID(){
+            return m_editorTextureID;
+        }
+
+        inline Transform *getTransformEditor(){
+            return m_transformEditor;
+        }
+
+
 
     private:
 
         void renderTheScene(Scene *scene, int width, int height);
+        void renderTheSceneEditor(Scene *scene, int width, int height);
         void drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l, float screenAspectRatio);
 
         Camera *getCamera();
@@ -68,20 +87,20 @@ class MainRenderer {
         glm::mat4 m_viewMat;
         glm::mat4 m_projectionMat;
 
-        /* FBO */
+        // FBO
 
         GLuint m_fboRenderScene;
+        GLuint m_renderedSceneTextureID;
+        GLuint m_editorTextureID;
+        GLuint m_renderedDepth;
 
         void createFBOSceneRender();
         void initFBOSceneRender(int width, int height);
         void deleteFBOSceneRender();
 
-        GLuint m_renderedSceneTextureID;
-        GLuint m_renderedDepth;
 
         /* final rendering */
-
-
+        
         void createVAOQuad();
         void deleteVAOQuad();
         void drawQuad();
@@ -92,12 +111,13 @@ class MainRenderer {
         GLuint m_vaoQuad;
         GLuint m_quad;
 
-        bool m_wireActived;
+        bool m_wireActivated;
         bool m_cullface;
 
         unsigned int m_widthScreen, m_heightScreen;
 
         Camera *m_camera;
+        Transform *m_transformEditor;
 
 };
 

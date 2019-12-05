@@ -25,7 +25,7 @@ Scene::Scene(){
     VoxelGrid *obj = new VoxelGrid(addNewId(), "VoxelGrid", new Transform());
 
     //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
-    objectsEngine.push_back(obj);
+    // objectsEngine.push_back(obj);
 
 }
 
@@ -37,7 +37,6 @@ void Scene::deleteScene(){
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         delete objectsEngine[i];
     }
-    delete m_transformWorld;
 }
 
 
@@ -164,7 +163,6 @@ void Scene::updateObj(EngineObject *obj){
 }
 
 void Scene::update(){
-    m_transformWorld->update();
     if(!m_pause){
         for(unsigned int i=0; i<objectsEngine.size(); i++){
             updateObj(objectsEngine[i]);
@@ -180,8 +178,6 @@ void Scene::togglePause(){
 
 void Scene::loadDefaultScene(){
     m_pause = false;
-
-    m_transformWorld = new Transform();
 
     m_idObject = 0;
 
