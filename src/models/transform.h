@@ -46,24 +46,24 @@ class Transform {
 
         void reset();
 
-        vec3 vecPosition, vecScale, vecRotation, center, translateAfter;
+        vec3 m_vecPosition, m_vecScale, m_vecRotation, m_center, m_translateAfter;
 
-        bool samePosition, sameRotation;
+        bool m_samePosition, m_sameRotation;
 
-        vec3 positionToSend, scaleToSend, rotationToSend;
+        vec3 m_positionToSend, m_scaleToSend, m_rotationToSend;
 
 
         // To animate the transform
-        float animRotX, animRotY, animRotZ;
-        float animChildRotX, animChildRotY, animChildRotZ;
+        float m_animRotX, m_animRotY, m_animRotZ;
+        float m_animChildRotX, m_animChildRotY, m_animChildRotZ;
 
-        float animRotSpeedX, animRotSpeedY, animRotSpeedZ;
-        float animChildRotSpeedX, animChildRotSpeedY, animChildRotSpeedZ;
+        float m_animRotSpeedX, m_animRotSpeedY, m_animRotSpeedZ;
+        float m_animChildRotSpeedX, m_animChildRotSpeedY, m_animChildRotSpeedZ;
 
-        bool b_animRotX, b_animRotY, b_animRotZ;
-        bool b_animChildRotX, b_animChildRotY, b_animChildRotZ;
+        bool m_b_animRotX = false, m_b_animRotY = false, b_animRotZ = false;
+        bool m_b_animChildRotX, m_b_animChildRotY, m_b_animChildRotZ;
 
-        const float defaultSpeed = 0.01;
+        const float m_defaultSpeed = 0.01;
 
 };
 

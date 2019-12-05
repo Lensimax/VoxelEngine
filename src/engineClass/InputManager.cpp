@@ -3,9 +3,7 @@
 
 #include <iostream>
 
-InputManager::InputManager(){
-    sensitivityRotateWorld = glm::vec2(1);
-    scrollZoomSensitivity = 1.f;
+InputManager::InputManager() : m_sensitivityRotateWorld(glm::vec2(1)), m_scrollZoomSensitivity(1.f) {
 }
 
 InputManager::~InputManager(){
@@ -13,11 +11,11 @@ InputManager::~InputManager(){
 }
 
 void InputManager::setScene(Scene *sc){
-    scene = sc;
+    m_scene = sc;
 }
 
 void InputManager::setUI(UI *u){
-    ui = u;
+    m_ui = u;
 }
 
 void InputManager::setRenderer(MainRenderer *r){
@@ -26,10 +24,10 @@ void InputManager::setRenderer(MainRenderer *r){
 
 void InputManager::createUI(){
 
-    if(ui == NULL){
+    if(m_ui == NULL){
         return;
     } else {
-        if(!ui->hasToDisplayed()){ return; }
+        if(!m_ui->hasToDisplayed()){ return; }
     }
 
     ImGui::Begin("Settings");
@@ -37,10 +35,9 @@ void InputManager::createUI(){
     ImGui::Text("Input Manager");
     ImGui::Separator();
     ImGui::Text("Rotation world sensitivity : (x0.01)");
-    ImGui::DragFloat2("##rotationsensitivity", &sensitivityRotateWorld[0], 0.01, 0.0, 100.);
+    ImGui::DragFloat2("##rotationsensitivity", &m_sensitivityRotateWorld[0], 0.01, 0.0, 100.);
     ImGui::Text("Scroll zoom sensitivity : ");
-    ImGui::DragFloat("##scrollZoomSensitivity", &scrollZoomSensitivity, 0.01, 0.0, 100.);
-
+    ImGui::DragFloat("##m_scrollZoomSensitivity", &m_scrollZoomSensitivity, 0.01, 0.0, 100.);
 
 
     ImGui::End();
@@ -63,8 +60,6 @@ void InputManager::createUI(){
 
     ImGui::End();
 }
-
-
 
 void InputManager::update(){
     ImGuiIO& io = ImGui::GetIO();
@@ -89,7 +84,7 @@ void InputManager::update(){
 
             // ROTATION OF the world
             glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
-            vectorMouse *= sensitivityRotateWorld*0.01f;
+            vectorMouse *= m_sensitivityRotateWorld*0.01f;
 
             if(m_renderer != NULL){
                 m_renderer->getTransformEditor()->rotatefromScreen(vectorMouse);
@@ -100,25 +95,25 @@ void InputManager::update(){
 
 
 
-    if(scene != NULL && ui != NULL){
+    if(m_scene != NULL && m_ui != NULL){
 
         // suppr
 
         // if(ImGui::IsKeyPressed(ImGuiKey_Delete)){
         if(ImGui::IsKeyPressed(261)){ // 0x105
-            scene->deleteObject(ui->getSelected());
+            m_scene->deleteObject(m_ui->getSelected());
 
         }
 
         if(io.KeyCtrl && ImGui::IsKeyPressed('T')){
-            scene->addEngineObject();
+            m_scene->addEngineObject();
         }
     }
 
     if(io.KeyCtrl){
         if(ImGui::IsKeyPressed('P')){
-            if(scene != NULL){
-                scene->togglePause();
+            if(m_scene != NULL){
+                m_scene->togglePause();
             }
         }
         if(ImGui::IsKeyPressed('F')){
@@ -127,8 +122,8 @@ void InputManager::update(){
             }
         }
         if(ImGui::IsKeyPressed('H')){
-            if(ui != NULL){
-                ui->toggleHasToBeDisplayed();
+            if(m_ui != NULL){
+                m_ui->toggleHasToBeDisplayed();
             }
         }
     }

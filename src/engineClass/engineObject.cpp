@@ -6,56 +6,55 @@
 #include <iostream>
 
 
-EngineObject::EngineObject(int id, std::string n, Transform *t){
+EngineObject::EngineObject(int id, std::string n, Transform *t) : m_transform(t){
 	setID(id);
-	setName("EngineObject");
-	transform = t;
+	setName(n);
 }
 
 EngineObject::~EngineObject(){
-    delete transform;
-    for(unsigned int i=0; i<listOfChildren.size(); i++){
-        delete listOfChildren[i];
+    delete m_transform;
+    for(unsigned int i=0; i<m_listOfChildren.size(); i++){
+        delete m_listOfChildren[i];
     }
 }
 
 
 void EngineObject::setName(std::string n){
-    name = n;
+    m_name = n;
 }
 
 std::string EngineObject::getName(){
-    return name;
+    return m_name;
 }
 
 int EngineObject::getID(){
-	return ID;
+	return m_id;
 }
 
 
 void EngineObject::setID(int i){
-	ID = i;
+	m_id = i;
 }
 
 
 Transform *EngineObject::getTransform(){
-    return transform;
+    return m_transform;
 }
 
 void EngineObject::addChild(EngineObject *obj){
 
-    listOfChildren.push_back(obj);
+    m_listOfChildren.push_back(obj);
 }
 
 
 // trouve l'enfant avec l'ID correspondant et le supprime en récursif
 void EngineObject::removeChild(int id){
-    for(unsigned int i=0; i<listOfChildren.size(); i++){
-        if(listOfChildren[i]->getID() == id){
+    for(unsigned int i=0; i<m_listOfChildren.size(); i++){
+        if(m_listOfChildren[i]->getID() == id){
 
-            listOfChildren[i]->deleteAllChildren();
-            delete(listOfChildren[i]);
-            listOfChildren.erase(listOfChildren.begin()+i);
+            m_listOfChildren[i]->deleteAllChildren();
+            delete(m_listOfChildren[i]);
+            m_listOfChildren.erase(m_listOfChildren.begin()+i);
             return;
         }
     }
@@ -64,13 +63,13 @@ void EngineObject::removeChild(int id){
 
 // supprime tous les enfants de ce gameobject en récursif
 void EngineObject::deleteAllChildren(){
-    for(unsigned int i=listOfChildren.size()-1; i >=0; i--){
-        if(listOfChildren[i]->listOfChildren.size() == 0){ // n'a pas d'enfant
-            delete(listOfChildren[i]);
-            listOfChildren.erase(listOfChildren.begin()+i);
+    for(unsigned int i=m_listOfChildren.size()-1; i >=0; i--){
+        if(m_listOfChildren[i]->m_listOfChildren.size() == 0){ // n'a pas d'enfant
+            delete(m_listOfChildren[i]);
+            m_listOfChildren.erase(m_listOfChildren.begin()+i);
         } else {
-            listOfChildren[i]->deleteAllChildren();
-            delete(listOfChildren[i]);
+            m_listOfChildren[i]->deleteAllChildren();
+            delete(m_listOfChildren[i]);
         }
     }
 }
@@ -80,15 +79,15 @@ void EngineObject::deleteAllChildren(){
 void EngineObject::createUI(char *ID){
 
 	ImGui::BeginChild(ID);
-    ImGui::Text(name.c_str()); ImGui::SameLine();
+    ImGui::Text(m_name.c_str()); ImGui::SameLine();
     ImGui::Text("id : %d", getID());
     ImGui::Separator();
-    transform->createUI();
+    m_transform->createUI();
 
 
     ImGui::EndChild();
 }
 
 void EngineObject::update(){
-    transform->update();
+    m_transform->update();
 }

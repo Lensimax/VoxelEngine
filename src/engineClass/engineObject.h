@@ -28,13 +28,13 @@ class EngineObject {
 
         Transform *getTransform();
 
-        std::vector<EngineObject*> listOfChildren;
+        std::vector<EngineObject*> m_listOfChildren;
 
     protected:
-        Transform *transform;
+        Transform *m_transform;
 
-        std::string name;
-        int ID;
+        std::string m_name;
+        int m_id;
 
 
 };

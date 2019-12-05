@@ -49,7 +49,9 @@ class Scene {
 
         void togglePause();
 
-     
+        inline Transform *getTransformWorld(){
+            return m_transformWorld;
+        }
 
     private:
         void deleteScene();
@@ -57,11 +59,11 @@ class Scene {
         Camera *getCameraRecursive(EngineObject *obj);
         Light *getLightRecursive(EngineObject *obj);
 
-        int IDObject = 0;
+        int m_idObject = 0;
 
-        bool pause;
+        bool m_pause;
 
-        
+        Transform *m_transformWorld;
 };
 
 #endif

@@ -19,16 +19,10 @@
 
 using namespace glm;
 
-Lambertian::Lambertian(glm::vec4 color){
-
+Lambertian::Lambertian(glm::vec4 color) : m_activeDebugNormal(false), m_specularDeg(2), m_ambientColor(vec4(0.0,0.0,0.0,0.0)), m_diffuseColor(color), m_specularColor(vec4(255./255.,255./255.,255./255.,1.0)){
 
     createShader();
-    activeDebugNormal = false;
 
-    specularDeg = 2;
-    ambientColor = vec4(0.0,0.0,0.0,0.0);
-    diffuseColor = color;
-    specularColor = vec4(255./255.,255./255.,255./255.,1.0);
 
 }
 Lambertian::~Lambertian(){
@@ -46,7 +40,7 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
     // printf("y = %f\n", light[1]);
 
-    if(!activeDebugNormal){
+    if(!m_activeDebugNormal){
 
         glm::vec4 lightVec;
         glm::vec3 vec = light->getLight();
@@ -64,13 +58,13 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
         glUniform4fv(glGetUniformLocation(shaderID,"light"), 1, &(lightVec[0]));
 
-        int boolUseDiffuse = displayDiffuse ? 1 : 0;
+        int boolUseDiffuse = m_displayDiffuse ? 1 : 0;
         glUniform1i(glGetUniformLocation(shaderID,"boolUseDiffuse"), boolUseDiffuse);
-        glUniform4fv(glGetUniformLocation(shaderID,"ambientColor"),1,&(ambientColor[0]));
-        glUniform4fv(glGetUniformLocation(shaderID,"diffuseColor"),1,&(diffuseColor[0]));
-        glUniform4fv(glGetUniformLocation(shaderID,"specularColor"),1,&(specularColor[0]));
+        glUniform4fv(glGetUniformLocation(shaderID,"ambientColor"),1,&(m_ambientColor[0]));
+        glUniform4fv(glGetUniformLocation(shaderID,"diffuseColor"),1,&(m_diffuseColor[0]));
+        glUniform4fv(glGetUniformLocation(shaderID,"specularColor"),1,&(m_specularColor[0]));
 
-        glUniform1f(glGetUniformLocation(shaderID,"specularDegree"), specularDeg);
+        glUniform1f(glGetUniformLocation(shaderID,"m_specularDegree"), m_specularDeg);
 
     }
 }
@@ -85,21 +79,21 @@ void Lambertian::createUI(){
     }
 
     ImGui::Text("Display by diffuse color "); ImGui::SameLine();
-    ImGui::Checkbox("##diffuseBool",&displayDiffuse); 
-    if(displayDiffuse){
+    ImGui::Checkbox("##diffuseBool",&m_displayDiffuse); 
+    if(m_displayDiffuse){
         ImGui::Text("Diffuse Color: "); ImGui::SameLine();
-        ImGui::ColorEdit4("diffuse-color", (float *)&diffuseColor);
+        ImGui::ColorEdit4("diffuse-color", (float *)&m_diffuseColor);
     }   
     ImGui::Text("Ambient Color: "); ImGui::SameLine();
-    ImGui::ColorEdit4("##ambient-color", (float *)&ambientColor);
+    ImGui::ColorEdit4("##ambient-color", (float *)&m_ambientColor);
     ImGui::Text("Specular Color: "); ImGui::SameLine();
-    ImGui::ColorEdit4("##spec-color", (float *)&specularColor);
+    ImGui::ColorEdit4("##spec-color", (float *)&m_specularColor);
 
     ImGui::Text("Specular degree"); ImGui::SameLine();
-    ImGui::DragFloat("##specdeg", &specularDeg, 0.01f, 0.001f, 10000, "%.3f");
+    ImGui::DragFloat("##specdeg", &m_specularDeg, 0.01f, 0.001f, 10000, "%.3f");
 
     ImGui::Text("debug Normal "); ImGui::SameLine();
-    ImGui::Checkbox("##debugNormal",&activeDebugNormal);
+    ImGui::Checkbox("##debugNormal",&m_activeDebugNormal);
 
     // to hide label of the input
     ImGui::PopItemWidth();
@@ -107,27 +101,27 @@ void Lambertian::createUI(){
 
 GLuint Lambertian::getShaderID(){
     GLuint shaderID;
-    if(activeDebugNormal){
-        shaderID = debugNormalShader->id();
+    if(m_activeDebugNormal){
+        shaderID = m_debugNormalShader->id();
     } else {
-        shaderID = shader->id();
+        shaderID = m_shader->id();
     }
     return shaderID;
 }
 
 
 void Lambertian::createShader(){
-    shader = new Shader();
-    shader->load(lambertianShaderVert,lambertianShaderFrag);
-    debugNormalShader = new Shader();
-    debugNormalShader->load(debugShaderVert,debugShaderFrag);
+    m_shader = new Shader();
+    m_shader->load(m_lambertianShaderVert,m_lambertianShaderFrag);
+    m_debugNormalShader = new Shader();
+    m_debugNormalShader->load(m_debugShaderVert,m_debugShaderFrag);
 }
 void Lambertian::reloadShaders(){
-    shader->reload(lambertianShaderVert,lambertianShaderFrag);
-    debugNormalShader->reload(debugShaderVert, debugShaderFrag);
+    m_shader->reload(m_lambertianShaderVert,m_lambertianShaderFrag);
+    m_debugNormalShader->reload(m_debugShaderVert, m_debugShaderFrag);
 }
 
 void Lambertian::deleteShader(){
-    delete shader; shader = NULL;
-    delete debugNormalShader; debugNormalShader = NULL;
+    delete m_shader; m_shader = NULL;
+    delete m_debugNormalShader; m_debugNormalShader = NULL;
 }

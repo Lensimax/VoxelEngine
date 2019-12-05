@@ -3,7 +3,7 @@
 out vec4 bufferColor;
 
 
-uniform float specularDegree;
+uniform float m_specularDegree;
 uniform vec4 ambientColor;
 uniform vec4 specularColor;
 uniform vec4 diffuseColor;
@@ -28,7 +28,7 @@ vec4 phong(vec3 l, vec3 n, vec3 e, vec4 colorDif) {
 
 	// if the light comes from the back
 	if(dot(l,n) >= 0.0){
-		float s = pow(max(dot(r,e),0.),specularDegree);
+		float s = pow(max(dot(r,e),0.),m_specularDegree);
 		renderedColor += specularColor*s  + colorDif*d;
 	}
 

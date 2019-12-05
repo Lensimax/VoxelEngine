@@ -33,19 +33,19 @@ class Lambertian : public Material {
         void createShader();
         void deleteShader();
 
-        Shader *debugNormalShader;
+        Shader *m_debugNormalShader;
 
-        bool activeDebugNormal;
+        bool m_activeDebugNormal;
 
-        float specularDeg;
-        glm::vec4 ambientColor, specularColor, diffuseColor;
+        float m_specularDeg;
+        glm::vec4 m_ambientColor, m_specularColor, m_diffuseColor;
 
-        bool displayDiffuse = false;
+        bool m_displayDiffuse = false;
 
-        const char * lambertianShaderVert = "../data/shaders/lambertian.vert";
-        const char * lambertianShaderFrag = "../data/shaders/lambertian.frag";
-        const char * debugShaderVert = "../data/shaders/debugNormal.vert";
-        const char * debugShaderFrag = "../data/shaders/debugNormal.frag";
+        const char * m_lambertianShaderVert = "../data/shaders/lambertian.vert";
+        const char * m_lambertianShaderFrag = "../data/shaders/lambertian.frag";
+        const char * m_debugShaderVert = "../data/shaders/debugNormal.vert";
+        const char * m_debugShaderFrag = "../data/shaders/debugNormal.frag";
 
 };
 

@@ -9,9 +9,9 @@ Player::Player(int id, Transform *t, Mesh *m, float sp) : m_speed(sp){
     setID(id);
     setName("Player");
 
-    transform = t;
-    mesh = m;
-    material = new Lambertian();
+    m_transform = t;
+    m_mesh = m;
+    m_material = new Lambertian();
 }
 
 
@@ -23,9 +23,9 @@ Player::~Player(){
 
 void Player::update(){
     EngineObject::update();
-    mesh->update();
+    m_mesh->update();
 
-    glm::vec3 pos = transform->getPosition();
+    glm::vec3 pos = m_transform->getPosition();
     if(ImGui::IsKeyPressed('W')){
         pos.z -= m_speed;
     }
@@ -39,7 +39,7 @@ void Player::update(){
         pos.x += m_speed;
     }
 
-    transform->setPosition(pos); 
+    m_transform->setPosition(pos); 
 
 
 }
@@ -49,10 +49,10 @@ void Player::createUI(char *ID){
     const int node_flags = 0;
 
     ImGui::BeginChild(ID);
-    ImGui::Text(name.c_str());
+    ImGui::Text(m_name.c_str());
 
     ImGui::Separator();
-    transform->createUI();
+    m_transform->createUI();
 
 
     ImGui::Separator();
@@ -64,13 +64,13 @@ void Player::createUI(char *ID){
     ImGui::Separator();
     bool node_mesh = ImGui::TreeNodeEx("Mesh", node_flags);
     if(node_mesh){
-        mesh->createUI();
+        m_mesh->createUI();
         if (ImGui::Button("Recreate")){
-            mesh->recreate();
+            m_mesh->recreate();
             
         }
         ImGui::Text("Show bounding box "); ImGui::SameLine();
-        ImGui::Checkbox("##showboundingbox"+getID(),&showboundingbox);
+        ImGui::Checkbox("##showboundingbox"+getID(),&m_showboundingbox);
 
         ImGui::TreePop();
     }
@@ -78,7 +78,7 @@ void Player::createUI(char *ID){
     ImGui::Separator();
     bool node_material = ImGui::TreeNodeEx("Material", node_flags);
     if(node_material){
-        material->createUI();
+        m_material->createUI();
         ImGui::TreePop();
     }
     ImGui::Separator();
