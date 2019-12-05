@@ -174,7 +174,7 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         
         renderer->paintGL(scene, display_w, display_h);
-        //renderer->displaySceneOnTheScreen(display_w, display_h);
+        renderer->displaySceneOnTheScreen(display_w, display_h);
 
         // draw UI
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

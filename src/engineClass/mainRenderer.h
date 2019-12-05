@@ -83,20 +83,28 @@ class MainRenderer {
         glm::mat4 m_viewMat;
         glm::mat4 m_projectionMat;
 
-        /* FBO */
+        // FBO
 
         GLuint m_fboRenderScene;
+        GLuint m_renderedSceneTextureID;
+        GLuint m_testID;
+        GLuint m_renderedDepth;
 
         void createFBOSceneRender();
         void initFBOSceneRender(int width, int height);
         void deleteFBOSceneRender();
 
-        GLuint m_renderedSceneTextureID;
-        GLuint m_renderedDepth;
+        // FBO Editeur
+        GLuint m_fboEditor;
+        GLuint m_editorTextureID;
+        GLuint m_editorDepth;
+
+        void createFBOEditorRender();
+        void initFBOEditorRender(int width, int height);
+        void deleteFBOEditorRender();
 
         /* final rendering */
-
-
+        
         void createVAOQuad();
         void deleteVAOQuad();
         void drawQuad();
