@@ -28,8 +28,10 @@
 #include <vector>
 #include <stdio.h>
 
+#include "../../engineClass/component.h"
 
-class Mesh {
+
+class Mesh : public Component {
 
 public:
 
@@ -44,8 +46,7 @@ public:
      glm::vec3 getMin();
      glm::vec3 getMax();
 
-
-     virtual void update();
+     void update() override;
 
      void createVAO();
 

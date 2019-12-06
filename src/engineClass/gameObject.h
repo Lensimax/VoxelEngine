@@ -30,8 +30,8 @@ class GameObject {
 
         std::vector<GameObject*> m_listOfChildren;
 
-    protected:
         Transform *m_transform;
+    protected:
 
         std::string m_name;
         int m_id;
