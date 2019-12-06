@@ -52,4 +52,6 @@ protected:
 
 };
 
+#include "gameObject.inl"
+
 #endif

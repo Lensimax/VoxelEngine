@@ -99,33 +99,33 @@ void GameObject::update(){
 
 //// COMPONENT
 
-template< class ComponentType> Component * GameObject::getComponent(){
-    for ( Component * component : m_components ) {
-        if ( ComponentType* o = dynamic_cast<ComponentType*>(component) ){
-            return component;
-        }
-    }
+// template< class ComponentType> Component * GameObject::getComponent(){
+//     for ( Component * component : m_components ) {
+//         if ( ComponentType* o = dynamic_cast<ComponentType*>(component) ){
+//             return component;
+//         }
+//     }
 
-    return NULL;
-}
+//     return NULL;
+// }
 
 void GameObject::addComponent( Component *component ) {
     m_components.push_back(component);
 }
 
-template< class ComponentType > bool GameObject::removeComponent() {
-    if(m_components.empty()){
-        return false; 
-    }
+// template< class ComponentType > bool GameObject::removeComponent() {
+//     if(m_components.empty()){
+//         return false; 
+//     }
 
     
-    for (unsigned int i=0; i<m_components.size(); i++ ) {
+//     for (unsigned int i=0; i<m_components.size(); i++ ) {
          
-        if ( ComponentType* o = dynamic_cast<ComponentType*>(m_components[i]) ){
-            m_components.erase(m_components.begin()+i);
-            return true;
-        }
-    }
+//         if ( ComponentType* o = dynamic_cast<ComponentType*>(m_components[i]) ){
+//             m_components.erase(m_components.begin()+i);
+//             return true;
+//         }
+//     }
 
-    return false;
-}
+//     return false;
+// }
