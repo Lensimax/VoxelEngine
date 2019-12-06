@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-//#include "gameObject.h"
+class GameObject;
 
 class Component {
 public:
@@ -24,7 +24,7 @@ public:
 
 protected:
 
-    //GameObject m_gameobject;
+    GameObject *m_gameobject;
 
     // TODO use it
     bool m_active = true;
