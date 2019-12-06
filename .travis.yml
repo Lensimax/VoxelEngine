@@ -15,7 +15,8 @@ compiler:
 jobs:
   include:
   - stage: Compilation
-    os: linux
+  
+  - os: linux
     before_install:
       - sudo apt-get update -qq
     install:
@@ -27,5 +28,10 @@ jobs:
       - make -j
       
   - os: osx
-    script:
-      - echo "MAC OSX"
+      
+      install:
+        - mkdir build
+        - cd build
+        - cmake ..
+      script:
+        - make -j
