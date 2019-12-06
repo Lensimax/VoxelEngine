@@ -13,12 +13,12 @@
 
 
 #include "../tools/lights/light.h"
-#include "../engineClass/engineObject.h"
+#include "../engineClass/gameObject.h"
 
 #include <string>
 
 
-class DrawableObject : public EngineObject {
+class DrawableObject : public GameObject {
     public:
 
 

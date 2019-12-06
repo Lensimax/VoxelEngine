@@ -12,9 +12,9 @@
 #endif
 
 
-#include "../engineClass/engineObject.h"
+#include "../engineClass/gameObject.h"
 
-class Camera : public EngineObject {
+class Camera : public GameObject {
 
 
     public:

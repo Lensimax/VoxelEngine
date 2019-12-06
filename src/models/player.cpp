@@ -22,7 +22,7 @@ Player::~Player(){
 
 
 void Player::update(){
-    EngineObject::update();
+    GameObject::update();
     m_mesh->update();
 
     glm::vec3 pos = m_transform->getPosition();

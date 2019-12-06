@@ -6,12 +6,12 @@
 #include <vector>
 #include "../models/transform.h"
 
-class EngineObject {
+class GameObject {
 
 
     public:
-    	EngineObject(int id = -1, std::string n = "EngineObject", Transform *t = new Transform());
-        virtual ~EngineObject();
+    	GameObject(int id = -1, std::string n = "GameObject", Transform *t = new Transform());
+        virtual ~GameObject();
         virtual void createUI(char *ID);
 
         virtual void update();
@@ -21,14 +21,14 @@ class EngineObject {
         int getID();
         void setID(int i);
 
-        void addChild(EngineObject *obj);
+        void addChild(GameObject *obj);
         void removeChild(int id);
         void deleteAllChildren();
 
 
         Transform *getTransform();
 
-        std::vector<EngineObject*> m_listOfChildren;
+        std::vector<GameObject*> m_listOfChildren;
 
     protected:
         Transform *m_transform;

@@ -40,7 +40,7 @@ void Scene::deleteScene(){
 }
 
 
-Camera *Scene::getCameraRecursive(EngineObject *obj){
+Camera *Scene::getCameraRecursive(GameObject *obj){
     Camera *tmp = NULL;
     if(Camera* c = dynamic_cast<Camera*>(obj)) {
         return c;
@@ -75,7 +75,7 @@ Light *Scene::getLight(){
     return NULL;
 }
 
-Light *Scene::getLightRecursive(EngineObject *obj){
+Light *Scene::getLightRecursive(GameObject *obj){
     Light *tmp = NULL;
     if(Light* l = dynamic_cast<Light*>(obj)) {
         return l;
@@ -104,7 +104,7 @@ void Scene::createUIAtID(int indexItem, char *ID){
     }
 }
 
-void Scene::drawUIAtID(std::vector<EngineObject*> objs, int indexItem, char *ID){
+void Scene::drawUIAtID(std::vector<GameObject*> objs, int indexItem, char *ID){
     for(unsigned int i=0; i<objs.size(); i++){
         if(objs[i]->getID() == indexItem){
             objs[i]->createUI(ID);
@@ -129,8 +129,8 @@ void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & i
 
 ///// CREATION DE PREFABS
 
-void Scene::addEngineObject(){
-    objectsEngine.push_back(new EngineObject(addNewId()));
+void Scene::addGameObject(){
+    objectsEngine.push_back(new GameObject(addNewId()));
 }
 
 void Scene::addCube(){
@@ -155,7 +155,7 @@ int Scene::addNewId(){
     return m_idObject-1;
 }
 
-void Scene::updateObj(EngineObject *obj){
+void Scene::updateObj(GameObject *obj){
     obj->update();
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         updateObj(obj->m_listOfChildren[i]);
@@ -181,7 +181,7 @@ void Scene::loadDefaultScene(){
 
     m_idObject = 0;
 
-    objectsEngine = std::vector<EngineObject*>();
+    objectsEngine = std::vector<GameObject*>();
 
     Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
 

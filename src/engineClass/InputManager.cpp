@@ -106,7 +106,7 @@ void InputManager::update(){
         }
 
         if(io.KeyCtrl && ImGui::IsKeyPressed('T')){
-            m_scene->addEngineObject();
+            m_scene->addGameObject();
         }
     }
 
