@@ -2,6 +2,7 @@
 
 #include "gameObject.h"
 #include "component.h"
+#include "../components/meshRenderer.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -12,6 +13,8 @@ GameObject::GameObject(int id, std::string n, Transform *t) : m_transform(t){
 	setName(n);
 
     m_components = std::vector<Component*>();
+
+    // getComponent<MeshRenderer>();
 }
 
 GameObject::~GameObject(){
@@ -98,7 +101,7 @@ void GameObject::update(){
 //// COMPONENT
 
 template< class ComponentType> Component * GameObject::getComponent(){
-    for ( Component & component : m_components ) {
+    for ( Component * component : m_components ) {
         if ( ComponentType* o = dynamic_cast<ComponentType*>(component) ){
             return component;
         }
@@ -111,8 +114,7 @@ void GameObject::addComponent( Component *component ) {
     m_components.push_back(component);
 }
 
-template< class ComponentType >
-bool GameObject::removeComponent() {
+template< class ComponentType > bool GameObject::removeComponent() {
     if(m_components.empty()){
         return false; 
     }

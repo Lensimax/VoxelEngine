@@ -29,7 +29,7 @@ Scene::Scene(){
 
     obj->addComponent(new MeshRenderer());
 
-    // obj->getComponent<MeshRenderer>();
+    obj->getComponent<MeshRenderer>();
 
     // obj->removeComponent<MeshRenderer>();
 

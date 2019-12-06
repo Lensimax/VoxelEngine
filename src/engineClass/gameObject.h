@@ -33,8 +33,7 @@ public:
     std::vector<GameObject*> m_listOfChildren;
 
     // COMPONENT
-    template< class ComponentType>
-    Component * getComponent();
+    template< class ComponentType> Component * getComponent();
 
     void addComponent( Component *component );
 
