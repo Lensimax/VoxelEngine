@@ -29,6 +29,7 @@ Scene::Scene(){
 
     obj->addComponent(new MeshRenderer());
 
+    /// TODO FIX CETTE ERREUR
     obj->getComponent<MeshRenderer>();
 
     // obj->removeComponent<MeshRenderer>();

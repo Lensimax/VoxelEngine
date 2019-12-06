@@ -1,7 +1,6 @@
 #include <imgui.h>
 
 #include "gameObject.h"
-#include "component.h"
 #include "../components/meshRenderer.h"
 
 #include <stdio.h>
