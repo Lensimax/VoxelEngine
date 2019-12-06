@@ -1,6 +1,6 @@
 os: 
  - linux
- - os
+ - osx
  
 language: cpp
 
@@ -15,7 +15,6 @@ compiler:
   - g++
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = "os" ]; then echo "MAC OS"; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then echo "MAC OSX"; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then echo "LINUX"; fi
   - sudo apt-get update -qq
