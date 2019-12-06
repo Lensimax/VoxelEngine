@@ -1,6 +1,6 @@
 # Voxel-Engine
 
-[![Build Status](https://travis-ci.com/TheSpyGeek/VoxelEngine.svg?token=jqV7mNU927UBqX84KPYx&branch=master)](https://travis-ci.com/TheSpyGeek/VoxelEngine)
+[![Build Status](https://travis-ci.com/TheSpyGeek/VoxelEngine.svg?branch=master)](https://travis-ci.com/TheSpyGeek/VoxelEngine)
 
 Green-engine is a graphic engine from a student to learn how we create a graphical engine.
 
