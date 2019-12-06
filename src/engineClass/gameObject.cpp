@@ -91,3 +91,14 @@ void GameObject::createUI(char *ID){
 void GameObject::update(){
     m_transform->update();
 }
+
+
+template< class ComponentType>
+ComponentType & GameObject::getComponent() {
+    for ( auto && component : m_components ) {
+        if ( component->isClassType( ComponentType::Type ) )
+            return *static_cast< ComponentType * >( component );
+    }
+
+    return nullptr;
+}

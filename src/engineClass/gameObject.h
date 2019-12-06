@@ -5,36 +5,45 @@
 #include <string>
 #include <vector>
 #include "../models/transform.h"
+#include "component.h"
+
+
 
 class GameObject {
 
 
-    public:
-    	GameObject(int id = -1, std::string n = "GameObject", Transform *t = new Transform());
-        virtual ~GameObject();
-        virtual void createUI(char *ID);
+public:
+    GameObject(int id = -1, std::string n = "GameObject", Transform *t = new Transform());
+    virtual ~GameObject();
+    virtual void createUI(char *ID);
 
-        virtual void update();
+    virtual void update();
 
-        void setName(std::string n);
-        std::string getName();
-        int getID();
-        void setID(int i);
+    // ID + NAME
+    void setName(std::string n);
+    std::string getName();
+    int getID();
+    void setID(int i);
 
-        void addChild(GameObject *obj);
-        void removeChild(int id);
-        void deleteAllChildren();
+    /// GRAPHE SCENE
+    void addChild(GameObject *obj);
+    void removeChild(int id);
+    void deleteAllChildren();
+    std::vector<GameObject*> m_listOfChildren;
 
+    // COMPONENT
+    template< class ComponentType>
+    ComponentType & getComponent();
 
-        Transform *getTransform();
+    // TRANSFORM
+    Transform *getTransform();
+    Transform *m_transform;
 
-        std::vector<GameObject*> m_listOfChildren;
+protected:
+    std::vector<Component*> m_components;
 
-        Transform *m_transform;
-    protected:
-
-        std::string m_name;
-        int m_id;
+    std::string m_name;
+    int m_id;
 
 
 };
