@@ -1,4 +1,6 @@
-os: linux
+os: 
+ - linux
+ - os
 language: cpp
 
 # safelist
