@@ -57,6 +57,10 @@ To build :
 * Go to ```build``` directory
 * Compile with ```mingw32-make```
 
+##### On MAC OSX
+
+Should work
+
 #### Ressources
 
 * https://sonarlearning.co.uk/coursepage.php?topic=game&course=ext-bb-3d-ged
