@@ -1,4 +1,4 @@
-os: linux
+ 
 language: cpp
 
 # safelist
@@ -7,18 +7,31 @@ branches:
   - master
   - stable
   - develop
+  
 
 compiler:
   - g++
 
-before_install:
-  - sudo apt-get update -qq
-
-install:
-  - sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev
-  - mkdir build
-  - cd build
-  - cmake ..
-
-script:
-  - make -j
+jobs:
+  include:
+  - stage: Compilation
+  
+  - os: linux
+    before_install:
+      - sudo apt-get update -qq
+    install:
+      - sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev
+      - mkdir build
+      - cd build
+      - cmake ..
+    script:
+      - make -j
+      
+  - os: osx
+      
+      install:
+        - mkdir build
+        - cd build
+        - cmake ..
+      script:
+        - make -j
