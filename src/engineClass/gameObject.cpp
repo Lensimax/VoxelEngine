@@ -1,6 +1,7 @@
 #include <imgui.h>
 
 #include "gameObject.h"
+#include "component.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -9,6 +10,8 @@
 GameObject::GameObject(int id, std::string n, Transform *t) : m_transform(t){
 	setID(id);
 	setName(n);
+
+    m_components = std::vector<Component*>();
 }
 
 GameObject::~GameObject(){
@@ -92,13 +95,36 @@ void GameObject::update(){
     m_transform->update();
 }
 
+//// COMPONENT
 
-template< class ComponentType>
-ComponentType & GameObject::getComponent() {
-    for ( auto && component : m_components ) {
-        if ( component->isClassType( ComponentType::Type ) )
-            return *static_cast< ComponentType * >( component );
+template< class ComponentType> Component * GameObject::getComponent(){
+    for ( Component & component : m_components ) {
+        if ( ComponentType* o = dynamic_cast<ComponentType*>(component) ){
+            return component;
+        }
     }
 
-    return nullptr;
+    return NULL;
+}
+
+void GameObject::addComponent( Component *component ) {
+    m_components.push_back(component);
+}
+
+template< class ComponentType >
+bool GameObject::removeComponent() {
+    if(m_components.empty()){
+        return false; 
+    }
+
+    
+    for (unsigned int i=0; i<m_components.size(); i++ ) {
+         
+        if ( ComponentType* o = dynamic_cast<ComponentType*>(m_components[i]) ){
+            m_components.erase(m_components.begin()+i);
+            return true;
+        }
+    }
+
+    return false;
 }

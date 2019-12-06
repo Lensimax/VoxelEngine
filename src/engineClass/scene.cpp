@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "../engineClass/gameObject.h"
 
 #include "../tools/lights/directionnalLight.h"
 #include "../tools/cameraProj.h"
@@ -10,7 +11,9 @@
 #include "../material/simpleMat.h"
 
 #include "../material/textureMaterial.h"
+#include "../components/meshRenderer.h"
 
+#include "../engineClass/component.h"
 
 #include "../models/player.h"
 
@@ -23,6 +26,12 @@ Scene::Scene(){
     objectsEngine.push_back(p);
 
     VoxelGrid *obj = new VoxelGrid(addNewId(), "VoxelGrid", new Transform());
+
+    obj->addComponent(new MeshRenderer());
+
+    // obj->getComponent<MeshRenderer>();
+
+    // obj->removeComponent<MeshRenderer>();
 
     //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     // objectsEngine.push_back(obj);

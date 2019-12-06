@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 #include "../models/transform.h"
-#include "component.h"
+
+class Component;
 
 
 
@@ -33,7 +34,11 @@ public:
 
     // COMPONENT
     template< class ComponentType>
-    ComponentType & getComponent();
+    Component * getComponent();
+
+    void addComponent( Component *component );
+
+    template< class ComponentType > bool removeComponent();
 
     // TRANSFORM
     Transform *getTransform();

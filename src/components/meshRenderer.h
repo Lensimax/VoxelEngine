@@ -5,12 +5,12 @@
 #include "../tools/lights/light.h"
 #include "../material/material.h"
 
-class MeshRenderer {
+class MeshRenderer : public Component {
 
 public:
 
-    MeshRenderer();
-    ~MeshRenderer();
+    MeshRenderer(){}
+    ~MeshRenderer(){}
 
     void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
 

@@ -6,11 +6,10 @@
 
 class GameObject;
 
+
 class Component {
 public:
 
-    static const std::size_t m_type = 0;
-    bool isClassType( const std::size_t classType ) const { return classType == m_type; };
 
     virtual void start(){};
 
