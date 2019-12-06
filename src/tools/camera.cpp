@@ -5,7 +5,7 @@
 #include "camera.h"
 
 #include <iostream>
-#include <glm_display.h>
+// #include <glm_display.h>
 
 
 void Camera::setAxis(glm::vec3 pos, glm::vec3 u, glm::vec3 dir){
