@@ -6,7 +6,7 @@
 #include <vector>
 #include "../models/transform.h"
 
-#include "component.h"
+#include "../components/component.h"
 
 
 

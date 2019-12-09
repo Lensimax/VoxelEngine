@@ -80,18 +80,21 @@ void GameObject::deleteAllChildren(){
 }
 
 
-
 void GameObject::createUI(char *ID){
-
-	ImGui::BeginChild(ID);
+    ImGui::BeginChild(ID);
     ImGui::Text(m_name.c_str()); ImGui::SameLine();
     ImGui::Text("id : %d", getID());
     ImGui::Separator();
     m_transform->createUI();
 
 
+    for(unsigned int i=0; i<m_components.size(); i++){
+        m_components[i]->createUI();
+    }
+    
     ImGui::EndChild();
 }
+
 
 void GameObject::update(){
     m_transform->update();

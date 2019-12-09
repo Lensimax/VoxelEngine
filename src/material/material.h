@@ -14,7 +14,9 @@
 #include "shader.h"
 #include "../tools/lights/light.h"
 
-class Material {
+#include "../components/component.h"
+
+class Material : public Component {
 
     public:
         virtual ~Material() = default;

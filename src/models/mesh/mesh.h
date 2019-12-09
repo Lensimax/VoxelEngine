@@ -28,7 +28,7 @@
 #include <vector>
 #include <stdio.h>
 
-#include "../../engineClass/component.h"
+#include "../../components/component.h"
 
 
 class Mesh : public Component {

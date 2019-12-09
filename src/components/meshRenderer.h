@@ -1,15 +1,17 @@
 #ifndef MESHRENDERER_H
 #define MESHRENDERER_H
 
-#include "../engineClass/component.h"
+#include "component.h"
 #include "../tools/lights/light.h"
-#include "../material/material.h"
+#include "../material/lambertian.h"
+
+
 
 class MeshRenderer : public Component {
 
 public:
 
-    MeshRenderer(){}
+    MeshRenderer(){m_material = new Lambertian();}
     ~MeshRenderer(){}
 
     void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);

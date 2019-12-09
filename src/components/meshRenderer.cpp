@@ -19,6 +19,8 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+#include <iostream>
+
 #include "meshRenderer.h"
 
 
@@ -31,7 +33,11 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
     // TODO GETCOMPONENT
     //m_mesh->drawVAO();
     Mesh *mesh = m_gameobject->getComponent<Mesh*>();
-    mesh->drawVAO();
+    if(mesh != NULL){
+        mesh->drawVAO();
+    } else {
+        std::cout << "Mesh missing\n";
+    }
 
     glUseProgram(0);
 

@@ -15,7 +15,6 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../material/shader.h"
 
-#include "../models/drawableObject.h"
 #include "../tools/camera.h"
 #include "../tools/cameraProj.h"
 

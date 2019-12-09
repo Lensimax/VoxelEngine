@@ -4,8 +4,6 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../tools/cameraProj.h"
 
-#include "../models/meshObject.h"
-#include "../models/voxelGrid.h"
 #include "../models/mesh/meshCube.h"
 
 #include "../material/simpleMat.h"
@@ -13,29 +11,25 @@
 #include "../material/textureMaterial.h"
 #include "../components/meshRenderer.h"
 
-#include "../engineClass/component.h"
+#include "../components/component.h"
 
-#include "../models/player.h"
+
+#include <iostream>
 
 
 Scene::Scene(){
 
     loadDefaultScene();
 
-    Player *p = new Player(addNewId());
-    objectsEngine.push_back(p);
-
-    VoxelGrid *obj = new VoxelGrid(addNewId(), "VoxelGrid", new Transform());
+    GameObject *obj = new GameObject();
 
     obj->addComponent<MeshRenderer>(new MeshRenderer());
-
-    /// TODO FIX CETTE ERREUR
-    MeshRenderer *meshR = obj->getComponent<MeshRenderer*>();
-
+    obj->addComponent<MeshCube>(new MeshCube());
+ 
     // obj->removeComponent<MeshRenderer>();
 
     //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
-    // objectsEngine.push_back(obj);
+    objectsEngine.push_back(obj);
 
 }
 
@@ -144,7 +138,7 @@ void Scene::addGameObject(){
 }
 
 void Scene::addCube(){
-    objectsEngine.push_back(new MeshObject(addNewId(),"Cube", new Transform(), new MeshCube(1.0f), new Lambertian()));
+    //objectsEngine.push_back(new MeshObject(addNewId(),"Cube", new Transform(), new MeshCube(1.0f), new Lambertian()));
 }
 
 
