@@ -30,8 +30,6 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
 
     setUniform(modelMat, viewMat, projectionMat, light);
 
-    // TODO GETCOMPONENT
-    //m_mesh->drawVAO();
     Mesh *mesh = m_gameobject->getComponent<Mesh*>();
     if(mesh != NULL){
         mesh->drawVAO();
@@ -39,14 +37,11 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
 
     glUseProgram(0);
 
-    // m_mesh->drawDebug(transform->getModelMat(),viewMat, projectionMat);
-
-
-
 }
 
 void MeshRenderer::createUI(){
     if (ImGui::TreeNode("Mesh Renderer")){
+        ImGui::SameLine(); ImGui::Checkbox("##active", &m_active);
         ImGui::TreePop();
     }
 
@@ -54,10 +49,6 @@ void MeshRenderer::createUI(){
 
 
 void MeshRenderer::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
-
-    // glm::mat4 model = transform->getMat4(modelMat);
-
-
 
     // send the transformation matrix
     m_material->callUniform(modelMat, viewMat, projectionMat, light);

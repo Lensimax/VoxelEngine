@@ -12,17 +12,19 @@ GameObject::GameObject(int id, std::string n, Transform *t) : m_transform(t){
 	setName(n);
 
     m_components = std::vector<Component*>();
-
-    // getComponent<MeshRenderer>();
 }
 
 GameObject::~GameObject(){
     delete m_transform;
+
+    for(Component * comp : m_components){
+        delete comp;
+    }
+
     for(unsigned int i=0; i<m_listOfChildren.size(); i++){
         delete m_listOfChildren[i];
     }
 }
-
 
 void GameObject::setName(std::string n){
     m_name = n;
@@ -92,12 +94,17 @@ void GameObject::createUI(char *ID){
         ImGui::Separator();
         m_components[i]->createUI();
     }
-    
+
+    ImGui::Separator();    
     ImGui::EndChild();
 }
 
 
 void GameObject::update(){
     m_transform->update();
+
+    for(unsigned int i=0; i<m_components.size(); i++){
+        m_components[i]->update();
+    }
 }
 
