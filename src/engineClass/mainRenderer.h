@@ -40,39 +40,14 @@ class MainRenderer {
 
 
 
-        inline void toggleWire(){
-            m_wireActivated = !m_wireActivated;
-        }
-
-        inline void toggleCullface(){
-            m_cullface = !m_cullface;
-        }
-
-        GLuint getTextureID(){
-            return m_renderedSceneTextureID;
-        }
-
-        inline unsigned int width(){
-            return m_widthScreen;
-        }
-
-        inline unsigned int height(){
-            return m_heightScreen;
-        }
-
-        inline GLuint getGameTextureID(){
-            return m_renderedSceneTextureID;
-        }
-
-        inline GLuint getEditorTextureID(){
-            return m_editorTextureID;
-        }
-
-        inline Transform *getTransformEditor(){
-            return m_transformEditor;
-        }
-
-
+        inline void toggleWire(){m_wireActivated = !m_wireActivated;}
+        inline void toggleCullface(){m_cullface = !m_cullface;}
+        GLuint getTextureID(){return m_renderedSceneTextureID;}
+        inline unsigned int width(){return m_widthScreen;}
+        inline unsigned int height(){return m_heightScreen;}
+        inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
+        inline GLuint getEditorTextureID(){return m_editorTextureID;}
+        inline Transform *getTransformEditor(){return m_transformEditor;}
 
     private:
 

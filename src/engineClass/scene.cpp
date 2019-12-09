@@ -21,14 +21,11 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *obj = new GameObject();
+    GameObject *obj = new GameObject(addNewId());
 
     obj->addComponent<MeshRenderer>(new MeshRenderer());
-    obj->addComponent<MeshCube>(new MeshCube());
+    obj->addComponent<Mesh>(new MeshCube());
  
-    // obj->removeComponent<MeshRenderer>();
-
-    //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(obj);
 
 }

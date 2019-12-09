@@ -35,8 +35,6 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
     Mesh *mesh = m_gameobject->getComponent<Mesh*>();
     if(mesh != NULL){
         mesh->drawVAO();
-    } else {
-        std::cout << "Mesh missing\n";
     }
 
     glUseProgram(0);
@@ -47,6 +45,12 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
 
 }
 
+void MeshRenderer::createUI(){
+    if (ImGui::TreeNode("Mesh Renderer")){
+        ImGui::TreePop();
+    }
+
+}
 
 
 void MeshRenderer::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){

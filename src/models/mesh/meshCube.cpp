@@ -21,13 +21,19 @@ void MeshCube::recreate(){
 }
 
 void MeshCube::createUI(){
-    Mesh::createUI();
+    if (ImGui::TreeNode("Mesh")){
+    //Mesh::createUI();
 
-    ImGui::Text("Width : ");
-    ImGui::DragFloat("##width", &m_width, 0.01f); 
+        ImGui::Text("Number vertices: %d", getNBVertices());
+        ImGui::Text("Number faces: %d", getNBFaces());
 
-    ImGui::Text("Centered : ");
-    ImGui::Checkbox("##centered", &m_centered);  
+        ImGui::Text("Width : ");
+        ImGui::DragFloat("##width", &m_width, 0.01f); 
+
+        ImGui::Text("Centered : ");
+        ImGui::Checkbox("##centered", &m_centered); 
+        ImGui::TreePop();
+    }
 }
 
 
