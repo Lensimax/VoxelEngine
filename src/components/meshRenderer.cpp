@@ -2,6 +2,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include "../models/mesh/mesh.h"
+
 #define POSITION_ATTRIB 0
 #define VERTEX_NORMAL_ATTRIB 1
 #define VERTEX_UV_ATTRIB 2
@@ -28,6 +30,8 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
 
     // TODO GETCOMPONENT
     //m_mesh->drawVAO();
+    Mesh *mesh = m_gameobject->getComponent<Mesh*>();
+    mesh->drawVAO();
 
     glUseProgram(0);
 

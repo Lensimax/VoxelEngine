@@ -27,10 +27,10 @@ Scene::Scene(){
 
     VoxelGrid *obj = new VoxelGrid(addNewId(), "VoxelGrid", new Transform());
 
-    obj->addComponent(new MeshRenderer());
+    obj->addComponent<MeshRenderer>(new MeshRenderer());
 
     /// TODO FIX CETTE ERREUR
-    obj->getComponent<MeshRenderer>();
+    MeshRenderer *meshR = obj->getComponent<MeshRenderer*>();
 
     // obj->removeComponent<MeshRenderer>();
 

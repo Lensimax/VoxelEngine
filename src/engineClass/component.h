@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-//class GameObject;
+class GameObject;
 
 
 class Component {
@@ -21,9 +21,11 @@ public:
     bool getActive(){return m_active;}
     void setActive(bool active){m_active = active;}
 
+    void setGameObject(GameObject * obj){m_gameobject = obj;}
+
 protected:
 
-    //GameObject *m_gameobject;
+    GameObject *m_gameobject;
 
     // TODO use it
     bool m_active = true;
