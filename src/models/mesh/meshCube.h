@@ -21,7 +21,7 @@ public:
 	void createUI();
 
     
-
+    float getVoxelSize(){return m_width;}
 private:
 
 	void createMesh(float w);

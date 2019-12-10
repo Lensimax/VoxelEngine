@@ -14,7 +14,7 @@ public:
     MeshRenderer(){m_material = new Lambertian();}
     ~MeshRenderer(){delete m_material;}
 
-    void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
+    virtual void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
 
     virtual void createUI() override;
 

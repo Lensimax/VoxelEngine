@@ -12,6 +12,7 @@
 #include "../components/meshRenderer.h"
 
 #include "../components/component.h"
+#include "../components/chunkRenderer.h"
 
 
 #include <iostream>
@@ -23,7 +24,8 @@ Scene::Scene(){
 
     GameObject *obj = new GameObject(addNewId());
 
-    obj->addComponent<MeshRenderer>(new MeshRenderer());
+    obj->addComponent<ChunkRenderer>(new ChunkRenderer());
+    //obj->addComponent<MeshRenderer>(new MeshRenderer());
     obj->addComponent<Mesh>(new MeshCube());
  
     objectsEngine.push_back(obj);
