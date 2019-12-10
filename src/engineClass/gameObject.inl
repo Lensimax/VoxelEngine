@@ -32,15 +32,19 @@ template< class ComponentType > bool GameObject::removeComponent() {
 }
 
 template< class ComponentType > void GameObject::addComponent(Component * component) {
-    m_components.push_back(component);
-    component->setGameObject(this);
+    if(!getComponent<ComponentType>()){
+        m_components.push_back(component);
+        component->setGameObject(this);
+    }
 }
 
 
 template< class ComponentType> void GameObject::addComponent(){
-    Component * comp = new ComponentType();
-    m_components.push_back(comp);
-    comp->setGameObject(this);
+    if(!getComponent<ComponentType>()){
+        Component * comp = new ComponentType();
+        m_components.push_back(comp);
+        comp->setGameObject(this);
+    }
 }
  
 #endif

@@ -3,6 +3,10 @@
 #include "gameObject.h"
 #include "../components/meshRenderer.h"
 
+#include "../material/lambertian.h"
+#include "../models/mesh/meshCube.h"
+#include "../components/chunkRenderer.h"
+
 #include <stdio.h>
 #include <iostream>
 
@@ -95,7 +99,17 @@ void GameObject::createUI(char *ID){
         m_components[i]->createUI();
     }
 
-    ImGui::Separator();    
+    ImGui::Separator();  
+
+    if(ImGui::BeginMenu("Add Component")){
+        if (ImGui::MenuItem("Add MeshCube")) { addComponent<Mesh*>(new MeshCube()); }
+        if (ImGui::MenuItem("Add Material")) { addComponent<Material*>(new Lambertian()); }
+        if (ImGui::MenuItem("Add MeshRenderer")) { addComponent<MeshRenderer*>(new MeshRenderer());  }
+        if (ImGui::MenuItem("Add ChunkRenderer")) { addComponent<MeshRenderer*>(new ChunkRenderer());  }
+        ImGui::EndMenu();
+    }
+
+
     ImGui::EndChild();
 }
 
