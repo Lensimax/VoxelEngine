@@ -24,9 +24,10 @@ Scene::Scene(){
 
     GameObject *obj = new GameObject(addNewId());
 
-    obj->addComponent<ChunkRenderer>(new ChunkRenderer());
-    //obj->addComponent<MeshRenderer>(new MeshRenderer());
-    obj->addComponent<Mesh>(new MeshCube());
+    //obj->addComponent<ChunkRenderer>(new ChunkRenderer());
+    obj->addComponent<MeshRenderer*>(new MeshRenderer());
+    obj->addComponent<Mesh*>(new MeshCube());
+    obj->addComponent<Material*>(new Lambertian());
  
     objectsEngine.push_back(obj);
 

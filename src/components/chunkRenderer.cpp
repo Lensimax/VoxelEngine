@@ -17,8 +17,6 @@ ChunkRenderer::ChunkRenderer(){
 
 
 void ChunkRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
-
-    
     if(m_mesh == NULL){
         m_mesh = m_gameobject->getComponent<MeshCube*>();
         if(m_mesh == NULL) {return;}
@@ -30,6 +28,4 @@ void ChunkRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projec
 	m_chunk->draw(modelMat, viewMat, projectionMat, light, m_mesh, m_material);
 
     glUseProgram(0);
-
-
 }

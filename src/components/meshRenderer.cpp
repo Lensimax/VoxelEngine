@@ -24,7 +24,22 @@
 #include "meshRenderer.h"
 
 
+MeshRenderer::MeshRenderer() : m_material(NULL) {
+}
+
+MeshRenderer::~MeshRenderer(){
+
+}
+
+
 void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+
+    if(m_material == NULL){
+        m_material = m_gameobject->getComponent<Material*>();
+        if(m_material == NULL){return;}
+    }
+
+    assert(m_material != NULL);
 
     glUseProgram(m_material->getShaderID());
 
@@ -50,6 +65,11 @@ void MeshRenderer::createUI(){
 
 void MeshRenderer::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
 
+    if(m_material == NULL){
+        m_material = m_gameobject->getComponent<Material*>();
+        if(m_material == NULL){return;}
+    }
+    assert(m_material != NULL);
     // send the transformation matrix
     m_material->callUniform(modelMat, viewMat, projectionMat, light);
 

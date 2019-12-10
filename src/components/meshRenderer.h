@@ -11,8 +11,8 @@ class MeshRenderer : public Component {
 
 public:
 
-    MeshRenderer(){m_material = new Lambertian();}
-    ~MeshRenderer(){delete m_material;}
+    MeshRenderer();
+    ~MeshRenderer();
 
     virtual void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
 
@@ -22,7 +22,7 @@ protected:
 
     void setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light);
 
-    Material *m_material;
+    Material *m_material = NULL;
 
 };
 
