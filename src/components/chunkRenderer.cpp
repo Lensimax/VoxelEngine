@@ -5,7 +5,6 @@
 #include <iostream>
 
 ChunkRenderer::ChunkRenderer(){
-    m_material = new Lambertian();
 
     m_mesh = m_gameobject->getComponent<MeshCube*>();
 
@@ -15,13 +14,26 @@ ChunkRenderer::ChunkRenderer(){
 
 }
 
+ChunkRenderer::~ChunkRenderer(){
+
+}
+
 
 void ChunkRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+    if(m_material == NULL){
+        m_material = m_gameobject->getComponent<Material*>();
+        if(m_material == NULL){return;}
+    }
+
+    assert(m_material != NULL);
+
     if(m_mesh == NULL){
         m_mesh = m_gameobject->getComponent<MeshCube*>();
         if(m_mesh == NULL) {return;}
         m_chunk = new Chunk(m_mesh->getVoxelSize());
     }
+
+    assert(m_mesh != NULL);
 
     glUseProgram(m_material->getShaderID());
 
