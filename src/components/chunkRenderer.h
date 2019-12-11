@@ -16,11 +16,18 @@ public:
 
     void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 
-private:
+    glm::ivec3 toChunkWorldPosition(const glm::vec3& worldPosition);
 
+    void setPlayerTransform(Transform *player){m_playerTransform = player;}
+    Transform * getPlayerTransform(){return m_playerTransform;}
+
+private:
+    std::vector<Chunk> m_chunks;
     Chunk *m_chunk = NULL;
     
     MeshCube *m_mesh = NULL;
+
+    Transform *m_playerTransform;
 
 };
 

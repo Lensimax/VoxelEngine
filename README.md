@@ -1,21 +1,12 @@
 # Voxel-Engine
 
-[![Build Status](https://travis-ci.com/TheSpyGeek/VoxelEngine.svg?token=jqV7mNU927UBqX84KPYx&branch=master)](https://travis-ci.com/TheSpyGeek/VoxelEngine)
+[![Build Status](https://travis-ci.com/TheSpyGeek/VoxelEngine.svg?branch=master)](https://travis-ci.com/TheSpyGeek/VoxelEngine)
 
 Green-engine is a graphic engine from a student to learn how we create a graphical engine.
 
-![Green engine](ressources/demo.gif)
+![Voxel engine](ressources/demo.gif)
 
 #### Features
-
-###### Add 3D Object
-
-Object can be added in the menu ```Edit```
-
-* Add Mesh Object from ```.OFF``` file
-* Add a plane
-* Add a sphere
-* Add a terrain modified with ```Perlin``` noise
 
 ###### Change transform
 
@@ -65,6 +56,10 @@ To build :
 * Run ```mingw64```
 * Go to ```build``` directory
 * Compile with ```mingw32-make```
+
+##### On MAC OSX
+
+Should work
 
 #### Ressources
 

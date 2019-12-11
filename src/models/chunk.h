@@ -21,24 +21,26 @@
 ///////////////////////// Voxel
 
 
-using Voxel = bool;
-/*
+// using Voxel = bool;
+
 struct Voxel {
 	
-	bool activated;
+	enum class Type : unsigned char {
+		Empty,
+		Full
+	};
 
-	//// Accessors 
+	Type type;
 
-	operator=(bool activated);
+	//// Constructors
 
-	constexpr float size() const;
+	Voxel();
+	Voxel(Voxel::Type type);
+
+	//// Cast operators 
+
 	operator bool() const;
-
-	//// Static functions
-
-	static constexpr float size() const;
-}
-*/
+};
 
 
 ///////////////////////// CubicGrid
@@ -53,7 +55,7 @@ struct CubicGrid : public std::array<T, N * N * N>
 	constexpr size_t height() const;
 	constexpr size_t depth()  const;
 
-	// Les coordonnées n'ont pas le droit  d'être négatives
+	// Les coordonnées n'ont pas le droit d'être négatives
 	T&       operator()(size_t x, size_t y, size_t z);       // Accès comme un tableau à 3 dimensions
 	const T& operator()(size_t x, size_t y, size_t z) const;
 
@@ -77,6 +79,7 @@ public:
 	//// Accessors
 
 	float voxelSize() const;
+	glm::uvec3 dimensions() const;
 	
 
 	bool allNeighborsActivated(size_t x, size_t y, size_t z) const; // min(1, 1, 1), max(14, 14, 14)

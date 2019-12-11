@@ -1,3 +1,6 @@
+#ifndef VOXEL_ENGINE_GLM_DISPLAY_H
+#define VOXEL_ENGINE_GLM_DISPLAY_H
+
 
 #ifndef GLM_H
 #define GLM_H
@@ -44,3 +47,5 @@ std::ostream & operator<<(std::ostream & out, const glm::mat3& matrix){
 
     return out;
 }
+
+#endif

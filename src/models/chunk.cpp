@@ -2,6 +2,20 @@
 #include <iostream>
 
 
+///////////////////////// Voxel
+
+//// Constructors
+
+Voxel::Voxel() : type(Voxel::Type::Empty) {}
+
+Voxel::Voxel(Voxel::Type type) : type(type) {}
+
+//// Cast operators
+
+Voxel::operator bool() const {
+	return this->type != Voxel::Type::Empty;
+}
+
 ///////////////////////// CubicGrid
 
 
@@ -51,7 +65,7 @@ bool CubicGrid<T, N>::on_bounds(size_t x, size_t y, size_t z) const {
 
 Chunk::Chunk(float voxelSize) : m_voxelSize(voxelSize) {
 	for (auto& v : (*this))
-		v = true;
+		v = Voxel::Type::Full;
 }
 
 
@@ -62,10 +76,20 @@ float Chunk::voxelSize() const {
 	return m_voxelSize;
 }
 
+glm::uvec3 Chunk::dimensions() const {
+	return glm::uvec3(
+        this->width()  * this->voxelSize(),
+        this->height() * this->voxelSize(),
+        this->depth()  * this->voxelSize()
+    );
+}
+
 bool Chunk::allNeighborsActivated(size_t x, size_t y, size_t z) const
 {
-	assert(x > 0 && y > 0 && z > 0 && "les indices doivent êtres plus grand que 0");
-	assert(x < this->width() - 1 && y < this->height() - 1 && z < this->depth() - 1 && "les indices doivent êtres plus grand que 0");
+	if (x == 0 || y == 0 || z == 0) return false;
+	if (x == this->width() - 1 || y == this->height() - 1 || z == this->depth() - 1) return false;
+	// assert(x > 0 && y > 0 && z > 0 && "les indices doivent êtres plus grand que 0");
+	// assert(x < this->width() - 1 && y < this->height() - 1 && z < this->depth() - 1 && "les indices doivent êtres inferieurs à 15");
 
 	if (!(*this)(x + 1, y    , z    )) return false;
 	if (!(*this)(x - 1, y    , z    )) return false;
@@ -83,12 +107,12 @@ bool Chunk::allNeighborsActivated(size_t x, size_t y, size_t z) const
 
 void Chunk::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light, Mesh *mesh, Material *material) {
 
-	// Dessin de l'interieur du chunk
+	// Dessin de l'interieur du chunk (Affiche seulement si tout les voisins ne sont pas activées)
 
-	for(size_t i = 1 ; i< this->width() - 1 ; i++) {
-		for(size_t j = 1 ; j < this->height() - 1 ; j++) {
-			for(size_t k = 1 ; k < this->depth() - 1 ; k++) {
-				if (!allNeighborsActivated(i, j, k)) {
+	for(size_t i = 0 ; i< this->width() ; i++) {
+		for(size_t j = 0 ; j < this->height() ; j++) {
+			for(size_t k = 0 ; k < this->depth() ; k++) {
+				if (!allNeighborsActivated(i, j, k)) { 
 					glm::mat4 model = glm::translate(modelMat, glm::vec3(i * this->voxelSize(), j * this->voxelSize(), k * this->voxelSize()));
 			    	setUniform(model, viewMat, projectionMat, light, material);
 			    	mesh->drawVAO();
@@ -97,8 +121,10 @@ void Chunk::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat,
 		}
 	}
 
-	// Dessin des faces exterieures du chunk
-	
+	// A garder pour du debugage plus tard
+
+	// Dessin des faces exterieures du chunk (Affiche seulement le si voxel est activé)
+	/*
 	std::array<size_t, 2> i_borders = {0, (this->width() - 1)};
 
 	for(size_t j = 0 ; j < this->height()  ; j++) {
@@ -143,6 +169,7 @@ void Chunk::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat,
 			}
 		}
 	}
+	*/
 }
 
 void Chunk::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light, Material *material) {
