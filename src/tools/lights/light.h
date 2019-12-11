@@ -10,9 +10,9 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
-#include "../../engineClass/engineObject.h"
+#include "../../engineClass/gameObject.h"
 
-class Light : public EngineObject {
+class Light : public GameObject {
 
 public:
     virtual glm::vec3 getLight() = 0;

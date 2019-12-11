@@ -34,7 +34,7 @@ void UI::createInfoWindow(){
 }
 
 
-void UI::displayEngineNode(std::vector<EngineObject*> obj){
+void UI::displayEngineNode(std::vector<GameObject*> obj){
 
     char strobj[1024]; // label object
 
@@ -106,7 +106,7 @@ void UI::createUISceneManager(Scene *scene){
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")){
-            if (ImGui::MenuItem("Add EngineObject", "Ctrl+T")) { scene->addEngineObject(); }
+            if (ImGui::MenuItem("Add GameObject", "Ctrl+T")) { scene->addGameObject(); }
             if (ImGui::MenuItem("Add Cube")) { scene->addCube(); }
             if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(m_selectedID); }
             ImGui::EndMenu();

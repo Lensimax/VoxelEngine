@@ -1,31 +1,37 @@
 #include "scene.h"
+#include "../engineClass/gameObject.h"
 
 #include "../tools/lights/directionnalLight.h"
 #include "../tools/cameraProj.h"
 
-#include "../models/meshObject.h"
-#include "../models/voxelGrid.h"
 #include "../models/mesh/meshCube.h"
 
 #include "../material/simpleMat.h"
 
 #include "../material/textureMaterial.h"
+#include "../components/meshRenderer.h"
 
+#include "../components/component.h"
+#include "../components/chunkRenderer.h"
 
-#include "../models/player.h"
+#include "../components/controller.h"
+
+#include <iostream>
 
 
 Scene::Scene(){
 
     loadDefaultScene();
 
-    Player *p = new Player(addNewId());
-    objectsEngine.push_back(p);
+    GameObject *obj = new GameObject(addNewId());
 
-    VoxelGrid *obj = new VoxelGrid(addNewId(), "VoxelGrid", new Transform());
-
-    //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
-    // objectsEngine.push_back(obj);
+    // obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
+    obj->addComponent<MeshRenderer*>(new MeshRenderer());
+    obj->addComponent<Mesh*>(new MeshCube());
+    obj->addComponent<Material*>(new Lambertian());
+    obj->addComponent<Controller*>(new Controller());
+ 
+    objectsEngine.push_back(obj);
 
 }
 
@@ -40,7 +46,7 @@ void Scene::deleteScene(){
 }
 
 
-Camera *Scene::getCameraRecursive(EngineObject *obj){
+Camera *Scene::getCameraRecursive(GameObject *obj){
     Camera *tmp = NULL;
     if(Camera* c = dynamic_cast<Camera*>(obj)) {
         return c;
@@ -75,7 +81,7 @@ Light *Scene::getLight(){
     return NULL;
 }
 
-Light *Scene::getLightRecursive(EngineObject *obj){
+Light *Scene::getLightRecursive(GameObject *obj){
     Light *tmp = NULL;
     if(Light* l = dynamic_cast<Light*>(obj)) {
         return l;
@@ -104,7 +110,7 @@ void Scene::createUIAtID(int indexItem, char *ID){
     }
 }
 
-void Scene::drawUIAtID(std::vector<EngineObject*> objs, int indexItem, char *ID){
+void Scene::drawUIAtID(std::vector<GameObject*> objs, int indexItem, char *ID){
     for(unsigned int i=0; i<objs.size(); i++){
         if(objs[i]->getID() == indexItem){
             objs[i]->createUI(ID);
@@ -129,12 +135,19 @@ void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & i
 
 ///// CREATION DE PREFABS
 
-void Scene::addEngineObject(){
-    objectsEngine.push_back(new EngineObject(addNewId()));
+void Scene::addGameObject(){
+    objectsEngine.push_back(new GameObject(addNewId()));
 }
 
 void Scene::addCube(){
-    objectsEngine.push_back(new MeshObject(addNewId(),"Cube", new Transform(), new MeshCube(1.0f), new Lambertian()));
+    GameObject *cube = new GameObject(addNewId(), "Cube");
+
+    cube->addComponent<MeshRenderer*>(new MeshRenderer());
+    cube->addComponent<Mesh*>(new MeshCube());
+    cube->addComponent<Material*>(new Lambertian());
+ 
+    objectsEngine.push_back(cube);
+
 }
 
 
@@ -155,7 +168,7 @@ int Scene::addNewId(){
     return m_idObject-1;
 }
 
-void Scene::updateObj(EngineObject *obj){
+void Scene::updateObj(GameObject *obj){
     obj->update();
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         updateObj(obj->m_listOfChildren[i]);
@@ -181,7 +194,7 @@ void Scene::loadDefaultScene(){
 
     m_idObject = 0;
 
-    objectsEngine = std::vector<EngineObject*>();
+    objectsEngine = std::vector<GameObject*>();
 
     Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
 

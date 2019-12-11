@@ -20,6 +20,8 @@
 
 #include "mainRenderer.h"
 
+#include "../components/meshRenderer.h"
+
 // #include "models/sphere.h"
 // #include "models/meshObject.h"
 
@@ -109,14 +111,20 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
 }
 
 
-void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l, float screenAspectRatio){
+void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c, Light *l, float screenAspectRatio){
 
     glm::mat4 matrixTochild = obj->getTransform()->getModelToChild(modelMat);
     glm::mat4 modelMatrix = obj->getTransform()->getModelMat(modelMat);
 
-    if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
-        o->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
+    MeshRenderer *meshRenderer = obj->getComponent<MeshRenderer*>();
+
+    if(meshRenderer != NULL){
+        meshRenderer->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
     }
+
+    /*if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
+        o->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
+    }*/
 
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         drawRecursive(matrixTochild, obj->m_listOfChildren[i], c, l, screenAspectRatio);

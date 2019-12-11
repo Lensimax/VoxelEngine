@@ -21,10 +21,13 @@ using namespace glm;
 
 Lambertian::Lambertian(glm::vec4 color) : m_activeDebugNormal(false), m_specularDeg(2), m_ambientColor(vec4(0.0,0.0,0.0,0.0)), m_diffuseColor(color), m_specularColor(vec4(255./255.,255./255.,255./255.,1.0)){
 
+    setName("Material");
+
     createShader();
 
 
 }
+
 Lambertian::~Lambertian(){
     deleteShader();
 }
@@ -71,9 +74,7 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
 
 void Lambertian::createUI(){
-    // to hide label of the input
-    ImGui::PushItemWidth(-1);
-
+    
     if (ImGui::Button("Refresh")){
         reloadShaders();
     }
@@ -82,7 +83,7 @@ void Lambertian::createUI(){
     ImGui::Checkbox("##diffuseBool",&m_displayDiffuse); 
     if(m_displayDiffuse){
         ImGui::Text("Diffuse Color: "); ImGui::SameLine();
-        ImGui::ColorEdit4("diffuse-color", (float *)&m_diffuseColor);
+        ImGui::ColorEdit4("##diffuse-color", (float *)&m_diffuseColor);
     }   
     ImGui::Text("Ambient Color: "); ImGui::SameLine();
     ImGui::ColorEdit4("##ambient-color", (float *)&m_ambientColor);
@@ -95,8 +96,7 @@ void Lambertian::createUI(){
     ImGui::Text("debug Normal "); ImGui::SameLine();
     ImGui::Checkbox("##debugNormal",&m_activeDebugNormal);
 
-    // to hide label of the input
-    ImGui::PopItemWidth();
+
 }
 
 GLuint Lambertian::getShaderID(){
