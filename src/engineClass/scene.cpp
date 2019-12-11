@@ -14,6 +14,7 @@
 #include "../components/component.h"
 #include "../components/chunkRenderer.h"
 
+#include "../components/controller.h"
 
 #include <iostream>
 
@@ -24,10 +25,11 @@ Scene::Scene(){
 
     GameObject *obj = new GameObject(addNewId());
 
-    obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
-    //obj->addComponent<MeshRenderer*>(new MeshRenderer());
+    // obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
+    obj->addComponent<MeshRenderer*>(new MeshRenderer());
     obj->addComponent<Mesh*>(new MeshCube());
     obj->addComponent<Material*>(new Lambertian());
+    obj->addComponent<Controller*>(new Controller());
  
     objectsEngine.push_back(obj);
 
@@ -138,7 +140,14 @@ void Scene::addGameObject(){
 }
 
 void Scene::addCube(){
-    //objectsEngine.push_back(new MeshObject(addNewId(),"Cube", new Transform(), new MeshCube(1.0f), new Lambertian()));
+    GameObject *cube = new GameObject(addNewId(), "Cube");
+
+    cube->addComponent<MeshRenderer*>(new MeshRenderer());
+    cube->addComponent<Mesh*>(new MeshCube());
+    cube->addComponent<Material*>(new Lambertian());
+ 
+    objectsEngine.push_back(cube);
+
 }
 
 

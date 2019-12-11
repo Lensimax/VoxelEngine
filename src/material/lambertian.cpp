@@ -27,6 +27,7 @@ Lambertian::Lambertian(glm::vec4 color) : m_activeDebugNormal(false), m_specular
 
 
 }
+
 Lambertian::~Lambertian(){
     deleteShader();
 }

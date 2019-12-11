@@ -21,8 +21,12 @@
 class Controller : public Component {
 
 public:
+    Controller();
+
 
     void update() override;
+
+    void createUI() override;
 
     float m_speed = 0.2f;
 

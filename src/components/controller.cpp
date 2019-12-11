@@ -1,6 +1,12 @@
 #include "controller.h"
 
 
+Controller::Controller(){
+    setName("Player Controller");
+    m_speed = 0.2f;
+}
+
+
 void Controller::update(){
 
     glm::vec3 pos = m_gameobject->m_transform->getPosition();
@@ -19,4 +25,9 @@ void Controller::update(){
 
     m_gameobject->m_transform->setPosition(pos); 
 
+}
+
+void Controller::createUI(){
+    ImGui::Text("Speed : ");
+    ImGui::DragFloat("##speed", &m_speed, 0.01f,0.01f, 1000.f); 
 }
