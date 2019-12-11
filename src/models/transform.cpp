@@ -136,11 +136,11 @@ void Transform::createUI(){
 
     ImGui::Text("Transform");
     ImGui::Text("Position: "); ImGui::SameLine();
-    ImGui::DragFloat3("position", &m_vecPosition[0], 0.01f, lowestValue, highestValue, format);
+    ImGui::DragFloat3("##position", &m_vecPosition[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Rotation: "); ImGui::SameLine();
-    ImGui::DragFloat3("rotation", &m_vecRotation[0], 0.01f, lowestValue, highestValue, format);
+    ImGui::DragFloat3("##rotation", &m_vecRotation[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Scale: "); ImGui::SameLine();
-    ImGui::DragFloat3("scale", &m_vecScale[0], 0.005f, 0.0f, highestValue, format);
+    ImGui::DragFloat3("##scale", &m_vecScale[0], 0.005f, 0.0f, highestValue, format);
 
     bool node_open_anim = ImGui::TreeNodeEx((void*)(intptr_t)0, node_flags, "Animation");
 
@@ -148,15 +148,15 @@ void Transform::createUI(){
         ImGui::Text("Rotation X : ");
         ImGui::SameLine(); ImGui::Checkbox("##RotX", &m_b_animRotX);
         ImGui::SameLine(); ImGui::Text("speed X: "); ImGui::SameLine();
-        ImGui::DragFloat("speedX", &m_animRotSpeedX, 0.002f, lowestValue, highestValue, format);
+        ImGui::DragFloat("##speedX", &m_animRotSpeedX, 0.002f, lowestValue, highestValue, format);
         ImGui::Text("Rotation Y : ");
         ImGui::SameLine(); ImGui::Checkbox("##RotY", &m_b_animRotY);
         ImGui::SameLine(); ImGui::Text("speed Y: "); ImGui::SameLine();
-        ImGui::DragFloat("speedY", &m_animRotSpeedY, 0.002f, lowestValue, highestValue, format);
+        ImGui::DragFloat("##speedY", &m_animRotSpeedY, 0.002f, lowestValue, highestValue, format);
         ImGui::Text("Rotation Z : ");
         ImGui::SameLine(); ImGui::Checkbox("##RotZ", &b_animRotZ);
         ImGui::SameLine(); ImGui::Text("speed Z: "); ImGui::SameLine();
-        ImGui::DragFloat("speedZ", &m_animRotSpeedZ, 0.002f, lowestValue, highestValue, format);
+        ImGui::DragFloat("##speedZ", &m_animRotSpeedZ, 0.002f, lowestValue, highestValue, format);
 
         ImGui::TreePop();
     }
@@ -196,15 +196,15 @@ void Transform::createUI(){
             ImGui::Text("Rotation X : ");
             ImGui::SameLine(); ImGui::Checkbox("##ChildRotX", &m_b_animChildRotX);
             ImGui::SameLine(); ImGui::Text("speed X: "); ImGui::SameLine();
-            ImGui::DragFloat("speedX", &m_animChildRotSpeedX, 0.002f, lowestValue, highestValue, format);
+            ImGui::DragFloat("##speedChildX", &m_animChildRotSpeedX, 0.002f, lowestValue, highestValue, format);
             ImGui::Text("Rotation Y : ");
             ImGui::SameLine(); ImGui::Checkbox("##ChildRotY", &m_b_animChildRotY);
             ImGui::SameLine(); ImGui::Text("speed Y: "); ImGui::SameLine();
-            ImGui::DragFloat("speedY", &m_animChildRotSpeedY, 0.002f, lowestValue, highestValue, format);
+            ImGui::DragFloat("##speedChildY", &m_animChildRotSpeedY, 0.002f, lowestValue, highestValue, format);
             ImGui::Text("Rotation Z : ");
             ImGui::SameLine(); ImGui::Checkbox("##ChildRotZ", &m_b_animChildRotZ);
             ImGui::SameLine(); ImGui::Text("speed Z: "); ImGui::SameLine();
-            ImGui::DragFloat("speedZ", &m_animChildRotSpeedZ, 0.002f, lowestValue, highestValue, format);
+            ImGui::DragFloat("##speedChildZ", &m_animChildRotSpeedZ, 0.002f, lowestValue, highestValue, format);
 
             ImGui::TreePop();
         }

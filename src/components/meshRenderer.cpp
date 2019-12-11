@@ -42,12 +42,14 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
 
     assert(m_material != NULL);
 
+    if(!m_material->getActive()){return;}
+
     glUseProgram(m_material->getShaderID());
 
     setUniform(modelMat, viewMat, projectionMat, light);
 
     Mesh *mesh = m_gameobject->getComponent<Mesh*>();
-    if(mesh != NULL){
+    if(mesh != NULL && mesh->getActive()){
         mesh->drawVAO();
     }
 
@@ -66,7 +68,9 @@ void MeshRenderer::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 p
         if(m_material == NULL){return;}
     }
     assert(m_material != NULL);
-    // send the transformation matrix
+    if(!m_material->getActive()){return;}
+    
+    // send the transformation matrix    
     m_material->callUniform(modelMat, viewMat, projectionMat, light);
 
 }
