@@ -5,6 +5,7 @@
 #include <iostream>
 
 ChunkRenderer::ChunkRenderer(){
+    setName("Chunk Renderer");
 
     m_mesh = m_gameobject->getComponent<MeshCube*>();
 
