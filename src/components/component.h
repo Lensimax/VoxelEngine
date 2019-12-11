@@ -20,16 +20,20 @@ public:
 
     bool getActive(){return m_active;}
     void setActive(bool active){m_active = active;}
+    char* getName(){return m_name;}
+    void setName(char name[2048]){sprintf(m_name, name);};
+
 
     void setGameObject(GameObject * obj){m_gameobject = obj;}
+
+
+    bool m_active = true;
 
 protected:
 
     GameObject *m_gameobject;
-    char name[2048];
+    char m_name[2048] = "Untitled Component";
 
-    // TODO use it
-    bool m_active = true;
 
 };
 

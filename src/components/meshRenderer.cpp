@@ -25,6 +25,7 @@
 
 
 MeshRenderer::MeshRenderer() : m_material(NULL) {
+    setName("Mesh Renderer");
 }
 
 MeshRenderer::~MeshRenderer(){
@@ -54,13 +55,7 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
 
 }
 
-void MeshRenderer::createUI(){
-    if (ImGui::TreeNode("Mesh Renderer")){
-        ImGui::SameLine(); ImGui::Checkbox("##active", &m_active);
-        ImGui::SameLine(); if(ImGui::Button("Delete")){m_gameobject->removeComponent<MeshRenderer*>(); m_gameobject->m_toRemove.push_back(this);}
-        ImGui::TreePop();
-    }
-
+void MeshRenderer::createUI(){    
 }
 
 

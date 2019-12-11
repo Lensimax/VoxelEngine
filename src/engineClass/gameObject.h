@@ -40,7 +40,6 @@ public:
 
 
     std::vector<Component*> m_toRemove;
-    
     // TRANSFORM
     Transform *getTransform();
     Transform *m_transform;

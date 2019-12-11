@@ -23,6 +23,7 @@ template< class ComponentType > bool GameObject::removeComponent() {
     for (unsigned int i=0; i<m_components.size(); i++ ) {
          
         if ( ComponentType o = dynamic_cast<ComponentType>(m_components[i]) ){
+            delete m_components[i];
             m_components.erase(m_components.begin()+i);
             return true;
         }

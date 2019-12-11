@@ -94,10 +94,21 @@ void GameObject::createUI(char *ID){
     ImGui::Separator();
     m_transform->createUI();
 
-
-    for(unsigned int i=0; i<m_components.size(); i++){
+    char label[2048];
+    for(int i=m_components.size()-1; i>=0; i--){
         ImGui::Separator();
-        m_components[i]->createUI();
+        // sprintf(label, "%s", m_components[i]->getName());
+        if (ImGui::TreeNode(m_components[i]->getName())){
+            ImGui::SameLine(); ImGui::Checkbox("##active", &(m_components[i]->m_active));
+            ImGui::SameLine();
+            if(ImGui::Button("Delete")){
+                delete m_components[i];
+                m_components.erase(m_components.begin()+i);
+            } else {
+                m_components[i]->createUI();
+            }
+            ImGui::TreePop();
+        }
     }
 
     ImGui::Separator();  
