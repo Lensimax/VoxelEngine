@@ -71,31 +71,28 @@ void Lambertian::callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 pr
 
 
 void Lambertian::createUI(){
-    if (ImGui::TreeNode("Lambertian Material")){
-        ImGui::SameLine(); ImGui::Checkbox("##active", &m_active);
-        
-        if (ImGui::Button("Refresh")){
-            reloadShaders();
-        }
-
-        ImGui::Text("Display by diffuse color "); ImGui::SameLine();
-        ImGui::Checkbox("##diffuseBool",&m_displayDiffuse); 
-        if(m_displayDiffuse){
-            ImGui::Text("Diffuse Color: "); ImGui::SameLine();
-            ImGui::ColorEdit4("diffuse-color", (float *)&m_diffuseColor);
-        }   
-        ImGui::Text("Ambient Color: "); ImGui::SameLine();
-        ImGui::ColorEdit4("##ambient-color", (float *)&m_ambientColor);
-        ImGui::Text("Specular Color: "); ImGui::SameLine();
-        ImGui::ColorEdit4("##spec-color", (float *)&m_specularColor);
-
-        ImGui::Text("Specular degree"); ImGui::SameLine();
-        ImGui::DragFloat("##specdeg", &m_specularDeg, 0.01f, 0.001f, 10000, "%.3f");
-
-        ImGui::Text("debug Normal "); ImGui::SameLine();
-        ImGui::Checkbox("##debugNormal",&m_activeDebugNormal);
-        ImGui::TreePop();
+    
+    if (ImGui::Button("Refresh")){
+        reloadShaders();
     }
+
+    ImGui::Text("Display by diffuse color "); ImGui::SameLine();
+    ImGui::Checkbox("##diffuseBool",&m_displayDiffuse); 
+    if(m_displayDiffuse){
+        ImGui::Text("Diffuse Color: "); ImGui::SameLine();
+        ImGui::ColorEdit4("diffuse-color", (float *)&m_diffuseColor);
+    }   
+    ImGui::Text("Ambient Color: "); ImGui::SameLine();
+    ImGui::ColorEdit4("##ambient-color", (float *)&m_ambientColor);
+    ImGui::Text("Specular Color: "); ImGui::SameLine();
+    ImGui::ColorEdit4("##spec-color", (float *)&m_specularColor);
+
+    ImGui::Text("Specular degree"); ImGui::SameLine();
+    ImGui::DragFloat("##specdeg", &m_specularDeg, 0.01f, 0.001f, 10000, "%.3f");
+
+    ImGui::Text("debug Normal "); ImGui::SameLine();
+    ImGui::Checkbox("##debugNormal",&m_activeDebugNormal);
+
 
 }
 

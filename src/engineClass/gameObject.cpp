@@ -102,7 +102,7 @@ void GameObject::createUI(char *ID){
         if (ImGui::TreeNode(m_components[i]->getName())){
             ImGui::SameLine(); ImGui::Checkbox("##active", &(m_components[i]->m_active));
             ImGui::SameLine();
-            if(ImGui::Button("Delete")){
+            if(ImGui::Button("Delete Component")){
                 delete m_components[i];
                 m_components.erase(m_components.begin()+i);
             } else {

@@ -4,6 +4,8 @@
 
 MeshCube::MeshCube(float w, bool center) : m_width(w), m_centered(center){
 
+    setName("Mesh Cube");
+
     createMesh(m_width);
     createVAO();
 
@@ -21,23 +23,18 @@ void MeshCube::recreate(){
 }
 
 void MeshCube::createUI(){
-    if (ImGui::TreeNode("Mesh")){
-    //Mesh::createUI();
-        ImGui::SameLine(); ImGui::Checkbox("##active", &m_active);
 
-        ImGui::Text("Number vertices: %d", getNBVertices());
-        ImGui::Text("Number faces: %d", getNBFaces());
+    ImGui::Text("Number vertices: %d", getNBVertices());
+    ImGui::Text("Number faces: %d", getNBFaces());
 
-        ImGui::Text("Width : ");
-        ImGui::DragFloat("##width", &m_width, 0.01f); 
+    ImGui::Text("Width : ");
+    ImGui::DragFloat("##width", &m_width, 0.01f); 
 
-        ImGui::Text("Centered : "); ImGui::SameLine();
-        ImGui::Checkbox("##centered", &m_centered); 
-        ImGui::TreePop();
+    ImGui::Text("Centered : "); ImGui::SameLine();
+    ImGui::Checkbox("##centered", &m_centered); 
 
-        if(ImGui::Button("Recreate")){
-            recreate();
-        }
+    if(ImGui::Button("Recreate")){
+        recreate();
     }
 }
 
