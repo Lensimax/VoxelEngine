@@ -17,6 +17,13 @@ jobs:
   - stage: Compilation
   
   - os: linux
+    branches:
+     only:
+     - master
+     - stable
+     - develop
+  
+   
     before_install:
       - sudo apt-get update -qq
     install:
@@ -28,7 +35,12 @@ jobs:
       - make -j
       
   - os: osx
-      
+      branches:
+       only:
+       - master
+       - stable
+       - develop
+  
       install:
         - mkdir build
         - cd build
