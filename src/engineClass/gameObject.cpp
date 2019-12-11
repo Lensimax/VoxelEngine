@@ -16,6 +16,7 @@ GameObject::GameObject(int id, std::string n, Transform *t) : m_transform(t){
 	setName(n);
 
     m_components = std::vector<Component*>();
+    m_toRemove = std::vector<Component*>();
 }
 
 GameObject::~GameObject(){
@@ -105,7 +106,7 @@ void GameObject::createUI(char *ID){
         if (ImGui::MenuItem("Add MeshCube")) { addComponent<Mesh*>(new MeshCube()); }
         if (ImGui::MenuItem("Add Material")) { addComponent<Material*>(new Lambertian()); }
         if (ImGui::MenuItem("Add MeshRenderer")) { addComponent<MeshRenderer*>(new MeshRenderer());  }
-        if (ImGui::MenuItem("Add ChunkRenderer")) { addComponent<MeshRenderer*>(new ChunkRenderer());  }
+        // if (ImGui::MenuItem("Add ChunkRenderer")) { addComponent<ChunkRenderer*>(new ChunkRenderer());  }
         ImGui::EndMenu();
     }
 
@@ -115,10 +116,19 @@ void GameObject::createUI(char *ID){
 
 
 void GameObject::update(){
+    removeComponentToBeDestroyed();
     m_transform->update();
 
     for(unsigned int i=0; i<m_components.size(); i++){
         m_components[i]->update();
+    }
+}
+
+
+void GameObject::removeComponentToBeDestroyed(){
+    for(int i=m_toRemove.size()-1; i>=0; i--){
+        delete m_toRemove[i];
+        m_toRemove.erase(m_toRemove.begin()+i);
     }
 }
 

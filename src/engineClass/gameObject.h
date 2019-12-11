@@ -38,12 +38,18 @@ public:
     template< class ComponentType> void addComponent();
     template< class ComponentType > bool removeComponent();
 
+
+    std::vector<Component*> m_toRemove;
+    
     // TRANSFORM
     Transform *getTransform();
     Transform *m_transform;
 
 protected:
     std::vector<Component*> m_components;
+
+
+    void removeComponentToBeDestroyed();
 
     std::string m_name;
     int m_id;

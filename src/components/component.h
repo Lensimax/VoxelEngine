@@ -26,6 +26,7 @@ public:
 protected:
 
     GameObject *m_gameobject;
+    char name[2048];
 
     // TODO use it
     bool m_active = true;
