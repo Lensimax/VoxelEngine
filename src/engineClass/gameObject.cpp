@@ -95,7 +95,8 @@ void GameObject::createUI(char *ID){
     m_transform->createUI();
 
     char label[2048];
-    for(int i=m_components.size()-1; i>=0; i--){
+    unsigned int i=0;
+    while(i<m_components.size()){
         ImGui::Separator();
         // sprintf(label, "%s", m_components[i]->getName());
         if (ImGui::TreeNode(m_components[i]->getName())){
@@ -106,8 +107,11 @@ void GameObject::createUI(char *ID){
                 m_components.erase(m_components.begin()+i);
             } else {
                 m_components[i]->createUI();
+                i++;
             }
             ImGui::TreePop();
+        } else {
+            i++;
         }
     }
 
