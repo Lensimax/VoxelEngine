@@ -93,7 +93,6 @@ void MeshRenderer::drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3
 
 // draw box that move with the object
 void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
-
     Shader *shader = new Shader();
     shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
 
@@ -104,7 +103,7 @@ void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 m
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
 
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
     glBegin(GL_TRIANGLES);
 
@@ -125,6 +124,8 @@ void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 m
     glEnd();
 
     glUseProgram(0);
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 
 

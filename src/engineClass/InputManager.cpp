@@ -1,6 +1,8 @@
 #include "InputManager.h"
 #include <imgui.h>
 
+#include "UI.h"
+
 #include <iostream>
 
 InputManager::InputManager() : m_sensitivityRotateWorld(glm::vec2(1)), m_scrollZoomSensitivity(1.f) {

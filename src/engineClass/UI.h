@@ -5,6 +5,7 @@
 
 #include "scene.h"
 #include "mainRenderer.h"
+#include "InputManager.h"
 
 #include <vector>
 
@@ -22,6 +23,7 @@ public:
     void set(Scene *sc);
     void set(MainRenderer *main);
     void set(GLFWwindow *win);
+    void set(InputManager *input){m_inputManager = input;};
 
     inline bool hasToDisplayed(){
         return m_hasToBeDisplayed;
@@ -45,6 +47,7 @@ private:
     Scene *m_scene;
     MainRenderer *m_mainRenderer;
     GLFWwindow* m_window;
+    InputManager *m_inputManager;
 
 };
 
