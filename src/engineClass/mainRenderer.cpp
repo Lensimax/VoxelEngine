@@ -151,7 +151,6 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     // render in texture
     renderTheScene(scene, width, height);
 
-
     ///// RENDERING DISPLAY FOR EDITOR
     glDrawBuffer(GL_COLOR_ATTACHMENT1);
 
@@ -164,7 +163,7 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
 
     renderTheSceneEditor(scene, width, height);
 
-
+    
 
 
     // disable FBO

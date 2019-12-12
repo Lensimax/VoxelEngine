@@ -9,8 +9,8 @@ uniform mat4 viewMat;
 
 void main() {
 
-	// gl_Position = projMat*viewMat * modelMat*vec4(position, 1.0);
+	gl_Position = projMat*viewMat * modelMat*vec4(position, 1.0);
 
-	gl_Position = vec4(position, 1.0);
+	// gl_Position = vec4(position, 1.0);
 
 }
