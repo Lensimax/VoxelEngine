@@ -19,6 +19,8 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+#include <drawDebug.h>
+
 #include <iostream>
 
 #include "meshRenderer.h"
@@ -81,53 +83,46 @@ void MeshRenderer::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 p
 
 }
 
-void MeshRenderer::drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4){
-    glVertex3f(v1.x, v1.y, v1.z);
+void MeshRenderer::drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4, float array[108], int i){
+    /*glVertex3f(v1.x, v1.y, v1.z);
     glVertex3f(v4.x, v4.y, v4.z);
     glVertex3f(v2.x, v2.y, v2.z);
 
     glVertex3f(v2.x, v2.y, v2.z);
     glVertex3f(v4.x, v4.y, v4.z);
-    glVertex3f(v3.x, v3.y, v3.z);
+    glVertex3f(v3.x, v3.y, v3.z);*/
+
+    array[i] = v1.x; array[i+1] = v1.y; array[i+2] = v1.z;
+    array[i+3] = v4.x; array[i+4] = v4.y; array[i+5] = v4.z;
+    array[i+6] = v2.x; array[i+7] = v2.y; array[i+8] = v2.z;
+
+    array[i+9] = v2.x; array[i+10] = v2.y; array[i+11] = v2.z;
+    array[i+12] = v4.x; array[i+13] = v4.y; array[i+14] = v4.z;
+    array[i+15] = v3.x; array[i+16] = v3.y; array[i+17] = v3.z;
 }
 
 // draw box that move with the object
 void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
-    Shader *shader = new Shader();
-    shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
+    Shader shader = Shader();
+    shader.load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
 
-    glUseProgram(shader->id());
+    glUseProgram(shader.id());
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
 
 
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+    float array[] = {
+        min.x,max.y,max.z, min.x,min.y,max.z, max.x,max.y,max.z,
+        max.x,max.y,max.z, min.x,min.y,max.z, max.x,min.y,max.z,
+    };
+
+    unsigned int nbVertices = 6;
 
     glLineWidth(1);
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-
-    glBegin(GL_TRIANGLES);
-
-    // front face
-    drawQuadWithTriangle(glm::vec3(min.x,max.y,max.z), glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(min.x,min.y,max.z));
-    // back face
-    drawQuadWithTriangle(glm::vec3(max.x,max.y,min.z), glm::vec3(min.x,max.y,min.z), glm::vec3(min.x,min.y,min.z), glm::vec3(max.x,min.y,min.z));
-    // left face
-    drawQuadWithTriangle(glm::vec3(min.x,max.y,min.z), glm::vec3(min.x,min.y,max.z), glm::vec3(min.x,min.y,max.z), glm::vec3(min.x,min.y,min.z));
-    // right face
-    drawQuadWithTriangle(glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,max.y,min.z), glm::vec3(max.x,min.y,min.z), glm::vec3(max.x,min.y,max.z));
-    // bottom face
-    drawQuadWithTriangle(glm::vec3(min.x,min.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(max.x,min.y,min.z), glm::vec3(min.x,min.y,min.z));
-    // top face
-    drawQuadWithTriangle(glm::vec3(min.x,max.y,min.z), glm::vec3(max.x,max.y,min.z), glm::vec3(max.x,max.y,max.z), glm::vec3(min.x,max.y,max.z));
-
-
-    glEnd();
-
+    DrawDebug::drawArrayPosition(nbVertices, array, GL_TRIANGLES, GL_LINE);
+    
     glUseProgram(0);
-
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-
 
 
 }
