@@ -24,7 +24,7 @@
 #include "meshRenderer.h"
 
 
-MeshRenderer::MeshRenderer() : m_material(NULL) {
+MeshRenderer::MeshRenderer() : m_material(NULL), m_showBoundingBox(true) {
     setName("Mesh Renderer");
 }
 
@@ -32,8 +32,8 @@ MeshRenderer::~MeshRenderer(){
 
 }
 
-
 void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+
 
     if(m_material == NULL){
         m_material = m_gameobject->getComponent<Material*>();
@@ -55,9 +55,15 @@ void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 project
 
     glUseProgram(0);
 
+    if(m_showBoundingBox){
+        drawBoxWithMatrices(mesh->getMin()*1.1f, mesh->getMax()*1.1f, modelMat, viewMat, projectionMat);
+    }
+
 }
 
-void MeshRenderer::createUI(){    
+void MeshRenderer::createUI(){  
+    ImGui::Text("Show bounding box : ");
+    ImGui::SameLine(); ImGui::Checkbox("##showbounding", &m_showBoundingBox);  
 }
 
 
@@ -72,5 +78,54 @@ void MeshRenderer::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 p
     
     // send the transformation matrix    
     m_material->callUniform(modelMat, viewMat, projectionMat, light);
+
+}
+
+void MeshRenderer::drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4){
+    glVertex3f(v1.x, v1.y, v1.z);
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v3.x, v3.y, v3.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+}
+
+// draw box that move with the object
+void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
+
+    Shader *shader = new Shader();
+    shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
+
+    glUseProgram(shader->id());
+
+
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+
+    glBegin(GL_TRIANGLES);
+
+    // front face
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,max.z), glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(min.x,min.y,max.z));
+    // back face
+    drawQuadWithTriangle(glm::vec3(max.x,max.y,min.z), glm::vec3(min.x,max.y,min.z), glm::vec3(min.x,min.y,min.z), glm::vec3(max.x,min.y,min.z));
+    // left face
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,min.z), glm::vec3(min.x,min.y,max.z), glm::vec3(min.x,min.y,max.z), glm::vec3(min.x,min.y,min.z));
+    // right face
+    drawQuadWithTriangle(glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,max.y,min.z), glm::vec3(max.x,min.y,min.z), glm::vec3(max.x,min.y,max.z));
+    // bottom face
+    drawQuadWithTriangle(glm::vec3(min.x,min.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(max.x,min.y,min.z), glm::vec3(min.x,min.y,min.z));
+    // top face
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,min.z), glm::vec3(max.x,max.y,min.z), glm::vec3(max.x,max.y,max.z), glm::vec3(min.x,max.y,max.z));
+
+
+    glEnd();
+
+    glUseProgram(0);
+
+
 
 }

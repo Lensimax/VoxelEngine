@@ -93,6 +93,8 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
 
 
 
+    //drawEditorGrid(m_transformEditor->getModelToChild(glm::mat4(1)), m_camera->getView(), m_camera->getProj());
+
     Light *l = scene->getLight();
     if(l == NULL){
         l = new DirectionnalLight(scene->addNewId());
@@ -153,11 +155,16 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     ///// RENDERING DISPLAY FOR EDITOR
     glDrawBuffer(GL_COLOR_ATTACHMENT1);
 
+
     initializeGL();
     glViewport(0,0,width,height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+
     renderTheSceneEditor(scene, width, height);
+
+
 
 
     // disable FBO
@@ -187,6 +194,43 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
     glUseProgram(0);
 }
 
+/*void drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4){
+    glVertex3f(v1.x, v1.y, v1.z);
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+
+    glVertex3f(v2.x, v2.y, v2.z);
+    glVertex3f(v3.x, v3.y, v3.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+}
+
+void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
+    Shader *shader = new Shader();
+    shader->load("../data/shaders/displayBoundingBox.vert","../data/shaders/displayBoundingBox.frag");
+
+    glm::vec3 min = glm::vec3(0);
+    glm::vec3 max = glm::vec3(1,1,0);
+
+    glUseProgram(shader->id());
+
+
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+
+    glBegin(GL_TRIANGLES);
+
+    drawQuadWithTriangle(glm::vec3(min.x,max.y,max.z), glm::vec3(max.x,max.y,max.z), glm::vec3(max.x,min.y,max.z), glm::vec3(min.x,min.y,max.z));
+
+    glEnd();
+
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glUseProgram(0);
+    delete shader;
+}*/
+
 
 void MainRenderer::update(){
     m_transformEditor->update();
@@ -213,7 +257,7 @@ void MainRenderer::initializeGL(){
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glDepthMask(GL_TRUE);
-    glDepthFunc(GL_LESS);
+    //glDepthFunc(GL_LESS);
     glEnable(GL_POLYGON_OFFSET_LINE);
     glPolygonOffset(-1,-1);
 
