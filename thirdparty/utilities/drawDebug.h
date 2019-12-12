@@ -31,7 +31,7 @@ public:
 
         glBindBuffer(GL_ARRAY_BUFFER,buffer); // vertices
         glBufferData(GL_ARRAY_BUFFER,nbVertices*3*sizeof(float),array,GL_STATIC_DRAW);
-        glEnableVertexAttribArray(POSITION_ATTRIB);
+        glEnableVertexAttribArray(0);
         glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
 
         glDrawArrays(drawMode,0,nbVertices);

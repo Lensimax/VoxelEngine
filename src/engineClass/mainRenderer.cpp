@@ -3,6 +3,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <drawDebug.h>
+
 
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -104,14 +106,10 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     }
 
-
-
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camera, l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-
-
 }
 
 
@@ -125,10 +123,6 @@ void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c,
     if(meshRenderer != NULL){
         meshRenderer->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
     }
-
-    /*if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
-        o->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
-    }*/
 
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         drawRecursive(matrixTochild, obj->m_listOfChildren[i], c, l, screenAspectRatio);
@@ -156,16 +150,11 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     ///// RENDERING DISPLAY FOR EDITOR
     glDrawBuffer(GL_COLOR_ATTACHMENT1);
 
-
     initializeGL();
     glViewport(0,0,width,height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     renderTheSceneEditor(scene, width, height);
-
-    
-
 
     // disable FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -200,42 +189,40 @@ void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
     Shader *shader = new Shader();
     shader->load("../data/shaders/simple.vert","../data/shaders/simple.frag");
 
-    glm::vec3 min = glm::vec3(0);
-    glm::vec3 max = glm::vec3(1,1,0);
+    glm::vec4 color = glm::vec4(0.217f, 0.217f, 0.217f, 1.0f);
 
     glUseProgram(shader->id());
-
 
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
 
+    glUniform4fv(glGetUniformLocation(shader->id(),"color"),1,&color[0]);
+
     glLineWidth(1);
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-
-    glBegin(GL_LINES);
-
-    int size = 16;
+    
+    const int size = 16;
     const float step = 1;
+
+    std::vector<glm::vec3> arrayVertices;
+    arrayVertices.resize(size*size);
 
     for(int i=-(size/2); i<size/2; i++){
         for(int j=-(size/2); j<size/2; j++){
             if(i != (size/2)-1){
-                glVertex3f(i*step, 0, j*step);
-                glVertex3f((i+1)*step, 0, j*step);
+                arrayVertices.push_back(glm::vec3(i*step, 0, j*step));
+                arrayVertices.push_back(glm::vec3((i+1)*step, 0, j*step));
             }
 
             if(j != (size/2)-1){
-                glVertex3f(i*step, 0, j*step);
-                glVertex3f((i)*step, 0, (j+1)*step);
+                arrayVertices.push_back(glm::vec3(i*step, 0, j*step));
+                arrayVertices.push_back(glm::vec3((i)*step, 0, (j+1)*step));
             }
         }
 
     }
+    DrawDebug::drawArrayPosition(arrayVertices.size(), (float*)&(arrayVertices[0]), GL_LINES);
 
-    glEnd();
-
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glUseProgram(0);
     delete shader;
 }

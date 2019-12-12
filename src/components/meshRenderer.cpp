@@ -95,7 +95,7 @@ void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 m
     glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
 
     std::vector<glm::vec3> array;
-    array.reserve(12);
+    array.reserve(36);
 
     array.push_back(glm::vec3(min.x,max.y,max.z)); array.push_back(glm::vec3(min.x,min.y,max.z)); array.push_back(glm::vec3(max.x,max.y,max.z));
     array.push_back(glm::vec3(max.x,max.y,max.z)); array.push_back(glm::vec3(min.x,min.y,max.z)); array.push_back(glm::vec3(max.x,min.y,max.z));
