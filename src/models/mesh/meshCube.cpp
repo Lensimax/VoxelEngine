@@ -31,7 +31,10 @@ void MeshCube::createUI(){
     ImGui::DragFloat("##width", &m_width, 0.01f); 
 
     ImGui::Text("Centered : "); ImGui::SameLine();
-    ImGui::Checkbox("##centered", &m_centered); 
+    ImGui::Checkbox("##centered", &m_centered);
+
+    ImGui::Text("min: %f, %f, %f", m_minX, m_minY, m_minZ);
+    ImGui::Text("max: %f, %f, %f", m_maxX, m_maxY, m_maxZ); 
 
     if(ImGui::Button("Recreate")){
         recreate();
@@ -49,6 +52,9 @@ void MeshCube::createMesh(float w){
     createColors();
     
     // createInfo();
+
+    computeBoundingBox();
+    inflateBoundingBox();
 
     m_backupVertices = m_vertices;
 

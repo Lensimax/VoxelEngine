@@ -6,7 +6,7 @@
 #include <imgui_impl_opengl3.h>
 
 
-UI::UI() : m_scene(NULL), m_mainRenderer(NULL), m_window(NULL), m_selectedID(0), m_hasToBeDisplayed(true) {
+UI::UI() : m_scene(NULL), m_mainRenderer(NULL), m_inputManager(NULL), m_window(NULL), m_selectedID(0), m_hasToBeDisplayed(true) {
 }
 
 UI::~UI(){
@@ -21,6 +21,14 @@ void UI::drawUI(){
 
     if(m_scene != NULL){
         createUISceneManager(m_scene);
+    }
+
+    if(m_mainRenderer != NULL){
+        m_mainRenderer->createUI();
+    }
+
+    if(m_inputManager != NULL){
+        m_inputManager->createUI();
     }
 
    
@@ -113,6 +121,7 @@ void UI::createUISceneManager(Scene *scene){
         }
         if (ImGui::BeginMenu("View")){
             if (ImGui::MenuItem("Toggle wire frame","CTRL+F")) { if(m_mainRenderer != NULL) m_mainRenderer->toggleWire(); }
+            if (ImGui::MenuItem("Toggle grid")) { if(m_mainRenderer != NULL) m_mainRenderer->toggleGrid(); }
             ImGui::EndMenu();
         }
 

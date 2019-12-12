@@ -2,11 +2,11 @@
 language: cpp
 
 # safelist
-branches:
-  only:
-  - master
-  - stable
-  - develop
+# branches:
+#   only:
+#   - master
+#   - stable
+#   - develop
   
 
 compiler:

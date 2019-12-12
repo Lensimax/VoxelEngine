@@ -3,6 +3,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <drawDebug.h>
+
 
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -28,7 +30,7 @@
 
 #include <iostream> 
 
-MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0) {
+MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true) {
 
     m_transformEditor = new Transform();
 
@@ -91,23 +93,25 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     m_widthScreen = width;
     m_heightScreen = height;
 
-
-
     Light *l = scene->getLight();
     if(l == NULL){
         l = new DirectionnalLight(scene->addNewId());
     }
 
+    if(m_gridActivated){
+        drawEditorGrid(m_transformEditor->getModelToChild(glm::mat4(1)), m_camera->getView(), m_camera->getProj());
+    }
+    
     if(m_wireActivated){
         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camera, l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-
-
 }
 
 
@@ -121,10 +125,6 @@ void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c,
     if(meshRenderer != NULL){
         meshRenderer->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
     }
-
-    /*if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
-        o->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
-    }*/
 
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         drawRecursive(matrixTochild, obj->m_listOfChildren[i], c, l, screenAspectRatio);
@@ -149,7 +149,6 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     // render in texture
     renderTheScene(scene, width, height);
 
-
     ///// RENDERING DISPLAY FOR EDITOR
     glDrawBuffer(GL_COLOR_ATTACHMENT1);
 
@@ -158,7 +157,6 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     renderTheSceneEditor(scene, width, height);
-
 
     // disable FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -188,6 +186,50 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
 }
 
 
+
+void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
+    Shader *shader = new Shader();
+    shader->load("../data/shaders/simple.vert","../data/shaders/simple.frag");
+
+    glm::vec4 color = glm::vec4(0.217f, 0.217f, 0.217f, 1.0f);
+
+    glUseProgram(shader->id());
+
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    glUniform4fv(glGetUniformLocation(shader->id(),"color"),1,&color[0]);
+
+    glLineWidth(1);
+    
+    const int size = 16;
+    const float step = 1;
+
+    std::vector<glm::vec3> arrayVertices;
+    arrayVertices.resize(size*size);
+
+    for(int i=-(size/2); i<size/2; i++){
+        for(int j=-(size/2); j<size/2; j++){
+            if(i != (size/2)-1){
+                arrayVertices.push_back(glm::vec3(i*step, 0, j*step));
+                arrayVertices.push_back(glm::vec3((i+1)*step, 0, j*step));
+            }
+
+            if(j != (size/2)-1){
+                arrayVertices.push_back(glm::vec3(i*step, 0, j*step));
+                arrayVertices.push_back(glm::vec3((i)*step, 0, (j+1)*step));
+            }
+        }
+
+    }
+    DrawDebug::drawArrayPosition(arrayVertices.size(), (float*)&(arrayVertices[0]), GL_LINES);
+
+    glUseProgram(0);
+    delete shader;
+}
+
+
 void MainRenderer::update(){
     m_transformEditor->update();
 }
@@ -213,7 +255,7 @@ void MainRenderer::initializeGL(){
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glDepthMask(GL_TRUE);
-    glDepthFunc(GL_LESS);
+    //glDepthFunc(GL_LESS);
     glEnable(GL_POLYGON_OFFSET_LINE);
     glPolygonOffset(-1,-1);
 
