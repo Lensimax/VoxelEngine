@@ -30,7 +30,7 @@
 
 #include <iostream> 
 
-MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0) {
+MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true) {
 
     m_transformEditor = new Transform();
 
@@ -98,8 +98,10 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
         l = new DirectionnalLight(scene->addNewId());
     }
 
-    drawEditorGrid(m_transformEditor->getModelToChild(glm::mat4(1)), m_camera->getView(), m_camera->getProj());
-
+    if(m_gridActivated){
+        drawEditorGrid(m_transformEditor->getModelToChild(glm::mat4(1)), m_camera->getView(), m_camera->getProj());
+    }
+    
     if(m_wireActivated){
         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     } else {

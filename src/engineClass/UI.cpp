@@ -121,6 +121,7 @@ void UI::createUISceneManager(Scene *scene){
         }
         if (ImGui::BeginMenu("View")){
             if (ImGui::MenuItem("Toggle wire frame","CTRL+F")) { if(m_mainRenderer != NULL) m_mainRenderer->toggleWire(); }
+            if (ImGui::MenuItem("Toggle grid")) { if(m_mainRenderer != NULL) m_mainRenderer->toggleGrid(); }
             ImGui::EndMenu();
         }
 

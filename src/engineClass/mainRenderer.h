@@ -42,6 +42,7 @@ public:
 
     inline void toggleWire(){m_wireActivated = !m_wireActivated;}
     inline void toggleCullface(){m_cullface = !m_cullface;}
+    inline void toggleGrid(){m_gridActivated = !m_gridActivated;}
     GLuint getTextureID(){return m_renderedSceneTextureID;}
     inline unsigned int width(){return m_widthScreen;}
     inline unsigned int height(){return m_heightScreen;}
@@ -91,6 +92,7 @@ private:
 
     bool m_wireActivated;
     bool m_cullface;
+    bool m_gridActivated;
 
     unsigned int m_widthScreen, m_heightScreen;
 
