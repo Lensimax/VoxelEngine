@@ -13,6 +13,7 @@
 
 #include "../components/component.h"
 #include "../components/chunkRenderer.h"
+#include "../components/cameraRenderer.h"
 
 #include "../components/controller.h"
 
@@ -198,6 +199,7 @@ void Scene::loadDefaultScene(){
     objectsEngine = std::vector<GameObject*>();
 
     Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
+    camera->addComponent<CameraRenderer*>(new CameraRenderer());
 
     objectsEngine.push_back(camera);
 

@@ -9,4 +9,5 @@ uniform vec4 color;
 void main(){
 
 	bufferColor = color;
+	// bufferColor = vec4(1,0,0,1);
 }

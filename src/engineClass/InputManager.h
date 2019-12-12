@@ -2,7 +2,9 @@
 #define INPUTMANAGER_H
 
 #include "scene.h"
-#include "UI.h"
+#include "mainRenderer.h"
+
+class UI;
 
 #ifndef GLM_H
 #define GLM_H

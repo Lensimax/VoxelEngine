@@ -153,13 +153,13 @@ int main(int, char**)
 
 
         ui->drawUI();
-        inputManager->createUI();
-        renderer->createUI();
 
         if(firstFramePassed){
-            ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoResize);
-            ImGui::Image((void*)(intptr_t)renderer->getGameTextureID(), ImVec2(426,240), ImVec2(0,1), ImVec2(1,0));
-            ImGui::End();
+            if(ui->hasToDisplayed()){
+                ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoResize);
+                ImGui::Image((void*)(intptr_t)renderer->getGameTextureID(), ImVec2(426,240), ImVec2(0,1), ImVec2(1,0));
+                ImGui::End();
+            }
         }
 
         //ImGui::ShowDemoWindow();
