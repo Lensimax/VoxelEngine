@@ -83,23 +83,6 @@ void MeshRenderer::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 p
 
 }
 
-void MeshRenderer::drawQuadWithTriangle(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, glm::vec3 v4, float array[108], int i){
-    /*glVertex3f(v1.x, v1.y, v1.z);
-    glVertex3f(v4.x, v4.y, v4.z);
-    glVertex3f(v2.x, v2.y, v2.z);
-
-    glVertex3f(v2.x, v2.y, v2.z);
-    glVertex3f(v4.x, v4.y, v4.z);
-    glVertex3f(v3.x, v3.y, v3.z);*/
-
-    array[i] = v1.x; array[i+1] = v1.y; array[i+2] = v1.z;
-    array[i+3] = v4.x; array[i+4] = v4.y; array[i+5] = v4.z;
-    array[i+6] = v2.x; array[i+7] = v2.y; array[i+8] = v2.z;
-
-    array[i+9] = v2.x; array[i+10] = v2.y; array[i+11] = v2.z;
-    array[i+12] = v4.x; array[i+13] = v4.y; array[i+14] = v4.z;
-    array[i+15] = v3.x; array[i+16] = v3.y; array[i+17] = v3.z;
-}
 
 // draw box that move with the object
 void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
@@ -111,18 +94,33 @@ void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 m
     glUniformMatrix4fv(glGetUniformLocation(shader.id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
 
+    std::vector<glm::vec3> array;
+    array.reserve(12);
 
-    float array[] = {
-        min.x,max.y,max.z, min.x,min.y,max.z, max.x,max.y,max.z,
-        max.x,max.y,max.z, min.x,min.y,max.z, max.x,min.y,max.z,
-    };
+    array.push_back(glm::vec3(min.x,max.y,max.z)); array.push_back(glm::vec3(min.x,min.y,max.z)); array.push_back(glm::vec3(max.x,max.y,max.z));
+    array.push_back(glm::vec3(max.x,max.y,max.z)); array.push_back(glm::vec3(min.x,min.y,max.z)); array.push_back(glm::vec3(max.x,min.y,max.z));
 
-    unsigned int nbVertices = 6;
+    array.push_back(glm::vec3(max.x,max.y,min.z)); array.push_back(glm::vec3(max.x,min.y,min.z)); array.push_back(glm::vec3(min.x,max.y,min.z));
+    array.push_back(glm::vec3(min.x,max.y,min.z)); array.push_back(glm::vec3(max.x,min.y,min.z)); array.push_back(glm::vec3(min.x,min.y,min.z));
+    
+    array.push_back(glm::vec3(min.x,max.y,min.z)); array.push_back(glm::vec3(min.x,min.y,min.z)); array.push_back(glm::vec3(min.x,min.y,max.z));
+    array.push_back(glm::vec3(min.x,min.y,max.z)); array.push_back(glm::vec3(min.x,max.y,max.z)); array.push_back(glm::vec3(min.x,max.y,min.z));
+
+    array.push_back(glm::vec3(max.x,max.y,max.z)); array.push_back(glm::vec3(max.x,min.y,max.z)); array.push_back(glm::vec3(max.x,max.y,min.z));
+    array.push_back(glm::vec3(max.x,max.y,min.z)); array.push_back(glm::vec3(max.x,min.y,max.z)); array.push_back(glm::vec3(max.x,min.y,min.z));
+
+    array.push_back(glm::vec3(min.x,min.y,max.z)); array.push_back(glm::vec3(min.x,min.y,min.z)); array.push_back(glm::vec3(max.x,min.y,max.z));
+    array.push_back(glm::vec3(max.x,min.y,max.z)); array.push_back(glm::vec3(min.x,min.y,min.z)); array.push_back(glm::vec3(max.x,min.y,min.z));
+
+    array.push_back(glm::vec3(min.x,max.y,min.z)); array.push_back(glm::vec3(min.x,max.y,max.z)); array.push_back(glm::vec3(max.x,max.y,min.z));
+    array.push_back(glm::vec3(max.x,max.y,min.z)); array.push_back(glm::vec3(min.x,max.y,max.z)); array.push_back(glm::vec3(max.x,max.y,max.z));
+
 
     glLineWidth(1);
-    DrawDebug::drawArrayPosition(nbVertices, array, GL_TRIANGLES, GL_LINE);
+    DrawDebug::drawArrayPosition(array.size(), (float*)&(array[0]), GL_TRIANGLES, GL_LINE);
     
     glUseProgram(0);
 
 
 }
+
