@@ -1,4 +1,4 @@
-
+os: linux
 language: cpp
 
 # safelist
@@ -14,10 +14,10 @@ compiler:
 jobs:
   include:
     - os: linux
-    - os: osxs
+    - os: osx
 
 install:
-  - ./.travis/install.sh
+  - bash .travis/install.sh
 
 
 script:
