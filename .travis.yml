@@ -22,6 +22,8 @@ jobs:
         - bash .travis/installLinux.sh
         - bash .travis/prepareCmake.sh
       script:
+        - ls
+        - pwd
         - make -j
 
     - stage: build
@@ -29,5 +31,7 @@ jobs:
       install:
         - bash .travis/prepareCmake.sh
       script:
+        - ls
+        - pwd
         - make -j
 
