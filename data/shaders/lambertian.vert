@@ -36,7 +36,7 @@ void main() {
 	normalView = normalize(normalMatrix*normal);
 	eyeView = (mv*vec4(position,1.0));
 
-	lightVec = light;
+	lightVec = viewMat * vec4(light.xyz, 0.0);
 
 	uv = textureCoordinate;
 	color = vertColor;

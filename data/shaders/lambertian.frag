@@ -27,9 +27,13 @@ vec4 phong(vec3 l, vec3 n, vec3 e, vec4 colorDif) {
 	renderedColor = ambientColor;
 
 	// if the light comes from the back
-	if(dot(l,n) >= 0.0){
+	if(dot(l,n) > 0.0){
 		float s = pow(max(dot(r,e),0.),m_specularDegree);
 		renderedColor += specularColor*s  + colorDif*d;
+		//renderedColor = vec4(1.0, 0, 0, 1);
+	}
+	else{
+		//renderedColor= vec4(0, 0, 1.0, 1);
 	}
 
 	return renderedColor;
@@ -55,6 +59,8 @@ void main(){
 
 
 		bufferColor = phong(l, n, e, usedColor);
+		//bufferColor = vec4(l.xyz, 1);
+
 	} else {
 		bufferColor = vec4(color,1);
 	}

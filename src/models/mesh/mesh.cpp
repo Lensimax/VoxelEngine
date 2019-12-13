@@ -168,3 +168,47 @@ void Mesh::deleteVAO(){
     glDeleteVertexArrays(1,&m_vertexArrayID);
     delete m_buffers;
 }
+
+
+// -- Add Method --
+
+void Mesh::addTriangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3,
+                 const glm::vec3& normal, const glm::vec3& color) {
+
+    m_vertices.push_back(v1);
+    m_vertices.push_back(v2);
+    m_vertices.push_back(v3);
+
+    m_normals.push_back(normal);
+    m_normals.push_back(normal);
+    m_normals.push_back(normal);
+
+    m_colors.push_back(color);
+    m_colors.push_back(color);
+    m_colors.push_back(color);
+
+    // Coord bidon pour ne pas faire bugger l'affichage
+
+    m_coords.emplace_back(glm::vec3(0, 0, 0));
+    m_coords.emplace_back(glm::vec3(0, 0, 0));
+    m_coords.emplace_back(glm::vec3(0, 0, 0));
+}
+
+void Mesh::addQuad    (const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4,
+                 const glm::vec3& normal, const glm::vec3& color) {
+
+    this->addTriangle(v1, v2, v3, normal, color);
+    this->addTriangle(v2, v4, v3, normal, color);
+}
+
+void Mesh::clear() {
+
+     m_vertices.clear();
+     m_normals.clear();
+     m_colors.clear();
+     
+     m_coords.clear();
+
+     m_tangents.clear();
+     m_backupVertices.clear();
+}
