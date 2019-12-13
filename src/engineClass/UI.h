@@ -5,6 +5,7 @@
 
 #include "scene.h"
 #include "mainRenderer.h"
+#include "InputManager.h"
 
 #include <vector>
 
@@ -22,6 +23,7 @@ public:
     void set(Scene *sc);
     void set(MainRenderer *main);
     void set(GLFWwindow *win);
+    void set(InputManager *input){m_inputManager = input;};
 
     inline bool hasToDisplayed(){
         return m_hasToBeDisplayed;
@@ -36,7 +38,7 @@ private:
     void createUISceneManager(Scene *scene);
     void DrawSplitter(int split_vertically, float thickness, float* size0, float* size1, float min_size0, float min_size1);
     void createInfoWindow();
-    void displayEngineNode(std::vector<EngineObject*> obj);
+    void displayEngineNode(std::vector<GameObject*> obj);
 
 
     bool m_hasToBeDisplayed;
@@ -45,6 +47,7 @@ private:
     Scene *m_scene;
     MainRenderer *m_mainRenderer;
     GLFWwindow* m_window;
+    InputManager *m_inputManager;
 
 };
 

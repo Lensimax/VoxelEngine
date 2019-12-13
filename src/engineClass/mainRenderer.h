@@ -15,89 +15,89 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../material/shader.h"
 
-#include "../models/drawableObject.h"
 #include "../tools/camera.h"
+#include "../tools/cameraProj.h"
 
 #include <vector>
 #include <string>
 
 class MainRenderer {
 
-    public:
-        MainRenderer();
-        ~MainRenderer();
+public:
+    MainRenderer();
+    ~MainRenderer();
 
 
-        void paintGL(Scene *scene, int width, int height);
-        void initializeGL();
-        void displaySceneOnTheScreen(int width, int height);
+    void paintGL(Scene *scene, int width, int height);
+    void initializeGL();
+    void displaySceneOnTheScreen(int width, int height);
 
 
 
-        inline void toggleCullface(){
-            m_cullface = !m_cullface;
-        }
 
-        inline void toggleWire(){
-            m_wireActived = !m_wireActived;
-        }
-        GLuint getTextureID(){
-            return m_renderedSceneTextureID;
-        }
-
-        inline unsigned int width(){
-            return m_widthScreen;
-        }
-
-        inline unsigned int height(){
-            return m_heightScreen;
-        }
-
-        inline GLuint getRenderSceneID(){
-            return m_renderedSceneTextureID;
-        }
-
-    private:
-
-        void renderTheScene(Scene *scene, int width, int height);
-        void drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l, float screenAspectRatio);
-
-        Camera *getCamera();
-        Light *getLight();
-
-        glm::mat4 m_viewMat;
-        glm::mat4 m_projectionMat;
-
-        /* FBO */
-
-        GLuint m_fboRenderScene;
-
-        void createFBOSceneRender();
-        void initFBOSceneRender(int width, int height);
-        void deleteFBOSceneRender();
-
-        GLuint m_renderedSceneTextureID;
-        GLuint m_renderedDepth;
-
-        /* final rendering */
+    void update();
+    void createUI();
 
 
-        void createVAOQuad();
-        void deleteVAOQuad();
-        void drawQuad();
 
-        Shader *m_postProcessShader;
+    inline void toggleWire(){m_wireActivated = !m_wireActivated;}
+    inline void toggleCullface(){m_cullface = !m_cullface;}
+    inline void toggleGrid(){m_gridActivated = !m_gridActivated;}
+    GLuint getTextureID(){return m_renderedSceneTextureID;}
+    inline unsigned int width(){return m_widthScreen;}
+    inline unsigned int height(){return m_heightScreen;}
+    inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
+    inline GLuint getEditorTextureID(){return m_editorTextureID;}
+    inline Transform *getTransformEditor(){return m_transformEditor;}
+
+private:
+
+    void renderTheScene(Scene *scene, int width, int height);
+    void renderTheSceneEditor(Scene *scene, int width, int height);
+    void drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c, Light *l, float screenAspectRatio);
+    
+    void drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
+
+    Camera *getCamera();
+    Light *getLight();
+
+    glm::mat4 m_viewMat;
+    glm::mat4 m_projectionMat;
+
+    // FBO
+
+    GLuint m_fboRenderScene;
+    GLuint m_renderedSceneTextureID;
+    GLuint m_editorTextureID;
+    GLuint m_renderedDepth;
+
+    void createFBOSceneRender();
+    void initFBOSceneRender(int width, int height);
+    void deleteFBOSceneRender();
 
 
-        GLuint m_vaoQuad;
-        GLuint m_quad;
 
-        bool m_wireActived;
-        bool m_cullface;
 
-        unsigned int m_widthScreen, m_heightScreen;
+    /* final rendering */
+    
+    void createVAOQuad();
+    void deleteVAOQuad();
+    void drawQuad();
 
-        Camera *m_camera;
+    Shader *m_postProcessShader;
+
+
+    GLuint m_vaoQuad;
+    GLuint m_quad;
+
+    bool m_wireActivated;
+    bool m_cullface;
+    bool m_gridActivated;
+
+    unsigned int m_widthScreen, m_heightScreen;
+
+    Camera *m_camera;
+    Transform *m_transformEditor;
 
 };
 

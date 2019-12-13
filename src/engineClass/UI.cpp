@@ -6,7 +6,7 @@
 #include <imgui_impl_opengl3.h>
 
 
-UI::UI() : m_scene(NULL), m_mainRenderer(NULL), m_window(NULL), m_selectedID(0), m_hasToBeDisplayed(true) {
+UI::UI() : m_scene(NULL), m_mainRenderer(NULL), m_inputManager(NULL), m_window(NULL), m_selectedID(0), m_hasToBeDisplayed(true) {
 }
 
 UI::~UI(){
@@ -23,6 +23,14 @@ void UI::drawUI(){
         createUISceneManager(m_scene);
     }
 
+    if(m_mainRenderer != NULL){
+        m_mainRenderer->createUI();
+    }
+
+    if(m_inputManager != NULL){
+        m_inputManager->createUI();
+    }
+
    
 }
 
@@ -34,7 +42,7 @@ void UI::createInfoWindow(){
 }
 
 
-void UI::displayEngineNode(std::vector<EngineObject*> obj){
+void UI::displayEngineNode(std::vector<GameObject*> obj){
 
     char strobj[1024]; // label object
 
@@ -106,13 +114,14 @@ void UI::createUISceneManager(Scene *scene){
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit")){
-            if (ImGui::MenuItem("Add EngineObject", "Ctrl+T")) { scene->addEngineObject(); }
+            if (ImGui::MenuItem("Add GameObject", "Ctrl+T")) { scene->addGameObject(); }
             if (ImGui::MenuItem("Add Cube")) { scene->addCube(); }
             if (ImGui::MenuItem("Delete selection", "SUPPR")) { scene->deleteObject(m_selectedID); }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("View")){
             if (ImGui::MenuItem("Toggle wire frame","CTRL+F")) { if(m_mainRenderer != NULL) m_mainRenderer->toggleWire(); }
+            if (ImGui::MenuItem("Toggle grid")) { if(m_mainRenderer != NULL) m_mainRenderer->toggleGrid(); }
             ImGui::EndMenu();
         }
 

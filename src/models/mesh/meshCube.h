@@ -20,7 +20,8 @@ public:
 	void recreate() override;
 	void createUI();
 
-
+    
+    float getVoxelSize(){return m_width;}
 private:
 
 	void createMesh(float w);

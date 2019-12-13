@@ -3,6 +3,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <drawDebug.h>
+
 
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
@@ -20,13 +22,17 @@
 
 #include "mainRenderer.h"
 
+#include "../components/meshRenderer.h"
+
 // #include "models/sphere.h"
 // #include "models/meshObject.h"
 
 
-#include <iostream>
+#include <iostream> 
 
-MainRenderer::MainRenderer() : m_wireActived(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0) {
+MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true) {
+
+    m_transformEditor = new Transform();
 
     m_postProcessShader = new Shader();
     m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
@@ -34,19 +40,30 @@ MainRenderer::MainRenderer() : m_wireActived(false), m_cullface(true), m_widthSc
     createVAOQuad();
     createFBOSceneRender();
 
+    m_camera = new CameraProj(-1, "Camera Editor");
+
 }
 
+
+MainRenderer::~MainRenderer(){
+    delete m_postProcessShader;
+    deleteVAOQuad();
+    deleteFBOSceneRender();
+    delete m_transformEditor;
+}
+
+
+
+//// Fait le rendu de la scene dans la version du jeu
+
 void MainRenderer::renderTheScene(Scene *scene, int width, int height){
+
+    assert(height > 0);
 
     m_widthScreen = width;
     m_heightScreen = height;
 
-    if(height == 0){
-        fprintf(stderr, "Error height = 0\n");
-        exit(1);
-    }
-
-
+    Transform *rootTransform = new Transform();
 
     // CAMERA
     Camera *c = scene->getCamera();
@@ -59,27 +76,54 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         l = new DirectionnalLight(scene->addNewId());
     }
 
-    if(m_wireActived){
-        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-    }
+
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(scene->getTransformWorld()->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
+        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
     }
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 
-    
+    delete rootTransform; 
 
 }
 
+void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
 
-void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *c, Light *l, float screenAspectRatio){
+    assert(height > 0);
+    
+    m_widthScreen = width;
+    m_heightScreen = height;
+
+    Light *l = scene->getLight();
+    if(l == NULL){
+        l = new DirectionnalLight(scene->addNewId());
+    }
+
+    if(m_gridActivated){
+        drawEditorGrid(m_transformEditor->getModelToChild(glm::mat4(1)), m_camera->getView(), m_camera->getProj());
+    }
+    
+    if(m_wireActivated){
+        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    }
+
+    for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
+        drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camera, l, (float)width/(float)height);
+    }
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+}
+
+
+void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c, Light *l, float screenAspectRatio){
 
     glm::mat4 matrixTochild = obj->getTransform()->getModelToChild(modelMat);
     glm::mat4 modelMatrix = obj->getTransform()->getModelMat(modelMat);
 
-    if(DrawableObject* o = dynamic_cast<DrawableObject*>(obj)) { // safe cast
-        o->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
+    MeshRenderer *meshRenderer = obj->getComponent<MeshRenderer*>();
+
+    if(meshRenderer != NULL){
+        meshRenderer->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
     }
 
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
@@ -91,8 +135,7 @@ void MainRenderer::drawRecursive(glm::mat4 modelMat, EngineObject *obj, Camera *
 
 void MainRenderer::paintGL(Scene *scene, int width, int height){
 
-
-
+    ///// RENDERING SCENE FOR THE GAME
 
     initFBOSceneRender(width, height);
 
@@ -105,6 +148,15 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
 
     // render in texture
     renderTheScene(scene, width, height);
+
+    ///// RENDERING DISPLAY FOR EDITOR
+    glDrawBuffer(GL_COLOR_ATTACHMENT1);
+
+    initializeGL();
+    glViewport(0,0,width,height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    renderTheSceneEditor(scene, width, height);
 
     // disable FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -121,7 +173,7 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
 
     // send rendered scene to the post process shader
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,m_renderedSceneTextureID);
+    glBindTexture(GL_TEXTURE_2D,getEditorTextureID());
     glUniform1i(glGetUniformLocation(m_postProcessShader->id(), "sceneRendered"), 0);
 
     glDisable(GL_DEPTH_TEST);
@@ -133,10 +185,67 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
     glUseProgram(0);
 }
 
-MainRenderer::~MainRenderer(){
-    delete m_postProcessShader;
-    deleteVAOQuad();
-    deleteFBOSceneRender();
+
+
+void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
+    Shader *shader = new Shader();
+    shader->load("../data/shaders/simple.vert","../data/shaders/simple.frag");
+
+    glm::vec4 color = glm::vec4(0.217f, 0.217f, 0.217f, 1.0f);
+
+    glUseProgram(shader->id());
+
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+
+    glUniform4fv(glGetUniformLocation(shader->id(),"color"),1,&color[0]);
+
+    glLineWidth(1);
+    
+    const int size = 16;
+    const float step = 1;
+
+    std::vector<glm::vec3> arrayVertices;
+    arrayVertices.resize(size*size);
+
+    for(int i=-(size/2); i<size/2; i++){
+        for(int j=-(size/2); j<size/2; j++){
+            if(i != (size/2)-1){
+                arrayVertices.push_back(glm::vec3(i*step, 0, j*step));
+                arrayVertices.push_back(glm::vec3((i+1)*step, 0, j*step));
+            }
+
+            if(j != (size/2)-1){
+                arrayVertices.push_back(glm::vec3(i*step, 0, j*step));
+                arrayVertices.push_back(glm::vec3((i)*step, 0, (j+1)*step));
+            }
+        }
+
+    }
+    DrawDebug::drawArrayPosition(arrayVertices.size(), (float*)&(arrayVertices[0]), GL_LINES);
+
+    glUseProgram(0);
+    delete shader;
+}
+
+
+void MainRenderer::update(){
+    m_transformEditor->update();
+}
+
+
+void MainRenderer::createUI(){
+    ImGui::Begin("Renderer Setting");
+
+    m_transformEditor->createUI();
+
+    ImGui::Separator();
+
+    m_camera->createUI("Renderer Setting");
+
+
+    ImGui::End();
 }
 
 
@@ -146,7 +255,7 @@ void MainRenderer::initializeGL(){
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glDepthMask(GL_TRUE);
-    glDepthFunc(GL_LESS);
+    //glDepthFunc(GL_LESS);
     glEnable(GL_POLYGON_OFFSET_LINE);
     glPolygonOffset(-1,-1);
 
@@ -163,7 +272,6 @@ void MainRenderer::initializeGL(){
 
 
 }
-
 
 
 void MainRenderer::createVAOQuad(){
@@ -195,21 +303,33 @@ void MainRenderer::drawQuad(){
 void MainRenderer::createFBOSceneRender(){
     glGenFramebuffers(1, &m_fboRenderScene);
     glGenTextures(1,&m_renderedSceneTextureID);
+    glGenTextures(1,&m_editorTextureID);
     glGenTextures(1,&m_renderedDepth);
 
 }
 
 void MainRenderer::initFBOSceneRender(int width, int height){
+    glBindFramebuffer(GL_FRAMEBUFFER,m_fboRenderScene);
 
     /* la taille est égale au nombre de cases de la grille */
+    // TEXTURE FOR GAME
     glBindTexture(GL_TEXTURE_2D,m_renderedSceneTextureID);
-
-
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F,width,height,0,GL_RGBA,GL_FLOAT,NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,m_renderedSceneTextureID,0);
+
+    // TEXTURE FOR EDITOR
+    glBindTexture(GL_TEXTURE_2D,m_editorTextureID);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F,width,height,0,GL_RGBA,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT1,GL_TEXTURE_2D,m_editorTextureID,0);
+
 
     glBindTexture(GL_TEXTURE_2D, m_renderedDepth);
     glTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT24,width,height,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
@@ -217,14 +337,9 @@ void MainRenderer::initFBOSceneRender(int width, int height){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    glBindFramebuffer(GL_FRAMEBUFFER,m_fboRenderScene);
-
-    glBindTexture(GL_TEXTURE_2D,m_renderedSceneTextureID);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,m_renderedSceneTextureID,0);
-
-    glBindTexture(GL_TEXTURE_2D,m_renderedDepth);
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,m_renderedDepth,0);
+
+
 
     /* on desactive le buffer */
     glBindFramebuffer(GL_FRAMEBUFFER,0);
@@ -234,6 +349,8 @@ void MainRenderer::deleteFBOSceneRender(){
     glDeleteFramebuffers(1,&m_fboRenderScene);
     glDeleteTextures(1, &m_renderedSceneTextureID);
     glDeleteTextures(1,&m_renderedDepth);
+    glDeleteTextures(1,&m_editorTextureID);
 }
+
 
 

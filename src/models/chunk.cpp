@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cmath>
-#include <glm_display.h>
+// #include <glm_display.h>
 
 
 //(0 -> 255)

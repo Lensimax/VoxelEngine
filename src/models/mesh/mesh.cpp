@@ -24,37 +24,40 @@
 
 
 void Mesh::createUI(){
-    ImGui::Text("Number vertices: %d", getNBVertices());
-    ImGui::Text("Number faces: %d", getNBFaces());
+    if (ImGui::TreeNode("Mesh")){
+        ImGui::Text("Number vertices: %d", getNBVertices());
+        ImGui::Text("Number faces: %d", getNBFaces());
 
 
-    ImGui::Separator();
-    if (ImGui::TreeNode("Vertices")){
-
-        ImGui::Columns(3, "Vertices"); // 4-ways, with border
         ImGui::Separator();
-        ImGui::Text("X"); ImGui::NextColumn();
-        ImGui::Text("Y"); ImGui::NextColumn();
-        ImGui::Text("Z"); ImGui::NextColumn();
-        ImGui::Separator();
-        for(unsigned int i=0; i<getNBVertices(); i++){
-            ImGui::Text("%4f",m_vertices[i].x); ImGui::NextColumn();
-            ImGui::Text("%4f",m_vertices[i].y); ImGui::NextColumn();
-            ImGui::Text("%4f",m_vertices[i].z); ImGui::NextColumn();
+        if (ImGui::TreeNode("Vertices")){
+
+            ImGui::Columns(3, "Vertices"); // 4-ways, with border
+            ImGui::Separator();
+            ImGui::Text("X"); ImGui::NextColumn();
+            ImGui::Text("Y"); ImGui::NextColumn();
+            ImGui::Text("Z"); ImGui::NextColumn();
+            ImGui::Separator();
+            for(unsigned int i=0; i<getNBVertices(); i++){
+                ImGui::Text("%4f",m_vertices[i].x); ImGui::NextColumn();
+                ImGui::Text("%4f",m_vertices[i].y); ImGui::NextColumn();
+                ImGui::Text("%4f",m_vertices[i].z); ImGui::NextColumn();
+            }
+
+            ImGui::Columns(1);
+            ImGui::Separator();
+            ImGui::TreePop();
+
         }
 
-        ImGui::Columns(1);
-        ImGui::Separator();
+        ImGui::Text("Bounding Box");
+        ImGui::Text("min: %f, %f, %f", m_minX, m_minY, m_minZ);
+        ImGui::Text("max: %f, %f, %f", m_maxX, m_maxY, m_maxZ);
+
+
+        ImGui::Text("radius: %f", m_radius);
         ImGui::TreePop();
-
     }
-
-    ImGui::Text("Bounding Box");
-    ImGui::Text("min: %f, %f, %f", m_minX, m_minY, m_minZ);
-    ImGui::Text("max: %f, %f, %f", m_maxX, m_maxY, m_maxZ);
-
-
-    ImGui::Text("radius: %f", m_radius);
 
 }
 

@@ -60,7 +60,7 @@ class Transform {
         float m_animRotSpeedX, m_animRotSpeedY, m_animRotSpeedZ;
         float m_animChildRotSpeedX, m_animChildRotSpeedY, m_animChildRotSpeedZ;
 
-        bool m_b_animRotX, m_b_animRotY, b_animRotZ;
+        bool m_b_animRotX = false, m_b_animRotY = false, b_animRotZ = false;
         bool m_b_animChildRotX, m_b_animChildRotY, m_b_animChildRotZ;
 
         const float m_defaultSpeed = 0.01;

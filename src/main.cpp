@@ -148,19 +148,23 @@ int main(int, char**)
         ///////////////
 
         inputManager->update();
-
         scene->update();
+        renderer->update();
+
 
         ui->drawUI();
-        inputManager->createUI();
 
-        /*if(firstFramePassed){
-            ImGui::Image((void*)(intptr_t)renderer->getRenderSceneID(), ImVec2(512,512));
-
-        }*/
+        if(firstFramePassed){
+            if(ui->hasToDisplayed()){
+                ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoResize);
+                ImGui::Image((void*)(intptr_t)renderer->getGameTextureID(), ImVec2(426,240), ImVec2(0,1), ImVec2(1,0));
+                ImGui::End();
+            }
+        }
 
         //ImGui::ShowDemoWindow();
 
+        // ceci est un test travis
 
         // Rendering
         ImGui::Render();

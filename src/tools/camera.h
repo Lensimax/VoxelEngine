@@ -12,9 +12,9 @@
 #endif
 
 
-#include "../engineClass/engineObject.h"
+#include "../engineClass/gameObject.h"
 
-class Camera : public EngineObject {
+class Camera : public GameObject {
 
 
     public:
@@ -23,6 +23,8 @@ class Camera : public EngineObject {
         glm::mat4 getView();
 
         void update() override;
+        
+        virtual void createUI(char *ID) = 0;
 
     protected:
         void setAxis(glm::vec3 pos, glm::vec3 u, glm::vec3 dir);
