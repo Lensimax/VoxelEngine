@@ -36,7 +36,7 @@ Scene::Scene(){
     obj->addChild(cube);
 
     // obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
-    //obj->addComponent<MeshRenderer*>(new MeshRenderer());
+    obj->addComponent<MeshRenderer*>(new MeshRenderer());
     obj->addComponent<Mesh*>(new MeshCube());
     obj->addComponent<Material*>(new Lambertian());
     obj->addComponent<Controller*>(new Controller());

@@ -125,10 +125,9 @@ void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, glm::mat4 
     glm::mat4 matrixTochild = obj->getTransform()->getModelToChild(modelMat);
     glm::mat4 modelMatrix = obj->getTransform()->getModelMat(modelMat);
 
-    MeshRenderer *meshRenderer = obj->getComponent<MeshRenderer*>();
-
-    if(meshRenderer != NULL){
-        meshRenderer->draw(modelMatrix, viewMat, projectionMat, l);
+    std::vector<MeshRenderer*> meshRenderers = obj->getComponents<MeshRenderer*>();
+    for(auto *renderer : meshRenderers){
+        renderer->draw(modelMatrix, viewMat, projectionMat, l);
     }
 
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
