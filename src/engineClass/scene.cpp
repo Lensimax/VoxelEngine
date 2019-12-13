@@ -35,6 +35,14 @@ Scene::Scene(){
     //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(obj);
 
+
+    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
+    camera->addComponent<CameraRenderer*>(new CameraRenderer());
+
+    obj->addChild(camera);
+
+    objectsEngine.push_back(camera);
+
 }
 
 Scene::~Scene(){
@@ -193,15 +201,10 @@ void Scene::togglePause(){
 
 void Scene::loadDefaultScene(){
     m_pause = false;
-
     m_idObject = 0;
-
     objectsEngine = std::vector<GameObject*>();
 
-    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
-    camera->addComponent<CameraRenderer*>(new CameraRenderer());
-
-    objectsEngine.push_back(camera);
+    
 
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
 }

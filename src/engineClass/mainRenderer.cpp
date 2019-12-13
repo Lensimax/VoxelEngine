@@ -123,7 +123,7 @@ void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c,
     MeshRenderer *meshRenderer = obj->getComponent<MeshRenderer*>();
 
     if(meshRenderer != NULL){
-        meshRenderer->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
+        meshRenderer->draw(modelMatrix, c->getView(modelMat), c->getProj(screenAspectRatio), l);
     }
 
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
