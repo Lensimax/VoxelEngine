@@ -13,7 +13,7 @@
 
 #include "../components/component.h"
 #include "../components/chunkRenderer.h"
-#include "../components/cameraRenderer.h"
+#include "../components/axisRenderer.h"
 
 #include "../components/controller.h"
 
@@ -36,17 +36,18 @@ Scene::Scene(){
     obj->addChild(cube);
 
     // obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
-    obj->addComponent<MeshRenderer*>(new MeshRenderer());
+    //obj->addComponent<MeshRenderer*>(new MeshRenderer());
     obj->addComponent<Mesh*>(new MeshCube());
     obj->addComponent<Material*>(new Lambertian());
     obj->addComponent<Controller*>(new Controller());
+    obj->addComponent<AxisRenderer*>(new AxisRenderer());
  
     //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(obj);
 
 
     Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
-    camera->addComponent<CameraRenderer*>(new CameraRenderer());
+    //camera->addComponent<AxisRenderer*>(new AxisRenderer());
 
     obj->addChild(camera);
 

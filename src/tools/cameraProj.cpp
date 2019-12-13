@@ -38,18 +38,18 @@ void CameraProj::createUI(char *ID){
 
     ImGui::PushItemWidth(-1);
 
-    // m_transform->createUI();
+    m_transform->createUI();
 
-    ImGui::Text("Position: "); ImGui::SameLine();
+    /*ImGui::Text("Position: "); ImGui::SameLine();
     ImGui::DragFloat3("position", &m_position[0], 0.01f, lowestValue, highestValue, format);
-    /*ImGui::Text("Up: "); ImGui::SameLine();
+    ImGui::Text("Up: "); ImGui::SameLine();
     ImGui::DragFloat3("Up", &m_up[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Direction: "); ImGui::SameLine();
-    ImGui::DragFloat3("direction", &m_directionOfView[0], 0.01f, lowestValue, highestValue, format);*/
+    ImGui::DragFloat3("direction", &m_directionOfView[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Pitch: ");
     ImGui::DragFloat("##pitch", &m_pitch, 0.01f);
     ImGui::Text("Yaw: ");
-    ImGui::DragFloat("##yaw", &m_yaw, 0.01f);
+    ImGui::DragFloat("##yaw", &m_yaw, 0.01f);*/
     ImGui::Separator();
     ImGui::Text("Fov: "); ImGui::SameLine();
     ImGui::DragFloat("fov", &m_fovy, 0.01f);

@@ -193,18 +193,18 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
 
 
 void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
-    Shader *shader = new Shader();
-    shader->load("../data/shaders/simple.vert","../data/shaders/simple.frag");
+    Shader shader = Shader();
+    shader.load("../data/shaders/simple.vert","../data/shaders/simple.frag");
 
     glm::vec4 color = glm::vec4(0.217f, 0.217f, 0.217f, 1.0f);
 
-    glUseProgram(shader->id());
+    glUseProgram(shader.id());
 
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
 
-    glUniform4fv(glGetUniformLocation(shader->id(),"color"),1,&color[0]);
+    glUniform4fv(glGetUniformLocation(shader.id(),"color"),1,&color[0]);
 
     glLineWidth(1);
     
@@ -231,7 +231,6 @@ void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
     DrawDebug::drawArrayPosition(arrayVertices.size(), (float*)&(arrayVertices[0]), GL_LINES);
 
     glUseProgram(0);
-    delete shader;
 }
 
 

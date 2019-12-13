@@ -21,7 +21,8 @@ glm::mat4 Camera::getView(){
     viewMat = glm::rotate(viewMat, m_yaw, vec3(0.0,1.0,0.0));
 
     viewMat = glm::translate(viewMat, glm::vec3(-m_position.x, -m_position.y, -m_position.z));
-    return viewMat;
+    //return viewMat;
+    return m_transform->getModelMat();
 }
 
 
