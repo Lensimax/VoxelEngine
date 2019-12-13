@@ -1,4 +1,4 @@
-os: linux
+
 language: cpp
 
 # safelist
@@ -11,14 +11,14 @@ branches:
 compiler:
   - g++
 
-before_install:
-  - sudo apt-get update -qq
+jobs:
+  include:
+    - os: linux
+    - os: osxs
 
 install:
-  - sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev
-  - mkdir build
-  - cd build
-  - cmake ..
+  - ./.travis/install.sh
+
 
 script:
   - make -j
