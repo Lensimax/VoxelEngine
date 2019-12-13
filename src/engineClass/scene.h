@@ -53,7 +53,7 @@ class Scene {
     private:
         void deleteScene();
 
-        Camera *getCameraRecursive(GameObject *obj);
+        Camera *getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
         Light *getLightRecursive(GameObject *obj);
 
         int m_idObject = 0;

@@ -17,6 +17,7 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+#include <glmCout.h>
 
 #include "../tools/lights/directionnalLight.h"
 
@@ -66,10 +67,14 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
     Transform *rootTransform = new Transform();
 
     // CAMERA
+    //glm::mat4 viewMat = glm::mat4(1);
     Camera *c = scene->getCamera();
     if(c == NULL){
         return;
     }
+
+    // GLMCOUT::printMat(c->getView());
+    // std::cout << "\n";
 
     Light *l = scene->getLight();
     if(l == NULL){
@@ -78,7 +83,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
+        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c->getView(), c->getProj((float)width/(float)height), l, (float)width/(float)height);
     }
 
 
@@ -109,13 +114,13 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camera, l, (float)width/(float)height);
+        drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camera->getView(), m_camera->getProj((float)width/(float)height), l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 
 
-void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c, Light *l, float screenAspectRatio){
+void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, glm::mat4 viewMat, glm::mat4 projectionMat, Light *l, float screenAspectRatio){
 
     glm::mat4 matrixTochild = obj->getTransform()->getModelToChild(modelMat);
     glm::mat4 modelMatrix = obj->getTransform()->getModelMat(modelMat);
@@ -123,11 +128,11 @@ void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c,
     MeshRenderer *meshRenderer = obj->getComponent<MeshRenderer*>();
 
     if(meshRenderer != NULL){
-        meshRenderer->draw(modelMatrix, c->getView(modelMat), c->getProj(screenAspectRatio), l);
+        meshRenderer->draw(modelMatrix, viewMat, projectionMat, l);
     }
 
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
-        drawRecursive(matrixTochild, obj->m_listOfChildren[i], c, l, screenAspectRatio);
+        drawRecursive(matrixTochild, obj->m_listOfChildren[i], viewMat, projectionMat, l, screenAspectRatio);
     }
 }
 

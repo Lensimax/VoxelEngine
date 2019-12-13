@@ -3,7 +3,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include <glm_display.h>
+#include <drawDebug.h>
+#include <glmCout.h>
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include <GL/gl3w.h>    // Initialize with gl3wInit()
@@ -21,7 +22,7 @@
 
 #include <iostream>
 
-CameraRenderer::CameraRenderer(){
+CameraRenderer::CameraRenderer() : m_cam(NULL){
     setName("Camera Renderer");
 }
 
@@ -31,30 +32,51 @@ CameraRenderer::~CameraRenderer(){
 }
 
 void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+    Camera* cam;
     
-    glm::vec4 color = glm::vec4(0,1,0,1);
+    if(m_cam == NULL){
+        if(cam = dynamic_cast<Camera*>(m_gameobject)) {
+            m_cam = cam;
+        }
+    }
 
-    Mesh *mesh = new MeshCube(0.1f);
+    if(m_cam == NULL){
+        return;
+    }
+    glm::vec3 pos = m_cam->getPosition();
 
-    Shader *shader = new Shader();
-    shader->load("../data/shaders/simple.vert","../data/shaders/simple.frag");
+    glm::mat4 mat = glm::translate(m_cam->getModel(), m_cam->getPosition());
 
-    glUseProgram(shader->id());
+    glm::vec4 origin = mat*glm::vec4(0, 0, 0, 1.0);
+
+    glm::vec4 forward = origin + vec4(1,0,0,0);
+
+    GLMCOUT::printVec(origin);
+
+    float arrayCam[] = {
+        origin.x,origin.y,origin.z,
+        forward.x,forward.y,forward.z
+    };
 
 
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+    glm::vec4 color = glm::vec4(1,0,0,1);
+    Shader shader = Shader();
+    shader.load("../data/shaders/simple.vert","../data/shaders/simple.frag");
+
+    glUseProgram(shader.id());
+
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
     
 
-    glUniform4fv(glGetUniformLocation(shader->id(),"color"), 1, &color[0]);
+    glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &color[0]);
 
-    mesh->drawVAO();
+    glLineWidth(2);
+    DrawDebug::drawArrayPosition(2, arrayCam, GL_LINES);
 
     glUseProgram(0);
 
-    delete shader;
-    delete mesh;
 
 }
 

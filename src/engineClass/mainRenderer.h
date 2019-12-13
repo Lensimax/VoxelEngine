@@ -54,7 +54,7 @@ private:
 
     void renderTheScene(Scene *scene, int width, int height);
     void renderTheSceneEditor(Scene *scene, int width, int height);
-    void drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c, Light *l, float screenAspectRatio);
+    void drawRecursive(glm::mat4 modelMat, GameObject *obj, glm::mat4 viewMat, glm::mat4 projectionMat, Light *l, float screenAspectRatio);
     
     void drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
 

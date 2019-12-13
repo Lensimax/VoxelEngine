@@ -9,11 +9,16 @@ CameraProj::CameraProj(int id, std::string name, glm::vec3 pos, glm::vec3 u, glm
 
     setAxis(pos, u, direction);
 
+    m_pitch = 0;
+    m_yaw = 0;
+    m_roll = 0;
+
     /*glm::mat4 view = glm::mat4(1);
     view[0][0] = -1;
     view[2][2] = 0;
     view[1][3] = 1;
     view[2][3] = 3;
+
 
     m_transform->decompose(view);*/
 }

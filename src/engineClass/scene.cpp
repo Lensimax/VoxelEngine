@@ -24,7 +24,16 @@ Scene::Scene(){
 
     loadDefaultScene();
 
+    GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(0), glm::vec3(1,0,0)));
+
+    // cube->addComponent<ChunkRenderer*>(new ChunkRenderer());
+    cube->addComponent<MeshRenderer*>(new MeshRenderer());
+    cube->addComponent<Mesh*>(new MeshCube(0.1f));
+    cube->addComponent<Material*>(new Lambertian());
+    cube->addComponent<Controller*>(new Controller());
+
     GameObject *obj = new GameObject(addNewId());
+    obj->addChild(cube);
 
     // obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
     obj->addComponent<MeshRenderer*>(new MeshRenderer());
@@ -41,7 +50,7 @@ Scene::Scene(){
 
     obj->addChild(camera);
 
-    objectsEngine.push_back(camera);
+    //objectsEngine.push_back(camera);
 
 }
 
@@ -56,16 +65,18 @@ void Scene::deleteScene(){
 }
 
 
-Camera *Scene::getCameraRecursive(GameObject *obj){
+Camera *Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
     Camera *tmp = NULL;
     if(Camera* c = dynamic_cast<Camera*>(obj)) {
+        c->setModel(modelMat);
         return c;
     } else {
         if(obj->m_listOfChildren.size() == 0){
             return NULL;
         } else {
+            modelMat = obj->getTransform()->getModelToChild(modelMat);
             for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
-                tmp = getCameraRecursive(obj->m_listOfChildren[i]);
+                tmp = getCameraRecursive(obj->m_listOfChildren[i], modelMat);
                 if(tmp != NULL){ return tmp;}
             }
         }
@@ -76,7 +87,7 @@ Camera *Scene::getCameraRecursive(GameObject *obj){
 Camera *Scene::getCamera(){
     Camera *tmp = NULL;
     for(unsigned int i=0; i<objectsEngine.size(); i++){
-        tmp = getCameraRecursive(objectsEngine[i]);
+        tmp = getCameraRecursive(objectsEngine[i], glm::mat4(1));
         if(tmp != NULL){ return tmp;}
     }
     return NULL;

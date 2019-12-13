@@ -14,9 +14,9 @@ void Camera::setAxis(glm::vec3 pos, glm::vec3 u, glm::vec3 dir){
     m_directionOfView = dir;*/
 }
 
-glm::mat4 Camera::getView(glm::mat4 model){
+glm::mat4 Camera::getView(){
     // return glm::lookAt(m_position, m_directionOfView, m_up);
-    glm::mat4 viewMat = model;
+    glm::mat4 viewMat = m_model;
     viewMat = glm::rotate(viewMat, m_pitch, vec3(1.0,0.0,0.0));
     viewMat = glm::rotate(viewMat, m_yaw, vec3(0.0,1.0,0.0));
 

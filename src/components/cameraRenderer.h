@@ -3,6 +3,8 @@
 
 #include "meshRenderer.h"
 
+#include "../tools/camera.h"
+
 class CameraRenderer : public MeshRenderer {
 public:
     CameraRenderer();
@@ -14,6 +16,8 @@ public:
 
 private:
     float m_lineLength = 0.2f;
+
+    Camera *m_cam;
 
 };
 
