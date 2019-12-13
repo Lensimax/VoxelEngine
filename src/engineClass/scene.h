@@ -19,6 +19,11 @@
 
 #include "gameObject.h"
 
+struct CameraInfo {
+    Camera *cam;
+    glm::mat4 viewMat;
+}; 
+
 
 class Scene {
 
@@ -27,7 +32,7 @@ class Scene {
         ~Scene();
 
         void createUI();
-        Camera *getCamera();
+        CameraInfo getCamera();
         Light *getLight();
         void createUIAtID(int indexItem, char *ID);
         void drawUIAtID(std::vector<GameObject*> objs, int indexItem, char *ID);
@@ -53,7 +58,7 @@ class Scene {
     private:
         void deleteScene();
 
-        Camera *getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
+        CameraInfo getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
         Light *getLightRecursive(GameObject *obj);
 
         int m_idObject = 0;

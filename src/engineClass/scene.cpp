@@ -50,6 +50,7 @@ Scene::Scene(){
     camera->addComponent<AxisRenderer*>(new AxisRenderer());
 
     obj->addChild(camera);
+    //objectsEngine.push_back(camera);
 
 
 }
@@ -65,31 +66,40 @@ void Scene::deleteScene(){
 }
 
 
-Camera *Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
-    Camera *tmp = NULL;
+CameraInfo Scene::getCamera(){
+    CameraInfo tmp;
+    tmp.cam = NULL;
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        tmp = getCameraRecursive(objectsEngine[i], glm::mat4(1));
+        if(tmp.cam != NULL){ return tmp;}
+    }
+    return tmp;
+}
+
+CameraInfo Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
+    CameraInfo tmp;
+    tmp.cam = NULL;
     if(Camera* c = dynamic_cast<Camera*>(obj)) {
-        return c;
+        CameraInfo ret;
+        ret.cam = c;
+        ret.viewMat = obj->getTransform()->getModelMat(modelMat);
+        return ret;
     } else {
         if(obj->m_listOfChildren.size() == 0){
-            return NULL;
+            CameraInfo cam;
+            cam.cam = NULL;
+            return cam;
         } else {
             modelMat = obj->getTransform()->getModelToChild(modelMat);
             for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
                 tmp = getCameraRecursive(obj->m_listOfChildren[i], modelMat);
-                if(tmp != NULL){ return tmp;}
+                if(tmp.cam != NULL){ return tmp;}
             }
         }
-        return NULL;
+        CameraInfo cam;
+        cam.cam = NULL;
+        return cam;
     }
-}
-
-Camera *Scene::getCamera(){
-    Camera *tmp = NULL;
-    for(unsigned int i=0; i<objectsEngine.size(); i++){
-        tmp = getCameraRecursive(objectsEngine[i], glm::mat4(1));
-        if(tmp != NULL){ return tmp;}
-    }
-    return NULL;
 }
 
 Light *Scene::getLight(){

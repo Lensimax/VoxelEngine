@@ -68,8 +68,8 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
     // CAMERA
     //glm::mat4 viewMat = glm::mat4(1);
-    Camera *c = scene->getCamera();
-    if(c == NULL){
+    CameraInfo c = scene->getCamera();
+    if(c.cam == NULL){
         return;
     }
 
@@ -83,7 +83,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c->getView(), c->getProj((float)width/(float)height), l, (float)width/(float)height);
+        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c.viewMat, c.cam->getProj((float)width/(float)height), l, (float)width/(float)height);
     }
 
 
