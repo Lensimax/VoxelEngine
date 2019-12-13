@@ -8,17 +8,26 @@ branches:
   - stable
   - develop
 
+stages:
+  - build
+
 compiler:
   - g++
 
 jobs:
   include:
-    - os: linux
-    - os: osx
+    - stage: build
+      os: linux
+      install:
+        - bash .travis/installLinux.sh
+        - bash .travis/prepareCmake.sh
+      script:
+        - make -j
 
-install:
-  - bash .travis/install.sh
+    - stage: build
+      os: osx
+      install:
+        - bash .travis/prepareCmake.sh
+      script:
+        - make -j
 
-
-script:
-  - make -j
