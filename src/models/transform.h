@@ -1,6 +1,7 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+
 #ifndef GLM_H
 #define GLM_H
 #include <glm/gtx/perpendicular.hpp>
@@ -42,11 +43,16 @@ class Transform {
         void setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
         void setSameAsParent(bool position, bool rotation);
 
+
+        void decompose(mat4 mat);
+
     private:
+
+        vec3 rotationMatrixToEulerAngles(mat4 r);
 
         void reset();
 
-        vec3 m_vecPosition, m_vecScale, m_vecRotation, m_center, m_translateAfter;
+        vec3 m_position, m_scale, m_rotation, m_center, m_translateAfter;
 
         bool m_samePosition, m_sameRotation;
 

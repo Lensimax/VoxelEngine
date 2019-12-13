@@ -1,11 +1,14 @@
+
+
 #include "transform.h"
+
 
 #include <imgui.h>
 
 #include <stdio.h>
 
 
-Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation) : m_vecPosition(position),m_vecScale(scale), m_vecRotation(rotation), m_center(center), m_translateAfter(glm::vec3(0)),
+Transform::Transform(vec3 center, vec3 position, vec3 scale, vec3 rotation) : m_position(position),m_scale(scale), m_rotation(rotation), m_center(center), m_translateAfter(glm::vec3(0)),
                                         m_positionToSend(position), m_scaleToSend(glm::vec3(1)), m_rotationToSend(glm::vec3(0)), m_samePosition(true), m_sameRotation(true), 
                                         m_animRotSpeedX(m_defaultSpeed), m_animRotSpeedY(m_defaultSpeed), m_animRotSpeedZ(m_defaultSpeed),
                                         m_animChildRotSpeedX(m_defaultSpeed), m_animChildRotSpeedY(m_defaultSpeed), m_animChildRotSpeedZ(m_defaultSpeed), 
@@ -29,15 +32,15 @@ void Transform::reset(){
 }
 
 void Transform::setPosition(vec3 position){
-    m_vecPosition = position;
+    m_position = position;
 }
 void Transform::rotate(vec3 axis){
-    m_vecRotation = axis;
+    m_rotation = axis;
 }
 
 void Transform::rotatefromScreen(vec2 v){
-    m_vecRotation.x += v.y;
-    m_vecRotation.y += v.x;
+    m_rotation.x += v.y;
+    m_rotation.y += v.x;
 }
 
 void Transform::setCenter(vec3 center) {
@@ -45,11 +48,11 @@ void Transform::setCenter(vec3 center) {
 }
 
 void Transform::scale(vec3 scale){
-    m_vecScale = scale;
+    m_scale = scale;
 }
 
 void Transform::addTranslation(vec3 t){
-    m_vecPosition += t;
+    m_position += t;
 }
 
 void Transform::addTranslationAfter(vec3 t){
@@ -58,25 +61,25 @@ void Transform::addTranslationAfter(vec3 t){
 
 mat4 Transform::getModelMat(){
     mat4 model = mat4(1.0f);
-    model = translate(model, m_vecPosition);
+    model = translate(model, m_position);
     // model = translate(model, center);
-    model = glm::rotate(model, m_vecRotation[0], vec3(1.0,0.0,0.0));
-    model = glm::rotate(model, m_vecRotation[1], vec3(0.0,1.0,0.0));
-    model = glm::rotate(model, m_vecRotation[2], vec3(0.0,0.0,1.0));
+    model = glm::rotate(model, m_rotation[0], vec3(1.0,0.0,0.0));
+    model = glm::rotate(model, m_rotation[1], vec3(0.0,1.0,0.0));
+    model = glm::rotate(model, m_rotation[2], vec3(0.0,0.0,1.0));
     model = translate(model, m_translateAfter);
-    model = glm::scale(model, m_vecScale);
+    model = glm::scale(model, m_scale);
 
     return model;
 }
 
 mat4 Transform::getModelMat(mat4 modelMat){
-    modelMat = translate(modelMat, m_vecPosition);
+    modelMat = translate(modelMat, m_position);
     // modelMat = translate(modelMat, center);
-    modelMat = glm::rotate(modelMat, m_vecRotation[0]+m_animRotX, vec3(1.0,0.0,0.0));
-    modelMat = glm::rotate(modelMat, m_vecRotation[1]+m_animRotY, vec3(0.0,1.0,0.0));
-    modelMat = glm::rotate(modelMat, m_vecRotation[2]+m_animRotZ, vec3(0.0,0.0,1.0));
+    modelMat = glm::rotate(modelMat, m_rotation[0]+m_animRotX, vec3(1.0,0.0,0.0));
+    modelMat = glm::rotate(modelMat, m_rotation[1]+m_animRotY, vec3(0.0,1.0,0.0));
+    modelMat = glm::rotate(modelMat, m_rotation[2]+m_animRotZ, vec3(0.0,0.0,1.0));
     modelMat = translate(modelMat, m_translateAfter);
-    modelMat = glm::scale(modelMat, m_vecScale);
+    modelMat = glm::scale(modelMat, m_scale);
 
     return modelMat;
 }
@@ -90,7 +93,7 @@ mat4 Transform::getModelToChild(mat4 modelMat){
     if(!m_samePosition){
         model = translate(model, m_positionToSend);
     } else {
-        model = translate(model, m_vecPosition);
+        model = translate(model, m_position);
     }
 
     if(!m_sameRotation){
@@ -98,9 +101,9 @@ mat4 Transform::getModelToChild(mat4 modelMat){
         model = glm::rotate(model, m_rotationToSend[1]+m_animChildRotY, vec3(0.0,1.0,0.0));
         model = glm::rotate(model, m_rotationToSend[2]+m_animChildRotZ, vec3(0.0,0.0,1.0));
     } else {
-        model = glm::rotate(model, m_vecRotation[0]+m_animRotX, vec3(1.0,0.0,0.0));
-        model = glm::rotate(model, m_vecRotation[1]+m_animRotY, vec3(0.0,1.0,0.0));
-        model = glm::rotate(model, m_vecRotation[2]+m_animRotZ, vec3(0.0,0.0,1.0));
+        model = glm::rotate(model, m_rotation[0]+m_animRotX, vec3(1.0,0.0,0.0));
+        model = glm::rotate(model, m_rotation[1]+m_animRotY, vec3(0.0,1.0,0.0));
+        model = glm::rotate(model, m_rotation[2]+m_animRotZ, vec3(0.0,0.0,1.0));
     }
 
     model = translate(model, m_translateAfter);    
@@ -136,13 +139,13 @@ void Transform::createUI(){
 
     ImGui::Text("Transform");
     ImGui::Text("Position: "); ImGui::SameLine();
-    ImGui::DragFloat3("##position", &m_vecPosition[0], 0.01f, lowestValue, highestValue, format);
+    ImGui::DragFloat3("##position", &m_position[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Rotation: "); ImGui::SameLine();
-    ImGui::DragFloat3("##rotation", &m_vecRotation[0], 0.01f, lowestValue, highestValue, format);
+    ImGui::DragFloat3("##rotation", &m_rotation[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Scale: "); ImGui::SameLine();
-    ImGui::DragFloat3("##scale", &m_vecScale[0], 0.005f, 0.0f, highestValue, format);
+    ImGui::DragFloat3("##scale", &m_scale[0], 0.005f, 0.0f, highestValue, format);
 
-    bool node_open_anim = ImGui::TreeNodeEx((void*)(intptr_t)0, node_flags, "Animation");
+    /*bool node_open_anim = ImGui::TreeNodeEx((void*)(intptr_t)0, node_flags, "Animation");
 
     if (node_open_anim) {
         ImGui::Text("Rotation X : ");
@@ -180,15 +183,6 @@ void Transform::createUI(){
             ImGui::DragFloat3("##rotation", &m_rotationToSend[0], 0.01f, lowestValue, highestValue, format);
         }
 
-        /*ImGui::Text("Same matrix as parent");
-        ImGui::SameLine(); ImGui::Checkbox("##TransformSameAsParent", &sameAsModelMat);
-        ImGui::Text("Position: "); ImGui::SameLine();
-        ImGui::DragFloat3("position", &m_positionToSend[0], 0.01f, lowestValue, highestValue, format);
-        ImGui::Text("Rotation: "); ImGui::SameLine();
-        ImGui::DragFloat3("rotation", &m_rotationToSend[0], 0.01f, lowestValue, highestValue, format);
-        ImGui::Text("Scale: "); ImGui::SameLine();
-        ImGui::DragFloat3("scale", &m_scaleToSend[0], 0.005f, 0.0f, highestValue, format);*/
-
         int anim_node_flags_child = 0;
         bool node_open_anim_child = ImGui::TreeNodeEx((void*)(intptr_t)2, anim_node_flags_child, "Animation Child");
 
@@ -215,7 +209,7 @@ void Transform::createUI(){
 
     if(ImGui::Button("Reset Animation")){
         reset();
-    }
+    }*/
 
     // to hide label of the input
     ImGui::PopItemWidth();
@@ -240,13 +234,52 @@ void Transform::setSameAsParent(bool position, bool rotation){
 
 
 vec3 Transform::getPosition(){
-    return m_vecPosition;
+    return m_position;
 }
 
 vec3 Transform::getRotation(){
-    return m_vecRotation;
+    return m_rotation;
 }
 
 vec3 Transform::getScale(){
-    return m_vecScale;
+    return m_scale;
+}
+
+void Transform::decompose(mat4 mat){
+
+
+    printf("(%f, %f, %f, %f)\n", mat[0][0],mat[0][1], mat[0][2], mat[0][3]);
+    printf("(%f, %f, %f, %f)\n", mat[1][0],mat[1][1], mat[1][2], mat[1][3]);
+    printf("(%f, %f, %f, %f)\n", mat[2][0],mat[2][1], mat[2][2], mat[2][3]);
+    printf("(%f, %f, %f, %f)\n\n", mat[3][0],mat[3][1], mat[3][2], mat[3][3]);
+
+    m_position = vec3(mat[0][3], mat[1][3], mat[2][3]);
+
+
+    m_rotation = rotationMatrixToEulerAngles(mat);
+    m_scale = glm::vec3(1,1,1);
+
+}
+
+vec3 Transform::rotationMatrixToEulerAngles(mat4 r){
+     
+    float sy = sqrt(r[0][0] * r[0][0] +  r[1][0] * r[1][0] );
+ 
+    bool singular = sy < 1e-6; // If
+ 
+    float x, y, z;
+    if (!singular)
+    {
+        x = atan2(r[2][1] , r[2][2]);
+        y = atan2(-r[2][0], sy);
+        z = atan2(r[1][0], r[0][0]);
+    }
+    else
+    {
+        x = atan2(-r[1][2], r[1][1]);
+        y = atan2(-r[2][0], sy);
+        z = 0;
+    }
+    return vec3(x, y, z);
+
 }

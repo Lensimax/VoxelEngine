@@ -238,12 +238,7 @@ void MainRenderer::update(){
 void MainRenderer::createUI(){
     ImGui::Begin("Renderer Setting");
 
-    m_transformEditor->createUI();
-
-    ImGui::Separator();
-
     m_camera->createUI("Renderer Setting");
-
 
     ImGui::End();
 }

@@ -20,7 +20,7 @@ class Camera : public GameObject {
     public:
         virtual glm::mat4 getProj(float aspect = 16./9.) = 0;
 
-        glm::mat4 getView();
+        glm::mat4 getView(glm::mat4 model = glm::mat4(1));
 
         void update() override;
         
