@@ -1,24 +1,24 @@
+os: linux
 language: cpp
+
+# safelist
+branches:
+  only:
+  - master
+  - stable
+  - develop
 
 compiler:
   - g++
 
-matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          packages:
-          - build-essential
-          - cmake
-          - libgl1-mesa-dev
-          - libfreetype6-dev
+before_install:
+  - sudo apt-get update -qq
 
-before_script:
+install:
+  - sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev
   - mkdir build
   - cd build
   - cmake ..
 
 script:
   - make -j
-
