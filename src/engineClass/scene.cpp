@@ -40,18 +40,17 @@ Scene::Scene(){
     obj->addComponent<Mesh*>(new MeshCube());
     obj->addComponent<Material*>(new Lambertian());
     obj->addComponent<Controller*>(new Controller());
-    obj->addComponent<AxisRenderer*>(new AxisRenderer());
+    //obj->addComponent<AxisRenderer*>(new AxisRenderer());
  
     //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(obj);
 
 
-    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
-    //camera->addComponent<AxisRenderer*>(new AxisRenderer());
+    Camera *camera = new CameraProj(addNewId(), "Camera");
+    camera->addComponent<AxisRenderer*>(new AxisRenderer());
 
     obj->addChild(camera);
 
-    //objectsEngine.push_back(camera);
 
 }
 
@@ -69,7 +68,6 @@ void Scene::deleteScene(){
 Camera *Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
     Camera *tmp = NULL;
     if(Camera* c = dynamic_cast<Camera*>(obj)) {
-        c->setModel(modelMat);
         return c;
     } else {
         if(obj->m_listOfChildren.size() == 0){

@@ -19,28 +19,10 @@ class Camera : public GameObject {
 
 public:
     virtual glm::mat4 getProj(float aspect = 16./9.) = 0;
+    glm::mat4 getView(){return m_transform->getModelMat();}
 
-    glm::mat4 getView();
-
-    void update() override;
-    
-    virtual void createUI(char *ID) = 0;
-
-    void setModel(glm::mat4 mat){m_model = mat;}
-    glm::mat4 getModel(){return m_model;}
-    glm::vec3 getPosition(){return m_position;}
 
 protected:
-    void setAxis(glm::vec3 pos, glm::vec3 u, glm::vec3 dir);
-
-    glm::vec3 getLeftDir();
-    glm::vec3 getRightDir();
-    void rotateAroundPoint(glm::vec2 v);
-    
-    glm::vec3 m_position;
-    float m_roll, m_pitch, m_yaw;
-    
-    glm::mat4 m_model = glm::mat4(1);
 
 };
 

@@ -34,7 +34,7 @@ void Transform::reset(){
 void Transform::setPosition(vec3 position){
     m_position = position;
 }
-void Transform::rotate(vec3 axis){
+void Transform::setRotation(vec3 axis){
     m_rotation = axis;
 }
 
