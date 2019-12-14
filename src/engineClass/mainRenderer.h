@@ -48,7 +48,6 @@ public:
     inline unsigned int height(){return m_heightScreen;}
     inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
     inline GLuint getEditorTextureID(){return m_editorTextureID;}
-    inline Transform *getTransformEditor(){return m_transformEditor;}
 
 private:
 
@@ -97,7 +96,6 @@ private:
     unsigned int m_widthScreen, m_heightScreen;
 
     Camera *m_camera;
-    Transform *m_transformEditor;
 
 };
 

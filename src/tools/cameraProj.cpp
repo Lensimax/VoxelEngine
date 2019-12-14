@@ -1,5 +1,10 @@
 #include "cameraProj.h"
 
+#include "../components/axisRenderer.h"
+#include "../components/meshRenderer.h"
+#include "../material/lambertian.h"
+#include "../models/mesh/meshCube.h"
+
 #include <imgui.h>
 
 
@@ -15,25 +20,12 @@ CameraProj::CameraProj(int id, std::string name, Transform *transform, float fov
 
 
 void CameraProj::createUI(char *ID){
-    const float lowestValue = -1000.0f;
-    const float highestValue = 1000.0f;
-    const char *format = "%.3f";
 
     ImGui::BeginChild(ID);
     ImGui::Text(m_name.c_str());
     ImGui::Separator();
 
-    glm::vec3 position = m_transform->getPosition();
-    glm::vec3 rotation = m_transform->getRotation();
-
-    ImGui::Text("Transform");
-    ImGui::Text("Position: "); ImGui::SameLine();
-    ImGui::DragFloat3("##position", &position[0], 0.01f, lowestValue, highestValue, format);
-    ImGui::Text("Rotation: "); ImGui::SameLine();
-    ImGui::DragFloat3("##rotation", &rotation[0], 0.01f, lowestValue, highestValue, format);
-
-    m_transform->setPosition(position);
-    m_transform->setRotation(rotation);
+    m_transform->createUI();
 
     ImGui::Separator();
 
@@ -43,6 +35,37 @@ void CameraProj::createUI(char *ID){
     ImGui::DragFloat("##near", &m_near, 0.01f); //ImGui::SameLine();
     ImGui::Text("Far: "); ImGui::SameLine();
     ImGui::DragFloat("##far", &m_far, 0.01f);
+
+    char label[2048];
+    unsigned int i=0;
+    while(i<m_components.size()){
+        ImGui::Separator();
+        // sprintf(label, "%s", m_components[i]->getName());
+        if (ImGui::TreeNode(m_components[i]->getName())){
+            ImGui::SameLine(); ImGui::Checkbox("##active", &(m_components[i]->m_active));
+            ImGui::SameLine();
+            if(ImGui::Button("Delete Component")){
+                delete m_components[i];
+                m_components.erase(m_components.begin()+i);
+            } else {
+                m_components[i]->createUI();
+                i++;
+            }
+            ImGui::TreePop();
+        } else {
+            i++;
+        }
+    }
+
+    ImGui::Separator();  
+
+    if(ImGui::BeginMenu("Add Component")){
+        if (ImGui::MenuItem("Add MeshCube")) { addComponent<Mesh*>(new MeshCube()); }
+        if (ImGui::MenuItem("Add Material")) { addComponent<Material*>(new Lambertian()); }
+        if (ImGui::MenuItem("Add MeshRenderer")) { addComponent<MeshRenderer*>(new MeshRenderer());  }
+        if (ImGui::MenuItem("Add AxisRenderer")) { addComponent<AxisRenderer*>(new AxisRenderer());  }
+        ImGui::EndMenu();
+    }
 
 
     ImGui::EndChild();

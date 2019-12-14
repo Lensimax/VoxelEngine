@@ -40,7 +40,7 @@ Scene::Scene(){
     obj->addComponent<Mesh*>(new MeshCube());
     obj->addComponent<Material*>(new Lambertian());
     obj->addComponent<Controller*>(new Controller());
-    //obj->addComponent<AxisRenderer*>(new AxisRenderer());
+    obj->addComponent<AxisRenderer*>(new AxisRenderer());
  
     //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(obj);
@@ -49,8 +49,8 @@ Scene::Scene(){
     Camera *camera = new CameraProj(addNewId(), "Camera");
     camera->addComponent<AxisRenderer*>(new AxisRenderer());
 
-    obj->addChild(camera);
-    //objectsEngine.push_back(camera);
+    //obj->addChild(camera);
+    objectsEngine.push_back(camera);
 
 
 }
@@ -82,7 +82,10 @@ CameraInfo Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
     if(Camera* c = dynamic_cast<Camera*>(obj)) {
         CameraInfo ret;
         ret.cam = c;
-        ret.viewMat = obj->getTransform()->getModelMat(modelMat);
+        ret.viewMat = c->getView(modelMat);
+        printf("[%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f]\n\n", ret.viewMat[0][0], ret.viewMat[0][1], ret.viewMat[0][2], ret.viewMat[0][3], ret.viewMat[1][0],
+        ret.viewMat[1][1], ret.viewMat[1][2], ret.viewMat[1][3], ret.viewMat[2][0], ret.viewMat[2][1], ret.viewMat[2][2], ret.viewMat[2][3], ret.viewMat[3][0], ret.viewMat[3][1], ret.viewMat[3][2], ret.viewMat[3][3]);
+
         return ret;
     } else {
         if(obj->m_listOfChildren.size() == 0){

@@ -59,18 +59,7 @@ void Transform::addTranslationAfter(vec3 t){
     m_translateAfter += t;
 }
 
-mat4 Transform::getModelMat(){
-    mat4 model = mat4(1.0f);
-    model = translate(model, m_position);
-    // model = translate(model, center);
-    model = glm::rotate(model, m_rotation[0], vec3(1.0,0.0,0.0));
-    model = glm::rotate(model, m_rotation[1], vec3(0.0,1.0,0.0));
-    model = glm::rotate(model, m_rotation[2], vec3(0.0,0.0,1.0));
-    model = translate(model, m_translateAfter);
-    model = glm::scale(model, m_scale);
 
-    return model;
-}
 
 mat4 Transform::getModelMat(mat4 modelMat){
     modelMat = translate(modelMat, m_position);
@@ -81,6 +70,7 @@ mat4 Transform::getModelMat(mat4 modelMat){
     modelMat = translate(modelMat, m_translateAfter);
     modelMat = glm::scale(modelMat, m_scale);
 
+    m_test = modelMat;
     return modelMat;
 }
 
@@ -144,6 +134,15 @@ void Transform::createUI(){
     ImGui::DragFloat3("##rotation", &m_rotation[0], 0.01f, lowestValue, highestValue, format);
     ImGui::Text("Scale: "); ImGui::SameLine();
     ImGui::DragFloat3("##scale", &m_scale[0], 0.005f, 0.0f, highestValue, format);
+
+    ImGui::Text("[%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f]\n", m_test[0][0], m_test[0][1], m_test[0][2], m_test[0][3], m_test[1][0],
+    m_test[1][1], m_test[1][2], m_test[1][3], m_test[2][0], m_test[2][1], m_test[2][2], m_test[2][3], m_test[3][0], m_test[3][1], m_test[3][2], m_test[3][3]);
+
+     ImGui::Separator();
+    glm::mat4 view = glm::lookAt(glm::vec3(0,0,3), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    ImGui::Text("[%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f]\n", view[0][0], view[0][1], view[0][2], view[0][3], view[1][0],
+    view[1][1], view[1][2], view[1][3], view[2][0], view[2][1], view[2][2], view[2][3], view[3][0], view[3][1], view[3][2], view[3][3]);
+
 
     /*bool node_open_anim = ImGui::TreeNodeEx((void*)(intptr_t)0, node_flags, "Animation");
 

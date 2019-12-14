@@ -33,8 +33,6 @@
 
 MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true) {
 
-    m_transformEditor = new Transform();
-
     m_postProcessShader = new Shader();
     m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
 
@@ -50,7 +48,6 @@ MainRenderer::~MainRenderer(){
     delete m_postProcessShader;
     deleteVAOQuad();
     deleteFBOSceneRender();
-    delete m_transformEditor;
 }
 
 
@@ -72,6 +69,8 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
     if(c.cam == NULL){
         return;
     }
+
+    //c.viewMat = glm::lookAt(glm::vec3(0,0,3), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
     // GLMCOUT::printMat(c->getView());
     // std::cout << "\n";
@@ -104,7 +103,7 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     if(m_gridActivated){
-        drawEditorGrid(m_transformEditor->getModelToChild(glm::mat4(1)), m_camera->getView(), m_camera->getProj());
+        drawEditorGrid(glm::mat4(1), m_camera->getView(), m_camera->getProj());
     }
     
     if(m_wireActivated){
@@ -114,7 +113,7 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camera->getView(), m_camera->getProj((float)width/(float)height), l, (float)width/(float)height);
+        drawRecursive(glm::mat4(1), scene->objectsEngine[i], m_camera->getView(), m_camera->getProj((float)width/(float)height), l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
@@ -234,7 +233,7 @@ void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
 
 
 void MainRenderer::update(){
-    m_transformEditor->update();
+    m_camera->update();
 }
 
 

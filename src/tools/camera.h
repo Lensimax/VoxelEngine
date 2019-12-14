@@ -19,7 +19,7 @@ class Camera : public GameObject {
 
 public:
     virtual glm::mat4 getProj(float aspect = 16./9.) = 0;
-    glm::mat4 getView(){return m_transform->getModelMat();}
+    glm::mat4 getView(glm::mat4 modelMat = glm::mat4(1)){return m_transform->getModelMat(modelMat);}
 
 
 protected:

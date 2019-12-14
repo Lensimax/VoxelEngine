@@ -33,11 +33,10 @@ class Transform {
 
         void update();
 
-        mat4 getModelMat();
-        mat4 getModelMat(mat4 modelMat);
-        mat4 getModelToChild(mat4 modelMat);
+        virtual mat4 getModelMat(mat4 modelMat = glm::mat4(1));
+        virtual mat4 getModelToChild(mat4 modelMat);
 
-        void createUI();
+        virtual void createUI();
 
         void setAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
         void setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
@@ -46,7 +45,7 @@ class Transform {
 
         void decompose(mat4 mat);
 
-    private:
+    protected:
 
         vec3 rotationMatrixToEulerAngles(mat4 r);
 
@@ -71,6 +70,7 @@ class Transform {
 
         const float m_defaultSpeed = 0.01;
 
+        glm::mat4 m_test = glm::mat4(1);
 };
 
 #endif
