@@ -50,8 +50,8 @@ Scene::Scene(){
     camera->addComponent<CameraProjective*>(new CameraProjective());
     camera->addComponent<AxisRenderer*>(new AxisRenderer());
 
-    obj->addChild(camera);
-    //objectsEngine.push_back(camera);
+    //obj->addChild(camera);
+    objectsEngine.push_back(camera);
 
 
 }

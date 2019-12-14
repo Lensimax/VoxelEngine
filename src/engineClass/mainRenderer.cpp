@@ -24,6 +24,7 @@
 #include "mainRenderer.h"
 
 #include "../components/meshRenderer.h"
+#include "../models/transformCamera.h"
 
 // #include "models/sphere.h"
 // #include "models/meshObject.h"
@@ -39,7 +40,7 @@ MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_width
     createVAOQuad();
     createFBOSceneRender();
 
-    m_camera = new GameObject(-1, "Camera Editor");
+    m_camera = new GameObject(-1, "Camera Editor", new TransformCamera());
     m_camera->addComponent<CameraProjective*>(new CameraProjective());
     m_camProj = m_camera->getComponent<CameraProjective*>();
 
