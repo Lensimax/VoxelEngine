@@ -72,7 +72,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
     //c.viewMat = glm::lookAt(glm::vec3(0,0,3), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
-    // GLMCOUT::printMat(c->getView());
+    GLMCOUT::printMat(c.viewMat);
     // std::cout << "\n";
 
     Light *l = scene->getLight();

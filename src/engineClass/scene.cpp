@@ -49,8 +49,8 @@ Scene::Scene(){
     Camera *camera = new CameraProj(addNewId(), "Camera");
     camera->addComponent<AxisRenderer*>(new AxisRenderer());
 
-    //obj->addChild(camera);
-    objectsEngine.push_back(camera);
+    obj->addChild(camera);
+    //objectsEngine.push_back(camera);
 
 
 }
@@ -83,8 +83,8 @@ CameraInfo Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
         CameraInfo ret;
         ret.cam = c;
         ret.viewMat = c->getView(modelMat);
-        printf("[%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f]\n\n", ret.viewMat[0][0], ret.viewMat[0][1], ret.viewMat[0][2], ret.viewMat[0][3], ret.viewMat[1][0],
-        ret.viewMat[1][1], ret.viewMat[1][2], ret.viewMat[1][3], ret.viewMat[2][0], ret.viewMat[2][1], ret.viewMat[2][2], ret.viewMat[2][3], ret.viewMat[3][0], ret.viewMat[3][1], ret.viewMat[3][2], ret.viewMat[3][3]);
+        //printf("[%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f]\n\n", ret.viewMat[0][0], ret.viewMat[0][1], ret.viewMat[0][2], ret.viewMat[0][3], ret.viewMat[1][0],
+        //ret.viewMat[1][1], ret.viewMat[1][2], ret.viewMat[1][3], ret.viewMat[2][0], ret.viewMat[2][1], ret.viewMat[2][2], ret.viewMat[2][3], ret.viewMat[3][0], ret.viewMat[3][1], ret.viewMat[3][2], ret.viewMat[3][3]);
 
         return ret;
     } else {

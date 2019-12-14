@@ -48,6 +48,7 @@ public:
     inline unsigned int height(){return m_heightScreen;}
     inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
     inline GLuint getEditorTextureID(){return m_editorTextureID;}
+    inline Camera *getCamera(){return m_camera;}
 
 private:
 
@@ -57,7 +58,6 @@ private:
     
     void drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
 
-    Camera *getCamera();
     Light *getLight();
 
     glm::mat4 m_viewMat;
