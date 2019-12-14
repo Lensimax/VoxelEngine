@@ -3,7 +3,6 @@
 
 #include "meshRenderer.h"
 
-#include "../tools/camera.h"
 
 class AxisRenderer : public MeshRenderer {
 public:

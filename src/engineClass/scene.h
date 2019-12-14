@@ -15,12 +15,12 @@
 #include <vector>
 
 #include "../tools/lights/light.h"
-#include "../tools/camera.h"
 
 #include "gameObject.h"
 
 struct CameraInfo {
-    Camera *cam;
+    bool found;
+    glm::mat4 projMat;
     glm::mat4 viewMat;
 }; 
 

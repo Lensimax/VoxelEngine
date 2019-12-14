@@ -15,8 +15,8 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../material/shader.h"
 
-#include "../tools/camera.h"
-#include "../tools/cameraProj.h"
+#include "../components/cameraProjective.h"
+
 
 #include <vector>
 #include <string>
@@ -48,7 +48,7 @@ public:
     inline unsigned int height(){return m_heightScreen;}
     inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
     inline GLuint getEditorTextureID(){return m_editorTextureID;}
-    inline Camera *getCamera(){return m_camera;}
+    inline GameObject *getCamera(){return m_camera;}
 
 private:
 
@@ -95,7 +95,8 @@ private:
 
     unsigned int m_widthScreen, m_heightScreen;
 
-    Camera *m_camera;
+    GameObject *m_camera;
+    CameraProjective *m_camProj;
 
 };
 

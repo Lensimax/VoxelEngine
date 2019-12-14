@@ -70,14 +70,14 @@ void InputManager::update(){
     if(!io.WantCaptureMouse){
         if(io.MouseWheel != 0.0){
             if(m_renderer != NULL){
-                m_renderer->getCamera()->getTransform()->addTranslation(glm::vec3(0,0,-(io.MouseWheel*0.5)));
+                m_renderer->getCamera()->getTransform()->addTranslation(glm::vec3(0,0,(io.MouseWheel*0.5)));
             }
         }
 
         if(ImGui::IsMouseDown(1)){
             glm::vec2 vectorTranslate = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
             vectorTranslate *= 0.01f;
-            m_renderer->getCamera()->getTransform()->addTranslation(glm::vec3(-vectorTranslate.x, vectorTranslate.y,0));
+            m_renderer->getCamera()->getTransform()->addTranslation(glm::vec3(vectorTranslate.x, vectorTranslate.y,0));
         }
 
 

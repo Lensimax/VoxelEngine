@@ -2,7 +2,6 @@
 #include "../engineClass/gameObject.h"
 
 #include "../tools/lights/directionnalLight.h"
-#include "../tools/cameraProj.h"
 
 #include "../models/mesh/meshCube.h"
 
@@ -16,6 +15,7 @@
 #include "../components/axisRenderer.h"
 
 #include "../components/controller.h"
+#include "../components/cameraProjective.h"
 
 #include <iostream>
 
@@ -46,7 +46,8 @@ Scene::Scene(){
     objectsEngine.push_back(obj);
 
 
-    Camera *camera = new CameraProj(addNewId(), "Camera");
+    GameObject *camera = new GameObject(addNewId(), "Camera");
+    camera->addComponent<CameraProjective*>(new CameraProjective());
     camera->addComponent<AxisRenderer*>(new AxisRenderer());
 
     obj->addChild(camera);
@@ -68,21 +69,21 @@ void Scene::deleteScene(){
 
 CameraInfo Scene::getCamera(){
     CameraInfo tmp;
-    tmp.cam = NULL;
+    tmp.found = false;
     for(unsigned int i=0; i<objectsEngine.size(); i++){
         tmp = getCameraRecursive(objectsEngine[i], glm::mat4(1));
-        if(tmp.cam != NULL){ return tmp;}
+        if(tmp.found){ return tmp;}
     }
     return tmp;
 }
 
 CameraInfo Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
     CameraInfo tmp;
-    tmp.cam = NULL;
-    if(Camera* c = dynamic_cast<Camera*>(obj)) {
+    tmp.found = false;
+    if(CameraProjective* c = obj->getComponent<CameraProjective*>()) {
         CameraInfo ret;
-        ret.cam = c;
-        ret.viewMat = c->getView(modelMat);
+        ret.projMat = c->getProj();
+        ret.viewMat = obj->getTransform()->getModelMat(modelMat);
         //printf("[%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f\n%4f, %4f, %4f, %4f]\n\n", ret.viewMat[0][0], ret.viewMat[0][1], ret.viewMat[0][2], ret.viewMat[0][3], ret.viewMat[1][0],
         //ret.viewMat[1][1], ret.viewMat[1][2], ret.viewMat[1][3], ret.viewMat[2][0], ret.viewMat[2][1], ret.viewMat[2][2], ret.viewMat[2][3], ret.viewMat[3][0], ret.viewMat[3][1], ret.viewMat[3][2], ret.viewMat[3][3]);
 
@@ -90,17 +91,17 @@ CameraInfo Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
     } else {
         if(obj->m_listOfChildren.size() == 0){
             CameraInfo cam;
-            cam.cam = NULL;
+            cam.found = false;
             return cam;
         } else {
             modelMat = obj->getTransform()->getModelToChild(modelMat);
             for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
                 tmp = getCameraRecursive(obj->m_listOfChildren[i], modelMat);
-                if(tmp.cam != NULL){ return tmp;}
+                if(tmp.found){ return tmp;}
             }
         }
         CameraInfo cam;
-        cam.cam = NULL;
+        cam.found = false;
         return cam;
     }
 }

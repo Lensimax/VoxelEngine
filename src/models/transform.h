@@ -33,10 +33,10 @@ class Transform {
 
         void update();
 
-        virtual mat4 getModelMat(mat4 modelMat = glm::mat4(1));
-        virtual mat4 getModelToChild(mat4 modelMat);
+        mat4 getModelMat(mat4 modelMat = glm::mat4(1));
+        mat4 getModelToChild(mat4 modelMat);
 
-        virtual void createUI();
+        void createUI();
 
         void setAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
         void setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
