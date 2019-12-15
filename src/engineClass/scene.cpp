@@ -35,25 +35,27 @@ Scene::Scene(){
     cube->addComponent<Material*>(new Lambertian());
     cube->addComponent<Controller*>(new Controller());
 
-    GameObject *obj = new GameObject(addNewId());
-    obj->addChild(cube);
+    GameObject *player = new GameObject(addNewId(), "Player");
+    player->addChild(cube);
 
-    // obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
-    obj->addComponent<MeshRenderer*>(new MeshRenderer());
-    obj->addComponent<Mesh*>(new MeshCube());
-    obj->addComponent<Material*>(new Lambertian());
-    obj->addComponent<Controller*>(new Controller());
-    obj->addComponent<AxisRenderer*>(new AxisRenderer());
+    // player->addComponent<ChunkRenderer*>(new ChunkRenderer());
+    player->addComponent<MeshRenderer*>(new MeshRenderer());
+    player->addComponent<Mesh*>(new MeshCube());
+    player->addComponent<Material*>(new Lambertian());
+    player->addComponent<Controller*>(new Controller());
+    player->addComponent<AxisRenderer*>(new AxisRenderer());
  
-    //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
-    objectsEngine.push_back(obj);
+    //MeshObject *player = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
+    objectsEngine.push_back(player);
 
 
     GameObject *camera = new GameObject(addNewId(), "Camera");
     camera->addComponent<CameraProjective*>(new CameraProjective());
     //camera->addComponent<AxisRenderer*>(new AxisRenderer());
     camera->addComponent<CameraRenderer*>(new CameraRenderer());
-    camera->addComponent<CameraFollow*>(new CameraFollow());
+    CameraFollow* camFoll = new CameraFollow();
+    camera->addComponent<CameraFollow*>(camFoll);
+    camFoll->setPlayer(player);
 
     //obj->addChild(camera);
     objectsEngine.push_back(camera);
