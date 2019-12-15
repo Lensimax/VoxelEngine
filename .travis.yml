@@ -30,3 +30,20 @@ jobs:
         - bash .travis/prepareCmake.sh
       script:
         - cd build && make -j
+
+    - stage: build
+      name: "Linux Build Release"
+      os: linux
+      install:
+        - bash .travis/installLinux.sh
+        - bash .travis/prepareCmakeRelease.sh
+      script:
+        - cd build && make -j
+
+    - stage: build
+      name: "MacOS Build Release"
+      os: osx
+      install:
+        - bash .travis/prepareCmakeRelease.sh
+      script:
+        - cd build && make -j
