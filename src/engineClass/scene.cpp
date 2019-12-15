@@ -43,13 +43,14 @@ Scene::Scene(){
     objectsEngine.push_back(player);
   
     // std::cerr << "ajout composent\n";
-    obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
+    GameObject *terrain = new GameObject(addNewId(), "Terrain");
+    terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
     // std::cerr << "fin ajout composent\n";
-    obj->addComponent<MeshRenderer*>(new MeshRenderer());
-    obj->addComponent<Mesh*>(new MeshCube());
-    obj->addComponent<Material*>(new Lambertian());
-    //obj->addComponent<Controller*>(new Controller());
-    objectsEngine.push_back(obj);
+    //terrain->addComponent<MeshRenderer*>(new MeshRenderer());
+    terrain->addComponent<Mesh*>(new MeshCube());
+    terrain->addComponent<Material*>(new Lambertian());
+    //terrain->addComponent<Controller*>(new Controller());
+    objectsEngine.push_back(terrain);
  
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
