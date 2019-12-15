@@ -23,9 +23,9 @@ public:
 
 private:
     std::vector<Chunk> m_chunks;
-    Chunk *m_chunk = NULL;
+    // Chunk *m_chunk = NULL;
     
-    MeshCube *m_mesh = NULL;
+    MeshCube *m_mesh = nullptr;
 
     Transform *m_playerTransform;
 

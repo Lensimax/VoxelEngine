@@ -67,9 +67,21 @@ public:
 
      inline glm::vec3 get_vertex(unsigned int i) { return m_vertices[i];}
      inline glm::vec3 get_normal(unsigned int i) { return m_normals[i];}
-     inline glm::vec3 get_tangent(unsigned int i) { return m_tangents[i];}
-     inline glm::vec2 get_coord(unsigned int i) { return m_coords[i];}
      inline glm::vec3 get_color(unsigned int i) { return m_colors[i];}
+     inline glm::vec2 get_coord(unsigned int i) { return m_coords[i];}
+
+     inline glm::vec3 get_tangent(unsigned int i) { return m_tangents[i];}
+
+     // -- Modificators --
+     
+     void addTriangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3,
+                      const glm::vec3& normal, const glm::vec3& color);
+
+     void addQuad    (const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4,
+                      const glm::vec3& normal, const glm::vec3& color);
+
+     void clear();
+
     protected:
 
 
@@ -79,10 +91,11 @@ public:
      // data
      std::vector<glm::vec3> m_vertices;
      std::vector<glm::vec3> m_normals;
-     std::vector<glm::vec3> m_tangents;
      std::vector<glm::vec3> m_colors;
-     std::vector<glm::vec2> m_coords;
 
+     std::vector<glm::vec2> m_coords; // ne sert pas pour l'instant
+
+     std::vector<glm::vec3> m_tangents;
      std::vector<glm::vec3> m_backupVertices;
 
    

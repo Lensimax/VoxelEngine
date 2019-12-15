@@ -7,14 +7,18 @@
 ChunkRenderer::ChunkRenderer(){
     setName("Chunk Renderer");
 
-    m_mesh = m_gameobject->getComponent<MeshCube*>();
+    m_mesh = new MeshCube();
+    //m_gameobject->Component<MeshCube*>();
 
-    if(m_mesh != NULL){
+    if(m_mesh){
         m_chunks = std::vector<Chunk>();
-        Chunk c = Chunk(m_mesh->getVoxelSize());
-        m_chunks.push_back(c);
-    }
+        Chunk c(1.0f, 0, 0, 0);
+        m_chunks.emplace_back(c);
 
+        c.calculateMesh(m_mesh);
+        m_mesh->createVAO();
+        // m_chunk = new Chunk(1.0f, 0, 0, 0);
+    }
 }
 
 ChunkRenderer::~ChunkRenderer(){
@@ -24,50 +28,37 @@ ChunkRenderer::~ChunkRenderer(){
 
 void ChunkRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
     
+// std::cerr << "dessin construction\n";
     /// RECUPERATION DES COMPOSANTS
-    if(m_material == NULL){
+    if(!m_material){
         m_material = m_gameobject->getComponent<Material*>();
-        if(m_material == NULL){return;}
+        if(!m_material){return;}
     }
 
-    assert(m_material != NULL);
+    assert(m_material);
 
-    if(m_mesh == NULL){
+    if(!m_mesh){
         m_mesh = m_gameobject->getComponent<MeshCube*>();
-        if(m_mesh == NULL) {return;}
+        if(!m_mesh) {return;}
 
         m_chunks = std::vector<Chunk>();
         Chunk c = Chunk(m_mesh->getVoxelSize());
         m_chunks.push_back(c);
     }
 
-    assert(m_mesh != NULL);
-
+    assert(m_mesh);
 
     // DESSIN DU CHUNK
     glUseProgram(m_material->getShaderID());
 
-    glm::vec3 worldPosition = m_gameobject->getTransform()->getPosition();
-    glm::vec3 chunkWorldPosition = toChunkWorldPosition(worldPosition);
+    // glm::vec3 worldPosition = m_gameobject->getTransform()->getPosition();
+    // glm::vec3 chunkWorldPosition = toChunkWorldPosition(worldPosition);
 
-    glm::vec3 chunkGridMinPosition = (chunkWorldPosition + glm::vec3(-1, 0, -1));
+    // glm::vec3 chunkGridMinPosition = (chunkWorldPosition + glm::vec3(-1, 0, -1));
 
 
+    m_chunks.front().draw(modelMat, viewMat, projectionMat, light, m_mesh, m_material);
 
-    /*size_t i = 0;
-    for (size_t x = 0; x < m_chunks.size() / 3; x++)
-    {
-        for (size_t z = 0; z < m_chunks.size() / 3; z++)
-        {
-            // chunkWorldPositionOffset + glm::vec3(x, y, z);
-            // std::cerr << chunkGridMinPosition + glm::vec3(x, 0, z) << ' ';
-            std::cout << "Passe\n";
-            glm::mat4 model = glm::translate(modelMat, (chunkGridMinPosition + glm::vec3(x, 0, z)) * glm::vec3(m_chunk->dimensions()));
-            m_chunks[i].draw(model, viewMat, projectionMat, light, m_mesh, m_material);
-            i++;
-            // m_chunk->draw(model, viewMat, projectionMat, light, m_mesh, m_material);
-        }
-    }*/
 
     glUseProgram(0);
 }
@@ -81,5 +72,5 @@ glm::ivec3 ChunkRenderer::toChunkWorldPosition(const glm::vec3& worldPosition) {
         worldPosition.z < 0 ? worldPosition.z - 3 : worldPosition.z
     );
 
-    return  glm::vec3(positionOffset) / glm::vec3(m_chunk->dimensions());
+    return  glm::vec3(positionOffset) / glm::vec3(m_chunks.front().dimensions());
 }

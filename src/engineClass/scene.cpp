@@ -27,25 +27,30 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(1,0,0)));
+    /*GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(1,0,0)));
 
-    // cube->addComponent<ChunkRenderer*>(new ChunkRenderer());
     cube->addComponent<MeshRenderer*>(new MeshRenderer());
     cube->addComponent<Mesh*>(new MeshCube(0.1f));
     cube->addComponent<Material*>(new Lambertian());
-    cube->addComponent<Controller*>(new Controller());
+    cube->addComponent<Controller*>(new Controller());*/
 
     GameObject *player = new GameObject(addNewId(), "Player");
-    player->addChild(cube);
-
-    // player->addComponent<ChunkRenderer*>(new ChunkRenderer());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Mesh*>(new MeshCube());
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
- 
     objectsEngine.push_back(player);
+  
+    // std::cerr << "ajout composent\n";
+    obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
+    // std::cerr << "fin ajout composent\n";
+    obj->addComponent<MeshRenderer*>(new MeshRenderer());
+    obj->addComponent<Mesh*>(new MeshCube());
+    obj->addComponent<Material*>(new Lambertian());
+    //obj->addComponent<Controller*>(new Controller());
+    objectsEngine.push_back(obj);
+ 
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
     camera->addComponent<CameraProjective*>(new CameraProjective());

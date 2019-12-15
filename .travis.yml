@@ -1,37 +1,49 @@
- 
+os: linux
 language: cpp
 
 # safelist
-# branches:
-#   only:
-#   - master
-#   - stable
-#   - develop
-  
+branches:
+  only:
+  - master
+  - stable
+  - develop
+
 
 compiler:
   - g++
 
 jobs:
   include:
-  - stage: Compilation
-  
-  - os: linux
-    before_install:
-      - sudo apt-get update -qq
-    install:
-      - sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev
-      - mkdir build
-      - cd build
-      - cmake ..
-    script:
-      - make -j
-      
-  - os: osx
-      
+    - stage: build
+      name: "Linux Build Debug"
+      os: linux
       install:
-        - mkdir build
-        - cd build
-        - cmake ..
+        - bash .travis/installLinux.sh
+        - bash .travis/prepareCmake.sh
       script:
-        - make -j
+        - cd build && make -j
+
+    - stage: build
+      name: "MacOS Build Debug"
+      os: osx
+      install:
+        - bash .travis/prepareCmake.sh
+      script:
+        - cd build && make -j
+
+    - stage: build
+      name: "Linux Build Release"
+      os: linux
+      install:
+        - bash .travis/installLinux.sh
+        - bash .travis/prepareCmakeRelease.sh
+      script:
+        - cd build && make -j
+
+    - stage: build
+      name: "MacOS Build Release"
+      os: osx
+      install:
+        - bash .travis/prepareCmakeRelease.sh
+      script:
+        - cd build && make -j
