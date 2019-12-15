@@ -17,7 +17,7 @@
 class CameraFollow : public Component {
 public:
 
-    CameraFollow(float distance = 2.0f, float pitch = 0.35f);
+    CameraFollow(float distance = 2.0f);
     ~CameraFollow();
 
     void update() override;
@@ -33,7 +33,7 @@ private:
     void updateCameraPositionFromPlayer();
 
     float m_distanceFromPlayer;
-    float m_pitch;
+    //float m_pitch;
 
     GameObject *m_player;
 

@@ -2,8 +2,10 @@
 
 #include <imgui.h>
 
+#include "cameraProjective.h"
 
-CameraFollow::CameraFollow(float distance, float pitch) : m_distanceFromPlayer(distance), m_pitch(pitch){
+
+CameraFollow::CameraFollow(float distance) : m_distanceFromPlayer(distance){
     setName("Camera Follow");
     m_player = NULL;
 }
@@ -26,17 +28,15 @@ void CameraFollow::update(){
 void CameraFollow::createUI(){
     ImGui::Text("Distance from the player : ");
     ImGui::DragFloat("##distance", &m_distanceFromPlayer, 0.01f,0.01f, 1000.f); 
-    ImGui::Text("Pitch : ");
-    ImGui::DragFloat("##pitch", &m_pitch,0.2f, 1.0f, 1000.0f); 
 }
 
 
 float CameraFollow::getHorizontalDistance(){
-    return m_distanceFromPlayer * cos(m_pitch);
+    return m_distanceFromPlayer * cos(m_gameobject->getTransform()->getRotation().x);
 }
 
 float CameraFollow::getVerticalDistance(){
-    return m_distanceFromPlayer * sin(m_pitch);
+    return m_distanceFromPlayer * sin(m_gameobject->getTransform()->getRotation().x);
 }
 
 void CameraFollow::updateCameraPositionFromPlayer(){
@@ -53,10 +53,12 @@ void CameraFollow::updateCameraPositionFromPlayer(){
     float offsetZ = horizontal * cos(theta);
 
     glm::vec3 position = m_player->getTransform()->getPosition();
-    position.x += offsetX;
+    position.x -= offsetX;
     position.y += vertical;
-    position.z += offsetZ;
+    position.z -= offsetZ;
 
     m_gameobject->getTransform()->setPosition(position);
-    //m_gameobject->getTransform()->setRotation(glm::vec3(m_pitch, 0, 0));
+    glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
+    rotation.y = 3.14159f - theta;
+    m_gameobject->getTransform()->setRotation(rotation);
 }
