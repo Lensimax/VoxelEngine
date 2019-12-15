@@ -16,6 +16,9 @@
 
 #include "../components/controller.h"
 #include "../components/cameraProjective.h"
+#include "../components/cameraRenderer.h"
+#include "../components/cameraFollow.h"
+
 
 #include <iostream>
 
@@ -48,7 +51,9 @@ Scene::Scene(){
 
     GameObject *camera = new GameObject(addNewId(), "Camera");
     camera->addComponent<CameraProjective*>(new CameraProjective());
-    camera->addComponent<AxisRenderer*>(new AxisRenderer());
+    //camera->addComponent<AxisRenderer*>(new AxisRenderer());
+    camera->addComponent<CameraRenderer*>(new CameraRenderer());
+    camera->addComponent<CameraFollow*>(new CameraFollow());
 
     //obj->addChild(camera);
     objectsEngine.push_back(camera);
