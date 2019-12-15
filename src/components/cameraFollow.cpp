@@ -5,7 +5,7 @@
 #include "cameraProjective.h"
 
 
-CameraFollow::CameraFollow(float distance) : m_distanceFromPlayer(distance){
+CameraFollow::CameraFollow(float distance, float offsetAngle) : m_distanceFromPlayer(distance), m_angleOffset(offsetAngle){
     setName("Camera Follow");
     m_player = NULL;
 }
@@ -28,6 +28,8 @@ void CameraFollow::update(){
 void CameraFollow::createUI(){
     ImGui::Text("Distance from the player : ");
     ImGui::DragFloat("##distance", &m_distanceFromPlayer, 0.01f,0.01f, 1000.f); 
+    ImGui::Text("Offset angle : ");
+    ImGui::DragFloat("##offsetangle", &m_angleOffset, 0.01f,-50.f, 50.f); 
 }
 
 
@@ -44,10 +46,9 @@ void CameraFollow::updateCameraPositionFromPlayer(){
         return;
     }
 
-    const float angleOffset = 0.0f;
     float vertical = getVerticalDistance();
     float horizontal = getHorizontalDistance();
-    float theta = m_player->getTransform()->getRotation().y + angleOffset;
+    float theta = m_player->getTransform()->getRotation().y + m_angleOffset;
 
     float offsetX = horizontal * sin(theta);
     float offsetZ = horizontal * cos(theta);
