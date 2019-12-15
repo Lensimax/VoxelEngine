@@ -69,3 +69,4 @@ Should work
 * https://jheer.github.io/barnes-hut/
 * https://www.youtube.com/watch?v=BP6NxVxDQIs
 * https://community.khronos.org/t/how-to-draw-one-line-on-top-of-another-in-opengl-without-z-fighting/68922
+* Third person camera : https://www.youtube.com/watch?v=PoxDDZmctnU&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=19
