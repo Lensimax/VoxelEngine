@@ -24,7 +24,6 @@
 #include "mainRenderer.h"
 
 #include "../components/meshRenderer.h"
-#include "../models/transformCamera.h"
 
 // #include "models/sphere.h"
 // #include "models/meshObject.h"
@@ -40,7 +39,7 @@ MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_width
     createVAOQuad();
     createFBOSceneRender();
 
-    m_camera = new GameObject(-1, "Camera Editor", new TransformCamera());
+    m_camera = new GameObject(-1, "Camera Editor");
     m_camera->addComponent<CameraProjective*>(new CameraProjective());
     m_camProj = m_camera->getComponent<CameraProjective*>();
 
@@ -68,14 +67,14 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
     // CAMERA
     //glm::mat4 viewMat = glm::mat4(1);
-    CameraInfo c = scene->getCamera();
-    if(!c.found){
+    CameraProjective * camera = scene->getCamera();
+    if(camera == NULL){
         return;
     }
 
     //c.viewMat = glm::lookAt(glm::vec3(0,0,3), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
-    GLMCOUT::printMat(c.viewMat);
+    //GLMCOUT::printMat(c.viewMat);
     // std::cout << "\n";
 
     Light *l = scene->getLight();
@@ -85,7 +84,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c.viewMat, m_camProj->getProj((float)width/(float)height), l, (float)width/(float)height);
+        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], camera->getView(), camera->getProjection((float)width/(float)height), l, (float)width/(float)height);
     }
 
 
@@ -106,7 +105,7 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     if(m_gridActivated){
-        drawEditorGrid(glm::mat4(1), m_camera->getTransform()->getModelMat(), m_camProj->getProj((float)width/(float)height));
+        drawEditorGrid(glm::mat4(1), m_camProj->getView(), m_camProj->getProjection((float)width/(float)height));
     }
     
     if(m_wireActivated){
@@ -116,7 +115,7 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(glm::mat4(1), scene->objectsEngine[i], m_camera->getTransform()->getModelMat(), m_camProj->getProj((float)width/(float)height), l, (float)width/(float)height);
+        drawRecursive(glm::mat4(1), scene->objectsEngine[i], m_camProj->getView(), m_camProj->getProjection((float)width/(float)height), l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }

@@ -33,7 +33,7 @@ class Transform {
 
         void update();
 
-        virtual mat4 getModelMat(mat4 modelMat = glm::mat4(1));
+        mat4 getModelMat(mat4 modelMat = glm::mat4(1));
         mat4 getModelToChild(mat4 modelMat);
 
         void createUI();

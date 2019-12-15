@@ -13,13 +13,16 @@
 #include "component.h"
 
 
+
 class CameraProjective : public Component {
 
 public:
     CameraProjective(float fov = 45.f, float near = 0.1f, float far = 1000.f);
 
 
-    virtual glm::mat4 getProj(float aspect = 16./9.);
+    glm::mat4 getView();
+
+    glm::mat4 getProjection(float aspect = 16./9.);
 
     void createUI() override final;
 

@@ -62,11 +62,11 @@ void Transform::addTranslationAfter(vec3 t){
 
 
 mat4 Transform::getModelMat(mat4 modelMat){
+    modelMat = translate(modelMat, m_position);
     // modelMat = translate(modelMat, center);
     modelMat = glm::rotate(modelMat, m_rotation[0]+m_animRotX, vec3(1.0,0.0,0.0));
     modelMat = glm::rotate(modelMat, m_rotation[1]+m_animRotY, vec3(0.0,1.0,0.0));
     modelMat = glm::rotate(modelMat, m_rotation[2]+m_animRotZ, vec3(0.0,0.0,1.0));
-    modelMat = translate(modelMat, m_position);
     modelMat = translate(modelMat, m_translateAfter);
     modelMat = glm::scale(modelMat, m_scale);
 

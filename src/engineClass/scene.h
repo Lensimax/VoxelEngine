@@ -18,6 +18,8 @@
 
 #include "gameObject.h"
 
+#include "../components/cameraProjective.h"
+
 struct CameraInfo {
     bool found;
     glm::mat4 projMat;
@@ -32,7 +34,7 @@ class Scene {
         ~Scene();
 
         void createUI();
-        CameraInfo getCamera();
+        CameraProjective* getCamera();
         Light *getLight();
         void createUIAtID(int indexItem, char *ID);
         void drawUIAtID(std::vector<GameObject*> objs, int indexItem, char *ID);
@@ -58,7 +60,7 @@ class Scene {
     private:
         void deleteScene();
 
-        CameraInfo getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
+        CameraProjective* getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
         Light *getLightRecursive(GameObject *obj);
 
         int m_idObject = 0;
