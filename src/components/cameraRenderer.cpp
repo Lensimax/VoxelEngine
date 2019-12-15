@@ -38,20 +38,12 @@ void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 proje
         return;
     }
 
-    /*const mat4 inverted = glm::inverse(camera->getView());
-    const vec3 origin = glm::vec3(inverted[3]);
-    const vec3 right = normalize(glm::vec3(inverted[0]));
-    const vec3 up = normalize(glm::vec3(inverted[1]));
-    const vec3 forward = normalize(glm::vec3(inverted[2]));*/
-
     glm::vec3 origin = glm::vec3(0, 0, 0);
     glm::vec3 forward = glm::vec3(0, 0, 1);
     glm::vec3 up = glm::vec3(0, 1, 0);
     glm::vec3 right = glm::vec3(1, 0, 0);
 
     std::vector<glm::vec3> arrayAxis;
-
-
 
 
     glLineWidth(m_lineWidth);

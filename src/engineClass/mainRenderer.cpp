@@ -39,7 +39,7 @@ MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_width
     createVAOQuad();
     createFBOSceneRender();
 
-    m_camera = new GameObject(-1, "Camera Editor");
+    m_camera = new GameObject(-1, "Camera Editor", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
     m_camera->addComponent<CameraProjective*>(new CameraProjective());
     m_camProj = m_camera->getComponent<CameraProjective*>();
 
@@ -90,6 +90,8 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
 
     assert(height > 0);
+
+    Transform *rootTransform = new Transform();
     
     m_widthScreen = width;
     m_heightScreen = height;
@@ -100,7 +102,7 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     if(m_gridActivated){
-        drawEditorGrid(glm::mat4(1), m_camProj->getView(), m_camProj->getProjection((float)width/(float)height));
+        drawEditorGrid(rootTransform->getModelToChild(glm::mat4(1)), m_camProj->getView(), m_camProj->getProjection((float)width/(float)height));
     }
     
     if(m_wireActivated){
@@ -110,7 +112,7 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(glm::mat4(1), scene->objectsEngine[i], m_camProj->getView(), m_camProj->getProjection((float)width/(float)height), l, (float)width/(float)height);
+        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camProj->getView(), m_camProj->getProjection((float)width/(float)height), l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }

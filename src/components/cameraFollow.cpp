@@ -1,6 +1,8 @@
+#include <imgui.h>
+
+
 #include "cameraFollow.h"
 
-#include <imgui.h>
 
 #include "cameraProjective.h"
 
@@ -31,6 +33,12 @@ void CameraFollow::createUI(){
     ImGui::Text("Offset angle : ");
     ImGui::DragFloat("##offsetangle", &m_angleOffset, 0.01f,-50.f, 50.f); 
 }
+
+
+
+
+
+
 
 
 float CameraFollow::getHorizontalDistance(){

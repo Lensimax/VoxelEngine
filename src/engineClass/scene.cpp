@@ -27,7 +27,7 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(0), glm::vec3(1,0,0)));
+    GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(1,0,0)));
 
     // cube->addComponent<ChunkRenderer*>(new ChunkRenderer());
     cube->addComponent<MeshRenderer*>(new MeshRenderer());
@@ -45,19 +45,14 @@ Scene::Scene(){
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
  
-    //MeshObject *player = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
     objectsEngine.push_back(player);
 
-
-    GameObject *camera = new GameObject(addNewId(), "Camera");
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
     camera->addComponent<CameraProjective*>(new CameraProjective());
-    //camera->addComponent<AxisRenderer*>(new AxisRenderer());
-    camera->addComponent<CameraRenderer*>(new CameraRenderer());
     CameraFollow* camFoll = new CameraFollow();
     camera->addComponent<CameraFollow*>(camFoll);
     camFoll->setPlayer(player);
 
-    //obj->addChild(camera);
     objectsEngine.push_back(camera);
 
 

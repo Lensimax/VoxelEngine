@@ -12,12 +12,10 @@
 
 #include "../engineClass/gameObject.h"
 #include "component.h"
-
-
 class CameraFollow : public Component {
 public:
 
-    CameraFollow(float distance = 2.0f, float offsetAngle = 0.0f);
+    CameraFollow(float distance = 3.5f, float offsetAngle = 0.0f);
     ~CameraFollow();
 
     void update() override;

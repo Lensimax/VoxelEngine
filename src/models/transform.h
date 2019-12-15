@@ -15,7 +15,7 @@ using namespace glm;
 
 class Transform {
     public:
-        Transform(vec3 center = vec3(0.0,0.0,0.0), vec3 position = vec3(0.0,0.0,0.0), vec3 scale = vec3(1.0,1.0,1.0), vec3 rotation = vec3(0.0,0.0,0.0));
+        Transform(vec3 position = vec3(0.0,0.0,0.0), vec3 rotation = vec3(0.0,0.0,0.0), vec3 scale = vec3(1.0,1.0,1.0));
         ~Transform();
 
         void setPosition(vec3 position);
