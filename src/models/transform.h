@@ -1,6 +1,7 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+
 #ifndef GLM_H
 #define GLM_H
 #include <glm/gtx/perpendicular.hpp>
@@ -14,11 +15,11 @@ using namespace glm;
 
 class Transform {
     public:
-        Transform(vec3 center = vec3(0.0,0.0,0.0), vec3 position = vec3(0.0,0.0,0.0), vec3 scale = vec3(1.0,1.0,1.0), vec3 rotation = vec3(0.0,0.0,0.0));
+        Transform(vec3 position = vec3(0.0,0.0,0.0), vec3 rotation = vec3(0.0,0.0,0.0), vec3 scale = vec3(1.0,1.0,1.0));
         ~Transform();
 
         void setPosition(vec3 position);
-        void rotate(vec3 angle);
+        void setRotation(vec3 angle);
         void rotatefromScreen(vec2 v);
         void scale(vec3 scale);
         void setCenter(vec3 center);
@@ -32,8 +33,7 @@ class Transform {
 
         void update();
 
-        mat4 getModelMat();
-        mat4 getModelMat(mat4 modelMat);
+        mat4 getModelMat(mat4 modelMat = glm::mat4(1));
         mat4 getModelToChild(mat4 modelMat);
 
         void createUI();
@@ -42,11 +42,16 @@ class Transform {
         void setChildAnimation(bool b_X, bool b_Y, bool b_Z, float SpeedX = 0.01f, float SpeedY = 0.01f, float SpeedZ = 0.01f);
         void setSameAsParent(bool position, bool rotation);
 
-    private:
+
+        void decompose(mat4 mat);
+
+    protected:
+
+        vec3 rotationMatrixToEulerAngles(mat4 r);
 
         void reset();
 
-        vec3 m_vecPosition, m_vecScale, m_vecRotation, m_center, m_translateAfter;
+        vec3 m_position, m_scale, m_rotation, m_center, m_translateAfter;
 
         bool m_samePosition, m_sameRotation;
 
@@ -65,6 +70,7 @@ class Transform {
 
         const float m_defaultSpeed = 0.01;
 
+        glm::mat4 m_test = glm::mat4(1);
 };
 
 #endif

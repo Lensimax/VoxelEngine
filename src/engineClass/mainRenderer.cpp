@@ -17,6 +17,7 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
+#include <glmCout.h>
 
 #include "../tools/lights/directionnalLight.h"
 
@@ -32,15 +33,15 @@
 
 MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true) {
 
-    m_transformEditor = new Transform();
-
     m_postProcessShader = new Shader();
     m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
 
     createVAOQuad();
     createFBOSceneRender();
 
-    m_camera = new CameraProj(-1, "Camera Editor");
+    m_camera = new GameObject(-1, "Camera Editor", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
+    m_camera->addComponent<CameraProjective*>(new CameraProjective());
+    m_camProj = m_camera->getComponent<CameraProjective*>();
 
 }
 
@@ -49,7 +50,6 @@ MainRenderer::~MainRenderer(){
     delete m_postProcessShader;
     deleteVAOQuad();
     deleteFBOSceneRender();
-    delete m_transformEditor;
 }
 
 
@@ -66,10 +66,11 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
     Transform *rootTransform = new Transform();
 
     // CAMERA
-    Camera *c = scene->getCamera();
-    if(c == NULL){
+    CameraProjective * camera = scene->getCamera();
+    if(camera == NULL){
         return;
     }
+
 
     Light *l = scene->getLight();
     if(l == NULL){
@@ -78,7 +79,7 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], c, l, (float)width/(float)height);
+        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], camera->getView(), camera->getProjection((float)width/(float)height), l, (float)width/(float)height);
     }
 
 
@@ -89,6 +90,8 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
 
     assert(height > 0);
+
+    Transform *rootTransform = new Transform();
     
     m_widthScreen = width;
     m_heightScreen = height;
@@ -99,7 +102,7 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     if(m_gridActivated){
-        drawEditorGrid(m_transformEditor->getModelToChild(glm::mat4(1)), m_camera->getView(), m_camera->getProj());
+        drawEditorGrid(rootTransform->getModelToChild(glm::mat4(1)), m_camProj->getView(), m_camProj->getProjection((float)width/(float)height));
     }
     
     if(m_wireActivated){
@@ -109,25 +112,24 @@ void MainRenderer::renderTheSceneEditor(Scene *scene, int width, int height){
     }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
-        drawRecursive(m_transformEditor->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camera, l, (float)width/(float)height);
+        drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], m_camProj->getView(), m_camProj->getProjection((float)width/(float)height), l, (float)width/(float)height);
     }
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 }
 
 
-void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c, Light *l, float screenAspectRatio){
+void MainRenderer::drawRecursive(glm::mat4 modelMat, GameObject *obj, glm::mat4 viewMat, glm::mat4 projectionMat, Light *l, float screenAspectRatio){
 
     glm::mat4 matrixTochild = obj->getTransform()->getModelToChild(modelMat);
     glm::mat4 modelMatrix = obj->getTransform()->getModelMat(modelMat);
 
-    MeshRenderer *meshRenderer = obj->getComponent<MeshRenderer*>();
-
-    if(meshRenderer != NULL){
-        meshRenderer->draw(modelMatrix, c->getView(), c->getProj(screenAspectRatio), l);
+    std::vector<MeshRenderer*> meshRenderers = obj->getComponents<MeshRenderer*>();
+    for(auto *renderer : meshRenderers){
+        renderer->draw(modelMatrix, viewMat, projectionMat, l);
     }
 
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
-        drawRecursive(matrixTochild, obj->m_listOfChildren[i], c, l, screenAspectRatio);
+        drawRecursive(matrixTochild, obj->m_listOfChildren[i], viewMat, projectionMat, l, screenAspectRatio);
     }
 }
 
@@ -188,18 +190,18 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
 
 
 void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
-    Shader *shader = new Shader();
-    shader->load("../data/shaders/simple.vert","../data/shaders/simple.frag");
+    Shader shader = Shader();
+    shader.load("../data/shaders/simple.vert","../data/shaders/simple.frag");
 
     glm::vec4 color = glm::vec4(0.217f, 0.217f, 0.217f, 1.0f);
 
-    glUseProgram(shader->id());
+    glUseProgram(shader.id());
 
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
-    glUniformMatrix4fv(glGetUniformLocation(shader->id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
 
-    glUniform4fv(glGetUniformLocation(shader->id(),"color"),1,&color[0]);
+    glUniform4fv(glGetUniformLocation(shader.id(),"color"),1,&color[0]);
 
     glLineWidth(1);
     
@@ -226,24 +228,18 @@ void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
     DrawDebug::drawArrayPosition(arrayVertices.size(), (float*)&(arrayVertices[0]), GL_LINES);
 
     glUseProgram(0);
-    delete shader;
 }
 
 
 void MainRenderer::update(){
-    m_transformEditor->update();
+    m_camera->update();
 }
 
 
 void MainRenderer::createUI(){
     ImGui::Begin("Renderer Setting");
 
-    m_transformEditor->createUI();
-
-    ImGui::Separator();
-
     m_camera->createUI("Renderer Setting");
-
 
     ImGui::End();
 }

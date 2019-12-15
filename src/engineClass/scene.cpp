@@ -2,7 +2,6 @@
 #include "../engineClass/gameObject.h"
 
 #include "../tools/lights/directionnalLight.h"
-#include "../tools/cameraProj.h"
 
 #include "../models/mesh/meshCube.h"
 
@@ -13,9 +12,13 @@
 
 #include "../components/component.h"
 #include "../components/chunkRenderer.h"
-#include "../components/cameraRenderer.h"
+#include "../components/axisRenderer.h"
 
 #include "../components/controller.h"
+#include "../components/cameraProjective.h"
+#include "../components/cameraRenderer.h"
+#include "../components/cameraFollow.h"
+
 
 #include <iostream>
 
@@ -24,18 +27,39 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *obj = new GameObject(addNewId());
+    /*GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(1,0,0)));
 
+    cube->addComponent<MeshRenderer*>(new MeshRenderer());
+    cube->addComponent<Mesh*>(new MeshCube(0.1f));
+    cube->addComponent<Material*>(new Lambertian());
+    cube->addComponent<Controller*>(new Controller());*/
+
+    GameObject *player = new GameObject(addNewId(), "Player");
+    player->addComponent<MeshRenderer*>(new MeshRenderer());
+    player->addComponent<Mesh*>(new MeshCube());
+    player->addComponent<Material*>(new Lambertian());
+    player->addComponent<Controller*>(new Controller());
+    player->addComponent<AxisRenderer*>(new AxisRenderer());
+    objectsEngine.push_back(player);
+  
     // std::cerr << "ajout composent\n";
     obj->addComponent<ChunkRenderer*>(new ChunkRenderer());
     // std::cerr << "fin ajout composent\n";
     obj->addComponent<MeshRenderer*>(new MeshRenderer());
     obj->addComponent<Mesh*>(new MeshCube());
     obj->addComponent<Material*>(new Lambertian());
-    obj->addComponent<Controller*>(new Controller());
- 
-    //MeshObject *obj = new MeshObject(addNewId(), "Cube", new Transform(), new MeshCube(0.5f), new Lambertian(glm::vec4(1,1,0,1)));
+    //obj->addComponent<Controller*>(new Controller());
     objectsEngine.push_back(obj);
+ 
+
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
+    camera->addComponent<CameraProjective*>(new CameraProjective());
+    CameraFollow* camFoll = new CameraFollow();
+    camera->addComponent<CameraFollow*>(camFoll);
+    camFoll->setPlayer(player);
+
+    objectsEngine.push_back(camera);
+
 
 }
 
@@ -50,30 +74,33 @@ void Scene::deleteScene(){
 }
 
 
-Camera *Scene::getCameraRecursive(GameObject *obj){
-    Camera *tmp = NULL;
-    if(Camera* c = dynamic_cast<Camera*>(obj)) {
+CameraProjective * Scene::getCamera(){
+    CameraProjective* tmp;
+    tmp = NULL;
+    for(unsigned int i=0; i<objectsEngine.size(); i++){
+        tmp = getCameraRecursive(objectsEngine[i], glm::mat4(1));
+        if(tmp != NULL){ return tmp;}
+    }
+    return tmp;
+}
+
+CameraProjective * Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat){
+    CameraProjective * tmp;
+    tmp = NULL;
+    if(CameraProjective* c = obj->getComponent<CameraProjective*>()) {
         return c;
     } else {
         if(obj->m_listOfChildren.size() == 0){
             return NULL;
         } else {
+            modelMat = obj->getTransform()->getModelToChild(modelMat);
             for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
-                tmp = getCameraRecursive(obj->m_listOfChildren[i]);
+                tmp = getCameraRecursive(obj->m_listOfChildren[i], modelMat);
                 if(tmp != NULL){ return tmp;}
             }
         }
         return NULL;
     }
-}
-
-Camera *Scene::getCamera(){
-    Camera *tmp = NULL;
-    for(unsigned int i=0; i<objectsEngine.size(); i++){
-        tmp = getCameraRecursive(objectsEngine[i]);
-        if(tmp != NULL){ return tmp;}
-    }
-    return NULL;
 }
 
 Light *Scene::getLight(){
@@ -195,15 +222,10 @@ void Scene::togglePause(){
 
 void Scene::loadDefaultScene(){
     m_pause = false;
-
     m_idObject = 0;
-
     objectsEngine = std::vector<GameObject*>();
 
-    Camera *camera = new CameraProj(addNewId(), "Camera", glm::vec3(0,0,3));
-    camera->addComponent<CameraRenderer*>(new CameraRenderer());
-
-    objectsEngine.push_back(camera);
+    
 
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
 }

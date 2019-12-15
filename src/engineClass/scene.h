@@ -15,9 +15,16 @@
 #include <vector>
 
 #include "../tools/lights/light.h"
-#include "../tools/camera.h"
 
 #include "gameObject.h"
+
+#include "../components/cameraProjective.h"
+
+struct CameraInfo {
+    bool found;
+    glm::mat4 projMat;
+    glm::mat4 viewMat;
+}; 
 
 
 class Scene {
@@ -27,7 +34,7 @@ class Scene {
         ~Scene();
 
         void createUI();
-        Camera *getCamera();
+        CameraProjective* getCamera();
         Light *getLight();
         void createUIAtID(int indexItem, char *ID);
         void drawUIAtID(std::vector<GameObject*> objs, int indexItem, char *ID);
@@ -53,7 +60,7 @@ class Scene {
     private:
         void deleteScene();
 
-        Camera *getCameraRecursive(GameObject *obj);
+        CameraProjective* getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
         Light *getLightRecursive(GameObject *obj);
 
         int m_idObject = 0;

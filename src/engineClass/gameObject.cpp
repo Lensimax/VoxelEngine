@@ -6,6 +6,7 @@
 #include "../material/lambertian.h"
 #include "../models/mesh/meshCube.h"
 #include "../components/chunkRenderer.h"
+#include "../components/axisRenderer.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -121,7 +122,7 @@ void GameObject::createUI(char *ID){
         if (ImGui::MenuItem("Add MeshCube")) { addComponent<Mesh*>(new MeshCube()); }
         if (ImGui::MenuItem("Add Material")) { addComponent<Material*>(new Lambertian()); }
         if (ImGui::MenuItem("Add MeshRenderer")) { addComponent<MeshRenderer*>(new MeshRenderer());  }
-        // if (ImGui::MenuItem("Add ChunkRenderer")) { addComponent<ChunkRenderer*>(new ChunkRenderer());  }
+        if (ImGui::MenuItem("Add AxisRenderer")) { addComponent<AxisRenderer*>(new AxisRenderer());  }
         ImGui::EndMenu();
     }
 

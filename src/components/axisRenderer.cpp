@@ -1,5 +1,4 @@
 
-
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -17,34 +16,30 @@
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
-#include "cameraRenderer.h"
-#include "cameraProjective.h"
- 
-CameraRenderer::CameraRenderer() : m_lineLength(0.2f), m_lineWidth(2.0f){
-    setName("Camera Renderer");
+#include "axisRenderer.h"
+
+#include "../models/mesh/meshCube.h"
+
+#include <iostream>
+
+AxisRenderer::AxisRenderer() : m_lineLength(0.2f), m_lineWidth(2.0f){
+    setName("Axis Renderer");
 }
 
 
-CameraRenderer::~CameraRenderer(){
+AxisRenderer::~AxisRenderer(){
 
 }
 
-
-
-void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
-
-    CameraProjective * camera = m_gameobject->getComponent<CameraProjective*>();
-    if(camera == NULL){
-        return;
-    }
+void AxisRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
     glm::vec3 origin = glm::vec3(0, 0, 0);
     glm::vec3 forward = glm::vec3(0, 0, 1);
     glm::vec3 up = glm::vec3(0, 1, 0);
     glm::vec3 right = glm::vec3(1, 0, 0);
 
-    std::vector<glm::vec3> arrayAxis;
 
+    std::vector<glm::vec3> arrayAxis;
 
     glLineWidth(m_lineWidth);
 
@@ -77,12 +72,15 @@ void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 proje
     DrawDebug::drawArrayPosition(arrayAxis.size(), (float*)&arrayAxis[0], GL_LINES);
 
     glUseProgram(0);
+
+
 }
 
+void AxisRenderer::createUI(){
 
-void CameraRenderer::createUI(){
     ImGui::Text("Line length : ");
     ImGui::DragFloat("##lineLength", &m_lineLength, 0.01f,0.01f, 1000.f); 
     ImGui::Text("Line width : ");
     ImGui::DragFloat("##linewidth", &m_lineWidth,0.2f, 1.0f, 1000.0f); 
+
 }

@@ -13,6 +13,17 @@ template< class ComponentType> ComponentType  GameObject::getComponent(){
     return NULL;
 }
 
+template< class ComponentType> std::vector<ComponentType>  GameObject::getComponents(){
+    std::vector<ComponentType> vec = std::vector<ComponentType>();
+    for ( Component * component : m_components ) {
+        if ( ComponentType o = dynamic_cast<ComponentType>(component) ){
+            vec.push_back(o);
+        }
+    }
+
+    return vec;
+}
+
 
 template< class ComponentType > bool GameObject::removeComponent() {
     if(m_components.empty()){
