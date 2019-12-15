@@ -8,6 +8,7 @@ ChunkRenderer::ChunkRenderer(){
     setName("Chunk Renderer");
 
     m_mesh = new MeshCube();
+    m_mesh->clear();
     //m_gameobject->Component<MeshCube*>();
 
     if(m_mesh){

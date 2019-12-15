@@ -15,8 +15,8 @@
 #include "../tools/lights/directionnalLight.h"
 #include "../material/shader.h"
 
-#include "../tools/camera.h"
-#include "../tools/cameraProj.h"
+#include "../components/cameraProjective.h"
+
 
 #include <vector>
 #include <string>
@@ -48,17 +48,16 @@ public:
     inline unsigned int height(){return m_heightScreen;}
     inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
     inline GLuint getEditorTextureID(){return m_editorTextureID;}
-    inline Transform *getTransformEditor(){return m_transformEditor;}
+    inline GameObject *getCamera(){return m_camera;}
 
 private:
 
     void renderTheScene(Scene *scene, int width, int height);
     void renderTheSceneEditor(Scene *scene, int width, int height);
-    void drawRecursive(glm::mat4 modelMat, GameObject *obj, Camera *c, Light *l, float screenAspectRatio);
+    void drawRecursive(glm::mat4 modelMat, GameObject *obj, glm::mat4 viewMat, glm::mat4 projectionMat, Light *l, float screenAspectRatio);
     
     void drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat);
 
-    Camera *getCamera();
     Light *getLight();
 
     glm::mat4 m_viewMat;
@@ -96,8 +95,8 @@ private:
 
     unsigned int m_widthScreen, m_heightScreen;
 
-    Camera *m_camera;
-    Transform *m_transformEditor;
+    GameObject *m_camera;
+    CameraProjective *m_camProj;
 
 };
 

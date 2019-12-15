@@ -1,13 +1,13 @@
-#ifndef CAMERARENDERER_H
-#define CAMERARENDERER_H
+#ifndef CAMERA_RENDERER_H
+#define CAMERA_RENDERER_H
 
 #include "meshRenderer.h"
 
-class CameraRenderer : public MeshRenderer {
-public:
 
-    CameraRenderer();
-    ~CameraRenderer();
+class AxisRenderer : public MeshRenderer {
+public:
+    AxisRenderer();
+    ~AxisRenderer();
 
     virtual void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light);
 
@@ -17,8 +17,6 @@ private:
     float m_lineLength;
     float m_lineWidth;
 
-    const glm::vec4 m_colorLine = glm::vec4(0.8,0.8,0.8,1);
 };
-
 
 #endif

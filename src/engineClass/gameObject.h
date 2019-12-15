@@ -34,6 +34,7 @@ public:
 
     // COMPONENT
     template< class ComponentType> ComponentType  getComponent();
+    template< class ComponentType> std::vector<ComponentType> getComponents();
     template< class ComponentType> void addComponent(Component * component);
     template< class ComponentType> void addComponent();
     template< class ComponentType > bool removeComponent();

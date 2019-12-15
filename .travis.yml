@@ -15,7 +15,7 @@ compiler:
 jobs:
   include:
     - stage: build
-
+      name: "Linux Build Debug"
       os: linux
       install:
         - bash .travis/installLinux.sh
@@ -24,10 +24,26 @@ jobs:
         - cd build && make -j
 
     - stage: build
-    
+      name: "MacOS Build Debug"
       os: osx
       install:
         - bash .travis/prepareCmake.sh
       script:
         - cd build && make -j
 
+    - stage: build
+      name: "Linux Build Release"
+      os: linux
+      install:
+        - bash .travis/installLinux.sh
+        - bash .travis/prepareCmakeRelease.sh
+      script:
+        - cd build && make -j
+
+    - stage: build
+      name: "MacOS Build Release"
+      os: osx
+      install:
+        - bash .travis/prepareCmakeRelease.sh
+      script:
+        - cd build && make -j
