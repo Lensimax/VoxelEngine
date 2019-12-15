@@ -66,16 +66,11 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
     Transform *rootTransform = new Transform();
 
     // CAMERA
-    //glm::mat4 viewMat = glm::mat4(1);
     CameraProjective * camera = scene->getCamera();
     if(camera == NULL){
         return;
     }
 
-    //c.viewMat = glm::lookAt(glm::vec3(0,0,3), glm::vec3(0,0,0), glm::vec3(0,1,0));
-
-    //GLMCOUT::printMat(c.viewMat);
-    // std::cout << "\n";
 
     Light *l = scene->getLight();
     if(l == NULL){

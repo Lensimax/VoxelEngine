@@ -81,10 +81,10 @@ CameraProjective * Scene::getCameraRecursive(GameObject *obj, glm::mat4 modelMat
     CameraProjective * tmp;
     tmp = NULL;
     if(CameraProjective* c = obj->getComponent<CameraProjective*>()) {
-        return NULL;
+        return c;
     } else {
         if(obj->m_listOfChildren.size() == 0){
-            return tmp;
+            return NULL;
         } else {
             modelMat = obj->getTransform()->getModelToChild(modelMat);
             for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
