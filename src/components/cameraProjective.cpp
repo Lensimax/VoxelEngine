@@ -27,10 +27,13 @@ glm::mat4 CameraProjective::getProjection(float aspect){
 }
 
 void CameraProjective::createUI(){
+    const float min = 0.001f;
+    const float max = 1000000.0f;
+
     ImGui::Text("Fov: "); ImGui::SameLine();
-    ImGui::DragFloat("##fov", &m_fov, 0.01f);
+    ImGui::DragFloat("##fov", &m_fov, 0.01f, min, max);
     ImGui::Text("Near: "); ImGui::SameLine();
-    ImGui::DragFloat("##near", &m_near, 0.01f); //ImGui::SameLine();
+    ImGui::DragFloat("##near", &m_near, 0.01f, min, max); //ImGui::SameLine();
     ImGui::Text("Far: "); ImGui::SameLine();
-    ImGui::DragFloat("##far", &m_far, 0.01f);
+    ImGui::DragFloat("##far", &m_far, 0.01f, min, max);
 }
