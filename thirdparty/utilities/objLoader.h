@@ -21,6 +21,15 @@
 // SOFTWARE.
 
 
+#ifndef GLM_H
+#define GLM_H
+#include <glm/gtx/perpendicular.hpp>
+#include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+#endif
+
 
 // OBJ_Loader.h - A Single Header OBJ Model Loader
 
@@ -93,6 +102,10 @@ namespace objl
 			return Vector2(this->X *other, this->Y * other);
 		}
 
+		glm::vec2 toGLM(){
+			return glm::vec2(this->X, this->Y);
+		}
+
 		// Positional Variables
 		float X;
 		float Y;
@@ -146,6 +159,10 @@ namespace objl
 		Vector3 operator/(const float& other) const
 		{
 			return Vector3(this->X / other, this->Y / other, this->Z / other);
+		}
+
+		glm::vec3 toGLM(){
+			return glm::vec3(this->X, this->Y, this->Z);
 		}
 
 		// Positional Variables

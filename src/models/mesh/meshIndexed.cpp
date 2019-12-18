@@ -2,6 +2,8 @@
 
 #include "meshIndexed.h"
 
+#include <objLoader.h>
+
 MeshIndexed::MeshIndexed(std::string filename) : m_filename(filename){
 
     setName("Mesh Indexed");
@@ -103,6 +105,38 @@ unsigned int MeshIndexed::getNBFaces() {
 
 void MeshIndexed::createMeshFromFile(std::string filename){
 
+    objl::Loader Loader;
 
+	// Load .obj File
+	bool loadout = Loader.LoadFile(filename);
+
+    if(loadout){ // load done
+
+        assert(Loader.LoadedMeshes.size() > 0);
+
+        m_indices = std::vector<unsigned int>(Loader.LoadedMeshes[0].Indices);
+        //m_vertices 
+        m_vertices.resize(Loader.LoadedMeshes[0].Vertices.size());
+        m_normals.resize(m_vertices.size());
+        m_coords.resize(m_vertices.size());
+        m_tangents.resize(m_vertices.size());
+        m_colors.resize(m_vertices.size());
+
+
+
+        for(unsigned int i=0; i<Loader.LoadedMeshes[0].Vertices.size(); i++){
+            m_vertices[i] = Loader.LoadedMeshes[0].Vertices[i].Position.toGLM();
+            m_normals[i] = Loader.LoadedMeshes[0].Vertices[i].Normal.toGLM();
+            m_coords[i] = Loader.LoadedMeshes[0].Vertices[i].TextureCoordinate.toGLM();
+            m_tangents[i] = glm::vec3(0,1,0);
+            m_colors[i] = glm::vec3(1,0,0);
+        }
+
+        m_backupVertices = m_vertices;
+
+    } else {
+        std::cerr << "Error loading filename : " << filename << "\n";
+        exit(1);
+    }
 
 }
