@@ -7,7 +7,7 @@
 
 class MeshIndexed : public Mesh {
 public:
-    MeshIndexed(std::string filename = "../data/models/sphereVoxelized.obj");
+    MeshIndexed(std::string filename = "../data/models/cube.obj");
     ~MeshIndexed();
 
     void createVAO() override;

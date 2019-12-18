@@ -4,6 +4,7 @@
 #include "../tools/lights/directionnalLight.h"
 
 #include "../models/mesh/meshCube.h"
+#include "../models/mesh/meshIndexed.h"
 
 #include "../material/simpleMat.h"
 
@@ -30,9 +31,18 @@ Scene::Scene(){
     GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(1,0,0)));
 
     cube->addComponent<MeshRenderer*>(new MeshRenderer());
-    cube->addComponent<Mesh*>(new MeshCube(0.1f));
     cube->addComponent<Material*>(new Lambertian());
     cube->addComponent<Controller*>(new Controller());
+
+
+    GameObject *meshIndex = new GameObject(addNewId(), "Objet", new Transform(glm::vec3(2,0,0)));
+
+    meshIndex->addComponent<MeshRenderer*>(new MeshRenderer());
+    meshIndex->addComponent<MeshIndexed*>(new MeshIndexed());
+    meshIndex->addComponent<Material*>(new Lambertian());
+    meshIndex->addComponent<Controller*>(new Controller());
+    objectsEngine.push_back(meshIndex);
+
 
     GameObject *player = new GameObject(addNewId(), "Player");
     player->addComponent<MeshRenderer*>(new MeshRenderer());
@@ -42,7 +52,7 @@ Scene::Scene(){
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     objectsEngine.push_back(player);
 
-    player->addChild(cube);
+    //player->addChild(cube);
   
     // GameObject *terrain = new GameObject(addNewId(), "Terrain");
     // terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());

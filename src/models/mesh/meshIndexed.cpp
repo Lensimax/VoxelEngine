@@ -53,7 +53,7 @@ void MeshIndexed::createVAO(){
 
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_buffers[4]); // indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,m_indices.size()*3*sizeof(unsigned int),&m_indices[0],GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,getNBFaces()*3*sizeof(unsigned int),&m_indices[0],GL_STATIC_DRAW);
 
 
     glBindVertexArray(0);
@@ -61,7 +61,7 @@ void MeshIndexed::createVAO(){
 
 void MeshIndexed::drawVAO(){
     glBindVertexArray(m_vertexArrayID);
-    glDrawElements(GL_TRIANGLES,3*getNBFaces(),GL_UNSIGNED_INT,(void *)0);
+    glDrawElements(GL_TRIANGLES,getNBFaces(),GL_UNSIGNED_INT,(void *)0);
     glBindVertexArray(0);
 }
 
@@ -74,6 +74,46 @@ void MeshIndexed::deleteVAO(){
 void MeshIndexed::createUI(){
     ImGui::Text("Number of vertices : %u", getNBVertices());
     ImGui::Text("Number of faces : %u", getNBFaces());
+
+    ImGui::Separator();
+    if (ImGui::TreeNode("Vertices")){
+
+        ImGui::Columns(3, "Vertices"); // 4-ways, with border
+        ImGui::Separator();
+        ImGui::Text("X"); ImGui::NextColumn();
+        ImGui::Text("Y"); ImGui::NextColumn();
+        ImGui::Text("Z"); ImGui::NextColumn();
+        ImGui::Separator();
+        for(unsigned int i=0; i<getNBVertices(); i++){
+            ImGui::Text("%4f",m_vertices[i].x); ImGui::NextColumn();
+            ImGui::Text("%4f",m_vertices[i].y); ImGui::NextColumn();
+            ImGui::Text("%4f",m_vertices[i].z); ImGui::NextColumn();
+        }
+
+        ImGui::Columns(1);
+        ImGui::Separator();
+        ImGui::TreePop();
+
+    }
+
+    if (ImGui::TreeNode("Faces")){
+
+        ImGui::Columns(3, "Face"); // 4-ways, with border
+        ImGui::Separator();
+        ImGui::Text("V1"); ImGui::NextColumn();
+        ImGui::Text("V2"); ImGui::NextColumn();
+        ImGui::Text("V3"); ImGui::NextColumn();
+        ImGui::Separator();
+        for(unsigned int i=0; i<getNBFaces(); i++){
+            ImGui::Text("%d",m_indices[3*i]); ImGui::NextColumn();
+            ImGui::Text("%d",m_indices[3*i+1]); ImGui::NextColumn();
+            ImGui::Text("%d", m_indices[3*i+2]); ImGui::NextColumn();
+        }
+
+        ImGui::Columns(1);
+        ImGui::Separator();
+        ImGui::TreePop();
+    }
 }
 
 
@@ -116,15 +156,22 @@ void MeshIndexed::createMeshFromFile(std::string filename){
 
         m_indices = std::vector<unsigned int>(Loader.LoadedMeshes[0].Indices);
         //m_vertices 
-        m_vertices.resize(Loader.LoadedMeshes[0].Vertices.size());
+        // std::cout << "Number indices : " << Loader.LoadedMeshes[0].Indices.size() << "\n";
+
+        m_vertices.resize(Loader.LoadedMeshes[0].Vertices.size()/3);
         m_normals.resize(m_vertices.size());
         m_coords.resize(m_vertices.size());
         m_tangents.resize(m_vertices.size());
         m_colors.resize(m_vertices.size());
 
+        
+        // std::cout << "Number vertices : " << Loader.LoadedMeshes[0].Vertices.size() << "\n";
+         // std::cout << "Number face : " << Loader.LoadedMeshes[0].Indices.size() << "\n";
 
+        std::cout << "Number vertices : " << getNBVertices() << "\n";
+        std::cout << "Number faces : " << getNBFaces() << "\n";
 
-        for(unsigned int i=0; i<Loader.LoadedMeshes[0].Vertices.size(); i++){
+        for(unsigned int i=0; i<m_vertices.size(); i++){
             m_vertices[i] = Loader.LoadedMeshes[0].Vertices[i].Position.toGLM();
             m_normals[i] = Loader.LoadedMeshes[0].Vertices[i].Normal.toGLM();
             m_coords[i] = Loader.LoadedMeshes[0].Vertices[i].TextureCoordinate.toGLM();
