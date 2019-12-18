@@ -96,7 +96,9 @@ mat4 Transform::getModelToChild(mat4 modelMat){
         model = glm::rotate(model, m_rotation[2]+m_animRotZ, vec3(0.0,0.0,1.0));
     }
 
-    model = translate(model, m_translateAfter);    
+    model = translate(model, m_translateAfter);   
+
+    model = glm::scale(model, m_scaleToSend); 
 
     return model;
 
