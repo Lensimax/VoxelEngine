@@ -18,6 +18,7 @@ MeshCube::~MeshCube(){
 
 
 void MeshCube::recreate(){
+    deleteVAO();
     createMesh(m_width);
     createVAO();
 }

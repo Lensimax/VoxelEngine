@@ -4,10 +4,7 @@
 
 
 
-#define POSITION_ATTRIB 0
-#define VERTEX_NORMAL_ATTRIB 1
-#define VERTEX_UV_ATTRIB 2
-#define VERTEX_COLOR_ATTRIB 3
+
 
 #include "mesh.h"
 
@@ -152,6 +149,8 @@ void Mesh::createVAO(){
     glBindBuffer(GL_ARRAY_BUFFER, m_buffers[3]);
     glBufferData(GL_ARRAY_BUFFER, getNBVertices()*3* sizeof(float), getColors(), GL_STATIC_DRAW); //m_normals is std::vector<float>
     glVertexAttribPointer(VERTEX_COLOR_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+
     
 
     glBindVertexArray(0);

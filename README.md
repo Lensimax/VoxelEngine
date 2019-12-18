@@ -72,3 +72,4 @@ Should work
 * Free look camera : https://gamedev.stackexchange.com/questions/60266/create-a-fly-camera-with-lookat
 * Third person camera : https://www.youtube.com/watch?v=PoxDDZmctnU&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=19
 * Voxelizer sur blender : https://www.youtube.com/watch?v=ntVhi8SlOzA
+* Let's make a voxel engine : https://sites.google.com/site/letsmakeavoxelengine/home/

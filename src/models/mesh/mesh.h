@@ -30,6 +30,12 @@
 
 #include "../../components/component.h"
 
+#define POSITION_ATTRIB 0
+#define VERTEX_NORMAL_ATTRIB 1
+#define VERTEX_UV_ATTRIB 2
+#define VERTEX_COLOR_ATTRIB 3
+#define INDICES_ATTRIB 4
+
 
 class Mesh : public Component {
 
@@ -48,11 +54,11 @@ public:
 
      void update() override;
 
-     void createVAO();
+     virtual void createVAO();
 
-     void drawVAO();
+     virtual void drawVAO();
 
-     void deleteVAO();
+     virtual void deleteVAO();
 
      
 
@@ -61,9 +67,9 @@ public:
      inline void *getUVs(){ return &(m_coords[0]);}
      inline void *getColors(){ return &(m_colors[0]);}
 
-     inline unsigned int getNBVertices(){ return m_vertices.size();}
+     unsigned int getNBVertices(){ return m_vertices.size();}
 
-     inline unsigned int getNBFaces(){ return getNBVertices()/3; }
+     virtual unsigned int getNBFaces(){ return getNBVertices()/3; }
 
      inline glm::vec3 get_vertex(unsigned int i) { return m_vertices[i];}
      inline glm::vec3 get_normal(unsigned int i) { return m_normals[i];}
@@ -80,7 +86,7 @@ public:
      void addQuad    (const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4,
                       const glm::vec3& normal, const glm::vec3& color);
 
-     void clear();
+     virtual void clear();
 
     protected:
 
