@@ -2,7 +2,8 @@
 
 #include "meshIndexed.h"
 
-#include <objLoader.h>
+#include <iostream>
+
 
 MeshIndexed::MeshIndexed(std::string filename) : m_filename(filename){
 
@@ -33,9 +34,13 @@ void MeshIndexed::createVAO(){
     glEnableVertexAttribArray(POSITION_ATTRIB);
     glVertexAttribPointer(POSITION_ATTRIB,3,GL_FLOAT,GL_FALSE,0,(void *)0);
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_buffers[1]); // indices
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,getNBFaces()*3*sizeof(unsigned int),&m_indices[0],GL_STATIC_DRAW);
+
+
     // m_normals
     glEnableVertexAttribArray(VERTEX_NORMAL_ATTRIB);
-    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, m_buffers[4]);
     glBufferData(GL_ARRAY_BUFFER, getNBVertices()*3* sizeof(float), getNormals(), GL_STATIC_DRAW); //m_normals is std::vector<float>
     glVertexAttribPointer(VERTEX_NORMAL_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -52,8 +57,6 @@ void MeshIndexed::createVAO(){
     glVertexAttribPointer(VERTEX_COLOR_ATTRIB, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_buffers[4]); // indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,getNBFaces()*3*sizeof(unsigned int),&m_indices[0],GL_STATIC_DRAW);
 
 
     glBindVertexArray(0);
@@ -145,45 +148,32 @@ unsigned int MeshIndexed::getNBFaces() {
 
 void MeshIndexed::createMeshFromFile(std::string filename){
 
-    objl::Loader Loader;
+    m_indices = std::vector<unsigned int>(6);
 
-	// Load .obj File
-	bool loadout = Loader.LoadFile(filename);
+    m_vertices.resize(4);
+    m_normals.resize(m_vertices.size());
+    m_coords.resize(m_vertices.size());
+    m_tangents.resize(m_vertices.size());
+    m_colors.resize(m_vertices.size());
 
-    if(loadout){ // load done
+    m_vertices[0] = glm::vec3(0,0,0);
+    m_vertices[1] = glm::vec3(1,0,0);
+    m_vertices[2] = glm::vec3(0,0,1);
+    m_vertices[3] = glm::vec3(1,0,1);
 
-        assert(Loader.LoadedMeshes.size() > 0);
+    m_indices[0] = 0;
+    m_indices[1] = 1;
+    m_indices[2] = 3;
+    m_indices[3] = 0;
+    m_indices[4] = 2;
+    m_indices[5] = 3;
 
-        m_indices = std::vector<unsigned int>(Loader.LoadedMeshes[0].Indices);
-        //m_vertices 
-        // std::cout << "Number indices : " << Loader.LoadedMeshes[0].Indices.size() << "\n";
-
-        m_vertices.resize(Loader.LoadedMeshes[0].Vertices.size()/3);
-        m_normals.resize(m_vertices.size());
-        m_coords.resize(m_vertices.size());
-        m_tangents.resize(m_vertices.size());
-        m_colors.resize(m_vertices.size());
-
-        
-        // std::cout << "Number vertices : " << Loader.LoadedMeshes[0].Vertices.size() << "\n";
-         // std::cout << "Number face : " << Loader.LoadedMeshes[0].Indices.size() << "\n";
-
-        std::cout << "Number vertices : " << getNBVertices() << "\n";
-        std::cout << "Number faces : " << getNBFaces() << "\n";
-
-        for(unsigned int i=0; i<m_vertices.size(); i++){
-            m_vertices[i] = Loader.LoadedMeshes[0].Vertices[i].Position.toGLM();
-            m_normals[i] = Loader.LoadedMeshes[0].Vertices[i].Normal.toGLM();
-            m_coords[i] = Loader.LoadedMeshes[0].Vertices[i].TextureCoordinate.toGLM();
-            m_tangents[i] = glm::vec3(0,1,0);
-            m_colors[i] = glm::vec3(1,0,0);
-        }
-
-        m_backupVertices = m_vertices;
-
-    } else {
-        std::cerr << "Error loading filename : " << filename << "\n";
-        exit(1);
+    for(unsigned int i=0; i<4; i++){
+        m_normals[i] = glm::vec3(0,1,0);
+        m_tangents[i] = glm::vec3(0,0,0);
+        m_colors[i] = glm::vec3(1,0,0);
+        m_coords[i] = glm::vec2(1,0);
     }
 
+    m_backupVertices = m_vertices;
 }
