@@ -131,7 +131,6 @@ int main(int, char**)
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    bool firstFramePassed = false;
 
     // Main loop
     while (!glfwWindowShouldClose(window)){
@@ -154,13 +153,7 @@ int main(int, char**)
 
         ui->drawUI();
 
-        if(firstFramePassed){
-            if(ui->hasToDisplayed()){
-                ImGui::Begin("Game", nullptr, ImGuiWindowFlags_NoResize);
-                ImGui::Image((void*)(intptr_t)renderer->getGameTextureID(), ImVec2(426,240), ImVec2(0,1), ImVec2(1,0));
-                ImGui::End();
-            }
-        }
+        
 
         //ImGui::ShowDemoWindow();
 
@@ -181,7 +174,6 @@ int main(int, char**)
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
-        firstFramePassed = true;
     }
 
     delete(scene);

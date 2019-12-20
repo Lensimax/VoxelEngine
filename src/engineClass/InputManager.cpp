@@ -76,7 +76,6 @@ void InputManager::update(){
         float dz = glm::cos(rotation.y);
 
         glm::vec3 move = glm::vec3(0,0,0);
-
         // mouse wheel
         if(io.MouseWheel != 0.0){
 
@@ -152,6 +151,11 @@ void InputManager::update(){
         if(ImGui::IsKeyPressed('H')){
             if(m_ui != NULL){
                 m_ui->toggleHasToBeDisplayed();
+            }
+        }
+        if(ImGui::IsKeyPressed('U')){
+            if(m_renderer != NULL){
+                m_renderer->togglePlayMode();
             }
         }
     }

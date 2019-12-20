@@ -31,7 +31,7 @@
 
 #include <iostream> 
 
-MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true) {
+MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true), m_firstFramePassed(false), m_playMode(true) {
 
     m_postProcessShader = new Shader();
     m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
@@ -165,6 +165,8 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
 
     glUseProgram(0);
 
+    m_firstFramePassed = true;
+
 
 }
 
@@ -175,7 +177,11 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
 
     // send rendered scene to the post process shader
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,getEditorTextureID());
+    if(m_playMode){
+        glBindTexture(GL_TEXTURE_2D,getGameTextureID()); 
+    } else {
+        glBindTexture(GL_TEXTURE_2D,getEditorTextureID()); 
+    }
     glUniform1i(glGetUniformLocation(m_postProcessShader->id(), "sceneRendered"), 0);
 
     glDisable(GL_DEPTH_TEST);
@@ -242,6 +248,14 @@ void MainRenderer::createUI(){
     m_camera->createUI("Renderer Setting");
 
     ImGui::End();
+
+
+    if(m_firstFramePassed){
+        ImGui::Begin("Game View", nullptr, ImGuiWindowFlags_NoResize);
+        ImGui::Image((void*)(intptr_t)getGameTextureID(), ImVec2(426,240), ImVec2(0,1), ImVec2(1,0));
+        ImGui::End();
+        
+    }
 }
 
 
