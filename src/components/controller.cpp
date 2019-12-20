@@ -9,6 +9,8 @@ Controller::Controller(){
 
 void Controller::update(){
 
+    float deltaTime = ImGui::GetIO().Framerate/1000.f;
+
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
     glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
 
@@ -32,6 +34,8 @@ void Controller::update(){
     if(ImGui::IsKeyPressed('D')){
         move.x = 1.0f;
     }
+
+    move *= deltaTime;
 
     pos.z += move.z*dx;
     pos.x += move.z*dz;
