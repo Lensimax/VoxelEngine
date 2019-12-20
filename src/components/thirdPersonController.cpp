@@ -29,22 +29,28 @@ void ThirdPersonController::update(){
         return;
     }
 
+    if(m_camera == NULL){
+        return;
+    }
+
     ImGuiIO& io = ImGui::GetIO();
 
     // CAMERA EDITOR CONTROL
     if(!io.WantCaptureMouse){
         
         glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
- 
-        float dx = glm::sin(rotation.y);
-        float dz = glm::cos(rotation.y);
+        glm::vec3 camrotation = m_camera->getTransform()->getRotation();
 
         glm::vec2 vectorMouse = glm::vec2(io.MouseDelta.x, io.MouseDelta.y);
-        // vectorMouse *= -1.0f;
+        vectorMouse *= -1.0f;
         vectorMouse *= m_sensitivity*0.01f;
 
-        rotation.y -= vectorMouse.x;
+        rotation.y += vectorMouse.x;
+        camrotation.x -= vectorMouse.y;
+        camrotation.x = glm::clamp(camrotation.x, 0.0f, 1.5f);
+
         m_gameobject->getTransform()->setRotation(rotation);
+        m_camera->getTransform()->setRotation(camrotation);
     }
 
 }

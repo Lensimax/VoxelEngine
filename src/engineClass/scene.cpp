@@ -59,6 +59,8 @@ Scene::Scene(){
     camera->addComponent<CameraFollow*>(camFoll);
     camFoll->setPlayer(player);
 
+    player->getComponent<ThirdPersonController*>()->setCamera(camera);
+
     objectsEngine.push_back(camera);
 
 

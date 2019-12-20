@@ -13,10 +13,12 @@ public:
     void update() override;
     void createUI() override;
 
+    void setCamera(GameObject *camera){m_camera = camera;}
+
 
 private:
 
-    CameraProjective *m_camera;
+    GameObject *m_camera;
     glm::vec2 m_sensitivity;
 
 };
