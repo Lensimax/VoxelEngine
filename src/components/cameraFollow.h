@@ -15,7 +15,7 @@
 class CameraFollow : public Component {
 public:
 
-    CameraFollow(float distance = 3.5f, float offsetAngle = 0.0f);
+    CameraFollow(float distance = 6.3f, float offsetAngle = 0.0f);
     ~CameraFollow();
 
     void update() override;
