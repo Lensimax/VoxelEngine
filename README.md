@@ -73,4 +73,5 @@ Should work
 * Third person camera : https://www.youtube.com/watch?v=PoxDDZmctnU&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=19
 * Voxelizer sur blender : https://www.youtube.com/watch?v=ntVhi8SlOzA
 * Voxelizer algorithm : https://github.com/davidstutz/mesh-voxelization
+* Travis Windows build : https://github.com/open-license-manager/open-license-manager/blob/dfddf5294677407c3a01b3a13c8348f02fe993ee/.travis.yml
 
