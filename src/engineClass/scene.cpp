@@ -33,7 +33,6 @@ Scene::Scene(){
     cube->addComponent<MeshRenderer*>(new MeshRenderer());
     cube->addComponent<Mesh*>(new MeshCube(0.1f));
     cube->addComponent<Material*>(new Lambertian());
-    cube->addComponent<Controller*>(new Controller());
 
     GameObject *player = new GameObject(addNewId(), "Player");
     player->addComponent<MeshRenderer*>(new MeshRenderer());
@@ -60,6 +59,7 @@ Scene::Scene(){
     camFoll->setPlayer(player);
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
+    player->getComponent<ThirdPersonController*>()->setActive(false);
 
     objectsEngine.push_back(camera);
 
