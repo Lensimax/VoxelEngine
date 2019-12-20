@@ -18,6 +18,7 @@
 #include "../components/cameraProjective.h"
 #include "../components/cameraRenderer.h"
 #include "../components/cameraFollow.h"
+#include "../components/thirdPersonController.h"
 
 
 #include <iostream>
@@ -40,6 +41,7 @@ Scene::Scene(){
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
+    player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     objectsEngine.push_back(player);
 
     player->addChild(cube);

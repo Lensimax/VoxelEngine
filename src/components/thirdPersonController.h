@@ -3,17 +3,21 @@
 
 #include "component.h"
 #include "cameraProjective.h"
+#include "../engineClass/gameObject.h"
 
 class ThirdPersonController : public Component {
 public:
     ThirdPersonController();
     ~ThirdPersonController();
 
+    void update() override;
+    void createUI() override;
 
 
 private:
 
     CameraProjective *m_camera;
+    glm::vec2 m_sensitivity;
 
 };
 

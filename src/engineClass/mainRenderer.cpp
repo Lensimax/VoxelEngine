@@ -80,6 +80,8 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         l = new DirectionnalLight(scene->addNewId());
     }
 
+    drawEditorGrid(rootTransform->getModelToChild(glm::mat4(1)), camera->getView(), camera->getProjection((float)width/(float)height));
+
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], camera->getView(), camera->getProjection((float)width/(float)height), l, (float)width/(float)height);
