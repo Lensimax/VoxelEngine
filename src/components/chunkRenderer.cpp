@@ -28,7 +28,9 @@ ChunkRenderer::~ChunkRenderer(){
 
 
 void ChunkRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
-    
+    if(!m_active){
+        return;
+    }
 // std::cerr << "dessin construction\n";
     /// RECUPERATION DES COMPOSANTS
     if(!m_material){

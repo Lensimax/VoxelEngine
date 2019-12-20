@@ -74,7 +74,7 @@ int main(int, char**)
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1600, 900, "Voxel-Engine", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1920, 1080, "Voxel-Engine", NULL, NULL);
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);

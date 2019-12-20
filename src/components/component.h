@@ -26,8 +26,8 @@ public:
 
     void setGameObject(GameObject * obj){m_gameobject = obj;}
 
-
     bool m_active = true;
+
 
 protected:
 
