@@ -23,6 +23,8 @@
 
 #include "mainRenderer.h"
 
+#include "../components/cameraControllerFirstPerson.h"
+
 #include "../components/meshRenderer.h"
 
 // #include "models/sphere.h"
@@ -41,6 +43,7 @@ MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_width
 
     m_camera = new GameObject(-1, "Camera Editor", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
     m_camera->addComponent<CameraProjective*>(new CameraProjective());
+    m_camera->addComponent<CameraControllerFirstPerson*>(new CameraControllerFirstPerson());
     m_camProj = m_camera->getComponent<CameraProjective*>();
 
 }
@@ -241,7 +244,9 @@ void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
 
 
 void MainRenderer::update(){
-    m_camera->update();
+    if(!m_playMode){
+        m_camera->update();
+    }
 }
 
 
