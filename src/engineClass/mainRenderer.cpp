@@ -152,13 +152,16 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     renderTheScene(scene, width, height);
 
     ///// RENDERING DISPLAY FOR EDITOR
-    glDrawBuffer(GL_COLOR_ATTACHMENT1);
+    if(!m_playMode){
+        glDrawBuffer(GL_COLOR_ATTACHMENT1);
 
-    initializeGL();
-    glViewport(0,0,width,height);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        initializeGL();
+        glViewport(0,0,width,height);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    renderTheSceneEditor(scene, width, height);
+        renderTheSceneEditor(scene, width, height);
+    }
+    
 
     // disable FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
