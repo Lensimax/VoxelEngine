@@ -74,4 +74,4 @@ Should work
 * Voxelizer sur blender : https://www.youtube.com/watch?v=ntVhi8SlOzA
 * Voxelizer algorithm : https://github.com/davidstutz/mesh-voxelization
 * Travis Windows build : https://github.com/open-license-manager/open-license-manager/blob/dfddf5294677407c3a01b3a13c8348f02fe993ee/.travis.yml
-
+* FBX loader : https://github.com/nem0/OpenFBX/blob/master/demo/main.cpp#L203
