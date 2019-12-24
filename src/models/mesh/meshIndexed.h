@@ -5,6 +5,13 @@
 
 #include "mesh.h"
 
+typedef struct {
+  GLuint vb_id;  // vertex buffer id
+  int numTriangles;
+  size_t material_id;
+  std::vector<float> buffer;
+} DrawObject;
+
 class MeshIndexed : public Mesh {
 public:
     MeshIndexed(std::string filename = "../data/models/cube.obj");
@@ -30,6 +37,9 @@ private:
 
     std::vector<unsigned int> m_indices;
     std::string m_filename;
+
+    DrawObject m_object;
+    
 };
 
 #endif

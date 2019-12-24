@@ -18,7 +18,10 @@ MeshIndexed::MeshIndexed(std::string filename) : m_filename(filename){
 
     setName("Mesh Indexed");
 
+    m_object.vb_id = -1;
+
     createMeshFromFile(m_filename);
+    //createVAO();
 }
 
 
@@ -71,10 +74,45 @@ void MeshIndexed::createVAO(){
     glBindVertexArray(0);
 }
 
+static void CheckErrors(std::string desc) {
+  GLenum e = glGetError();
+  if (e != GL_NO_ERROR) {
+    fprintf(stderr, "OpenGL error in \"%s\": %d (%d)\n", desc.c_str(), e, e);
+    exit(20);
+  }
+}
+
 void MeshIndexed::drawVAO(){
+    if(m_object.vb_id == -1){
+        return;
+    }/*
     glBindVertexArray(m_vertexArrayID);
     glDrawElements(GL_TRIANGLES,getNBFaces(),GL_UNSIGNED_INT,(void *)0);
-    glBindVertexArray(0);
+    glBindVertexArray(0);*/
+    GLsizei stride = (3 + 3 + 3 + 2) * sizeof(float);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_object.vb_id);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    /*glBindTexture(GL_TEXTURE_2D, 0);
+    if ((o.material_id < materials.size())) {
+      std::string diffuse_texname = materials[o.material_id].diffuse_texname;
+      if (textures.find(diffuse_texname) != textures.end()) {
+        glBindTexture(GL_TEXTURE_2D, textures[diffuse_texname]);
+      }
+    }*/
+    glVertexPointer(3, GL_FLOAT, stride, (const void*)0);
+    glNormalPointer(GL_FLOAT, stride, (const void*)(sizeof(float) * 3));
+    glColorPointer(3, GL_FLOAT, stride, (const void*)(sizeof(float) * 6));
+    glTexCoordPointer(2, GL_FLOAT, stride, (const void*)(sizeof(float) * 9));
+
+    glDrawArrays(GL_TRIANGLES, 0, 3 * m_object.numTriangles);
+    CheckErrors("drawarrays");
+    glBindTexture(GL_TEXTURE_2D, 0);
+  
 }
 
 void MeshIndexed::deleteVAO(){
@@ -192,11 +230,7 @@ struct vec3 {
   }
 };
 
-typedef struct {
-  GLuint vb_id;  // vertex buffer id
-  int numTriangles;
-  size_t material_id;
-} DrawObject;
+
 
 void normalizeVector(vec3 &v) {
   float len2 = v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
@@ -409,7 +443,7 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
   {
     for (size_t s = 0; s < shapes.size(); s++) {
       DrawObject o;
-      std::vector<float> buffer;  // pos(3float), normal(3float), color(3float)
+     // std::vector<float> buffer;  // pos(3float), normal(3float), color(3float)
 
       // Check for smoothing group and compute smoothing normals
       std::map<int, vec3> smoothVertexNormals;
@@ -558,12 +592,12 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
         }
 
         for (int k = 0; k < 3; k++) {
-          buffer.push_back(v[k][0]);
-          buffer.push_back(v[k][1]);
-          buffer.push_back(v[k][2]);
-          buffer.push_back(n[k][0]);
-          buffer.push_back(n[k][1]);
-          buffer.push_back(n[k][2]);
+            o.buffer.push_back(v[k][0]);
+          o.buffer.push_back(v[k][1]);
+          o.buffer.push_back(v[k][2]);
+          o.buffer.push_back(n[k][0]);
+          o.buffer.push_back(n[k][1]);
+          o.buffer.push_back(n[k][2]);
           // Combine normal and diffuse to get color.
           float normal_factor = 0.2;
           float diffuse_factor = 1 - normal_factor;
@@ -578,12 +612,12 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
             c[1] /= len;
             c[2] /= len;
           }
-          buffer.push_back(c[0] * 0.5 + 0.5);
-          buffer.push_back(c[1] * 0.5 + 0.5);
-          buffer.push_back(c[2] * 0.5 + 0.5);
+          o.buffer.push_back(c[0] * 0.5 + 0.5);
+          o.buffer.push_back(c[1] * 0.5 + 0.5);
+          o.buffer.push_back(c[2] * 0.5 + 0.5);
 
-          buffer.push_back(tc[k][0]);
-          buffer.push_back(tc[k][1]);
+          o.buffer.push_back(tc[k][0]);
+          o.buffer.push_back(tc[k][1]);
         }
       }
 
@@ -600,12 +634,12 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
       }
       printf("shape[%d] material_id %d\n", int(s), int(o.material_id));
 
-      if (buffer.size() > 0) {
+      if (o.buffer.size() > 0) {
         glGenBuffers(1, &o.vb_id);
         glBindBuffer(GL_ARRAY_BUFFER, o.vb_id);
-        glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float),
-                     &buffer.at(0), GL_STATIC_DRAW);
-        o.numTriangles = buffer.size() / (3 + 3 + 3 + 2) /
+        glBufferData(GL_ARRAY_BUFFER, o.buffer.size() * sizeof(float),
+                     &o.buffer.at(0), GL_STATIC_DRAW);
+        o.numTriangles = o.buffer.size() / (3 + 3 + 3 + 2) /
                          3;  // 3:vtx, 3:normal, 3:col, 2:texcoord
 
         printf("shape[%d] # of triangles = %d\n", static_cast<int>(s),
@@ -624,5 +658,18 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
 
 void MeshIndexed::createMeshFromFile(std::string filename){
 
+
+    std::vector<DrawObject> gDrawObjects;
+    float bmin[3], bmax[3];
+
+    std::vector<tinyobj::material_t> materials;
+    std::map<std::string, GLuint> textures;
+
+    if (false == LoadObjAndConvert(bmin, bmax, &gDrawObjects, materials, textures,filename.c_str())) {
+        return;
+    }
+    assert(gDrawObjects.size() > 0);
+    m_object = gDrawObjects[0];
+    
 
 }
