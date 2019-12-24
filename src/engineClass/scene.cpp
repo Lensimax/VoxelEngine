@@ -38,7 +38,7 @@ Scene::Scene(){
     GameObject *meshIndex = new GameObject(addNewId(), "Objet", new Transform(glm::vec3(2,0,0)));
 
     meshIndex->addComponent<MeshRenderer*>(new MeshRenderer());
-    meshIndex->addComponent<MeshIndexed*>(new MeshIndexed());
+    meshIndex->addComponent<MeshIndexed*>(new MeshIndexed("../data/models/sphereVoxelized.obj"));
     meshIndex->addComponent<Material*>(new Lambertian());
     meshIndex->addComponent<Controller*>(new Controller());
     objectsEngine.push_back(meshIndex);
