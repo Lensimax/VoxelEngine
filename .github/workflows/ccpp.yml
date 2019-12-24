@@ -1,0 +1,17 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: install dependancies
+      run: ./.travis/installLinux.sh
+    - name: configure cmake 
+      run: mkdir build && cd build && cmake ..
+    - name: compile
+      run: cd build && cmake --build .
