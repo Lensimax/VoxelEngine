@@ -30,6 +30,14 @@
 #include "engineClass/UI.h"
 #include "engineClass/InputManager.h"
 
+GLFWwindow* m_window;
+int m_display_w, m_display_h;
+Scene *m_scene;
+MainRenderer *m_renderer;
+
+
+const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
 // Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
@@ -39,6 +47,14 @@
 
 
 
+void rendering(){
+    glfwGetFramebufferSize(m_window, &m_display_w, &m_display_h);
+    glViewport(0, 0, m_display_w, m_display_h);
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    m_renderer->paintGL(m_scene, m_display_w, m_display_h);
+}
 
 
 
@@ -74,10 +90,10 @@ int main(int, char**)
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1920, 1080, "Voxel-Engine", NULL, NULL);
-    if (window == NULL)
+    m_window = glfwCreateWindow(1280, 720, "Voxel-Engine", NULL, NULL);
+    if (m_window == NULL)
         return 1;
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(m_window);
     glfwSwapInterval(1); // Enable vsync
 
     // Initialize OpenGL loader
@@ -107,33 +123,43 @@ int main(int, char**)
     ImGui::StyleColorsDark();
 
     // Setup Platform/Renderer bindings
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
 
 
-    MainRenderer *renderer = new MainRenderer();
-    renderer->initializeGL();
+    m_renderer = new MainRenderer();
+    m_renderer->initializeGL();
 
-    Scene *scene = new Scene();
+    m_scene = new Scene();
 
     UI *ui = new UI();
     InputManager *inputManager = new InputManager();
 
-    ui->set(scene);
-    ui->set(renderer);
-    ui->set(window);
+    ui->set(m_scene);
+    ui->set(m_renderer);
+    ui->set(m_window);
     
     inputManager->setUI(ui);
-    inputManager->setScene(scene);
-    inputManager->setRenderer(renderer);
+    inputManager->setScene(m_scene);
+    inputManager->setRenderer(m_renderer);
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+    ImGui::Render();
+    rendering();
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    m_renderer->swapFBO();
+    glfwSwapBuffers(m_window);
 
     // Our state
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
     // Main loop
-    while (!glfwWindowShouldClose(window)){
+    while (!glfwWindowShouldClose(m_window)){
 
         glfwPollEvents();
 
@@ -147,8 +173,8 @@ int main(int, char**)
         ///////////////
 
         inputManager->update();
-        scene->update();
-        renderer->update();
+        m_scene->update();
+        m_renderer->update();
 
 
         ui->drawUI();
@@ -161,23 +187,19 @@ int main(int, char**)
 
         // Rendering
         ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        
-        renderer->paintGL(scene, display_w, display_h);
-        renderer->displaySceneOnTheScreen(display_w, display_h);
+        glfwGetFramebufferSize(m_window, &m_display_w, &m_display_h);
+        rendering();
+        m_renderer->displaySceneOnTheScreen(m_display_w, m_display_h);
 
         // draw UI
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        glfwSwapBuffers(window);
+        m_renderer->swapFBO();
+        glfwSwapBuffers(m_window);
     }
 
-    delete(scene);
-    delete(renderer);
+    delete(m_scene);
+    delete(m_renderer);
     delete(ui);
     delete(inputManager);
 
@@ -186,8 +208,10 @@ int main(int, char**)
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(m_window);
     glfwTerminate();
 
     return 0;
 }
+
+
