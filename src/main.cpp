@@ -7,6 +7,7 @@
 #include <imgui_impl_opengl3.h>
 #include <stdio.h>
 #include <glm/vec3.hpp>
+#include <thread>
 
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
@@ -33,6 +34,8 @@
 GLFWwindow* m_window;
 int m_display_w, m_display_h;
 Scene *m_scene;
+InputManager *m_inputManager;
+UI *m_ui;
 MainRenderer *m_renderer;
 
 
@@ -48,15 +51,19 @@ const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 
 void rendering(){
-    glfwGetFramebufferSize(m_window, &m_display_w, &m_display_h);
-    glViewport(0, 0, m_display_w, m_display_h);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
+    assert(m_display_h > 0);
     m_renderer->paintGL(m_scene, m_display_w, m_display_h);
 }
 
+void displayOnScreen(){
+    m_renderer->displaySceneOnTheScreen(m_display_w, m_display_h);
+}
 
+void update(){
+    m_inputManager->update();
+    m_scene->update();
+    m_renderer->update();  
+}
 
 
 static void glfw_error_callback(int error, const char* description)
@@ -133,27 +140,22 @@ int main(int, char**)
 
     m_scene = new Scene();
 
-    UI *ui = new UI();
-    InputManager *inputManager = new InputManager();
+    m_ui = new UI();
+    m_inputManager = new InputManager();
 
-    ui->set(m_scene);
-    ui->set(m_renderer);
-    ui->set(m_window);
+    m_ui->set(m_scene);
+    m_ui->set(m_renderer);
+    m_ui->set(m_window);
     
-    inputManager->setUI(ui);
-    inputManager->setScene(m_scene);
-    inputManager->setRenderer(m_renderer);
+    m_inputManager->setUI(m_ui);
+    m_inputManager->setScene(m_scene);
+    m_inputManager->setRenderer(m_renderer);
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    ImGui::Render();
+
+    glfwGetFramebufferSize(m_window, &m_display_w, &m_display_h);
+
     rendering();
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
     m_renderer->swapFBO();
-    glfwSwapBuffers(m_window);
 
     // Our state
 
@@ -162,24 +164,26 @@ int main(int, char**)
     while (!glfwWindowShouldClose(m_window)){
 
         glfwPollEvents();
+        glfwGetFramebufferSize(m_window, &m_display_w, &m_display_h);
+
+        std::thread updateThread(&update);
+        updateThread.join();
+
+        std::thread renderingThread(&rendering);
+
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+
         ///////////////
         // CREATE UI //
         ///////////////
 
-        inputManager->update();
-        m_scene->update();
-        m_renderer->update();
-
-
-        ui->drawUI();
-
-        
+    
+        m_ui->drawUI();      
 
         //ImGui::ShowDemoWindow();
 
@@ -187,21 +191,25 @@ int main(int, char**)
 
         // Rendering
         ImGui::Render();
-        glfwGetFramebufferSize(m_window, &m_display_w, &m_display_h);
-        rendering();
-        m_renderer->displaySceneOnTheScreen(m_display_w, m_display_h);
-
+        glViewport(0, 0, m_display_w, m_display_h);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
         // draw UI
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+        displayOnScreen();
+        renderingThread.join();
+
         m_renderer->swapFBO();
         glfwSwapBuffers(m_window);
+
     }
 
     delete(m_scene);
     delete(m_renderer);
-    delete(ui);
-    delete(inputManager);
+    delete(m_ui);
+    delete(m_inputManager);
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();

@@ -329,6 +329,7 @@ void MainRenderer::createFBOSceneRender(){
 }
 
 void MainRenderer::initFBOSceneRender(int width, int height){
+    std::cout << m_fboRenderScene[m_currentFBO] << "\n";
     glBindFramebuffer(GL_FRAMEBUFFER,m_fboRenderScene[m_currentFBO]);
 
     /* la taille est égale au nombre de cases de la grille */
