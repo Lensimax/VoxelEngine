@@ -44,11 +44,11 @@ public:
     inline void toggleCullface(){m_cullface = !m_cullface;}
     inline void toggleGrid(){m_gridActivated = !m_gridActivated;}
     inline void togglePlayMode(){m_playMode = !m_playMode;}
-    GLuint getTextureID(){return m_renderedSceneTextureID;}
+    GLuint getTextureID(){return m_renderedSceneTextureID[m_currentFBO];}
     inline unsigned int width(){return m_widthScreen;}
     inline unsigned int height(){return m_heightScreen;}
-    inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
-    inline GLuint getEditorTextureID(){return m_editorTextureID;}
+    inline GLuint getGameTextureID(){return m_renderedSceneTextureID[m_currentFBO];}
+    inline GLuint getEditorTextureID(){return m_editorTextureID[m_currentFBO];}
     inline GameObject *getCamera(){return m_camera;}
 
 private:
@@ -65,11 +65,12 @@ private:
     glm::mat4 m_projectionMat;
 
     // FBO
+    unsigned int m_currentFBO;
 
-    GLuint m_fboRenderScene;
-    GLuint m_renderedSceneTextureID;
-    GLuint m_editorTextureID;
-    GLuint m_renderedDepth;
+    GLuint m_fboRenderScene[2];
+    GLuint m_renderedSceneTextureID[2];
+    GLuint m_editorTextureID[2];
+    GLuint m_renderedDepth[2];
 
     void createFBOSceneRender();
     void initFBOSceneRender(int width, int height);

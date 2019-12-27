@@ -65,8 +65,8 @@ Should work
 
 * https://sonarlearning.co.uk/coursepage.php?topic=game&course=ext-bb-3d-ged
 * https://www.3dgep.com/courses/
-* https://github.com/nothings/stb
-* https://jheer.github.io/barnes-hut/
+* STB IMAGE LOADER : https://github.com/nothings/stb
+* Barnes : https://jheer.github.io/barnes-hut/
 * https://www.youtube.com/watch?v=BP6NxVxDQIs
 * https://community.khronos.org/t/how-to-draw-one-line-on-top-of-another-in-opengl-without-z-fighting/68922
 * Free look camera : https://gamedev.stackexchange.com/questions/60266/create-a-fly-camera-with-lookat

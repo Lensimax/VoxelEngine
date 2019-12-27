@@ -33,7 +33,7 @@
 
 #include <iostream> 
 
-MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true), m_firstFramePassed(false), m_playMode(true) {
+MainRenderer::MainRenderer() : m_currentFBO(0), m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true), m_firstFramePassed(false), m_playMode(true) {
 
     m_postProcessShader = new Shader();
     m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
@@ -146,7 +146,7 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
 
     initFBOSceneRender(width, height);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, m_fboRenderScene);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_fboRenderScene[m_currentFBO]);
     glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
     initializeGL();
@@ -321,43 +321,43 @@ void MainRenderer::drawQuad(){
 
 
 void MainRenderer::createFBOSceneRender(){
-    glGenFramebuffers(1, &m_fboRenderScene);
-    glGenTextures(1,&m_renderedSceneTextureID);
-    glGenTextures(1,&m_editorTextureID);
-    glGenTextures(1,&m_renderedDepth);
+    glGenFramebuffers(2, m_fboRenderScene);
+    glGenTextures(2,m_renderedSceneTextureID);
+    glGenTextures(2,m_editorTextureID);
+    glGenTextures(2,m_renderedDepth);
 
 }
 
 void MainRenderer::initFBOSceneRender(int width, int height){
-    glBindFramebuffer(GL_FRAMEBUFFER,m_fboRenderScene);
+    glBindFramebuffer(GL_FRAMEBUFFER,m_fboRenderScene[m_currentFBO]);
 
     /* la taille est égale au nombre de cases de la grille */
     // TEXTURE FOR GAME
-    glBindTexture(GL_TEXTURE_2D,m_renderedSceneTextureID);
+    glBindTexture(GL_TEXTURE_2D,m_renderedSceneTextureID[m_currentFBO]);
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F,width,height,0,GL_RGBA,GL_FLOAT,NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,m_renderedSceneTextureID,0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,m_renderedSceneTextureID[m_currentFBO],0);
 
     // TEXTURE FOR EDITOR
-    glBindTexture(GL_TEXTURE_2D,m_editorTextureID);
+    glBindTexture(GL_TEXTURE_2D,m_editorTextureID[m_currentFBO]);
     glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA32F,width,height,0,GL_RGBA,GL_FLOAT,NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT1,GL_TEXTURE_2D,m_editorTextureID,0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT1,GL_TEXTURE_2D,m_editorTextureID[m_currentFBO],0);
 
 
-    glBindTexture(GL_TEXTURE_2D, m_renderedDepth);
+    glBindTexture(GL_TEXTURE_2D, m_renderedDepth[m_currentFBO]);
     glTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT24,width,height,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,m_renderedDepth,0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,m_renderedDepth[m_currentFBO],0);
 
 
 
@@ -366,10 +366,10 @@ void MainRenderer::initFBOSceneRender(int width, int height){
 }
 
 void MainRenderer::deleteFBOSceneRender(){
-    glDeleteFramebuffers(1,&m_fboRenderScene);
-    glDeleteTextures(1, &m_renderedSceneTextureID);
-    glDeleteTextures(1,&m_renderedDepth);
-    glDeleteTextures(1,&m_editorTextureID);
+    glDeleteFramebuffers(2,m_fboRenderScene);
+    glDeleteTextures(2, m_renderedSceneTextureID);
+    glDeleteTextures(2,m_renderedDepth);
+    glDeleteTextures(2,m_editorTextureID);
 }
 
 
