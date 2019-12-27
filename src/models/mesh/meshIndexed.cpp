@@ -770,14 +770,7 @@ void MeshIndexed::createMeshFromFile(std::string filename){
   m_maxX = m_maxY = m_maxZ = -std::numeric_limits<float>::max();
 
   
-    // std::vector<float> buffer;  // pos(3float), normal(3float), color(3float)
 
-    // Check for smoothing group and compute smoothing normals
-    /*std::map<int, vec3> smoothVertexNormals;
-    if (hasSmoothingGroup(shapes[s]) > 0) {
-    std::cout << "Compute smoothingNormal for shape [" << s << "]" << std::endl;
-    computeSmoothingNormals(attrib, shapes[s], smoothVertexNormals);
-    }*/
 
 
     for (size_t f = 0; f < shapes[0].mesh.indices.size() / 3; f++) {
@@ -896,6 +889,9 @@ void MeshIndexed::createMeshFromFile(std::string filename){
             }
         }
 
+        std::cout << n[0][0] << ", " << n[0][1] << ", " << n[0][2] << "\n"; 
+        std::cout << n[1][0] << ", " << n[1][1] << ", " << n[1][2] << "\n";
+        std::cout << n[2][0] << ", " << n[2][1] << ", " << n[2][2] << "\n\n";
         m_vertices.push_back(glm::vec3(n[0][0], n[0][1], n[0][2]));
         m_vertices.push_back(glm::vec3(n[1][0], n[1][1], n[1][2]));
         m_vertices.push_back(glm::vec3(n[2][0], n[2][1], n[2][2]));
