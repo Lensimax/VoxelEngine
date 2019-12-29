@@ -69,7 +69,7 @@ struct CubicGrid : public std::array<T, N * N * N>
 ///////////////////////// Chunk
 
 
-class Chunk : public CubicGrid<Voxel, 32> {
+class Chunk : public CubicGrid<Voxel, 128> {
 
 public:	
 

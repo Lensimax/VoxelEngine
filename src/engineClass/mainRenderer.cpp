@@ -39,7 +39,7 @@ MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_width
     createVAOQuad();
     createFBOSceneRender();
 
-    m_camera = new GameObject(-1, "Camera Editor", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
+    m_camera = new GameObject(-1, "Camera Editor", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2, M_PI, 0)));
     m_camera->addComponent<CameraProjective*>(new CameraProjective());
     m_camProj = m_camera->getComponent<CameraProjective*>();
 
