@@ -145,15 +145,15 @@ int main(int, char**)
     Scene *scene = new Scene();
 
     UI *ui = new UI();
-    InputManager *inputManager = new InputManager();
+    InputManager inputManager;
 
     ui->set(scene);
     ui->set(renderer);
     ui->set(window);
     
-    inputManager->setUI(ui);
-    inputManager->setScene(scene);
-    inputManager->setRenderer(renderer);
+    inputManager.setUI(ui);
+    inputManager.setScene(scene);
+    inputManager.setRenderer(renderer);
 
 
     int display_w, display_h;
@@ -169,9 +169,11 @@ int main(int, char**)
         glfwGetFramebufferSize(window, &display_w, &display_h);
 
         /// UPDATE
-        inputManager->update();
+        std::thread threadInput(&InputManager::update, &inputManager);
         scene->update();
         renderer->update();
+
+        threadInput.join();
 
         // RENDERING
         rendering(display_w, display_h, renderer, scene);
@@ -192,7 +194,7 @@ int main(int, char**)
     delete(scene);
     delete(renderer);
     delete(ui);
-    delete(inputManager);
+    // delete(inputManager);
 
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
