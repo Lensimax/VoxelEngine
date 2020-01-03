@@ -50,7 +50,7 @@ Scene::Scene(){
     terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
     terrain->addComponent<Mesh*>(new MeshCube());
     terrain->addComponent<Material*>(new Lambertian());
-    //objectsEngine.push_back(terrain);
+    objectsEngine.push_back(terrain);
  
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
@@ -61,7 +61,7 @@ Scene::Scene(){
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     //player->getComponent<ThirdPersonController*>()->setActive(false);
-    //player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<ChunkRenderer*>());
+    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<ChunkRenderer*>());
     player->getComponent<FireProjectiles*>()->setScene(this);
     objectsEngine.push_back(camera);
 

@@ -8,6 +8,10 @@ Voxel-Engine is a WIP game engine specialized for voxel rendering. It is made by
 
 #### Features
 
+###### Jeu
+
+* you can shoot projectile by pushing F
+
 ###### Change transform
 
 * Change position
