@@ -3,6 +3,7 @@
 #include "meshRenderer.h"
 #include "../models/mesh/meshCube.h"
 #include "../material/lambertian.h"
+#include "projectile.h"
 
 #include <imgui.h>
 #include <iostream>
@@ -34,6 +35,7 @@ void FireProjectiles::createProjectile(){
     projectile->addComponent<MeshRenderer*>(new MeshRenderer());
     projectile->addComponent<Mesh*>(new MeshCube(0.5f));
     projectile->addComponent<Material*>(new Lambertian());
+    projectile->addComponent<Projectile*>(new Projectile());
 
     m_scene->addGameObject(projectile);
 

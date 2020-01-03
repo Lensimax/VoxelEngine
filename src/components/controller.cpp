@@ -3,7 +3,7 @@
 
 Controller::Controller(){
     setName("Player Controller");
-    m_speed = 0.2f;
+    m_speed = 0.8f;
 }
 
 
@@ -35,7 +35,7 @@ void Controller::update(){
         move.x = 1.0f;
     }
 
-    move *= deltaTime;
+    move *= deltaTime*m_speed;
 
     pos.z += move.z * dx;
     pos.x += move.z * dz;
