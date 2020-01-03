@@ -1,3 +1,6 @@
+#ifndef _CUBIC_ARRAY_INL_
+#define _CUBIC_ARRAY_INL_
+
 #include "cubicArray.h" 
 
 ///////////////////////// CubicArray
@@ -50,3 +53,4 @@ const T& CubicArray<T>::operator()(size_t x, size_t y, size_t z) const {
 	return (*this)[ x + (y * this->width()) + (z * this->width() * this->height()) ];
 }
 
+#endif

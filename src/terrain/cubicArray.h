@@ -37,5 +37,6 @@ private:
 	size_t m_cubic_size;
 };
 
+#include "cubicArray.inl"
 
 #endif

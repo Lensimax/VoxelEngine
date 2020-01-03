@@ -22,12 +22,14 @@ public:
     Transform * getPlayerTransform(){return m_playerTransform;}
 
 private:
+
     std::vector<Chunk> m_chunks;
+    std::vector<Mesh*> m_meshes;
     // Chunk *m_chunk = NULL;
     
-    MeshCube *m_mesh = nullptr;
-
-    Transform *m_playerTransform;
+    // MeshCube *m_mesh = nullptr;
+// 
+    // Transform *m_playerTransform;
 
 };
 

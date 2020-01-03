@@ -17,7 +17,7 @@ public:
     MeshCube(float w = 1.0f, bool center = true);
 	~MeshCube();
 
-	void recreate() override;
+	void recreate();
 	void createUI();
 
     

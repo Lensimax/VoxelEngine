@@ -19,7 +19,7 @@ MeshCube::~MeshCube(){
 
 void MeshCube::recreate(){
     createMesh(m_width);
-    createVAO();
+    Mesh::recreate();
 }
 
 void MeshCube::createUI(){

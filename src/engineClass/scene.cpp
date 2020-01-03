@@ -11,7 +11,7 @@
 #include "../components/meshRenderer.h"
 
 #include "../components/component.h"
-#include "../components/chunkRenderer.h"
+// #include "../components/chunkRenderer.h"
 #include "../components/axisRenderer.h"
 
 #include "../components/controller.h"
@@ -44,7 +44,7 @@ Scene::Scene(){
   
     // std::cerr << "ajout composent\n";
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
+    // terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
     // std::cerr << "fin ajout composent\n";
     //terrain->addComponent<MeshRenderer*>(new MeshRenderer());
     terrain->addComponent<Mesh*>(new MeshCube());
