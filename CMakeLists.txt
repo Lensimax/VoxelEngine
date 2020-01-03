@@ -30,10 +30,29 @@ configure_file(data/default_imgui.ini imgui.ini  COPYONLY)
 
 ###### BUILD OPTION #######
 
-add_definitions(-std=c++11 -pthread)
-
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
 add_definitions(-DGLFW_INCLUDE_NONE)
+
+
+if (CMAKE_GENERATOR MATCHES "Visual Studio")
+    # Do Visual Studio specific stuff
+else()
+    add_definitions(-std=c++11 -pthread)
+    if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+        message("DEBUG MODE ACTIVATED")
+
+        add_definitions(-Wformat -Wall -g)
+
+    endif()
+
+    if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+            message("RELEASE MODE ACTIVATED")
+
+            add_definitions(-O3)
+
+    endif()
+endif()
+
 
 # BUILD TYPE = Debug | Release
 if( NOT CMAKE_BUILD_TYPE )
@@ -41,20 +60,6 @@ if( NOT CMAKE_BUILD_TYPE )
   message("BUILD TYPE = Debug | Release")
 endif()
 
-
-if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-        message("DEBUG MODE ACTIVATED")
-
-        add_definitions(-Wformat -Wall -g)
-
-endif()
-
-if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-        message("RELEASE MODE ACTIVATED")
-
-        add_definitions(-O3)
-
-endif()
 
 #### SET SOURCES ####
 
