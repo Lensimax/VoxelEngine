@@ -20,6 +20,7 @@
 #include "../components/cameraFollow.h"
 #include "../components/thirdPersonController.h"
 #include "../components/groundFollow.h"
+#include "../components/fireProjectiles.h"
 
 #include <thread>
 
@@ -40,6 +41,7 @@ Scene::Scene(){
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     player->addComponent<GroundFollow*>(new GroundFollow());
+    player->addComponent<FireProjectiles*>(new FireProjectiles());
     objectsEngine.push_back(player);
 
   
@@ -48,7 +50,7 @@ Scene::Scene(){
     terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
     terrain->addComponent<Mesh*>(new MeshCube());
     terrain->addComponent<Material*>(new Lambertian());
-    objectsEngine.push_back(terrain);
+    //objectsEngine.push_back(terrain);
  
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
@@ -59,9 +61,8 @@ Scene::Scene(){
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     //player->getComponent<ThirdPersonController*>()->setActive(false);
-    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<ChunkRenderer*>());
-
-
+    //player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<ChunkRenderer*>());
+    player->getComponent<FireProjectiles*>()->setScene(this);
     objectsEngine.push_back(camera);
 
 
@@ -172,6 +173,11 @@ void Scene::getAllObjects(std::vector<std::string> & names, std::vector<int> & i
 
 void Scene::addGameObject(){
     objectsEngine.push_back(new GameObject(addNewId()));
+}
+
+
+void Scene::addGameObject(GameObject *obj){
+    objectsEngine.push_back(obj);
 }
 
 void Scene::addCube(){
