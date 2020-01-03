@@ -10,7 +10,7 @@ public:
     FireProjectiles();
     ~FireProjectiles();
 
-    void update() override;
+    void inputUpdate() override;
 
     void setScene(Scene *scene){m_scene = scene;}
 private:

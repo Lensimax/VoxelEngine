@@ -225,6 +225,21 @@ void Scene::update(){
     }
 }
 
+void Scene::inputUpdateObj(GameObject *obj){
+    obj->inputUpdate();
+    for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+        inputUpdateObj(obj->m_listOfChildren[i]);
+    }
+}
+
+void Scene::inputUpdate(){
+    if(!m_pause){
+        for(unsigned int i=0; i<objectsEngine.size(); i++){
+            inputUpdateObj(objectsEngine[i]);
+        }
+    }
+}
+
 
 void Scene::togglePause(){
     m_pause = !m_pause;

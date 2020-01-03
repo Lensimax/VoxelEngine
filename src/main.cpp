@@ -168,6 +168,8 @@ int main(int, char**)
         glfwPollEvents();
         glfwGetFramebufferSize(window, &display_w, &display_h);
 
+        scene->inputUpdate();
+
         /// UPDATE
         std::thread threadInput(&InputManager::update, &inputManager);
         std::thread threadSceneUpdate(&Scene::update, scene);

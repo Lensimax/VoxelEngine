@@ -141,6 +141,13 @@ void GameObject::update(){
 }
 
 
+void GameObject::inputUpdate(){
+    for(unsigned int i=0; i<m_components.size(); i++){
+        m_components[i]->inputUpdate();
+    }
+}
+
+
 void GameObject::removeComponentToBeDestroyed(){
     for(int i=m_toRemove.size()-1; i>=0; i--){
         delete m_toRemove[i];

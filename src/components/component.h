@@ -11,11 +11,12 @@ class Component {
 public:
 
 
-    virtual void start(){};
+    virtual void start(){}
 
-    virtual void update(){};
+    virtual void update(){}
+    virtual void inputUpdate(){}
 
-    virtual void createUI(){};
+    virtual void createUI(){}
 
 
     bool getActive(){return m_active;}

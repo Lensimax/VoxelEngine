@@ -5,6 +5,7 @@
 #include "../material/lambertian.h"
 
 #include <imgui.h>
+#include <iostream>
 
 FireProjectiles::FireProjectiles(){
     setName("Fire Projectiles");
@@ -15,7 +16,7 @@ FireProjectiles::~FireProjectiles(){
     
 }
 
-void FireProjectiles::update(){
+void FireProjectiles::inputUpdate(){
     if(ImGui::IsKeyPressed('F')){
         createProjectile();
     }
@@ -34,7 +35,6 @@ void FireProjectiles::createProjectile(){
     // projectile->addComponent<Mesh*>(new MeshCube(0.5f));
     // projectile->addComponent<Material*>(new Lambertian());
 
-    // m_scene->addGameObject(projectile);
-    m_scene->addCube();
+    m_scene->addGameObject(projectile);
 
 }
