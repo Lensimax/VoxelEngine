@@ -1,0 +1,23 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Checkout submodules
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+    - name: install dependancies
+      run: sudo apt-get update -qq && sudo apt-get install -y build-essential cmake xorg-dev libgl1-mesa-dev libfreetype6-dev
+    - name: configure cmake 
+      run: mkdir build && cd build && cmake ..
+    - name: compile
+      run: cd build && cmake --build .

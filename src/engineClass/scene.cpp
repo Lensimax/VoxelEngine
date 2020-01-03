@@ -52,7 +52,7 @@ Scene::Scene(){
     // objectsEngine.push_back(terrain);
  
 
-    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2, M_PI, 0)));
     camera->addComponent<CameraProjective*>(new CameraProjective());
     CameraFollow* camFoll = new CameraFollow();
     camera->addComponent<CameraFollow*>(camFoll);
@@ -230,6 +230,6 @@ void Scene::loadDefaultScene(){
 
     
 
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 2.0, 2)));
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 256, 0)));
 }
 

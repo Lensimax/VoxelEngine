@@ -2,27 +2,29 @@
 
 [![Build Status](https://travis-ci.com/TheSpyGeek/VoxelEngine.svg?branch=master)](https://travis-ci.com/TheSpyGeek/VoxelEngine)
 
-Green-engine is a graphic engine from a student to learn how we create a graphical engine.
+Voxel-Engine is a WIP game engine specialized for voxel rendering. It is made by 2 students to learn the process of creating a game engine.
 
 ![Voxel engine](ressources/demo.gif)
+
+![terrain_1](ressources/terrain_1.png)
 
 #### Features
 
 ###### Change transform
 
-* change position
-* change orientation
-* change scale
-* animate orientation
+* Change position
+* Change orientation
+* Change scale
+* Animate orientation
 
 ###### Change tools position
 
-* change camera position, fov, orientation
-* change light position
+* Change camera position, fov, orientation
+* Change light position
 
 ###### Display
 
-* Activate/Desactivate the display in wire frame
+* Activate/Deactivate display in wire frame
 
 
 #### How to clone
@@ -61,7 +63,7 @@ To build :
 
 Should work
 
-#### Ressources
+#### Resources
 
 * https://sonarlearning.co.uk/coursepage.php?topic=game&course=ext-bb-3d-ged
 * https://www.3dgep.com/courses/
@@ -75,3 +77,4 @@ Should work
 * Voxelizer algorithm : https://github.com/davidstutz/mesh-voxelization
 * Travis Windows build : https://github.com/open-license-manager/open-license-manager/blob/dfddf5294677407c3a01b3a13c8348f02fe993ee/.travis.yml
 * FBX loader : https://github.com/nem0/OpenFBX/blob/master/demo/main.cpp#L203
+* Procedural generation : https://www.youtube.com/watch?v=wbpMiKiSKm8
