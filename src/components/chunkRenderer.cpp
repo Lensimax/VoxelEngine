@@ -77,3 +77,8 @@ glm::ivec3 ChunkRenderer::toChunkWorldPosition(const glm::vec3& worldPosition) {
 
     return  glm::vec3(positionOffset) / glm::vec3(m_chunks.front().dimensions());
 }
+
+// return the height at this point according to the procedural noise
+float ChunkRenderer::getHeightAt(float x, float z){
+    return m_chunks.front().getHeight(x,z);
+}

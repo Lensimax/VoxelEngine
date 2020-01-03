@@ -85,6 +85,8 @@ public:
 	
 	void generateTerrain(float x, float y, float z);
 
+	float getHeight(float x, float z);
+
 	// bool allNeighborsActivated(size_t x, size_t y, size_t z) const; // min(1, 1, 1), max(14, 14, 14)
 	bool surrounded(size_t x, size_t y, size_t z) const; // min(1, 1, 1), max(14, 14, 14)
 
@@ -105,6 +107,7 @@ public:
 private:
 
 	float m_voxelSize;
+	size_t m_octaves;
 };
 
 

@@ -87,26 +87,25 @@ bool CubicGrid<T, N>::on_bounds(size_t x, size_t y, size_t z) const {
 //// Constructors
 
 
-Chunk::Chunk(float voxelSize) : m_voxelSize(voxelSize) {
+Chunk::Chunk(float voxelSize) : m_voxelSize(voxelSize), m_octaves(8) {
 	for (auto& v : (*this))
 		v = Voxel::Type::Empty;
 }
 
-Chunk::Chunk(float voxelSize, float x, float y, float z) : m_voxelSize(voxelSize) {
+Chunk::Chunk(float voxelSize, float x, float y, float z) : m_voxelSize(voxelSize), m_octaves(8) {
 	generateTerrain(x, y, z);
 }
 
 void Chunk::generateTerrain(float x, float y, float z)
 {
 	float scale = 100.f;
-	size_t octaves = 8;
 
 	SimplexNoise snoise(1.0f / scale);
 
 	for(size_t i = 0 ; i < this->width() ; ++i) {
 		for(size_t k = 0 ; k < this->depth() ; ++k) {
 			
-			float v = (snoise.fractal(octaves, float(i) + float(x) * float(this->width()), float(k) + float(z) * float(this->depth())) + 1.0) * (255.0 / 2.0);
+			float v = (snoise.fractal(m_octaves, float(i) + float(x) * float(this->width()), float(k) + float(z) * float(this->depth())) + 1.0) * (255.0 / 2.0);
 			
 			float max_y = std::round(normalize(v, 255, this->borderSize() -1));
 
@@ -120,6 +119,12 @@ void Chunk::generateTerrain(float x, float y, float z)
 		}
 	}
 }
+
+float Chunk::getHeight(float x, float z){
+	SimplexNoise snoise(1.0f / 100.f);
+	float height = (snoise.fractal(m_octaves, x, z) + 1.0) * (255.0 / 2.0);
+	return height;
+}	
 
 
 //// Accessors
