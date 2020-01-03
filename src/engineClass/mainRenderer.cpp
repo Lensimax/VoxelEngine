@@ -199,6 +199,8 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
     drawQuad();
 
     glUseProgram(0);
+
+    std::cout << getGameTextureID() << "\n";
 }
 
 

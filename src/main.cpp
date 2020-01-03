@@ -144,16 +144,9 @@ int main(int, char**)
     inputManager->setScene(m_scene);
     inputManager->setRenderer(m_renderer);
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    ImGui::Render();
     rendering();
 
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
     m_renderer->swapFBO();
-    glfwSwapBuffers(m_window);
 
     // Our state
 
@@ -163,37 +156,32 @@ int main(int, char**)
 
         glfwPollEvents();
 
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        ///////////////
-        // CREATE UI //
-        ///////////////
-
+        /// UPDATE
         inputManager->update();
         m_scene->update();
         m_renderer->update();
 
+        /// RENDERING
+        rendering();
 
+        // DISPLAY FRAME ON THE SCREEN
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // CREATE UI //        
         ui->drawUI();
-
-        
 
         //ImGui::ShowDemoWindow();
 
-        // ceci est un test travis
-
-        // Rendering
         ImGui::Render();
         glfwGetFramebufferSize(m_window, &m_display_w, &m_display_h);
-        rendering();
-        m_renderer->displaySceneOnTheScreen(m_display_w, m_display_h);
-
         // draw UI
+        m_renderer->displaySceneOnTheScreen(m_display_w, m_display_h);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+
+        // swap buffer
         m_renderer->swapFBO();
         glfwSwapBuffers(m_window);
     }
