@@ -42,9 +42,12 @@ class Scene {
 
         void update();
         void updateObj(GameObject *obj);
+        void inputUpdate();
+        void inputUpdateObj(GameObject *obj);
 
 
         void addGameObject();
+        void addGameObject(GameObject *obj);
         void addCube();
         void deleteObject(int id);
 

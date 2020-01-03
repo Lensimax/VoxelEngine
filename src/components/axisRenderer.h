@@ -1,5 +1,5 @@
-#ifndef CAMERA_RENDERER_H
-#define CAMERA_RENDERER_H
+#ifndef AXIS_RENDERER_H
+#define AXIS_RENDERER_H
 
 #include "meshRenderer.h"
 

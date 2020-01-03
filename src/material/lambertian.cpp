@@ -19,7 +19,7 @@
 
 using namespace glm;
 
-Lambertian::Lambertian(glm::vec4 color) : m_activeDebugNormal(false), m_specularDeg(2), m_ambientColor(vec4(0.0,0.0,0.0,0.0)), m_diffuseColor(color), m_specularColor(vec4(255./255.,255./255.,255./255.,1.0)){
+Lambertian::Lambertian(glm::vec4 color) : m_activeDebugNormal(false), m_specularDeg(2), m_ambientColor(vec4(0.1,0.1,0.1,0.0)), m_diffuseColor(color), m_specularColor(vec4(255./255.,255./255.,255./255.,1.0)){
 
     setName("Material");
 

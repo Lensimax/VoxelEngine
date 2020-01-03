@@ -18,7 +18,8 @@ public:
     virtual ~GameObject();
     virtual void createUI(char *ID);
 
-    virtual void update();
+    void update();
+    void inputUpdate();
 
     // ID + NAME
     void setName(std::string n);

@@ -87,38 +87,42 @@ bool CubicGrid<T, N>::on_bounds(size_t x, size_t y, size_t z) const {
 //// Constructors
 
 
-Chunk::Chunk(float voxelSize) : m_voxelSize(voxelSize) {
+Chunk::Chunk(float voxelSize) : m_voxelSize(voxelSize), m_octaves(8) {
 	for (auto& v : (*this))
 		v = Voxel::Type::Empty;
 }
 
-Chunk::Chunk(float voxelSize, float x, float y, float z) : m_voxelSize(voxelSize) {
+Chunk::Chunk(float voxelSize, float x, float y, float z) : m_voxelSize(voxelSize), m_octaves(8) {
 	generateTerrain(x, y, z);
 }
 
-void Chunk::generateTerrain(float x, float y, float z)
-{
+void Chunk::generateTerrain(float w_x, float w_y, float w_z) {
+	
+	for(size_t i = 0 ; i < this->width() ; ++i) {
+		for(size_t k = 0 ; k < this->depth() ; ++k) {
+			
+			size_t max_y = getHeight(i + (w_x * this->width()), k + (w_z * this->depth()));
+
+			// (*this)(i, max_y, k) = Voxel::Full;
+			
+			for (size_t j = 0 ; j < max_y ; ++j) // => active les voxel de 0 à Y 
+			{
+				(*this)(i, j, k) = Voxel::Type::Full;
+			}
+		}
+	}
+}
+
+size_t Chunk::getHeight(float w_x, float w_z) {
+
 	float scale = 100.f;
 	size_t octaves = 8;
 
 	SimplexNoise snoise(1.0f / scale);
+	
+	float perlin_value = (snoise.fractal(octaves, w_x, w_z) + 1.0) / 2.0;
 
-	for(size_t i = 0 ; i < this->width() ; ++i) {
-		for(size_t k = 0 ; k < this->depth() ; ++k) {
-			
-			float v = (snoise.fractal(octaves, float(i) + float(x) * float(this->width()), float(k) + float(z) * float(this->depth())) + 1.0) * (255.0 / 2.0);
-			
-			float max_y = std::round(normalize(v, 255, this->borderSize() -1));
-
-			// (*this)(i, max_y, k) = Voxel::Type::Full;
-			
-			for (size_t j = 0 ; j != max_y + 1 ; ++j) // => active les voxel de 0 à Y 
-			{
-				(*this)(i, j, k) = Voxel::Type::Full;
-				// std::cerr << "Voxel : " << glm::vec3(i, j, k) << '\n';
-			}
-		}
-	}
+	return std::round(perlin_value * this->borderSize());
 }
 
 

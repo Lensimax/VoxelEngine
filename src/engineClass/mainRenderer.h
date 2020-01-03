@@ -43,6 +43,7 @@ public:
     inline void toggleWire(){m_wireActivated = !m_wireActivated;}
     inline void toggleCullface(){m_cullface = !m_cullface;}
     inline void toggleGrid(){m_gridActivated = !m_gridActivated;}
+    inline void togglePlayMode(){m_playMode = !m_playMode;}
     GLuint getTextureID(){return m_renderedSceneTextureID;}
     inline unsigned int width(){return m_widthScreen;}
     inline unsigned int height(){return m_heightScreen;}
@@ -78,7 +79,6 @@ private:
 
 
     /* final rendering */
-    
     void createVAOQuad();
     void deleteVAOQuad();
     void drawQuad();
@@ -97,6 +97,9 @@ private:
 
     GameObject *m_camera;
     CameraProjective *m_camProj;
+    bool m_firstFramePassed;
+
+    bool m_playMode;
 
 };
 

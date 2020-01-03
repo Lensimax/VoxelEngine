@@ -4,8 +4,6 @@
 
 Voxel-Engine is a WIP game engine specialized for voxel rendering. It is made by 2 students to learn the process of creating a game engine.
 
-![Voxel engine](ressources/demo.gif)
-
 ![terrain_1](ressources/terrain_1.png)
 
 #### Features
@@ -26,10 +24,23 @@ Voxel-Engine is a WIP game engine specialized for voxel rendering. It is made by
 
 * Activate/Deactivate display in wire frame
 
+###### Components 
+
+The components are in the folder ```src/components/```
+
+* Camera Follow : follow the objet attached to
+* Axis Renderer : display axis in the camera Editor
+* Camera Controller First Person : allow to move and rotate the camera with left and right click
+* Camera Projective : functions needed to make a projective camera
+* Camera Renderer : WIP, display the camera in the editor
+* Chunk Renderer : display a terrain composed of chunks with OpenGL
+* Controller : allow to interactively strafe and go forward and backward
+* Mesh Renderer : display in the screen with OpenGL the mesh
+* Third Person Controller : allow to move the camera around an objet like in a third person game
 
 #### How to clone
 
-```git clone --recursive https://github.com/TheSpyGeek/ImGUITemplate.git```
+```git clone --recursive https://github.com/TheSpyGeek/VoxelEngine.git```
 
 #### Build
 
@@ -73,4 +84,10 @@ Should work
 * https://community.khronos.org/t/how-to-draw-one-line-on-top-of-another-in-opengl-without-z-fighting/68922
 * Free look camera : https://gamedev.stackexchange.com/questions/60266/create-a-fly-camera-with-lookat
 * Third person camera : https://www.youtube.com/watch?v=PoxDDZmctnU&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=19
+* Voxelizer sur blender : https://www.youtube.com/watch?v=ntVhi8SlOzA
+* Voxelizer algorithm : https://github.com/davidstutz/mesh-voxelization
+* Travis Windows build : https://github.com/open-license-manager/open-license-manager/blob/dfddf5294677407c3a01b3a13c8348f02fe993ee/.travis.yml
+* FBX loader : https://github.com/nem0/OpenFBX/blob/master/demo/main.cpp#L203
 * Procedural generation : https://www.youtube.com/watch?v=wbpMiKiSKm8
+* Multi-threading : https://www.randygaul.net/wp-content/uploads/2014/09/MultiThread.pdf
+

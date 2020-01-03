@@ -31,14 +31,14 @@ public:
     void update();
 
 
+
 private:
 
     Scene *m_scene = NULL;
     UI *m_ui = NULL;
     MainRenderer *m_renderer = NULL;
 
-    glm::vec2 m_sensitivityRotateWorld;
-    float m_scrollZoomSensitivity;
+    
 };
 
 

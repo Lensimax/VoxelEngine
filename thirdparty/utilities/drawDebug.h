@@ -20,7 +20,7 @@ class DrawDebug {
 
 public:
     static inline void drawArrayPosition(unsigned int nbVertices, float *array, GLenum drawMode, GLenum primitiveDraw = GL_FILL){
-        glPolygonMode(GL_FRONT_AND_BACK,primitiveDraw);
+        //glPolygonMode(GL_FRONT_AND_BACK,primitiveDraw);
         GLuint buffer, vertexArray;
 
         glGenBuffers(1, &buffer);
@@ -41,7 +41,7 @@ public:
         glDeleteBuffers(1,&buffer);
         glDeleteVertexArrays(1,&vertexArray);
         
-        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+        //glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
             
     };
 

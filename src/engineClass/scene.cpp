@@ -18,6 +18,11 @@
 #include "../components/cameraProjective.h"
 #include "../components/cameraRenderer.h"
 #include "../components/cameraFollow.h"
+#include "../components/thirdPersonController.h"
+#include "../components/groundFollow.h"
+#include "../components/fireProjectiles.h"
+
+#include <thread>
 
 
 #include <iostream>
@@ -27,38 +32,37 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    /*GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(1,0,0)));
 
-    cube->addComponent<MeshRenderer*>(new MeshRenderer());
-    cube->addComponent<Mesh*>(new MeshCube(0.1f));
-    cube->addComponent<Material*>(new Lambertian());
-    cube->addComponent<Controller*>(new Controller());*/
-
-    GameObject *player = new GameObject(addNewId(), "Player");
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(50.f, 128.f, 30.f)));
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Mesh*>(new MeshCube());
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
+    player->addComponent<ThirdPersonController*>(new ThirdPersonController());
+    player->addComponent<GroundFollow*>(new GroundFollow());
+    player->addComponent<FireProjectiles*>(new FireProjectiles());
     objectsEngine.push_back(player);
+
   
-    // std::cerr << "ajout composent\n";
+
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
     terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
-    // std::cerr << "fin ajout composent\n";
-    //terrain->addComponent<MeshRenderer*>(new MeshRenderer());
     terrain->addComponent<Mesh*>(new MeshCube());
     terrain->addComponent<Material*>(new Lambertian());
-    //terrain->addComponent<Controller*>(new Controller());
-    objectsEngine.push_back(terrain);
+    //objectsEngine.push_back(terrain);
  
 
-    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2, M_PI, 0)));
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
     camera->addComponent<CameraProjective*>(new CameraProjective());
     CameraFollow* camFoll = new CameraFollow();
     camera->addComponent<CameraFollow*>(camFoll);
     camFoll->setPlayer(player);
 
+    player->getComponent<ThirdPersonController*>()->setCamera(camera);
+    //player->getComponent<ThirdPersonController*>()->setActive(false);
+    //player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<ChunkRenderer*>());
+    player->getComponent<FireProjectiles*>()->setScene(this);
     objectsEngine.push_back(camera);
 
 
@@ -171,6 +175,11 @@ void Scene::addGameObject(){
     objectsEngine.push_back(new GameObject(addNewId()));
 }
 
+
+void Scene::addGameObject(GameObject *obj){
+    objectsEngine.push_back(obj);
+}
+
 void Scene::addCube(){
     GameObject *cube = new GameObject(addNewId(), "Cube");
 
@@ -201,16 +210,32 @@ int Scene::addNewId(){
 }
 
 void Scene::updateObj(GameObject *obj){
-    obj->update();
+    std::thread threadUpdate(&GameObject::update, obj);
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         updateObj(obj->m_listOfChildren[i]);
     }
+    threadUpdate.join();
 }
 
 void Scene::update(){
     if(!m_pause){
         for(unsigned int i=0; i<objectsEngine.size(); i++){
             updateObj(objectsEngine[i]);
+        }
+    }
+}
+
+void Scene::inputUpdateObj(GameObject *obj){
+    obj->inputUpdate();
+    for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+        inputUpdateObj(obj->m_listOfChildren[i]);
+    }
+}
+
+void Scene::inputUpdate(){
+    if(!m_pause){
+        for(unsigned int i=0; i<objectsEngine.size(); i++){
+            inputUpdateObj(objectsEngine[i]);
         }
     }
 }

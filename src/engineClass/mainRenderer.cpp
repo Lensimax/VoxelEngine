@@ -23,6 +23,8 @@
 
 #include "mainRenderer.h"
 
+#include "../components/cameraControllerFirstPerson.h"
+
 #include "../components/meshRenderer.h"
 
 // #include "models/sphere.h"
@@ -31,7 +33,7 @@
 
 #include <iostream> 
 
-MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true) {
+MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_widthScreen(0), m_heightScreen(0), m_gridActivated(true), m_firstFramePassed(false), m_playMode(true) {
 
     m_postProcessShader = new Shader();
     m_postProcessShader->load("../data/shaders/postProcess.vert","../data/shaders/postProcess.frag");
@@ -41,6 +43,7 @@ MainRenderer::MainRenderer() : m_wireActivated(false), m_cullface(true), m_width
 
     m_camera = new GameObject(-1, "Camera Editor", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2, M_PI, 0)));
     m_camera->addComponent<CameraProjective*>(new CameraProjective());
+    m_camera->addComponent<CameraControllerFirstPerson*>(new CameraControllerFirstPerson());
     m_camProj = m_camera->getComponent<CameraProjective*>();
 
 }
@@ -76,6 +79,8 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
     if(l == NULL){
         l = new DirectionnalLight(scene->addNewId());
     }
+
+    drawEditorGrid(rootTransform->getModelToChild(glm::mat4(1)), camera->getView(), camera->getProjection((float)width/(float)height));
 
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
@@ -152,18 +157,23 @@ void MainRenderer::paintGL(Scene *scene, int width, int height){
     renderTheScene(scene, width, height);
 
     ///// RENDERING DISPLAY FOR EDITOR
-    glDrawBuffer(GL_COLOR_ATTACHMENT1);
+    if(!m_playMode){
+        glDrawBuffer(GL_COLOR_ATTACHMENT1);
 
-    initializeGL();
-    glViewport(0,0,width,height);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        initializeGL();
+        glViewport(0,0,width,height);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    renderTheSceneEditor(scene, width, height);
+        renderTheSceneEditor(scene, width, height);
+    }
+    
 
     // disable FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     glUseProgram(0);
+
+    m_firstFramePassed = true;
 
 
 }
@@ -175,7 +185,11 @@ void MainRenderer::displaySceneOnTheScreen(int width, int height){
 
     // send rendered scene to the post process shader
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,getEditorTextureID());
+    if(m_playMode){
+        glBindTexture(GL_TEXTURE_2D,getGameTextureID()); 
+    } else {
+        glBindTexture(GL_TEXTURE_2D,getEditorTextureID()); 
+    }
     glUniform1i(glGetUniformLocation(m_postProcessShader->id(), "sceneRendered"), 0);
 
     glDisable(GL_DEPTH_TEST);
@@ -232,7 +246,9 @@ void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
 
 
 void MainRenderer::update(){
-    m_camera->update();
+    if(!m_playMode){
+        m_camera->update();
+    }
 }
 
 
@@ -242,6 +258,14 @@ void MainRenderer::createUI(){
     m_camera->createUI("Renderer Setting");
 
     ImGui::End();
+
+
+    if(m_firstFramePassed){
+        ImGui::Begin("Game View", nullptr, ImGuiWindowFlags_NoResize);
+        ImGui::Image((void*)(intptr_t)getGameTextureID(), ImVec2(426,240), ImVec2(0,1), ImVec2(1,0));
+        ImGui::End();
+        
+    }
 }
 
 

@@ -11,11 +11,12 @@ class Component {
 public:
 
 
-    virtual void start(){};
+    virtual void start(){}
 
-    virtual void update(){};
+    virtual void update(){}
+    virtual void inputUpdate(){}
 
-    virtual void createUI(){};
+    virtual void createUI(){}
 
 
     bool getActive(){return m_active;}
@@ -26,8 +27,8 @@ public:
 
     void setGameObject(GameObject * obj){m_gameobject = obj;}
 
-
     bool m_active = true;
+
 
 protected:
 

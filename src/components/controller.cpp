@@ -3,25 +3,44 @@
 
 Controller::Controller(){
     setName("Player Controller");
-    m_speed = 0.2f;
+    m_speed = 0.8f;
 }
 
 
 void Controller::update(){
 
-    glm::vec3 pos = m_gameobject->m_transform->getPosition();
+    float deltaTime = ImGui::GetIO().Framerate/1000.f;
+
+    glm::vec3 pos = m_gameobject->getTransform()->getPosition();
+    glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
+
+    float dx = glm::cos(rotation.y);
+    float dz = glm::sin(rotation.y);
+
+    float dxx = glm::cos(M_PI - rotation.y);
+    float dzx = glm::sin(M_PI - rotation.y);
+
+    glm::vec3 move = glm::vec3(0, 0, 0);
+
     if(ImGui::IsKeyPressed('W')){
-        pos.z += m_speed;
+        move.z = 1.0f;
     }
     if(ImGui::IsKeyPressed('S')){
-        pos.z -= m_speed;
+        move.z = -1.0f;
     }
     if(ImGui::IsKeyPressed('A')){
-        pos.x += m_speed;
+        move.x = -1.0f;
     }
     if(ImGui::IsKeyPressed('D')){
-        pos.x -= m_speed;
+        move.x = 1.0f;
     }
+
+    move *= deltaTime*m_speed;
+
+    pos.z += move.z * dx;
+    pos.x += move.z * dz;
+    pos.z += move.x * dzx;
+    pos.x += move.x * dxx;
 
     m_gameobject->m_transform->setPosition(pos); 
 

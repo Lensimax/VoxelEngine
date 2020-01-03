@@ -30,7 +30,7 @@ configure_file(data/default_imgui.ini imgui.ini  COPYONLY)
 
 ###### BUILD OPTION #######
 
-add_definitions(-std=c++11)
+add_definitions(-std=c++11 -pthread)
 
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
 add_definitions(-DGLFW_INCLUDE_NONE)
