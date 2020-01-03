@@ -19,6 +19,7 @@
 #include "../components/cameraRenderer.h"
 #include "../components/cameraFollow.h"
 #include "../components/thirdPersonController.h"
+#include "../components/groundFollow.h"
 
 
 #include <iostream>
@@ -36,6 +37,7 @@ Scene::Scene(){
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
+    player->addComponent<GroundFollow*>(new GroundFollow());
     objectsEngine.push_back(player);
 
   
@@ -47,7 +49,7 @@ Scene::Scene(){
     objectsEngine.push_back(terrain);
  
 
-    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2, M_PI, 0)));
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
     camera->addComponent<CameraProjective*>(new CameraProjective());
     CameraFollow* camFoll = new CameraFollow();
     camera->addComponent<CameraFollow*>(camFoll);
@@ -55,6 +57,8 @@ Scene::Scene(){
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     //player->getComponent<ThirdPersonController*>()->setActive(false);
+    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<ChunkRenderer*>());
+
 
     objectsEngine.push_back(camera);
 
