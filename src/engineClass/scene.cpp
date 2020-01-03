@@ -19,6 +19,7 @@
 #include "../components/cameraRenderer.h"
 #include "../components/cameraFollow.h"
 #include "../components/thirdPersonController.h"
+#include "../components/groundFollow.h"
 
 #include <thread>
 
@@ -30,38 +31,36 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *cube = new GameObject(addNewId(), "Cube", new Transform(glm::vec3(1,0,0)));
 
-    cube->addComponent<MeshRenderer*>(new MeshRenderer());
-    cube->addComponent<Mesh*>(new MeshCube(0.1f));
-    cube->addComponent<Material*>(new Lambertian());
-
-    GameObject *player = new GameObject(addNewId(), "Player");
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(50.f, 128.f, 30.f)));
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Mesh*>(new MeshCube());
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
+    player->addComponent<GroundFollow*>(new GroundFollow());
     objectsEngine.push_back(player);
 
-    player->addChild(cube);
   
-    // GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    // terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
-    // terrain->addComponent<Mesh*>(new MeshCube());
-    // terrain->addComponent<Material*>(new Lambertian());
-    // objectsEngine.push_back(terrain);
+
+    GameObject *terrain = new GameObject(addNewId(), "Terrain");
+    terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
+    terrain->addComponent<Mesh*>(new MeshCube());
+    terrain->addComponent<Material*>(new Lambertian());
+    objectsEngine.push_back(terrain);
  
 
-    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2, M_PI, 0)));
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
     camera->addComponent<CameraProjective*>(new CameraProjective());
     CameraFollow* camFoll = new CameraFollow();
     camera->addComponent<CameraFollow*>(camFoll);
     camFoll->setPlayer(player);
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
-    player->getComponent<ThirdPersonController*>()->setActive(false);
+    //player->getComponent<ThirdPersonController*>()->setActive(false);
+    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<ChunkRenderer*>());
+
 
     objectsEngine.push_back(camera);
 

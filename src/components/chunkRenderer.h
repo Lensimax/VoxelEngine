@@ -21,6 +21,8 @@ public:
     void setPlayerTransform(Transform *player){m_playerTransform = player;}
     Transform * getPlayerTransform(){return m_playerTransform;}
 
+    float getHeightAt(float x, float z);
+
 private:
     std::vector<Chunk> m_chunks;
     // Chunk *m_chunk = NULL;

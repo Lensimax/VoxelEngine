@@ -17,10 +17,10 @@ void Controller::update(){
     float dx = glm::cos(rotation.y);
     float dz = glm::sin(rotation.y);
 
-    float dxx = glm::cos(3.14159f-rotation.y);
-    float dzx = glm::sin(3.14159f-rotation.y);
+    float dxx = glm::cos(M_PI - rotation.y);
+    float dzx = glm::sin(M_PI - rotation.y);
 
-    glm::vec3 move = glm::vec3(0);
+    glm::vec3 move = glm::vec3(0, 0, 0);
 
     if(ImGui::IsKeyPressed('W')){
         move.z = 1.0f;
@@ -37,10 +37,10 @@ void Controller::update(){
 
     move *= deltaTime;
 
-    pos.z += move.z*dx;
-    pos.x += move.z*dz;
-    pos.z += move.x*dzx;
-    pos.x += move.x*dxx;
+    pos.z += move.z * dx;
+    pos.x += move.z * dz;
+    pos.z += move.x * dzx;
+    pos.x += move.x * dxx;
 
     m_gameobject->m_transform->setPosition(pos); 
 
