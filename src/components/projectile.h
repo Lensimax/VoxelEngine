@@ -5,7 +5,7 @@
 
 class Projectile : public Component {
 public:
-    Projectile(float speed = 0.5f);
+    Projectile(float speed = 1.0f);
     ~Projectile();
 
     void update() override;

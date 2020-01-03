@@ -19,33 +19,35 @@
 
 class Lambertian : public Material {
 
-    public:
-        Lambertian(glm::vec4 color = glm::vec4(255./255.,0./255.,0./255.,1.0));
-        ~Lambertian();
+public:
+    Lambertian(glm::vec4 color = glm::vec4(255./255.,0./255.,0./255.,1.0));
+    ~Lambertian();
 
-        virtual void callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, Light *light);
-        virtual void createUI();
-        virtual GLuint getShaderID();
-        virtual void reloadShaders();
+    virtual void callUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projMat, Light *light);
+    virtual void createUI();
+    virtual GLuint getShaderID();
+    virtual void reloadShaders();
 
-    protected:
+    void toggleDisplayDiffuse(){m_displayDiffuse = !m_displayDiffuse; }
 
-        void createShader();
-        void deleteShader();
+protected:
 
-        Shader *m_debugNormalShader;
+    void createShader();
+    void deleteShader();
 
-        bool m_activeDebugNormal;
+    Shader *m_debugNormalShader;
 
-        float m_specularDeg;
-        glm::vec4 m_ambientColor, m_specularColor, m_diffuseColor;
+    bool m_activeDebugNormal;
 
-        bool m_displayDiffuse = false;
+    float m_specularDeg;
+    glm::vec4 m_ambientColor, m_specularColor, m_diffuseColor;
 
-        const char * m_lambertianShaderVert = "../data/shaders/lambertian.vert";
-        const char * m_lambertianShaderFrag = "../data/shaders/lambertian.frag";
-        const char * m_debugShaderVert = "../data/shaders/debugNormal.vert";
-        const char * m_debugShaderFrag = "../data/shaders/debugNormal.frag";
+    bool m_displayDiffuse = false;
+
+    const char * m_lambertianShaderVert = "../data/shaders/lambertian.vert";
+    const char * m_lambertianShaderFrag = "../data/shaders/lambertian.frag";
+    const char * m_debugShaderVert = "../data/shaders/debugNormal.vert";
+    const char * m_debugShaderFrag = "../data/shaders/debugNormal.frag";
 
 };
 

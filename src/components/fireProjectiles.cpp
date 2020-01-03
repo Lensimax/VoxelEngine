@@ -33,8 +33,9 @@ void FireProjectiles::createProjectile(){
 
     GameObject *projectile = new GameObject(m_scene->addNewId(), "Projectile", transf);
     projectile->addComponent<MeshRenderer*>(new MeshRenderer());
-    projectile->addComponent<Mesh*>(new MeshCube(0.5f));
+    projectile->addComponent<Mesh*>(new MeshCube(0.2f));
     projectile->addComponent<Material*>(new Lambertian());
+    projectile->getComponent<Lambertian*>()->toggleDisplayDiffuse();
     projectile->addComponent<Projectile*>(new Projectile());
 
     m_scene->addGameObject(projectile);
