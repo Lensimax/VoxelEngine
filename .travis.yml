@@ -32,6 +32,17 @@ jobs:
         - cd build && make -j
 
     - stage: build
+      name: "Windows Build Debug"
+      os: windows
+      before_install:
+        - $msys2 pacman --sync --noconfirm --needed cmake
+      script:
+        - mkdir build && cd build
+        - cmake ..
+        - cmake --build .
+        - ls
+
+    - stage: build
       name: "Linux Build Release"
       os: linux
       install:
