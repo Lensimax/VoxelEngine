@@ -20,6 +20,8 @@
 #include "../components/cameraFollow.h"
 #include "../components/thirdPersonController.h"
 
+#include <thread>
+
 
 #include <iostream>
 
@@ -203,10 +205,11 @@ int Scene::addNewId(){
 }
 
 void Scene::updateObj(GameObject *obj){
-    obj->update();
+    std::thread threadUpdate(&GameObject::update, obj);
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         updateObj(obj->m_listOfChildren[i]);
     }
+    threadUpdate.join();
 }
 
 void Scene::update(){
