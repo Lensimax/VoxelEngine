@@ -170,10 +170,13 @@ int main(int, char**)
 
         /// UPDATE
         std::thread threadInput(&InputManager::update, &inputManager);
-        scene->update();
+        std::thread threadSceneUpdate(&Scene::update, scene);
+        std::thread threadRendererUpdate(&MainRenderer::update, renderer);
         renderer->update();
 
         threadInput.join();
+        threadSceneUpdate.join();
+        threadRendererUpdate.join();
 
         // RENDERING
         rendering(display_w, display_h, renderer, scene);
