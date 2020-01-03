@@ -25,6 +25,10 @@ ThirdPersonController::~ThirdPersonController(){
 
 
 void ThirdPersonController::update(){
+    ImGuiIO& io = ImGui::GetIO();
+    if(io.KeyCtrl && ImGui::IsKeyPressed('G')){
+        m_active = !m_active;
+    }
     if(!m_active){
         return;
     }
@@ -33,7 +37,6 @@ void ThirdPersonController::update(){
         return;
     }
 
-    ImGuiIO& io = ImGui::GetIO();
 
     // CAMERA EDITOR CONTROL
     if(!io.WantCaptureMouse){
