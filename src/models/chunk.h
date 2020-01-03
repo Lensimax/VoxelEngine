@@ -68,6 +68,8 @@ struct CubicGrid : public std::array<T, N * N * N>
 
 ///////////////////////// Chunk
 
+// world relative coordinate : w_x, w_y, w_z
+// chunk relative coordinate : c_x, c_y, c_z
 
 class Chunk : public CubicGrid<Voxel, 128> {
 
@@ -83,18 +85,17 @@ public:
 	float voxelSize() const;
 	glm::uvec3 dimensions() const;
 	
-	void generateTerrain(float x, float y, float z);
-
-	float getHeight(float x, float z);
+	void generateTerrain(float w_x, float w_y, float w_z);
+	size_t getHeight(float w_x, float w_z);
 
 	// bool allNeighborsActivated(size_t x, size_t y, size_t z) const; // min(1, 1, 1), max(14, 14, 14)
-	bool surrounded(size_t x, size_t y, size_t z) const; // min(1, 1, 1), max(14, 14, 14)
+	bool surrounded(size_t c_x, size_t c_y, size_t c_z) const; // min(1, 1, 1), max(14, 14, 14)
 
 
 	// Renvoie 6 booleen correspondant à la presence ou non des 6 voisins du voxel (x, y, z)
-	std::array<bool, 6> surrounding(size_t x, size_t y, size_t z) const;
+	std::array<bool, 6> surrounding(size_t c_x, size_t c_y, size_t c_z) const;
 		
-	void addCubeFaces(Mesh* mesh, const std::array<bool, 6>& surrounding, size_t x, size_t y, size_t z) const;
+	void addCubeFaces(Mesh* mesh, const std::array<bool, 6>& surrounding, size_t c_x, size_t c_y, size_t c_z) const;
 	
 	void calculateMesh(Mesh* mesh) const;
 

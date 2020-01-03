@@ -96,36 +96,34 @@ Chunk::Chunk(float voxelSize, float x, float y, float z) : m_voxelSize(voxelSize
 	generateTerrain(x, y, z);
 }
 
-void Chunk::generateTerrain(float x, float y, float z)
-{
-	float scale = 100.f;
-
-	SimplexNoise snoise(1.0f / scale);
-
+void Chunk::generateTerrain(float w_x, float w_y, float w_z) {
+	
 	for(size_t i = 0 ; i < this->width() ; ++i) {
 		for(size_t k = 0 ; k < this->depth() ; ++k) {
 			
-			float v = (snoise.fractal(m_octaves, float(i) + float(x) * float(this->width()), float(k) + float(z) * float(this->depth())) + 1.0) * (255.0 / 2.0);
-			
-			float max_y = std::round(normalize(v, 255, this->borderSize() -1));
+			size_t max_y = getHeight(i + (w_x * this->width()), k + (w_z * this->depth()));
 
-			// (*this)(i, max_y, k) = Voxel::Type::Full;
+			// (*this)(i, max_y, k) = Voxel::Full;
 			
-			for (size_t j = 0 ; j != max_y + 1 ; ++j) // => active les voxel de 0 à Y 
+			for (size_t j = 0 ; j < max_y ; ++j) // => active les voxel de 0 à Y 
 			{
 				(*this)(i, j, k) = Voxel::Type::Full;
-				// std::cerr << "Voxel : " << glm::vec3(i, j, k) << '\n';
 			}
 		}
 	}
 }
 
-float Chunk::getHeight(float x, float z){
-	SimplexNoise snoise(1.0f / 100.f);
-	float height = (snoise.fractal(m_octaves, x, z) + 1.0) * (255.0 / 2.0);
-	float max_y = std::round(normalize(height, 255, this->borderSize() -1));
-	return max_y;
-}	
+size_t Chunk::getHeight(float w_x, float w_z) {
+
+	float scale = 100.f;
+	size_t octaves = 8;
+
+	SimplexNoise snoise(1.0f / scale);
+	
+	float perlin_value = (snoise.fractal(octaves, w_x, w_z) + 1.0) / 2.0;
+
+	return std::round(perlin_value * this->borderSize());
+}
 
 
 //// Accessors
