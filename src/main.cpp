@@ -30,6 +30,10 @@
 #include "engineClass/UI.h"
 #include "engineClass/InputManager.h"
 
+#include <chrono>
+#include <thread>
+#include <iostream>
+
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
 // Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
@@ -40,7 +44,29 @@
 
 
 
+void display(int display_w, int display_h, MainRenderer *renderer, UI *ui){
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 
+    // CREATE UI //
+    ui->drawUI();
+    //ImGui::ShowDemoWindow();
+    // Rendering
+    ImGui::Render();
+    renderer->displaySceneOnTheScreen(display_w, display_h);
+    // draw UI
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void rendering(int display_w, int display_h, MainRenderer *renderer, Scene *scene){
+    const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    glViewport(0, 0, display_w, display_h);
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    renderer->paintGL(scene, display_w, display_h);
+}
 
 
 static void glfw_error_callback(int error, const char* description)
@@ -110,6 +136,7 @@ int main(int, char**)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+    glfwSwapInterval(1);
 
 
     MainRenderer *renderer = new MainRenderer();
@@ -128,50 +155,36 @@ int main(int, char**)
     inputManager->setScene(scene);
     inputManager->setRenderer(renderer);
 
-    // Our state
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+    int display_w, display_h;
+    double lasttime = glfwGetTime();
+
+    float TARGET_FPS = 60.0f;
 
     // Main loop
     while (!glfwWindowShouldClose(window)){
+        
 
         glfwPollEvents();
+        glfwGetFramebufferSize(window, &display_w, &display_h);
 
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        ///////////////
-        // CREATE UI //
-        ///////////////
-
+        /// UPDATE
         inputManager->update();
         scene->update();
         renderer->update();
 
+        // RENDERING
+        rendering(display_w, display_h, renderer, scene);
 
-        ui->drawUI();
+        // DISPLAY ON THE SCREEN
+        display(display_w, display_h, renderer, ui);
 
-        
-
-        //ImGui::ShowDemoWindow();
-
-        // ceci est un test travis
-
-        // Rendering
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        
-        renderer->paintGL(scene, display_w, display_h);
-        renderer->displaySceneOnTheScreen(display_w, display_h);
-
-        // draw UI
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        // wait for refresh rate
+        while (glfwGetTime() < lasttime + 1.0/TARGET_FPS) {
+            // sleep for x milliseconds
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));   
+        }
+        lasttime += 1.0/TARGET_FPS;
 
         glfwSwapBuffers(window);
     }
