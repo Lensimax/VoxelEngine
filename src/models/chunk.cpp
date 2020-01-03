@@ -123,7 +123,8 @@ void Chunk::generateTerrain(float x, float y, float z)
 float Chunk::getHeight(float x, float z){
 	SimplexNoise snoise(1.0f / 100.f);
 	float height = (snoise.fractal(m_octaves, x, z) + 1.0) * (255.0 / 2.0);
-	return height;
+	float max_y = std::round(normalize(height, 255, this->borderSize() -1));
+	return max_y;
 }	
 
 

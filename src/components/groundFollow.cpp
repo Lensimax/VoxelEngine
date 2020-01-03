@@ -1,7 +1,7 @@
 #include "groundFollow.h"
 
 
-GroundFollow::GroundFollow() : m_heightOffset(0.0f){
+GroundFollow::GroundFollow() : m_heightOffset(1.5f){
     setName("Ground Follow");
     m_terrain = nullptr;
 }
