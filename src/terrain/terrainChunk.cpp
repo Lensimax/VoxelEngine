@@ -44,8 +44,8 @@ void TerrainChunk::generate() {
 			
 			// perlin_value in [0, 1]
 			float perlin_value = (snoise.fractal(octaves,
-				                  position.x * voxels.width() + i, 
-				                  position.z * voxels.depth() + k) + 1.0) / 2.0;
+				                  position.x + i, 
+				                  position.z + k) + 1.0) / 2.0;
 			
 			size_t max_y = std::round(perlin_value * voxels.cubic_size());
 

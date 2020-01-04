@@ -13,7 +13,7 @@
 #include "../components/component.h"
 // #include "../components/chunkRenderer.h"
 #include "../components/axisRenderer.h"
-#include "../terrain/terrainChunk.h"
+#include "../terrain/terrainManager.h"
 
 #include "../components/controller.h"
 #include "../components/cameraProjective.h"
@@ -44,13 +44,19 @@ Scene::Scene(){
     
     objectsEngine.push_back(player);
   
-    GameObject *chunk = new GameObject(addNewId(), "Chunk");
-        chunk->addComponent<Mesh*>         (new Mesh());
-        chunk->addComponent<Material*>     (new Lambertian());
-        chunk->addComponent<MeshRenderer*> (new MeshRenderer());
-        chunk->addComponent<TerrainChunk*> (new TerrainChunk(64));
+
+    GameObject *terrain = new GameObject(addNewId(), "Terrain");
+        terrain->addComponent<TerrainManager*>(new TerrainManager(64, 5));
     
-    objectsEngine.push_back(chunk);
+    objectsEngine.push_back(terrain);
+    
+    // GameObject *chunk = new GameObject(addNewId(), "Chunk");
+    //     chunk->addComponent<Mesh*>         (new Mesh());
+    //     chunk->addComponent<Material*>     (new Lambertian());
+    //     chunk->addComponent<MeshRenderer*> (new MeshRenderer());
+    //     chunk->addComponent<TerrainChunk*> (new TerrainChunk(64));
+    
+    // objectsEngine.push_back(chunk);
 
 /*
     // std::cerr << "ajout composent\n";
