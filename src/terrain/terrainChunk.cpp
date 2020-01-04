@@ -48,12 +48,15 @@ void TerrainChunk::generate() {
 			// size_t max_y = std::round(perlin_value * voxels.cubic_size());
 			size_t max_y = getHeightAt(voxels.cubic_size(), position.x + i, position.z + k);
 
-			// (*this)(i, max_y, k) = Voxel::Full;
+			voxels(i, max_y, k) = Voxel::Full;
+
+			if (max_y > 0)
+				voxels(i, max_y - 1, k) = Voxel::Full;
 			
-			for (size_t j = 0 ; j < max_y ; ++j) // => active les voxel de 0 à Y 
-			{
-				voxels(i, j, k) = Voxel::Full;
-			}
+			// for (size_t j = 0 ; j < max_y ; ++j) // => active les voxel de 0 à Y 
+			// {
+			// 	voxels(i, j, k) = Voxel::Full;
+			// }
 		}
 	}
 }

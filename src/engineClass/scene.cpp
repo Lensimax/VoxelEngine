@@ -41,12 +41,12 @@ Scene::Scene(){
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     player->addComponent<GroundFollow*>(new GroundFollow());
-    player->addComponent<FireProjectiles*>(new FireProjectiles());
+    player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
     objectsEngine.push_back(player);
 
   
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 5));
+    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 10));
     objectsEngine.push_back(terrain);
     
 

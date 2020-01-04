@@ -8,8 +8,15 @@ GroundFollow::GroundFollow() : m_heightOffset(1.5f){
 void GroundFollow::update(){
     if(m_terrain != nullptr){
         glm::vec3 position = m_gameobject->getTransform()->getPosition();
+        
         float height = m_terrain->getHeightAt(position.x, position.z);
-        position.y = height + m_heightOffset;
+        
+        if (position.y > height + m_heightOffset)
+            position.y -= 1.0f;
+        else
+            position.y = height + m_heightOffset;
+        
+
         m_gameobject->getTransform()->setPosition(position);
     }
 }
