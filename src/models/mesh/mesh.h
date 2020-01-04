@@ -26,7 +26,9 @@
 
 #include <string>
 #include <vector>
-#include <stdio.h>
+#include <array>
+#include <cstdio>
+#include <iostream>
 
 #include "../../components/component.h"
 
@@ -35,26 +37,20 @@ class Mesh : public Component {
 
 public:
 
+     Mesh();
      virtual ~Mesh() = default;
 
-     
-
      virtual void createUI();
-     virtual void recreate() = 0;
-
+     virtual void recreate();
 
      glm::vec3 getMin();
      glm::vec3 getMax();
-
-     void update() override;
 
      void createVAO();
 
      void drawVAO();
 
      void deleteVAO();
-
-     
 
      inline void *getVertices(){ return &(m_vertices[0]);}
      inline void *getNormals(){ return &(m_normals[0]);}
@@ -84,7 +80,6 @@ public:
 
     protected:
 
-
      float m_maxX, m_maxY, m_maxZ;
      float m_minX, m_minY, m_minZ;
 
@@ -107,7 +102,7 @@ public:
      void inflateBoundingBox();
 
      GLuint m_vertexArrayID;
-     GLuint *m_buffers;
+     std::array<GLuint, 4> m_buffers;
 
 
 };

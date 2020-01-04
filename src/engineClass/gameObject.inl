@@ -9,8 +9,8 @@ template< class ComponentType> ComponentType  GameObject::getComponent(){
             return o;
         }
     }
-
-    return NULL;
+    
+    return nullptr;
 }
 
 template< class ComponentType> std::vector<ComponentType>  GameObject::getComponents(){
@@ -26,11 +26,6 @@ template< class ComponentType> std::vector<ComponentType>  GameObject::getCompon
 
 
 template< class ComponentType > bool GameObject::removeComponent() {
-    if(m_components.empty()){
-        return false; 
-    }
-
-    
     for (unsigned int i=0; i<m_components.size(); i++ ) {
          
         if ( ComponentType o = dynamic_cast<ComponentType>(m_components[i]) ){
@@ -47,6 +42,7 @@ template< class ComponentType > void GameObject::addComponent(Component * compon
     if(!getComponent<ComponentType>()){
         m_components.push_back(component);
         component->setGameObject(this);
+        component->start(); // Permet d'initialiser les données dynamiques du composant
     }
 }
 
@@ -56,6 +52,7 @@ template< class ComponentType> void GameObject::addComponent(){
         Component * comp = new ComponentType();
         m_components.push_back(comp);
         comp->setGameObject(this);
+        comp->start(); // Permet d'initialiser les données dynamiques du composant
     }
 }
  

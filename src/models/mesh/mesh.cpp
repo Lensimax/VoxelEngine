@@ -22,12 +22,14 @@
 #define M_PI 3.1415926
 #endif
 
+Mesh::Mesh() {
+    setName("Mesh");
+}
 
 void Mesh::createUI(){
     if (ImGui::TreeNode("Mesh")){
         ImGui::Text("Number vertices: %d", getNBVertices());
         ImGui::Text("Number faces: %d", getNBFaces());
-
 
         ImGui::Separator();
         if (ImGui::TreeNode("Vertices")){
@@ -61,8 +63,6 @@ void Mesh::createUI(){
 
 }
 
-
-
 ////// COMPUTE BOUNDING BOX /////
 
 void Mesh::computeBoundingBox(){
@@ -88,13 +88,10 @@ void Mesh::computeBoundingBox(){
             m_minZ = m_vertices[i].z;
         }
     }
-
-
-
 }
 
-void Mesh::update(){
-
+void Mesh::recreate(){
+    createVAO();
 }
 
 void Mesh::inflateBoundingBox(){
@@ -116,11 +113,7 @@ glm::vec3 Mesh::getMax(){
 
 void Mesh::createVAO(){
 
-    const int nbBuffer = 4;
-
-    m_buffers = new GLuint[nbBuffer];
-
-    glGenBuffers(nbBuffer, m_buffers);
+    glGenBuffers(m_buffers.size(), m_buffers.data());
     glGenVertexArrays(1,&m_vertexArrayID);
 
     // create the VBO associated with the grid (the terrain)
@@ -167,9 +160,8 @@ void Mesh::drawVAO(){
 }
 
 void Mesh::deleteVAO(){
-    glDeleteBuffers(4,m_buffers);
+    glDeleteBuffers(m_buffers.size(), m_buffers.data());
     glDeleteVertexArrays(1,&m_vertexArrayID);
-    delete m_buffers;
 }
 
 

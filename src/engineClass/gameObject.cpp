@@ -5,7 +5,7 @@
 
 #include "../material/lambertian.h"
 #include "../models/mesh/meshCube.h"
-#include "../components/chunkRenderer.h"
+// #include "../components/chunkRenderer.h"
 #include "../components/axisRenderer.h"
 
 #include <stdio.h>
