@@ -6,28 +6,40 @@
 #include "cubicArray.h"
 #include "voxel.h"
 #include "../models/mesh/mesh.h"
+#include "../components/component.h"
+#include "../components/meshRenderer.h"
 
-struct TerrainChunk : public CubicArray<Voxel> {
+class TerrainChunk : public Component {
 
-	glm::vec3 position;
+public:
+
+	/// Attributes
+
+	CubicArray<Voxel> voxels;
+	MeshRenderer* renderer = nullptr;
 
 	/// Constructors
 
-	TerrainChunk(size_t cubic_size, const glm::vec3& pos); // Initialise les valeurs du chunk à partir de sa position dans le monde
-	TerrainChunk(size_t cubic_size, float x, float y, float z);
+	TerrainChunk(size_t cubic_size);
+	~TerrainChunk();
+
+	/// Overrides
+
+    void start() override;
+    // void update() override;
+    // void createUI() override;
 
 	/// Modificators
 
 	void generate(); // regenère le chunk en fonction de ça position dans le monde
+	void calculateMesh();
+	void addCubeFaces(const std::array<bool, 6>& surrounding, size_t x, size_t y, size_t z) const;
 
-	/// Mesh Création
+	/// Accessors
 
 	// Renvoie 6 booleen correspondant à la presence ou non des 6 voisins du voxel (x, y, z)
 	std::array<bool, 6> surrounding(size_t x, size_t y, size_t z) const;
-		
-	void addCubeFaces(Mesh* mesh, const std::array<bool, 6>& surrounding, size_t x, size_t y, size_t z) const;
-	
-	Mesh* calculateMesh() const;
+
 };
 
 #endif

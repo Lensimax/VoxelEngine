@@ -27,7 +27,8 @@
 #include <string>
 #include <vector>
 #include <array>
-#include <stdio.h>
+#include <cstdio>
+#include <iostream>
 
 #include "../../components/component.h"
 
@@ -36,6 +37,7 @@ class Mesh : public Component {
 
 public:
 
+     Mesh();
      virtual ~Mesh() = default;
 
      virtual void createUI();

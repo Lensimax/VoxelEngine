@@ -22,6 +22,9 @@
 #define M_PI 3.1415926
 #endif
 
+Mesh::Mesh() {
+    setName("Mesh");
+}
 
 void Mesh::createUI(){
     if (ImGui::TreeNode("Mesh")){

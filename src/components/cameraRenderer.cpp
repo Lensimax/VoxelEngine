@@ -19,6 +19,7 @@
 
 #include "cameraRenderer.h"
 #include "cameraProjective.h"
+#include "../material/shader.h"
  
 CameraRenderer::CameraRenderer() : m_lineLength(0.2f), m_lineWidth(2.0f){
     setName("Camera Renderer");

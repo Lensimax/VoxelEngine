@@ -13,6 +13,7 @@
 #include "../components/component.h"
 // #include "../components/chunkRenderer.h"
 #include "../components/axisRenderer.h"
+#include "../terrain/terrainChunk.h"
 
 #include "../components/controller.h"
 #include "../components/cameraProjective.h"
@@ -35,23 +36,31 @@ Scene::Scene(){
     cube->addComponent<Controller*>(new Controller());*/
 
     GameObject *player = new GameObject(addNewId(), "Player");
-    player->addComponent<MeshRenderer*>(new MeshRenderer());
-    player->addComponent<Mesh*>(new MeshCube());
-    player->addComponent<Material*>(new Lambertian());
-    player->addComponent<Controller*>(new Controller());
-    player->addComponent<AxisRenderer*>(new AxisRenderer());
+        player->addComponent<Mesh*>         (new MeshCube());
+        player->addComponent<Material*>     (new Lambertian());
+        player->addComponent<MeshRenderer*> (new MeshRenderer());
+        player->addComponent<Controller*>   (new Controller());
+        player->addComponent<AxisRenderer*> (new AxisRenderer());
+    
     objectsEngine.push_back(player);
   
+    GameObject *chunk = new GameObject(addNewId(), "Chunk");
+        chunk->addComponent<Mesh*>         (new Mesh());
+        chunk->addComponent<Material*>     (new Lambertian());
+        chunk->addComponent<MeshRenderer*> (new MeshRenderer());
+        chunk->addComponent<TerrainChunk*> (new TerrainChunk(64));
+    
+    objectsEngine.push_back(chunk);
+
+/*
     // std::cerr << "ajout composent\n";
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    // terrain->addComponent<ChunkRenderer*>(new ChunkRenderer());
-    // std::cerr << "fin ajout composent\n";
-    //terrain->addComponent<MeshRenderer*>(new MeshRenderer());
-    terrain->addComponent<Mesh*>(new MeshCube());
+    // terrain->addComponent<MeshRenderer*>(new MeshRenderer());
+    // terrain->addComponent<Mesh*>(new Mesh());
     terrain->addComponent<Material*>(new Lambertian());
     //terrain->addComponent<Controller*>(new Controller());
     objectsEngine.push_back(terrain);
- 
+ */
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,2, -3), glm::vec3(0.6, 3.14, 0)));
     camera->addComponent<CameraProjective*>(new CameraProjective());
@@ -60,8 +69,6 @@ Scene::Scene(){
     camFoll->setPlayer(player);
 
     objectsEngine.push_back(camera);
-
-
 }
 
 Scene::~Scene(){
@@ -73,7 +80,6 @@ void Scene::deleteScene(){
         delete objectsEngine[i];
     }
 }
-
 
 CameraProjective * Scene::getCamera(){
     CameraProjective* tmp;

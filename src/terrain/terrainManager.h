@@ -1,8 +1,9 @@
-#ifndef _TERRAIN_H_
-#define _TERRAIN_H_
+#ifndef _TERRAIN_MANAGER_H_
+#define _TERRAIN_MANAGER_H_
 
 #include <map>
 #include "terrainChunk.h"
+#include "../engineClass/gameObject.h"
 
 class Terrain {
 
@@ -14,7 +15,7 @@ public:
 
 private:
 
-	std::vector<TerrainChunk> m_chunks;
+	std::vector<GameObject*> m_chunks;
 };
 
 #endif

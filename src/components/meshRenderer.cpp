@@ -25,64 +25,36 @@
 
 #include "meshRenderer.h"
 
-
-MeshRenderer::MeshRenderer() : m_material(NULL), m_showBoundingBox(false) {
+MeshRenderer::MeshRenderer() : m_showBoundingBox(false) {
     setName("Mesh Renderer");
 }
 
-MeshRenderer::~MeshRenderer(){
-
+void MeshRenderer::start() {
+    mesh = m_gameobject->getComponent<Mesh*>();         assert(mesh != nullptr);
+    material = m_gameobject->getComponent<Material*>(); assert(material != nullptr);
 }
 
-void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
+void MeshRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) {
 
+    if(!material->getActive())
+        return;
 
-    if(m_material == NULL){
-        m_material = m_gameobject->getComponent<Material*>();
-        if(m_material == NULL){return;}
-    }
+    glUseProgram(material->getShaderID());
 
-    assert(m_material != NULL);
+    material->callUniform(modelMat, viewMat, projectionMat, light);
 
-    if(!m_material->getActive()){return;}
-
-    glUseProgram(m_material->getShaderID());
-
-    setUniform(modelMat, viewMat, projectionMat, light);
-
-    Mesh *mesh = m_gameobject->getComponent<Mesh*>();
-    if(mesh != NULL && mesh->getActive()){
+    if(mesh->getActive())
         mesh->drawVAO();
-    }
 
     glUseProgram(0);
 
-    if(m_showBoundingBox){
+    if(m_showBoundingBox)
         drawBoxWithMatrices(mesh->getMin()*1.1f, mesh->getMax()*1.1f, modelMat, viewMat, projectionMat);
-    }
-
 }
 
 void MeshRenderer::createUI(){  
-    ImGui::Text("Show bounding box : ");
-    ImGui::SameLine(); ImGui::Checkbox("##showbounding", &m_showBoundingBox);  
+    ImGui::Text("Show bounding box : "); ImGui::SameLine(); ImGui::Checkbox("##showbounding", &m_showBoundingBox);  
 }
-
-
-void MeshRenderer::setUniform(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light* light){
-
-    if(m_material == NULL){
-        m_material = m_gameobject->getComponent<Material*>();
-        if(m_material == NULL){return;}
-    }
-    assert(m_material != NULL);
-    if(!m_material->getActive()){return;}
-    
-    // send the transformation matrix    
-    m_material->callUniform(modelMat, viewMat, projectionMat, light);
-
-}
-
 
 // draw box that move with the object
 void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat){
@@ -120,7 +92,5 @@ void MeshRenderer::drawBoxWithMatrices(glm::vec3 min, glm::vec3 max, glm::mat4 m
     DrawDebug::drawArrayPosition(array.size(), (float*)&(array[0]), GL_TRIANGLES, GL_LINE);
     
     glUseProgram(0);
-
-
 }
 
