@@ -28,12 +28,14 @@
 
 #include <iostream>
 
+#define M_PI 3.14159265359
+
 
 Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(50.f, 128.f, 30.f)));
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3()));
     player->addComponent<Mesh*>(new MeshCube());
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
@@ -46,7 +48,7 @@ Scene::Scene(){
 
   
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 10));
+    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 3, player->getTransform()));
     objectsEngine.push_back(terrain);
     
 
@@ -244,9 +246,6 @@ void Scene::loadDefaultScene(){
     m_pause = false;
     m_idObject = 0;
     objectsEngine = std::vector<GameObject*>();
-
-    
-
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 256, 0)));
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 128, 0)));
 }
 
