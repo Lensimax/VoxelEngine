@@ -9,8 +9,10 @@ On lancement du jeu, vous controlez le personnage, vous pouvez :
 Si vous faites ```CTRL + U``` vous passez en mode "editeur" vous pouvez maintenant :
 * Orienter la camera en appuyant sur le clic gauche de la souris et en déplaçant la souris
 * Bouger la caméra sur les cotés en appuyant sur le clic droit de la souris
+* Zoomer avec la molette de la souris
 * ```CTRL + H``` pour afficher/cacher l'interface
 * vous pouvez toujours déplacer le personnage et voir le terrain se charger
+* vous pouvez changer la taille des chunk en allant dans le scene manager -> "Terrain" -> "Terrain Manager" -> Chunk Size
 
 
 
@@ -43,4 +45,4 @@ Pour compiler :
 
 Pour lancer le programme :
 
- ```./green-engine```
+ ```./voxel-engine```

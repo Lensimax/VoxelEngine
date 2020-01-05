@@ -3,6 +3,7 @@
 #include <algorithm>
 
 TerrainManager::TerrainManager(size_t chunk_size, size_t terrain_size, Transform* player_transform) : m_chunk_size(chunk_size), m_terrain_size(terrain_size), m_player_transform(player_transform) {
+    setName("Terrain Manager");
     assert(m_player_transform != nullptr);
 
     m_oldChunkGridCoord = toChunkGridCoord(getPlayerCoord());
@@ -32,6 +33,16 @@ void TerrainManager::inputUpdate() {
 
         m_oldChunkGridCoord = cg_coord;
     }
+}
+
+void TerrainManager::createUI(){
+    int chunk_size = m_chunk_size;
+    ImGui::Text("Chunk size : "); ImGui::SameLine();
+    ImGui::InputInt("##m_chunk_size", &chunk_size, 1, 5);
+    if(chunk_size > 0){
+        m_chunk_size = chunk_size;
+    }
+
 }
 
 void TerrainManager::generateAround(glm::vec3 position) {

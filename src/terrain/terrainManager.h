@@ -18,6 +18,8 @@ public:
 	// void update() override;
 	void inputUpdate() override;
 
+	void createUI() override;
+
 	/// Factory
 
 	// Alloue un nouveau chunk
