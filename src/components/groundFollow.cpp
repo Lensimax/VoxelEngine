@@ -8,6 +8,8 @@ GroundFollow::GroundFollow() : m_heightOffset(1.5f){
 void GroundFollow::update(){
     if(m_terrain != nullptr){
         glm::vec3 position = m_gameobject->getTransform()->getPosition();
+
+        // m_terrain->setVoxelAt(position - glm::vec3(2, 2, 2), Voxel::Empty);
         
         float height = m_terrain->getHeightAt(position.x, position.z);
         

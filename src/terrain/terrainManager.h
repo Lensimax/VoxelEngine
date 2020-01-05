@@ -20,7 +20,8 @@ public:
 
 	/// Factory
 
-	GameObject* createTerrainChunk(glm::vec3 position);
+	// Alloue un nouveau chunk
+	GameObject* createTerrainChunk(glm::vec3 position) const;
 
 	/// Modificators
 
@@ -28,7 +29,16 @@ public:
 
 	/// Accessors
 
-	glm::ivec3 toChunkGridCoord(glm::vec3 world_coord);
+	glm::ivec3 toChunkGridCoord(glm::vec3 world_coord) const;
+	glm::uvec3 toChunkCoord(glm::vec3 world_coord) const;
+
+	TerrainChunk* getPlayerChunk();
+	TerrainChunk* getChunkAt(glm::vec3 world_coord); 
+
+	Voxel getVoxelAt(glm::vec3 world_coord);
+	void  setVoxelAt(glm::vec3 world_coord, Voxel v); // change le voxel seulement si il est dans les terrains visibles
+
+	glm::vec3 getPlayerCoord() const;
 
 	size_t getHeightAt(float x, float z) const;
 	size_t getChunkSize() const;

@@ -47,16 +47,16 @@ void TerrainChunk::generate() {
 			// 
 			// size_t max_y = std::round(perlin_value * voxels.cubic_size());
 			size_t max_y = getHeightAt(voxels.cubic_size(), position.x + i, position.z + k);
+// 
+			// voxels(i, max_y, k) = Voxel::Full;
 
-			voxels(i, max_y, k) = Voxel::Full;
-
-			if (max_y > 0)
-				voxels(i, max_y - 1, k) = Voxel::Full;
+			// if (max_y > 0)
+				// voxels(i, max_y - 1, k) = Voxel::Full;
 			
-			// for (size_t j = 0 ; j < max_y ; ++j) // => active les voxel de 0 à Y 
-			// {
-			// 	voxels(i, j, k) = Voxel::Full;
-			// }
+			for (size_t j = 0 ; j < max_y ; ++j) // => active les voxel de 0 à Y 
+			{
+				voxels(i, j, k) = Voxel::Full;
+			}
 		}
 	}
 }
@@ -81,7 +81,7 @@ void TerrainChunk::addCubeFaces(const std::array<bool, 6>& surrounding, size_t x
 {
 
 	float height_ratio = float(y) / voxels.cubic_size();
-	std::cerr << "height_ratio : "<< height_ratio << '\n';
+	// std::cerr << "height_ratio : "<< height_ratio << '\n';
 
 	glm::vec3 color(1.0, 0.8, 0.1);
 
