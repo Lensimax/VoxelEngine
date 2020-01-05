@@ -15,7 +15,8 @@ public:
 	/// Overrides
 
 	void start() override;
-	void update() override;
+	// void update() override;
+	void inputUpdate() override;
 
 	/// Factory
 

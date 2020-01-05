@@ -1,4 +1,6 @@
 #include "terrainManager.h"
+#include "../material/simpleMat.h"
+#include <future>
 
 TerrainManager::TerrainManager(size_t chunk_size, size_t terrain_size, Transform* player_transform) : m_chunk_size(chunk_size), m_terrain_size(terrain_size), m_player_transform(player_transform) {
     assert(m_player_transform != nullptr);
@@ -10,28 +12,22 @@ void TerrainManager::start() {
 
     // Ajoute les chunks autour de la position du joueur
     generateAround(m_player_transform->getPosition());
-
-    std::cerr << "regarde dans TerrainManager::start()\n";
-    // j'essaie d'effacer ici juste pour tester deleteAllChildren mais il y a une fuite mémoire :/
-    // m_gameobject->deleteAllChildren();
 }
 
-void TerrainManager::update() {
+void TerrainManager::inputUpdate() {
     
-    std::cerr << "regarde dans TerrainManager::update()\n";
-
     glm::vec3 player_coord = m_player_transform->getPosition();
     
     glm::ivec3 cg_coord = toChunkGridCoord(player_coord);
-    std::cerr << '(' << cg_coord.x << ", " << cg_coord.y << ", " << cg_coord.z << ")\n";
+    // std::cerr << '(' << cg_coord.x << ", " << cg_coord.y << ", " << cg_coord.z << ")\n";
 
     if (m_oldChunkGridCoord != cg_coord)
     {
-        std::cerr << "deleting old chunks...\n";
+        // std::cerr << "deleting old chunks...\n";
         // segmentation fault je sais pas pk ?
-        // m_gameobject->deleteAllChildren();
+        m_gameobject->deleteAllChildren();
 
-        std::cerr << "generating new chunks...\n";
+        // std::cerr << "generating new chunks...\n";
         generateAround(m_player_transform->getPosition());
 
         m_oldChunkGridCoord = cg_coord;
@@ -53,10 +49,6 @@ void TerrainManager::generateAround(glm::vec3 position) {
         {
             GameObject* chunk = createTerrainChunk(min_chunk_pos + glm::ivec3(i * getChunkSize(), 0, k * getChunkSize()));
             m_gameobject->addChild(chunk);
-
-            // glm::ivec3 cg_coord = min_chunk_pos + glm::ivec3(i * getChunkSize(), 0, k * getChunkSize());
-            // std::cerr << "generateAround :\n";
-            // std::cerr << '(' << cg_coord.x << ", " << cg_coord.y << ", " << cg_coord.z << ")\n";
         }
     }
 }
@@ -71,8 +63,8 @@ GameObject* TerrainManager::createTerrainChunk(glm::vec3 position) {
     			chunk->addComponent<Material*>(new Lambertian());
     			chunk->addComponent<MeshRenderer*>(new MeshRenderer());
     			chunk->addComponent<TerrainChunk*>(new TerrainChunk(getChunkSize()));
-	
-	id++;    
+
+	id++;
 
     return chunk;
 }
