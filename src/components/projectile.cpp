@@ -1,5 +1,7 @@
 #include "projectile.h"
 
+#define M_PI 3.14159265359
+
 #ifndef GLM_H
 #define GLM_H
 #include <glm/gtx/perpendicular.hpp>
