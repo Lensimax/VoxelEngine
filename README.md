@@ -85,6 +85,7 @@ Should work
 * https://github.com/nothings/stb
 * https://jheer.github.io/barnes-hut/
 * https://www.youtube.com/watch?v=BP6NxVxDQIs
+* Let's make a voxel engine : https://sites.google.com/site/letsmakeavoxelengine/home/
 * https://community.khronos.org/t/how-to-draw-one-line-on-top-of-another-in-opengl-without-z-fighting/68922
 * Free look camera : https://gamedev.stackexchange.com/questions/60266/create-a-fly-camera-with-lookat
 * Third person camera : https://www.youtube.com/watch?v=PoxDDZmctnU&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=19
