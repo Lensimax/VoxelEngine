@@ -1,5 +1,7 @@
 #include "controller.h"
 
+#define M_PI 3.14159265359
+
 
 Controller::Controller(){
     setName("Player Controller");
