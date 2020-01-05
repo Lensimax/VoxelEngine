@@ -79,9 +79,17 @@ std::array<bool, 6> TerrainChunk::surrounding(size_t x, size_t y, size_t z) cons
 
 void TerrainChunk::addCubeFaces(const std::array<bool, 6>& surrounding, size_t x, size_t y, size_t z) const
 {
-	// std::cerr << "addCube" << glm::vec3(x, y, z) << '\n';
 
-	glm::vec3 color(0.1, 1.0 - float(y) / voxels.cubic_size(), 0);
+	float height_ratio = float(y) / voxels.cubic_size();
+	std::cerr << "height_ratio : "<< height_ratio << '\n';
+
+	glm::vec3 color(1.0, 0.8, 0.1);
+
+	// std::cerr << "(" << color.r << ", " << color.g << ", " <<  color.b << ")\n";
+
+	if(height_ratio > 0.25)
+		color = glm::vec3(0.1, 1.0 - height_ratio, 0);
+
 	// glm::vec3 normal(0, 0, 0);
 
 	// XPlus
