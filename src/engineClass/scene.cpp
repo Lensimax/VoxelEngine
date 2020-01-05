@@ -244,9 +244,6 @@ void Scene::loadDefaultScene(){
     m_pause = false;
     m_idObject = 0;
     objectsEngine = std::vector<GameObject*>();
-
-    
-
-    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 256, 0)));
+    objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 128, 0)));
 }
 

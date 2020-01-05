@@ -81,7 +81,7 @@ void TerrainChunk::addCubeFaces(const std::array<bool, 6>& surrounding, size_t x
 {
 	// std::cerr << "addCube" << glm::vec3(x, y, z) << '\n';
 
-	glm::vec3 color(0.0, 1.0, 0.0);
+	glm::vec3 color(0.1, 1.0 - float(y) / voxels.cubic_size(), 0);
 	// glm::vec3 normal(0, 0, 0);
 
 	// XPlus
