@@ -63,7 +63,9 @@ MainRenderer::~MainRenderer(){
 
 void MainRenderer::renderTheScene(Scene *scene, int width, int height){
 
-    assert(height > 0);
+    if(height <= 0){
+        return;
+    }
 
     m_widthScreen = width;
     m_heightScreen = height;

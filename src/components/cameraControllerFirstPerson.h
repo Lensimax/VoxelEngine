@@ -27,7 +27,7 @@ private:
 
     glm::vec2 m_sensitivityRotateWorld;
     float m_scrollZoomSensitivity;
-
+    glm::vec2 m_stafeSensitivity;
     
 
 };
