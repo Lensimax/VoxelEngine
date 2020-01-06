@@ -32,9 +32,9 @@ void FireProjectiles::createProjectile(){
     transf->setRotation(m_gameobject->getTransform()->getRotation());
 
     GameObject *projectile = new GameObject(m_scene->addNewId(), "Projectile", transf);
-    projectile->addComponent<MeshRenderer*>(new MeshRenderer());
     projectile->addComponent<Mesh*>(new MeshCube(0.2f));
     projectile->addComponent<Material*>(new Lambertian());
+    projectile->addComponent<MeshRenderer*>(new MeshRenderer());
     projectile->getComponent<Lambertian*>()->toggleDisplayDiffuse();
     projectile->addComponent<Projectile*>(new Projectile());
 

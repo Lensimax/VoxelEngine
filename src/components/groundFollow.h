@@ -2,22 +2,21 @@
 #define GROUNDFOLLOW_H
 
 #include "component.h"
-#include "chunkRenderer.h"
+#include "../terrain/terrainManager.h"
 
 class GroundFollow : public Component {
 public:
 
     GroundFollow();
-    ~GroundFollow();
 
     void update() override;
     void createUI() override;
 
-    void setTerrain(ChunkRenderer *terrain){m_terrain = terrain;}
+    void setTerrain(TerrainManager *terrain){m_terrain = terrain;}
 
 private:
 
-    ChunkRenderer *m_terrain;
+    TerrainManager *m_terrain = nullptr;
     float m_heightOffset;
 
 };

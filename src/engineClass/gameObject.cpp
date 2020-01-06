@@ -5,7 +5,7 @@
 
 #include "../material/lambertian.h"
 #include "../models/mesh/meshCube.h"
-#include "../components/chunkRenderer.h"
+// #include "../components/chunkRenderer.h"
 #include "../components/axisRenderer.h"
 
 #include <stdio.h>
@@ -76,7 +76,7 @@ void GameObject::removeChild(int id){
 
 // supprime tous les enfants de ce gameobject en récursif
 void GameObject::deleteAllChildren(){
-    for(unsigned int i=m_listOfChildren.size()-1; i >=0; i--){
+    for(int i=m_listOfChildren.size()-1; i >=0; i--){
         if(m_listOfChildren[i]->m_listOfChildren.size() == 0){ // n'a pas d'enfant
             delete(m_listOfChildren[i]);
             m_listOfChildren.erase(m_listOfChildren.begin()+i);

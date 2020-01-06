@@ -3,20 +3,22 @@
 
 GroundFollow::GroundFollow() : m_heightOffset(1.5f){
     setName("Ground Follow");
-    m_terrain = nullptr;
 }
-
-GroundFollow::~GroundFollow(){
-
-}
-
 
 void GroundFollow::update(){
     if(m_terrain != nullptr){
         glm::vec3 position = m_gameobject->getTransform()->getPosition();
 
+        // m_terrain->setVoxelAt(position - glm::vec3(2, 2, 2), Voxel::Empty);
+        
         float height = m_terrain->getHeightAt(position.x, position.z);
-        position.y = height + m_heightOffset;
+        
+        if (position.y > height + m_heightOffset)
+            position.y -= 1.0f;
+        else
+            position.y = height + m_heightOffset;
+        
+
         m_gameobject->getTransform()->setPosition(position);
     }
 }

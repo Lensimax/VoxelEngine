@@ -1,9 +1,9 @@
 #ifndef CAMERARENDERER_H
 #define CAMERARENDERER_H
 
-#include "meshRenderer.h"
+#include "renderer.h"
 
-class CameraRenderer : public MeshRenderer {
+class CameraRenderer : public Renderer {
 public:
 
     CameraRenderer();

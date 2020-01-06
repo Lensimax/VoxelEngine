@@ -1,9 +1,11 @@
 #include "controller.h"
 
+#define M_PI 3.14159265359
+
 
 Controller::Controller(){
     setName("Player Controller");
-    m_speed = 0.8f;
+    m_speed = 100.0f;
 }
 
 
@@ -34,6 +36,9 @@ void Controller::update(){
     if(ImGui::IsKeyPressed('D')){
         move.x = 1.0f;
     }
+    if(ImGui::IsKeyPressed(' ')) {
+        move.y = 1.0f;
+    }
 
     move *= deltaTime*m_speed;
 
@@ -41,6 +46,7 @@ void Controller::update(){
     pos.x += move.z * dz;
     pos.z += move.x * dzx;
     pos.x += move.x * dxx;
+    pos.y += move.y;
 
     m_gameobject->m_transform->setPosition(pos); 
 

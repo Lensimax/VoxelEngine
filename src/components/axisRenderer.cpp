@@ -19,16 +19,12 @@
 #include "axisRenderer.h"
 
 #include "../models/mesh/meshCube.h"
+#include "../material/shader.h"
 
 #include <iostream>
 
 AxisRenderer::AxisRenderer() : m_lineLength(0.2f), m_lineWidth(2.0f){
     setName("Axis Renderer");
-}
-
-
-AxisRenderer::~AxisRenderer(){
-
 }
 
 void AxisRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
