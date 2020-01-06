@@ -22,6 +22,7 @@
 #include "../components/thirdPersonController.h"
 #include "../components/groundFollow.h"
 #include "../components/fireProjectiles.h"
+#include "../components/debug/debugTransform.h"
 
 #include <thread>
 
@@ -42,14 +43,15 @@ Scene::Scene(){
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
-    player->addComponent<GroundFollow*>(new GroundFollow());
+    //player->addComponent<GroundFollow*>(new GroundFollow());
     player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
+    player->addComponent<DebugTransform*>(new DebugTransform());
     objectsEngine.push_back(player);
 
   
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
     terrain->addComponent<TerrainManager*>(new TerrainManager(32, 5, player->getTransform()));
-    objectsEngine.push_back(terrain);
+    //objectsEngine.push_back(terrain);
 
     GameObject *origin = new GameObject(addNewId(), "Origin", new Transform(glm::vec3()));
     origin->addComponent<Mesh*>(new MeshCube(0.5f));
@@ -58,7 +60,7 @@ Scene::Scene(){
     origin->addComponent<MeshRenderer*>(new MeshRenderer());
     objectsEngine.push_back(origin);
 
-    GameObject *uno = new GameObject(addNewId(), "One", new Transform(glm::vec3()));
+    GameObject *uno = new GameObject(addNewId(), "One", new Transform(glm::vec3(1,0,0)));
     uno->addComponent<Mesh*>(new MeshCube(0.5f));
     uno->addComponent<Material*>(new Lambertian(glm::vec4(0,1,0,1)));
     uno->getComponent<Lambertian*>()->toggleDisplayDiffuse();
@@ -74,7 +76,7 @@ Scene::Scene(){
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     // player->getComponent<ThirdPersonController*>()->setActive(false);
-    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+    //player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
     player->getComponent<FireProjectiles*>()->setScene(this);
     objectsEngine.push_back(camera);
 }
