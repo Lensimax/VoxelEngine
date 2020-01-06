@@ -36,7 +36,7 @@ Scene::Scene(){
     loadDefaultScene();
 
     GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3()));
-    player->addComponent<Mesh*>(new MeshCube());
+    player->addComponent<Mesh*>(new MeshCube(0.5f));
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Controller*>(new Controller());
@@ -50,6 +50,20 @@ Scene::Scene(){
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
     terrain->addComponent<TerrainManager*>(new TerrainManager(32, 5, player->getTransform()));
     objectsEngine.push_back(terrain);
+
+    GameObject *origin = new GameObject(addNewId(), "Origin", new Transform(glm::vec3()));
+    origin->addComponent<Mesh*>(new MeshCube(0.5f));
+    origin->addComponent<Material*>(new Lambertian());
+    origin->getComponent<Lambertian*>()->toggleDisplayDiffuse();
+    origin->addComponent<MeshRenderer*>(new MeshRenderer());
+    objectsEngine.push_back(origin);
+
+    GameObject *uno = new GameObject(addNewId(), "One", new Transform(glm::vec3()));
+    uno->addComponent<Mesh*>(new MeshCube(0.5f));
+    uno->addComponent<Material*>(new Lambertian(glm::vec4(0,1,0,1)));
+    uno->getComponent<Lambertian*>()->toggleDisplayDiffuse();
+    uno->addComponent<MeshRenderer*>(new MeshRenderer());
+    objectsEngine.push_back(uno);
     
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));

@@ -26,8 +26,11 @@ void FireProjectiles::inputUpdate(){
 void FireProjectiles::createProjectile(){
     Transform *transf = new Transform();
 
+    const mat4 inverted = glm::inverse(m_gameobject->getTransform()->getModelMat());
+    const vec3 forward = -1.0f*normalize(glm::vec3(inverted[2]));
+
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
-    pos.z += 0.5f;
+    pos += forward*0.1f;
     transf->setPosition(pos);
     transf->setRotation(m_gameobject->getTransform()->getRotation());
 
