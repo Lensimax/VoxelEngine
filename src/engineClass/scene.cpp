@@ -48,7 +48,7 @@ Scene::Scene(){
 
   
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 3, player->getTransform()));
+    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 5, player->getTransform()));
     objectsEngine.push_back(terrain);
     
 

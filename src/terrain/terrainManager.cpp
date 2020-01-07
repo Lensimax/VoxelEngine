@@ -85,10 +85,6 @@ glm::uvec3 TerrainManager::toChunkCoord(glm::vec3 world_coord) const {
     );
 }
 
-TerrainChunk* TerrainManager::getPlayerChunk() {
-    return getChunkAt(getPlayerCoord());
-}
-
 TerrainChunk* TerrainManager::getChunkAt(glm::vec3 world_coord) {
     glm::vec3 chunk_coord = toChunkGridCoord(world_coord) * glm::ivec3(getChunkSize()); 
 
