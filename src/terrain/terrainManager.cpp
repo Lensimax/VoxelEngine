@@ -25,7 +25,7 @@ void TerrainManager::inputUpdate() {
     {
         // std::cerr << "deleting old chunks...\n";
         // segmentation fault je sais pas pk ?
-        // m_gameobject->deleteAllChildren();
+        m_gameobject->deleteAllChildren();
 
         // std::cerr << "generating new chunks...\n";
         generateAround(getPlayerCoord());
