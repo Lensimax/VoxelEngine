@@ -222,11 +222,12 @@ int Scene::addNewId(){
 }
 
 void Scene::updateObj(GameObject *obj){
-    std::thread threadUpdate(&GameObject::update, obj);
+    obj->update();
+    // std::thread threadUpdate(&GameObject::update, obj);
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         updateObj(obj->m_listOfChildren[i]);
     }
-    threadUpdate.join();
+    // threadUpdate.join();
 }
 
 void Scene::update(){

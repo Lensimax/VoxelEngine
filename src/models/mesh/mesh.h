@@ -38,7 +38,7 @@ class Mesh : public Component {
 public:
 
      Mesh();
-     virtual ~Mesh() = default;
+     virtual ~Mesh();
 
      virtual void createUI();
      virtual void recreate();
@@ -101,7 +101,7 @@ public:
      void computeBoundingBox();
      void inflateBoundingBox();
 
-     GLuint m_vertexArrayID;
+     GLuint m_vertexArrayID = 0;
      std::array<GLuint, 4> m_buffers;
 
 

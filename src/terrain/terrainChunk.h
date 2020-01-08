@@ -21,7 +21,7 @@ public:
 	/// Constructors
 
 	TerrainChunk(size_t cubic_size);
-	~TerrainChunk();
+	// ~TerrainChunk();
 
 	/// Overrides
 

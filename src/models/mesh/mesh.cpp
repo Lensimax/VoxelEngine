@@ -26,6 +26,12 @@ Mesh::Mesh() {
     setName("Mesh");
 }
 
+Mesh::~Mesh() 
+{
+    if (m_vertexArrayID != 0)
+        deleteVAO();
+}
+
 void Mesh::createUI(){
     if (ImGui::TreeNode("Mesh")){
         ImGui::Text("Number vertices: %d", getNBVertices());

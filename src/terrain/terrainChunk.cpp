@@ -11,9 +11,9 @@ TerrainChunk::TerrainChunk(size_t cubic_size) : voxels(cubic_size) {
 	setName("TerrainChunk");
 }
 
-TerrainChunk::~TerrainChunk() {
-	renderer->mesh->deleteVAO();
-}
+// TerrainChunk::~TerrainChunk() {
+// 	// renderer->mesh->deleteVAO();
+// }
 
 void TerrainChunk::start() {	
 	renderer = m_gameobject->getComponent<MeshRenderer*>();

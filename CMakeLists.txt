@@ -17,6 +17,8 @@ set(GLAD_INCLUDE_DIR thirdparty/glad/include)
 set(STB_IMAGE_DIR thirdparty/stb_image)
 set(UTILITIES_DIR thirdparty/utilities)
 
+set(CMAKE_EXE_LINKER_FLAGS -fsanitize=address)
+
 # 3rd party libraries
 add_subdirectory(thirdparty)
 
@@ -55,7 +57,7 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
     # Do Visual Studio specific stuff
 else()
     add_definitions(-std=c++11)
-    add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic)
+    add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic -fsanitize=address -fno-omit-frame-pointer)
 endif()
 
 

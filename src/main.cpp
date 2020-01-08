@@ -172,13 +172,15 @@ int main(int, char**)
 
         /// UPDATE
         inputManager.update();
-        std::thread threadSceneUpdate(&Scene::update, scene);
-        std::thread threadRendererUpdate(&MainRenderer::update, renderer);
+        scene->update();
+        renderer->update();
+        // std::thread threadSceneUpdate(&Scene::update, scene);
+        // std::thread threadRendererUpdate(&MainRenderer::update, renderer);
         renderer->update();
 
         //threadInput.join();
-        threadSceneUpdate.join();
-        threadRendererUpdate.join();
+        // threadSceneUpdate.join();
+        // threadRendererUpdate.join();
 
         // RENDERING
         rendering(display_w, display_h, renderer, scene);

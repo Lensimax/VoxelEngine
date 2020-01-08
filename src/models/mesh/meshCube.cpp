@@ -10,9 +10,9 @@ MeshCube::MeshCube(float w, bool center) : m_width(w), m_centered(center){
     createVAO();
 }
 
-MeshCube::~MeshCube() {
-    deleteVAO();
-}
+// MeshCube::~MeshCube() {
+//     deleteVAO();
+// }
 
 void MeshCube::recreate(){
     createMesh(m_width);
