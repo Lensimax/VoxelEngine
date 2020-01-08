@@ -30,6 +30,8 @@ GameObject::~GameObject(){
     for(unsigned int i=0; i<m_listOfChildren.size(); i++){
         delete m_listOfChildren[i];
     }
+    m_components.clear();
+    m_listOfChildren.clear();
 }
 
 void GameObject::setName(std::string n){

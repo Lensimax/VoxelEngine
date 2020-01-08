@@ -55,7 +55,7 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
     # Do Visual Studio specific stuff
 else()
     add_definitions(-std=c++11)
-    add_definitions(-Wformat -Wall)
+    add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic)
 endif()
 
 

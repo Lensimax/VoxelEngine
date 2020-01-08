@@ -43,7 +43,7 @@ Scene::Scene(){
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
-    //player->addComponent<GroundFollow*>(new GroundFollow());
+    player->addComponent<GroundFollow*>(new GroundFollow());
     player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
     player->addComponent<DebugTransform*>(new DebugTransform());
     objectsEngine.push_back(player);
@@ -51,7 +51,7 @@ Scene::Scene(){
   
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
     terrain->addComponent<TerrainManager*>(new TerrainManager(32, 5, player->getTransform()));
-    //objectsEngine.push_back(terrain);
+    objectsEngine.push_back(terrain);
 
     GameObject *origin = new GameObject(addNewId(), "Origin", new Transform(glm::vec3()));
     origin->addComponent<Mesh*>(new MeshCube(0.5f));
@@ -76,7 +76,7 @@ Scene::Scene(){
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     // player->getComponent<ThirdPersonController*>()->setActive(false);
-    //player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
     player->getComponent<FireProjectiles*>()->setScene(this);
     objectsEngine.push_back(camera);
 }
@@ -195,9 +195,9 @@ void Scene::addGameObject(GameObject *obj){
 void Scene::addCube(){
     GameObject *cube = new GameObject(addNewId(), "Cube");
 
-    cube->addComponent<MeshRenderer*>(new MeshRenderer());
     cube->addComponent<Mesh*>(new MeshCube());
     cube->addComponent<Material*>(new Lambertian());
+    cube->addComponent<MeshRenderer*>(new MeshRenderer());
  
     objectsEngine.push_back(cube);
 
