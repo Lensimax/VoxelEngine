@@ -101,11 +101,39 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
     glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &color[0]);
 
 
-    arrayAxis.resize(4);
+    arrayAxis.resize(24);
+    // face du dessus
     arrayAxis[0] = glm::vec3(-m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
     arrayAxis[1] = glm::vec3(m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
     arrayAxis[2] = glm::vec3(m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
     arrayAxis[3] = glm::vec3(m_collidingBox.x, m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[4] = glm::vec3(m_collidingBox.x, m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[5] = glm::vec3(-m_collidingBox.x, m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[6] = glm::vec3(-m_collidingBox.x, m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[7] = glm::vec3(-m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
+    // face du dessous
+    arrayAxis[8] = glm::vec3(-m_collidingBox.x, -m_collidingBox.y, m_collidingBox.z);
+    arrayAxis[9] = glm::vec3(m_collidingBox.x, -m_collidingBox.y, m_collidingBox.z);
+    arrayAxis[10] = glm::vec3(m_collidingBox.x, -m_collidingBox.y, m_collidingBox.z);
+    arrayAxis[11] = glm::vec3(m_collidingBox.x, -m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[12] = glm::vec3(m_collidingBox.x, -m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[13] = glm::vec3(-m_collidingBox.x, -m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[14] = glm::vec3(-m_collidingBox.x, -m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[15] = glm::vec3(-m_collidingBox.x, -m_collidingBox.y, m_collidingBox.z);
+    // reliure des 2 faces
+    arrayAxis[16] = glm::vec3(-m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
+    arrayAxis[17] = glm::vec3(-m_collidingBox.x, -m_collidingBox.y, m_collidingBox.z);
+
+    arrayAxis[18] = glm::vec3(m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
+    arrayAxis[19] = glm::vec3(m_collidingBox.x, -m_collidingBox.y, m_collidingBox.z);
+
+    arrayAxis[20] = glm::vec3(m_collidingBox.x, m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[21] = glm::vec3(m_collidingBox.x, -m_collidingBox.y, -m_collidingBox.z);
+
+    arrayAxis[22] = glm::vec3(-m_collidingBox.x, m_collidingBox.y, -m_collidingBox.z);
+    arrayAxis[23] = glm::vec3(-m_collidingBox.x, -m_collidingBox.y, -m_collidingBox.z);
+
+
 
 
 
