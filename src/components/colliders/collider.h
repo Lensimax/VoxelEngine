@@ -7,13 +7,15 @@
 #include "../../terrain/terrainChunk.h"
 
 
-class Collider : public Component {
+class Collider : public Renderer {
 public:
     Collider(glm::vec3 box = glm::vec3(0.6f));
     ~Collider();
 
     void update() override;
     void createUI() override;
+
+    void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 
     inline bool isGrounded(){return m_bottom != Voxel::Empty;}
     inline void setTerrain(TerrainManager *terrain){m_terrain = terrain;}

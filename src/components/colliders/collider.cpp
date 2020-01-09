@@ -4,6 +4,17 @@
 #include "../../engineClass/gameObject.h"
 
 #include <imgui.h>
+#include <drawDebug.h>
+
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+#include <GL/gl3w.h>    // Initialize with gl3wInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+#include <GL/glew.h>    // Initialize with glewInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+#include <glad/glad.h>  // Initialize with gladLoadGL()
+#else
+#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#endif
 
 #ifndef GLM_H
 #define GLM_H
@@ -44,6 +55,9 @@ void Collider::createUI() {
         displayImGuiVoxel(m_bottom, "Bottom");
 
     }
+
+    ImGui::Text("Show colliding box "); ImGui::SameLine();
+    ImGui::Checkbox("##showColliding",&m_showCollidingBox);
 }
 
 
@@ -55,4 +69,50 @@ void Collider::displayImGuiVoxel(Voxel voxel, const char message[]) {
     } else {
         ImGui::Text("%s : Full", message);
     }    
+}
+
+void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) {
+    
+    if(!m_showCollidingBox){
+        return;
+    }
+
+    const float lineWidth = 0.2f;
+    const glm::vec4 color = glm::vec4(1,0,0,1);
+
+    glm::vec3 origin = glm::vec3(0, 0, 0);
+    glm::vec3 forward = glm::vec3(0, 0, 1);
+
+
+    glm::vec3 up = glm::vec3(0, 1, 0);
+    glm::vec3 right = glm::vec3(1, 0, 0);
+
+
+    std::vector<glm::vec3> arrayAxis;
+
+    glLineWidth(lineWidth);
+
+    Shader shader = Shader();
+    shader.load("../data/shaders/simple.vert","../data/shaders/simple.frag");
+    glUseProgram(shader.id());
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
+    glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &color[0]);
+
+
+    arrayAxis.resize(4);
+    arrayAxis[0] = glm::vec3(-m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
+    arrayAxis[1] = glm::vec3(m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
+    arrayAxis[2] = glm::vec3(m_collidingBox.x, m_collidingBox.y, m_collidingBox.z);
+    arrayAxis[3] = glm::vec3(m_collidingBox.x, m_collidingBox.y, -m_collidingBox.z);
+
+
+
+    DrawDebug::drawArrayPosition(arrayAxis.size(), (float*)&arrayAxis[0], GL_LINES);
+
+  
+
+    glUseProgram(0);
+
 }
