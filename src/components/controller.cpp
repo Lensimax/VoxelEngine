@@ -5,7 +5,7 @@
 
 Controller::Controller(){
     setName("Player Controller");
-    m_speed = 100.0f;
+    m_speed = 2.0f;
 }
 
 

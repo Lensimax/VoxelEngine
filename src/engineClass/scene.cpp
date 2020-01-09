@@ -23,6 +23,7 @@
 #include "../components/groundFollow.h"
 #include "../components/fireProjectiles.h"
 #include "../components/debug/debugTransform.h"
+#include "../components/colliders/collider.h"
 
 #include <thread>
 
@@ -36,16 +37,17 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3()));
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(0,17.5f,0)));
     player->addComponent<Mesh*>(new MeshCube(0.5f));
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Controller*>(new Controller());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
-    player->addComponent<GroundFollow*>(new GroundFollow());
+    //player->addComponent<GroundFollow*>(new GroundFollow());
     player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
     player->addComponent<DebugTransform*>(new DebugTransform());
+    player->addComponent<Collider*>(new Collider());
     objectsEngine.push_back(player);
 
   
@@ -76,8 +78,9 @@ Scene::Scene(){
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     // player->getComponent<ThirdPersonController*>()->setActive(false);
-    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+    // player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
     player->getComponent<FireProjectiles*>()->setScene(this);
+    player->getComponent<Collider*>()->setTerrain(terrain->getComponent<TerrainManager*>());
     objectsEngine.push_back(camera);
 }
 
