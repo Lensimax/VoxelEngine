@@ -35,9 +35,10 @@ Collider::~Collider() {
 }
 
 void Collider::update() {
+    const glm::vec3 box = m_collidingBox*m_gameobject->getTransform()->getScale();
     glm::vec3 position = m_gameobject->getTransform()->getPosition();
-    m_top = m_terrain->getVoxelAt(glm::vec3(position.x, position.y+m_collidingBox.y, position.z));
-    m_bottom = m_terrain->getVoxelAt(glm::vec3(position.x, position.y-m_collidingBox.y, position.z));
+    m_top = m_terrain->getVoxelAt(glm::vec3(position.x, position.y+box.y, position.z));
+    m_bottom = m_terrain->getVoxelAt(glm::vec3(position.x, position.y-box.y, position.z));
 }
 
 void Collider::createUI() {
