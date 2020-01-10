@@ -39,6 +39,8 @@ void Collider::update() {
     glm::vec3 position = m_gameobject->getTransform()->getPosition();
     m_top = m_terrain->getVoxelAt(glm::vec3(position.x, position.y+box.y, position.z));
     m_bottom = m_terrain->getVoxelAt(glm::vec3(position.x, position.y-box.y, position.z));
+    m_right = m_terrain->getVoxelAt(glm::vec3(position.x+box.x, position.y, position.z));
+    m_left = m_terrain->getVoxelAt(glm::vec3(position.x-box.x, position.y, position.z));
 }
 
 void Collider::createUI() {
@@ -54,6 +56,8 @@ void Collider::createUI() {
 
         displayImGuiVoxel(m_top, "Top");
         displayImGuiVoxel(m_bottom, "Bottom");
+        displayImGuiVoxel(m_left, "Left");
+        displayImGuiVoxel(m_right, "Right");
 
     }
 
@@ -87,6 +91,12 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
 
     glm::vec3 up = glm::vec3(0, 1, 0);
     glm::vec3 right = glm::vec3(1, 0, 0);
+
+    // pour enlever la rotation sur la matric model
+    modelMat[0][0] = 1; modelMat[1][1] = 1; modelMat[2][2] = 1; 
+    modelMat[0][1] = 0; modelMat[0][2] = 0;
+    modelMat[1][0] = 0; modelMat[1][2] = 0;
+    modelMat[2][0] = 0; modelMat[2][1] = 0;
 
 
     std::vector<glm::vec3> arrayAxis;
