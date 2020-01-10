@@ -31,6 +31,13 @@ configure_file(data/default_imgui.ini imgui.ini  COPYONLY)
 
 
 ###### BUILD OPTION #######
+
+# BUILD TYPE = Debug | Release
+if( NOT CMAKE_BUILD_TYPE )
+    set(CMAKE_BUILD_TYPE Debug)
+    message("BUILD TYPE = Debug | Release")
+endif()
+
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     message("DEBUG MODE ACTIVATED")
 endif()
@@ -39,7 +46,7 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     message("RELEASE MODE ACTIVATED")
 endif()
 
-add_definitions(-pthread)
+add_definitions(-pthread )
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
 add_definitions(-DGLFW_INCLUDE_NONE)
 
@@ -48,24 +55,20 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     add_definitions(-O3)
 endif()
 
-if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-    add_definitions(-g)
-endif()
-
 # si le compilateur est Visual Studio
 if (CMAKE_GENERATOR MATCHES "Visual Studio")
     # Do Visual Studio specific stuff
 else()
     add_definitions(-std=c++11)
-    add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic -fsanitize=address -fno-omit-frame-pointer)
+    if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+        add_definitions(-g)
+        add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic -fsanitize=address -fno-omit-frame-pointer)
+    endif()
+    
 endif()
 
 
-# BUILD TYPE = Debug | Release
-if( NOT CMAKE_BUILD_TYPE )
-    set(CMAKE_BUILD_TYPE Debug)
-    message("BUILD TYPE = Debug | Release")
-endif()
+
 
 
 

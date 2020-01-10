@@ -55,12 +55,17 @@ void display(int display_w, int display_h, MainRenderer *renderer, UI *ui){
     // CREATE UI //
     ui->drawUI();
     //ImGui::ShowDemoWindow();
-    ImGui::Begin("Execution time");
-    ImGui::Text("Input update : %u microseconds", inputUpdateTime);
-    ImGui::Text("scene update : %u microseconds", updateTime);
-    ImGui::Text("rendering : %u microseconds", renderingTime);
-    ImGui::Text("renderer update : %u microseconds", rendererUpdate);
-    ImGui::End();
+    if(ui->hasToDisplayed()){
+        ImGui::Begin("Execution time");
+        ImGui::Text("Application average %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
+        ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
+        ImGui::Text("Input update : %u microseconds", inputUpdateTime);
+        ImGui::Text("scene update : %u microseconds", updateTime);
+        ImGui::Text("rendering : %u microseconds", renderingTime);
+        ImGui::Text("renderer update : %u microseconds", rendererUpdate);
+        ImGui::End();
+    }
+    
     // Rendering
     ImGui::Render();
     renderer->displaySceneOnTheScreen(display_w, display_h);

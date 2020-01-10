@@ -32,10 +32,7 @@ void TerrainChunk::start() {
 void TerrainChunk::generate() {
 	glm::vec3 position = m_gameobject->getTransform()->getPosition();
 	// std::cerr << position.x << ','<< position.y << ',' << position.z << '\n';
-	float scale = 100.f;
-	size_t octaves = 8;
 
-	SimplexNoise snoise(1.0f / scale);
 
 	for(size_t i = 0 ; i < voxels.width() ; ++i) {
 		for(size_t k = 0 ; k < voxels.depth() ; ++k) {
@@ -173,6 +170,7 @@ void TerrainChunk::addCubeFaces(const std::array<bool, 6>& surrounding, size_t x
 
 void TerrainChunk::calculateMesh()
 {
+	
 	for(size_t i = 0 ; i< voxels.width() ; i++) {
 		for(size_t j = 0 ; j < voxels.height() ; j++) {
 			for(size_t k = 0 ; k < voxels.depth() ; k++) {

@@ -17,7 +17,7 @@ void UI::drawUI(){
     if(!m_hasToBeDisplayed){
         return;
     }
-    createInfoWindow();
+    // createInfoWindow();
 
     if(m_scene != NULL){
         createUISceneManager(m_scene);
