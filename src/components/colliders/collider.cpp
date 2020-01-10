@@ -41,6 +41,8 @@ void Collider::update() {
     m_bottom = m_terrain->getVoxelAt(glm::vec3(position.x, position.y-box.y, position.z));
     m_right = m_terrain->getVoxelAt(glm::vec3(position.x+box.x, position.y, position.z));
     m_left = m_terrain->getVoxelAt(glm::vec3(position.x-box.x, position.y, position.z));
+    m_front = m_terrain->getVoxelAt(glm::vec3(position.x, position.y, position.z+box.z));
+    m_back = m_terrain->getVoxelAt(glm::vec3(position.x, position.y, position.z-box.z));
 }
 
 void Collider::createUI() {
@@ -58,6 +60,8 @@ void Collider::createUI() {
         displayImGuiVoxel(m_bottom, "Bottom");
         displayImGuiVoxel(m_left, "Left");
         displayImGuiVoxel(m_right, "Right");
+        displayImGuiVoxel(m_back, "Back");
+        displayImGuiVoxel(m_top, "Top");
 
     }
 
