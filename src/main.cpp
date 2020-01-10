@@ -43,6 +43,9 @@
 
 
 
+std::chrono::microseconds inputUpdateTime, updateTime, renderingTime, rendererUpdate;
+
+
 
 void display(int display_w, int display_h, MainRenderer *renderer, UI *ui){
     ImGui_ImplOpenGL3_NewFrame();
@@ -52,6 +55,12 @@ void display(int display_w, int display_h, MainRenderer *renderer, UI *ui){
     // CREATE UI //
     ui->drawUI();
     //ImGui::ShowDemoWindow();
+    ImGui::Begin("Execution time");
+    ImGui::Text("Input update : %u microseconds", inputUpdateTime);
+    ImGui::Text("scene update : %u microseconds", updateTime);
+    ImGui::Text("rendering : %u microseconds", renderingTime);
+    ImGui::Text("renderer update : %u microseconds", rendererUpdate);
+    ImGui::End();
     // Rendering
     ImGui::Render();
     renderer->displaySceneOnTheScreen(display_w, display_h);
@@ -156,6 +165,7 @@ int main(int, char**)
     inputManager.setRenderer(renderer);
 
 
+
     int display_w, display_h;
     double lasttime = glfwGetTime();
 
@@ -168,22 +178,37 @@ int main(int, char**)
         glfwPollEvents();
         glfwGetFramebufferSize(window, &display_w, &display_h);
 
+
+        auto start = std::chrono::high_resolution_clock::now();
         scene->inputUpdate();
+        auto stop = std::chrono::high_resolution_clock::now(); 
+        inputUpdateTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
 
         /// UPDATE
         inputManager.update();
+        start = std::chrono::high_resolution_clock::now();
         scene->update();
+        stop = std::chrono::high_resolution_clock::now(); 
+        updateTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
+        
+        start = std::chrono::high_resolution_clock::now();
         renderer->update();
+        stop = std::chrono::high_resolution_clock::now(); 
+        rendererUpdate = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
+        
         // std::thread threadSceneUpdate(&Scene::update, scene);
         // std::thread threadRendererUpdate(&MainRenderer::update, renderer);
-        renderer->update();
+        // renderer->update();
 
         //threadInput.join();
         // threadSceneUpdate.join();
         // threadRendererUpdate.join();
 
         // RENDERING
+        start = std::chrono::high_resolution_clock::now();
         rendering(display_w, display_h, renderer, scene);
+        stop = std::chrono::high_resolution_clock::now(); 
+        renderingTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 
         // DISPLAY ON THE SCREEN
         display(display_w, display_h, renderer, ui);
