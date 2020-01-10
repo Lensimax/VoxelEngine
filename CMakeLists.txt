@@ -17,7 +17,6 @@ set(GLAD_INCLUDE_DIR thirdparty/glad/include)
 set(STB_IMAGE_DIR thirdparty/stb_image)
 set(UTILITIES_DIR thirdparty/utilities)
 
-set(CMAKE_EXE_LINKER_FLAGS -fsanitize=address)
 
 # 3rd party libraries
 add_subdirectory(thirdparty)
@@ -63,6 +62,7 @@ else()
     if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         add_definitions(-g)
         add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic -fsanitize=address -fno-omit-frame-pointer)
+        set(CMAKE_EXE_LINKER_FLAGS -fsanitize=address)
     endif()
     
 endif()
