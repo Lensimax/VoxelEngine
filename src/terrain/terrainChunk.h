@@ -23,8 +23,7 @@ public:
 
 	/// Constructors
 
-	TerrainChunk(size_t cubic_size, TerrainManager* terrain);
-	// ~TerrainChunk();
+	TerrainChunk(size_t cubic_size);
 
 	/// Overrides
 
@@ -47,9 +46,9 @@ public:
 
 	static size_t getHeightAt(size_t chunk_size, float x, float z);
 
-private:
+// private:
 
-	TerrainManager* m_terrain = nullptr;
+	// TerrainManager* m_terrain = nullptr;
 };
 
 #endif

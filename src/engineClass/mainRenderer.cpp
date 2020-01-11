@@ -27,8 +27,6 @@
 
 #include "../components/meshRenderer.h"
 
-#define M_PI 3.14159265359
-
 // #include "models/sphere.h"
 // #include "models/meshObject.h"
 

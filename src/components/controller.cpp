@@ -1,8 +1,5 @@
 #include "controller.h"
 
-#define M_PI 3.14159265359
-
-
 Controller::Controller(){
     setName("Player Controller");
     m_speed = 100.0f;

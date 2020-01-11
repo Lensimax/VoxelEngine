@@ -169,7 +169,7 @@ GameObject* TerrainManager::createTerrainChunk(glm::vec3 position) {
     			chunk->addComponent<Mesh*>(new Mesh());
     			chunk->addComponent<Material*>(new Lambertian());
     			chunk->addComponent<MeshRenderer*>(new MeshRenderer());
-    			chunk->addComponent<TerrainChunk*>(new TerrainChunk(getChunkSize(), this));
+    			chunk->addComponent<TerrainChunk*>(new TerrainChunk(getChunkSize()));
 
 	id++;
 
@@ -230,9 +230,7 @@ void  TerrainManager::setVoxelAt(glm::vec3 world_coord, Voxel v) {
     {
         glm::uvec3 voxel = toVoxelCoord(world_coord);
         chunk->voxels(voxel.x, voxel.y, voxel.z) = v;
-        std::cerr << "set\n";
     }
-
 }
 
 
