@@ -17,7 +17,7 @@ public:
 
     void draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) override;
 
-    inline bool isGrounded(){return m_bottom != Voxel::Empty;}
+    inline bool isGrounded(){return m_isGrounded;}
     inline void setTerrain(TerrainManager *terrain){m_terrain = terrain;}
 private:
     void displayImGuiVoxel(Voxel voxel, const char message[]);
@@ -25,6 +25,7 @@ private:
     bool intersect(glm::vec3 box1Min, glm::vec3 box1Max, glm::vec3 box2Min, glm::vec3 box2Max);
     bool intersectAccordingToMove(glm::vec3 boxMin, glm::vec3 boxMax);
     void updateCollidingBox();
+    void computeCollisionWithGround();
 
     void drawAABB(glm::vec3 min, glm::vec3 max, Shader shader, glm::vec4 color = glm::vec4(1,0,0,1));
 
@@ -36,6 +37,8 @@ private:
     Voxel m_bottom, m_top, m_left, m_right, m_front, m_back;
 
     glm::vec3 m_boxMin, m_boxMax;
+
+    bool m_isGrounded;
     
 };
 

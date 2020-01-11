@@ -29,6 +29,7 @@
 
 Collider::Collider(glm::vec3 box) : m_collidingBox(box), m_showCollidingBox(true) {
     setName("Collider");
+    computeCollisionWithGround();
 }
 
 Collider::~Collider() {
@@ -49,15 +50,33 @@ bool Collider::intersectAccordingToMove(glm::vec3 boxMin, glm::vec3 boxMax) {
     Rigidbody *rb = m_gameobject->getComponent<Rigidbody*>();
     if(rb != nullptr){
         glm::vec3 objMin = m_boxMin;
-        objMin -= rb->getMass();
+        objMin.y -= rb->getMass();
         glm::vec3 objMax = m_boxMax;
-        return (objMin.x <= boxMax.x && objMax.x >= boxMin.x) &&
-            (objMin.y <= boxMax.y && objMax.y >= boxMin.y) &&
-            (objMin.z <= boxMax.z && objMax.z >= boxMin.z);
+        return intersect(objMin, objMax, boxMin, boxMax);
     } else {
         return false;
     }
     
+}
+
+void Collider::computeCollisionWithGround(){
+    if(m_terrain != nullptr){
+        if(m_terrain->getVoxelAt(m_boxMin) == Voxel::Full){
+            m_isGrounded = true; return;
+        }
+        if(m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMin.y, m_boxMax.z)) == Voxel::Full){
+            m_isGrounded = true; return;
+        }
+        if(m_terrain->getVoxelAt(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMax.z)) == Voxel::Full){
+            m_isGrounded = true; return;
+        }
+        if(m_terrain->getVoxelAt(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMin.z)) == Voxel::Full){
+            m_isGrounded = true; return;
+        }
+    }
+
+    m_isGrounded = false;    
+
 }
 
 void Collider::updateCollidingBox(){
@@ -72,9 +91,8 @@ void Collider::updateCollidingBox(){
 
 void Collider::physicsUpdate() {
     updateCollidingBox();
-    const glm::vec3 boxMin = m_boxMin*m_gameobject->getTransform()->getScale();
-    const glm::vec3 boxMax = m_boxMax*m_gameobject->getTransform()->getScale();
-    glm::vec3 position = m_gameobject->getTransform()->getPosition();
+
+    computeCollisionWithGround();
 /*
     m_top = m_terrain->getVoxelAt(glm::vec3(position.x, position.y+boxMax.y, position.z));
     m_bottom = m_terrain->getVoxelAt(glm::vec3(position.x, position.y+boxMin.y, position.z));
@@ -160,17 +178,17 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
         glm::vec3 voxel = glm::vec3(4.0f, 13.0f, 35.0f);
         drawAABB(voxel, voxel+1.0f, shader, intersect(voxel, voxel+1.0f) ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
 
-       glm::vec3 voxel1 = m_terrain->toVoxelWorldCoord(m_boxMin + glm::vec3(-1,0,0));
-        glm::vec3 voxelBottom1 = m_terrain->toVoxelWorldCoord(m_boxMin + glm::vec3(0,-1,0));
-        glm::vec3 voxelBottom2 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMin.x, m_boxMin.y, m_boxMax.z) + glm::vec3(0,-1,0));
-        glm::vec3 voxelBottom3 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMax.z) + glm::vec3(0,-1,0));
-        glm::vec3 voxelBottom4 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMin.z) + glm::vec3(0,-1,0));
+        // glm::vec3 voxel1 = m_terrain->toVoxelWorldCoord(m_boxMin + glm::vec3(-1,0,0));
+        glm::vec3 voxelBottom1 = m_terrain->toVoxelWorldCoord(m_boxMin);
+        glm::vec3 voxelBottom2 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMin.x, m_boxMin.y, m_boxMax.z));
+        glm::vec3 voxelBottom3 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMax.z));
+        glm::vec3 voxelBottom4 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMin.z));
 
         // drawAABB(voxel1, voxel1+1.0f, shader, glm::vec4(0,0,1,1));
-        drawAABB(voxelBottom1, voxelBottom1+1.0f, shader, intersectAccordingToMove(voxelBottom1, voxelBottom1+1.0f) ? glm::vec4(0,0,1,1) : glm::vec4(0,0,1,1));
-        drawAABB(voxelBottom2, voxelBottom2+1.0f, shader, intersectAccordingToMove(voxelBottom2, voxelBottom2+1.0f) ? glm::vec4(0,0,1,1) : glm::vec4(0,0,1,1));
-        drawAABB(voxelBottom3, voxelBottom3+1.0f, shader, intersectAccordingToMove(voxelBottom3, voxelBottom3+1.0f) ? glm::vec4(0,0,1,1) : glm::vec4(0,0,1,1));
-        drawAABB(voxelBottom4, voxelBottom4+1.0f, shader, intersectAccordingToMove(voxelBottom4, voxelBottom4+1.0f) ? glm::vec4(0,0,1,1) : glm::vec4(0,0,1,1));
+        drawAABB(voxelBottom1, voxelBottom1+1.0f, shader, intersect(voxelBottom1, voxelBottom1+1.0f) ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
+        drawAABB(voxelBottom2, voxelBottom2+1.0f, shader, intersect(voxelBottom2, voxelBottom2+1.0f) ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
+        drawAABB(voxelBottom3, voxelBottom3+1.0f, shader, intersect(voxelBottom3, voxelBottom3+1.0f) ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
+        drawAABB(voxelBottom4, voxelBottom4+1.0f, shader, intersect(voxelBottom4, voxelBottom4+1.0f) ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
     
     }
 
