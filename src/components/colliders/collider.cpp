@@ -146,6 +146,7 @@ void Collider::physicsUpdate() {
 
 }
 
+// http://www.stashofcode.fr/clipping-de-droite-par-un-rectangle/#more-706
 glm::vec2 intersectQuadLine(glm::vec2 A, glm::vec2 B, glm::vec2 Rect0, glm::vec2 Rect1){
     
     glm::vec2 AB = B - A;
@@ -194,9 +195,36 @@ glm::vec2 intersectQuadLine(glm::vec2 A, glm::vec2 B, glm::vec2 Rect0, glm::vec2
     return interPoint;
 }
 
+// https://stackoverflow.com/questions/3746274/line-intersection-with-aabb-rectangle
+glm::vec2 Intersects(glm::vec2 a1, glm::vec2 a2, glm::vec2 b1, glm::vec2 b2)
+{
+    glm::vec2 intersection = glm::vec2(0);
+
+    glm::vec2 b = a2 - a1;
+    glm::vec2 d = b2 - b1;
+    float bDotDPerp = b.x * d.y - b.y * d.x;
+
+    // if b dot d == 0, it means the lines are parallel so have infinite intersection points
+    if (bDotDPerp == 0)
+        return glm::vec2(0);;
+
+    glm::vec2 c = b1 - a1;
+    float t = (c.x * d.y - c.y * d.x) / bDotDPerp;
+    if (t < 0 || t > 1)
+        return glm::vec2(0);
+
+    float u = (c.x * b.y - c.y * b.x) / bDotDPerp;
+    if (u < 0 || u > 1)
+        return glm::vec2(0);;
+
+    intersection = a1 + t * b;
+
+    return intersection;
+}
 
 void Collider::raycast(){
-    m_targetHitPoint = m_gameobject->getTransform()->getPosition();
+    glm::vec3 pos = m_gameobject->getTransform()->getPosition();
+    m_targetHitPoint = pos;
     glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
     float dx = glm::cos(rotation.y);
     float dz = glm::sin(rotation.y);
@@ -207,7 +235,15 @@ void Collider::raycast(){
     m_targetHitPoint.x += length * dz;
     
     if(m_terrain->getVoxelAt(m_targetHitPoint) == Voxel::Full){ // collision
+        glm::vec3 min = m_terrain->toVoxelWorldCoord(m_targetHitPoint);
 
+        glm::vec2 intersectPoint = Intersects(glm::vec2(pos.x, pos.z), glm::vec2(m_targetHitPoint.x, m_targetHitPoint.z),
+        glm::vec2(min.x, min.z), glm::vec2(min.x+1.0f, min.z+0.0f));
+        // glm::vec2 intersectPoint = intersectQuadLine(glm::vec2(pos.x, pos.z), glm::vec2(m_targetHitPoint.x, m_targetHitPoint.z),
+        // glm::vec2(min.x, min.z), glm::vec2(min.x+1.0f, min.z+1.0f));
+
+        m_targetHitPoint.x = intersectPoint.x;
+        m_targetHitPoint.z = intersectPoint.y;
     }
 
 }
