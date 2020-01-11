@@ -1,10 +1,12 @@
 #include "rigidbody.h"
 #include "../engineClass/mainRenderer.h"
 
+#include <iostream>
+
 #define M_PI 3.14159265359
 
 
-Rigidbody::Rigidbody() {
+Rigidbody::Rigidbody() : m_speed(2.0f), m_move(glm::vec3(0)) {
     setName("Rigidbody");
 }
 
@@ -45,9 +47,11 @@ void Rigidbody::update() {
 
     computeGravity();
 
-
-    float deltaTime = ImGui::GetIO().Framerate/global_limitFramerate;
+    assert(global_limitFramerate != 0.0f);
+    float deltaTime = ImGui::GetIO().Framerate / global_limitFramerate;
     m_move *= deltaTime*m_speed;
+
+    std::cout << deltaTime << "\n";
 
     pos.z += m_move.z * dx;
     pos.x += m_move.z * dz;
