@@ -19,14 +19,13 @@ void TerrainManager::start() {
 
 void TerrainManager::inputUpdate() {
     
-    glm::vec3 player_coord = getPlayerCoord();
+    glm::vec3 player_coord = getPlayerCoord(); player_coord.y = 0;
     
     glm::ivec3 cg_coord = toChunkGridCoord(player_coord);
     // std::cerr << '(' << cg_coord.x << ", " << cg_coord.y << ", " << cg_coord.z << ")\n";
 
     if (m_oldChunkGridCoord != cg_coord)
     {
-        // player_coord.y = 0;
 
         manageChunksAround(player_coord);
         updateChunks();
@@ -76,7 +75,7 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
 
     // Création des chunks autour de la position world_coord qui n'éxistent pas déja
 
-    m_grid_to_chunk_map.clear();
+    // m_grid_to_chunk_map.clear();
 
     for (size_t i = 0 ; i < getTerrainSize() ; ++i)
     {
@@ -104,25 +103,6 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
             }
         }
     }
-
-    // On trouve les gameobjects trop loins de la position world_coord.
-
-    // std::vector<GameObject*> to_remove;
-
-    // for (auto* go_child : m_gameobject->m_listOfChildren)
-    // {
-    //     auto res = find(to_keep.begin(), to_keep.end(), go_child);
-
-    //     if (res == to_keep.end()) // Non trouvé
-    //         to_remove.push_back(*res);
-    // }
-
-    // // Suppression des gameobjects trop éloignées
-
-    // for (auto* go_remove : to_remove)
-    // {
-    //     m_gameobject->removeChild(go_remove->getID());
-    // }
 }
 
 void TerrainManager::updateChunks(){
