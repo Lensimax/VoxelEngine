@@ -45,7 +45,6 @@ public:
 	/// Statics
 
 	static size_t getHeightAt(size_t chunk_size, float x, float z);
-
 // private:
 
 	// TerrainManager* m_terrain = nullptr;
