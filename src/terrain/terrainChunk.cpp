@@ -208,6 +208,7 @@ void TerrainChunk::addCubeFaces(const std::array<bool, 6>& surrounding, size_t x
 
 void TerrainChunk::calculateMesh()
 {
+	
 	for(size_t i = 0 ; i< voxels.width() ; i++) {
 		for(size_t j = 0 ; j < voxels.height() ; j++) {
 			for(size_t k = 0 ; k < voxels.depth() ; k++) {
