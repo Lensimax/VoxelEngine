@@ -147,15 +147,12 @@ void Collider::physicsUpdate() {
 }
 
 void Collider::raycast(){
-    glm::vec3 m_targetHitPoint = m_gameobject->getTransform()->getPosition();
+    m_targetHitPoint = m_gameobject->getTransform()->getPosition();
     glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
     float dx = glm::cos(rotation.y);
     float dz = glm::sin(rotation.y);
 
-    float dxx = glm::cos(M_PI - rotation.y);
-    float dzx = glm::sin(M_PI - rotation.y);
-
-    const float length = 1.0f;
+    const float length = 3.0f;
 
     m_targetHitPoint.z += length * dx;
     m_targetHitPoint.x += length * dz;
@@ -163,14 +160,22 @@ void Collider::raycast(){
 }
 
 void Collider::createUI() {
+    glm::vec3 position = m_gameobject->getTransform()->getPosition();
     ImGui::Text("Box Collider: ");
     ImGui::DragFloat3("##boxCollider", &m_collidingBox[0], 0.01f, 0.01f, 10.f, "%.3f");
 
     ImGui::Text("Min: (%f, %f, %f)", m_boxMin.x, m_boxMin.y, m_boxMin.z);
     ImGui::Text("Max: (%f, %f, %f)", m_boxMax.x, m_boxMax.y, m_boxMax.z);
 
+    ImGui::Separator();
+    ImGui::Text("Position: (%f, %f, %f)", position.x, position.y, position.z);
+    glm::vec3 testCast = m_targetHitPoint - position;
+    ImGui::Text("Vector ray: (%f, %f, %f)", testCast.x, testCast.y, testCast.z);
+    ImGui::Text("Length: %f",glm::distance(m_targetHitPoint, position));
+    ImGui::Separator();
+
     if(m_terrain != nullptr){
-        glm::vec3 position = m_gameobject->getTransform()->getPosition();
+        
 
 
         glm::vec3 boxMin = m_gameobject->getTransform()->getPosition() + m_boxMin;
