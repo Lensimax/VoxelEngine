@@ -2,7 +2,7 @@
 #include "../material/simpleMat.h"
 #include <algorithm>
 
-TerrainManager::TerrainManager(size_t chunk_size, size_t terrain_size, Transform* player_transform) : m_chunk_size(chunk_size), m_terrain_size(terrain_size), m_player_transform(player_transform) {
+TerrainManager::TerrainManager(size_t chunk_size, size_t terrain_size, Transform* player_transform) : m_chunk_size(chunk_size), m_terrain_size(terrain_size), m_player_transform(player_transform), m_grid_to_chunk_map(ivec3_comp) {
     assert(m_player_transform != nullptr);
 
     m_oldChunkGridCoord = toChunkGridCoord(getPlayerCoord());
@@ -10,8 +10,11 @@ TerrainManager::TerrainManager(size_t chunk_size, size_t terrain_size, Transform
 
 void TerrainManager::start() {
 
-    // Ajoute les chunks autour de la position du joueur
-    generateAround(getPlayerCoord());
+    // Création des chunks autour du joueur
+
+    createChunksAround(getPlayerCoord());
+
+    updateChunks();
 }
 
 void TerrainManager::inputUpdate() {
@@ -23,18 +26,23 @@ void TerrainManager::inputUpdate() {
 
     if (m_oldChunkGridCoord != cg_coord)
     {
+        // player_coord.y = 0;
+
+        manageChunksAround(player_coord);
+        updateChunks();
         // std::cerr << "deleting old chunks...\n";
         // segmentation fault je sais pas pk ?
-        m_gameobject->deleteAllChildren();
+        // m_gameobject->deleteAllChildren();
+        // m_grid_to_chunk_map.clear()zz;
 
         // std::cerr << "generating new chunks...\n";
-        generateAround(getPlayerCoord());
+        // createChunksAround(getPlayerCoord());
 
         m_oldChunkGridCoord = cg_coord;
     }
 }
 
-void TerrainManager::generateAround(glm::vec3 position) {
+void TerrainManager::createChunksAround(glm::vec3 position) {
     assert(m_gameobject != nullptr);
 
     glm::ivec3 current_chunk_coord = toChunkGridCoord(position) * glm::ivec3(getChunkSize());
@@ -47,13 +55,114 @@ void TerrainManager::generateAround(glm::vec3 position) {
     {
         for (size_t k = 0 ; k < getTerrainSize() ; ++k)
         {
+            // Instanciation des chunks
             GameObject* chunk = createTerrainChunk(min_chunk_pos + glm::ivec3(i * getChunkSize(), 0, k * getChunkSize()));
             m_gameobject->addChild(chunk);
+
+            // Ajout des chunks dans une map en fonction de leurs coordonnées dans la grille de chunk
+            glm::ivec3 chunk_grid_coord = min_chunk_pos + glm::ivec3(i, 0, k);
+            m_grid_to_chunk_map[chunk_grid_coord] = chunk->getComponent<TerrainChunk*>();
         }
     }
 }
 
-GameObject* TerrainManager::createTerrainChunk(glm::vec3 position) const{
+void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
+
+    glm::ivec3 current_grid_coord(toChunkGridCoord(world_coord));
+    glm::ivec3 grid_offset(getTerrainSize() / 2, 0, getTerrainSize() / 2);
+    glm::ivec3 min_grid_coord = current_grid_coord - grid_offset;
+
+    std::vector<GameObject*> to_keep;
+
+    // Création des chunks autour de la position world_coord qui n'éxistent pas déja
+
+    m_grid_to_chunk_map.clear();
+
+    for (size_t i = 0 ; i < getTerrainSize() ; ++i)
+    {
+        for (size_t k = 0 ; k < getTerrainSize() ; ++k)
+        {
+            glm::ivec3 chunk_grid_coord = min_grid_coord + glm::ivec3(i, 0, k);
+
+            auto res = m_grid_to_chunk_map.find(chunk_grid_coord);
+            
+            if (res != m_grid_to_chunk_map.end()) // Trouvé
+            {
+                TerrainChunk* terrain_chunk = res->second;
+
+                m_grid_to_chunk_map[chunk_grid_coord] = terrain_chunk;
+                to_keep.push_back(terrain_chunk->getGameObject());
+            }
+            else
+            {
+                // Si le chunk n'est pas dans la map il faut le creer
+                GameObject* chunk = createTerrainChunk(toWorldGridCoord(chunk_grid_coord));
+                m_gameobject->addChild(chunk);
+
+                m_grid_to_chunk_map[chunk_grid_coord] = chunk->getComponent<TerrainChunk*>();
+                to_keep.push_back(chunk);
+            }
+        }
+    }
+
+    // On trouve les gameobjects trop loins de la position world_coord.
+
+    // std::vector<GameObject*> to_remove;
+
+    // for (auto* go_child : m_gameobject->m_listOfChildren)
+    // {
+    //     auto res = find(to_keep.begin(), to_keep.end(), go_child);
+
+    //     if (res == to_keep.end()) // Non trouvé
+    //         to_remove.push_back(*res);
+    // }
+
+    // // Suppression des gameobjects trop éloignées
+
+    // for (auto* go_remove : to_remove)
+    // {
+    //     m_gameobject->removeChild(go_remove->getID());
+    // }
+}
+
+void TerrainManager::updateChunks(){
+
+    // initialize leurs valeurs de terrain
+
+    for (auto& p : m_grid_to_chunk_map)
+    {
+        TerrainChunk* chunk = p.second;
+
+        if (chunk->needUpdate)
+            chunk->generate();
+    }
+
+    // Calcul de leurs mesh
+
+    for (auto& p : m_grid_to_chunk_map)
+    {
+        TerrainChunk* chunk = p.second;
+        
+        if (chunk->needUpdate)
+            chunk->calculateMesh();
+    }
+
+    // Envoie des données au GPU pour le dessin
+
+    for (auto& p : m_grid_to_chunk_map)
+    {
+        TerrainChunk* chunk = p.second;
+
+        if (chunk->needUpdate)
+        {
+            chunk->renderer->mesh->createVAO();
+            chunk->needUpdate = false;
+        }
+    }
+}
+
+
+GameObject* TerrainManager::createTerrainChunk(glm::vec3 position) {
 
 	// std::cerr << "Attention : bricolage temporaire sur les id dans TerrainManager::createTerrainChunk !\n";
 	static size_t id = 10000;
@@ -62,7 +171,7 @@ GameObject* TerrainManager::createTerrainChunk(glm::vec3 position) const{
     			chunk->addComponent<Mesh*>(new Mesh());
     			chunk->addComponent<Material*>(new Lambertian());
     			chunk->addComponent<MeshRenderer*>(new MeshRenderer());
-    			chunk->addComponent<TerrainChunk*>(new TerrainChunk(getChunkSize()));
+    			chunk->addComponent<TerrainChunk*>(new TerrainChunk(getChunkSize(), this));
 
 	id++;
 
@@ -77,7 +186,11 @@ glm::ivec3 TerrainManager::toChunkGridCoord(glm::vec3 world_coord) const {
     return glm::ivec3(coord);
 }
 
-glm::uvec3 TerrainManager::toChunkCoord(glm::vec3 world_coord) const {
+glm::vec3 TerrainManager::toWorldGridCoord(glm::ivec3 chunk_grid_coord) const {
+    return glm::vec3(chunk_grid_coord) * glm::vec3(getChunkSize());
+}
+
+glm::uvec3 TerrainManager::toVoxelCoord(glm::vec3 world_coord) const {
     return glm::uvec3(
         world_coord.x < 0 ? (getChunkSize() - 1) - (size_t(abs(world_coord.x)) % getChunkSize()) : size_t(world_coord.x) % getChunkSize(),
         world_coord.y < 0 ? (getChunkSize() - 1) - (size_t(abs(world_coord.y)) % getChunkSize()) : size_t(world_coord.y) % getChunkSize(),
@@ -103,8 +216,8 @@ Voxel TerrainManager::getVoxelAt(glm::vec3 world_coord) {
     TerrainChunk* chunk = getChunkAt(world_coord);
     if (chunk != nullptr)
     {
-        glm::uvec3 chunk_coord = toChunkCoord(world_coord);
-        return chunk->voxels(chunk_coord.x, chunk_coord.y, chunk_coord.z);
+        glm::uvec3 voxel = toVoxelCoord(world_coord);
+        return chunk->voxels(voxel.x, voxel.y, voxel.z);
     }
     else
     {
@@ -117,8 +230,9 @@ void  TerrainManager::setVoxelAt(glm::vec3 world_coord, Voxel v) {
     
     if (chunk != nullptr)
     {
-        glm::uvec3 chunk_coord = toChunkCoord(world_coord);
-        chunk->voxels(chunk_coord.x, chunk_coord.y, chunk_coord.z) = v;
+        glm::uvec3 voxel = toVoxelCoord(world_coord);
+        chunk->voxels(voxel.x, voxel.y, voxel.z) = v;
+        std::cerr << "set\n";
     }
 
 }

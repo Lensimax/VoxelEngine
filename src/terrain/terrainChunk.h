@@ -9,6 +9,8 @@
 #include "../components/component.h"
 #include "../components/meshRenderer.h"
 
+class TerrainManager;
+
 class TerrainChunk : public Component {
 
 public:
@@ -17,10 +19,11 @@ public:
 
 	CubicArray<Voxel> voxels;
 	MeshRenderer* renderer = nullptr;
+	bool needUpdate = true;
 
 	/// Constructors
 
-	TerrainChunk(size_t cubic_size);
+	TerrainChunk(size_t cubic_size, TerrainManager* terrain);
 	// ~TerrainChunk();
 
 	/// Overrides
@@ -31,10 +34,10 @@ public:
 
 	/// Modificators
 
-	void generate(); // regenère le chunk en fonction de ça position dans le monde
+	void generate(); // initialize le chunk en fonction de sa position dans le monde
 	void calculateMesh();
 	void addCubeFaces(const std::array<bool, 6>& surrounding, size_t x, size_t y, size_t z) const;
-
+	
 	/// Accessors
 
 	// Renvoie 6 booleen correspondant à la presence ou non des 6 voisins du voxel (x, y, z)
@@ -43,6 +46,10 @@ public:
 	/// Statics
 
 	static size_t getHeightAt(size_t chunk_size, float x, float z);
+
+private:
+
+	TerrainManager* m_terrain = nullptr;
 };
 
 #endif

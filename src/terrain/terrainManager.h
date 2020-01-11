@@ -1,8 +1,32 @@
 #ifndef _TERRAIN_MANAGER_H_
 #define _TERRAIN_MANAGER_H_
 
+#include <map>
+
 #include "terrainChunk.h"
 #include "../engineClass/gameObject.h"
+
+auto ivec3_comp = [](const glm::ivec3& v1, const glm::ivec3& v2)
+{
+	if (v1.x < v2.x)
+	{
+		return true;
+	}
+	else if (v1.x == v2.x)
+	{
+		if (v1.y < v2.y)
+		{
+			return true;
+		}
+		else if (v1.y == v2.y)
+		{
+			if (v1.z < v2.z){
+				return true;
+			}
+		}
+	}
+	return false;
+};
 
 class TerrainManager : public Component {
 
@@ -21,16 +45,20 @@ public:
 	/// Factory
 
 	// Alloue un nouveau chunk
-	GameObject* createTerrainChunk(glm::vec3 position) const;
+	GameObject* createTerrainChunk(glm::vec3 position);
 
 	/// Modificators
 
-	void generateAround(glm::vec3 position);
+	void createChunksAround(glm::vec3 world_coord);
+	void manageChunksAround(glm::vec3 world_coord); // managechunks_around
+	void updateChunks();
 
 	/// Accessors
 
-	glm::ivec3 toChunkGridCoord(glm::vec3 world_coord) const;
-	glm::uvec3 toChunkCoord(glm::vec3 world_coord) const;
+	glm::ivec3 toChunkGridCoord(glm::vec3 world_coord)       const;
+	glm::vec3  toWorldGridCoord(glm::ivec3 chunk_grid_coord) const;
+
+	glm::uvec3 toVoxelCoord(glm::vec3 world_coord) const;
 
 	TerrainChunk* getPlayerChunk();
 	TerrainChunk* getChunkAt(glm::vec3 world_coord); 
@@ -50,6 +78,8 @@ private:
 	size_t m_terrain_size;
 	Transform* m_player_transform = nullptr;
 	glm::ivec3 m_oldChunkGridCoord;
+
+	std::map<glm::ivec3, TerrainChunk*, decltype(ivec3_comp)> m_grid_to_chunk_map;
 };
 
 #endif

@@ -26,6 +26,7 @@ public:
 
 
     void setGameObject(GameObject * obj){m_gameobject = obj;}
+    GameObject* getGameObject(){return m_gameobject;}
 
     bool m_active = true;
 
