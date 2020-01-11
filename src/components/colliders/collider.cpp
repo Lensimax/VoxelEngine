@@ -28,6 +28,7 @@
 
 Collider::Collider(glm::vec3 box) : m_collidingBox(box), m_showCollidingBox(true), m_showCheckCollision(true) {
     setName("Collider");
+    m_targetHitPoint = glm::vec3(0);
 }
 
 Collider::~Collider() {
@@ -140,6 +141,25 @@ void Collider::physicsUpdate() {
         }
     }
 
+    /// TEST
+    raycast();
+
+}
+
+void Collider::raycast(){
+    glm::vec3 m_targetHitPoint = m_gameobject->getTransform()->getPosition();
+    glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
+    float dx = glm::cos(rotation.y);
+    float dz = glm::sin(rotation.y);
+
+    float dxx = glm::cos(M_PI - rotation.y);
+    float dzx = glm::sin(M_PI - rotation.y);
+
+    const float length = 1.0f;
+
+    m_targetHitPoint.z += length * dx;
+    m_targetHitPoint.x += length * dz;
+    
 }
 
 void Collider::createUI() {
@@ -208,7 +228,7 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
 
         // Intersection with ground
         // glm::vec3 voxel1 = m_terrain->toVoxelWorldCoord(m_boxMin + glm::vec3(-1,0,0));
-        glm::vec3 voxelBottom1 = m_terrain->toVoxelWorldCoord(m_boxMin);
+        /*glm::vec3 voxelBottom1 = m_terrain->toVoxelWorldCoord(m_boxMin);
         glm::vec3 voxelBottom2 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMin.x, m_boxMin.y, m_boxMax.z));
         glm::vec3 voxelBottom3 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMax.z));
         glm::vec3 voxelBottom4 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMin.z));
@@ -229,11 +249,17 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
         drawAABB(voxel2, voxel2+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMax.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
         drawAABB(voxel3, voxel3+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMin.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
         drawAABB(voxel4, voxel4+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMin.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
-    
+        */
 
+       glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &glm::vec4(1,0,1,1)[0]);
+       glm::vec3 array[2];
+       array[0] = m_gameobject->getTransform()->getPosition();
+       array[1] = m_targetHitPoint; 
+       DrawDebug::drawArrayPosition(2, (float*)&array[0], GL_LINES);
     }
 
     drawAABB(m_boxMin, m_boxMax, shader);
+
 
     glUseProgram(0);
 

@@ -29,6 +29,7 @@ private:
     void updateCollidingBox();
     void computeCollisionWithGround();
     glm::vec3 computeCollision();
+    void raycast();
 
     void drawAABB(glm::vec3 min, glm::vec3 max, Shader shader, glm::vec4 color = glm::vec4(1,0,0,1));
 
@@ -40,6 +41,8 @@ private:
     glm::vec3 m_boxMin, m_boxMax;
 
     Rigidbody *m_rb;
+
+    glm::vec3 m_targetHitPoint;
 
     bool m_isGrounded;  
 };
