@@ -26,7 +26,7 @@ private:
     bool intersectAccordingToMove(glm::vec3 boxMin, glm::vec3 boxMax);
     void updateCollidingBox();
     void computeCollisionWithGround();
-    bool computeCollision();
+    glm::vec3 computeCollision();
 
     void drawAABB(glm::vec3 min, glm::vec3 max, Shader shader, glm::vec4 color = glm::vec4(1,0,0,1));
 
@@ -39,10 +39,7 @@ private:
 
     glm::vec3 m_boxMin, m_boxMax;
 
-    bool m_isGrounded;
-
-    glm::vec3 m_move;
-    float m_speed;    
+    bool m_isGrounded;  
 };
 
 #endif
