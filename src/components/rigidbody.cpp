@@ -8,30 +8,46 @@
 #define M_PI 3.14159265359
 
 
-Rigidbody::Rigidbody() : m_speed(0.5f), m_move(glm::vec3(0)), m_useGravity(true), m_mass(0.15f) {
+Rigidbody::Rigidbody() : m_speed(0.5f), m_vectorMove(glm::vec3(0)), m_useGravity(true), m_mass(0.15f) {
     setName("Rigidbody");
 }
 
 void Rigidbody::inputUpdate() {
 
 
-    m_move.x = 0.0f; m_move.z = 0.0f;
+    glm::vec3 input = glm::vec3(0.0f);
 
     if(ImGui::IsKeyPressed('W')){
-        m_move.z = 1.0f;
+        input.z = 1.0f;
     }
     if(ImGui::IsKeyPressed('S')){
-        m_move.z = -1.0f;
+        input.z = -1.0f;
     }
     if(ImGui::IsKeyPressed('A')){
-        m_move.x = -1.0f;
+        input.x = -1.0f;
     }
     if(ImGui::IsKeyPressed('D')){
-        m_move.x = 1.0f;
+        input.x = 1.0f;
     }
     if(ImGui::IsKeyPressed(' ')) { // barre espace
-        m_move.y = 1.0f;
+        input.y = 1.0f;
     }
+
+    glm::vec3 pos = m_gameobject->getTransform()->getPosition();
+    glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
+    float dx = glm::cos(rotation.y);
+    float dz = glm::sin(rotation.y);
+
+    float dxx = glm::cos(M_PI - rotation.y);
+    float dzx = glm::sin(M_PI - rotation.y);
+
+    pos.z += input.z * dx;
+    pos.x += input.z * dz;
+    pos.z += input.x * dzx;
+    pos.x += input.x * dxx;
+    pos.y += input.y;
+
+    m_vectorMove = pos - m_gameobject->getTransform()->getPosition(); 
 }
 
 void Rigidbody::update() {
@@ -39,27 +55,17 @@ void Rigidbody::update() {
 
 
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
-    glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
 
-    float dx = glm::cos(rotation.y);
-    float dz = glm::sin(rotation.y);
-
-    float dxx = glm::cos(M_PI - rotation.y);
-    float dzx = glm::sin(M_PI - rotation.y);
 
     computeGravity();
 
     assert(global_limitFramerate != 0.0f);
     float deltaTime = ImGui::GetIO().Framerate / global_limitFramerate;
-    m_move *= deltaTime*m_speed;
+    m_vectorMove *= deltaTime*m_speed;
 
-    pos.z += m_move.z * dx;
-    pos.x += m_move.z * dz;
-    pos.z += m_move.x * dzx;
-    pos.x += m_move.x * dxx;
-    pos.y += m_move.y;
+    
 
-    m_gameobject->m_transform->setPosition(pos); 
+    m_gameobject->m_transform->setPosition(pos+m_vectorMove); 
 
 }
 
@@ -76,12 +82,12 @@ void Rigidbody::createUI() {
 void Rigidbody::computeGravity() {
     if(m_useGravity){
 
-        m_move.y = -m_mass;
+        m_vectorMove.y = -m_mass;
 
         Collider* collider = m_gameobject->getComponent<Collider*>();
         if(collider != nullptr && collider->getActive()){
             if(collider->isGrounded()){
-                m_move.y = 0.0f;
+                m_vectorMove.y = 0.0f;
             }
         }
     }

@@ -37,7 +37,10 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,13.5f,33.7f)));
+
+    
+
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,32.5f,33.7f)));
     player->addComponent<Mesh*>(new MeshCube(0.5f));
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
@@ -46,15 +49,18 @@ Scene::Scene(){
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     //player->addComponent<GroundFollow*>(new GroundFollow());
     player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
+    player->getComponent<FireProjectiles*>()->setScene(this);
     player->getComponent<FireProjectiles*>()->setActive(false);
     player->addComponent<DebugTransform*>(new DebugTransform());
     player->addComponent<Collider*>(new Collider());
     objectsEngine.push_back(player);
 
-  
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
     terrain->addComponent<TerrainManager*>(new TerrainManager(32, 5, player->getTransform()));
     objectsEngine.push_back(terrain);
+  
+
+    player->getComponent<Collider*>()->setTerrain(terrain->getComponent<TerrainManager*>());
 
     GameObject *origin = new GameObject(addNewId(), "Origin", new Transform(glm::vec3()));
     origin->addComponent<Mesh*>(new MeshCube(0.5f));
@@ -80,8 +86,8 @@ Scene::Scene(){
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     // player->getComponent<ThirdPersonController*>()->setActive(false);
     // player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
-    player->getComponent<FireProjectiles*>()->setScene(this);
-    player->getComponent<Collider*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+    
+    
     objectsEngine.push_back(camera);
 }
 

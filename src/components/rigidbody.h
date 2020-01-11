@@ -30,15 +30,16 @@ public:
 
     float getSpeed(){return m_speed;}
     float getMass(){return m_mass;}
+    glm::vec3 getMove(){return m_vectorMove;}
+    void setMove(glm::vec3 move){m_vectorMove = move;}
 
 private:
     void computeGravity();
 
     float m_speed, m_mass;
-    glm::vec3 m_move;
     bool m_useGravity;
 
-
+    glm::vec3 m_vectorMove;
 };
 
 #endif

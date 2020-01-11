@@ -26,20 +26,23 @@ private:
     bool intersectAccordingToMove(glm::vec3 boxMin, glm::vec3 boxMax);
     void updateCollidingBox();
     void computeCollisionWithGround();
+    bool computeCollision();
 
     void drawAABB(glm::vec3 min, glm::vec3 max, Shader shader, glm::vec4 color = glm::vec4(1,0,0,1));
 
     TerrainManager *m_terrain = nullptr;
 
     glm::vec3 m_collidingBox;
-    bool m_showCollidingBox;
+    bool m_showCollidingBox, m_showCheckCollision;
 
     Voxel m_bottom, m_top, m_left, m_right, m_front, m_back;
 
     glm::vec3 m_boxMin, m_boxMax;
 
     bool m_isGrounded;
-    
+
+    glm::vec3 m_move;
+    float m_speed;    
 };
 
 #endif
