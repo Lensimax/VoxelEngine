@@ -3,10 +3,12 @@
 
 #include <iostream>
 
+#include "colliders/collider.h"
+
 #define M_PI 3.14159265359
 
 
-Rigidbody::Rigidbody() : m_speed(2.0f), m_move(glm::vec3(0)) {
+Rigidbody::Rigidbody() : m_speed(0.5f), m_move(glm::vec3(0)), m_useGravity(false), m_mass(0.15f) {
     setName("Rigidbody");
 }
 
@@ -51,8 +53,6 @@ void Rigidbody::update() {
     float deltaTime = ImGui::GetIO().Framerate / global_limitFramerate;
     m_move *= deltaTime*m_speed;
 
-    std::cout << deltaTime << "\n";
-
     pos.z += m_move.z * dx;
     pos.x += m_move.z * dz;
     pos.z += m_move.x * dzx;
@@ -65,10 +65,24 @@ void Rigidbody::update() {
 
 void Rigidbody::createUI() {
     ImGui::Text("Speed : ");
-    ImGui::DragFloat("##speed", &m_speed, 0.01f,0.01f, 1000.f); 
+    ImGui::DragFloat("##speed", &m_speed, 0.01f,0.01f, 1000.f);
+    ImGui::Text("Mass : ");
+    ImGui::DragFloat("##mass", &m_mass, 0.01f,0.01f, 1000.f);
+    ImGui::Text("Use gravity: "); ImGui::SameLine();
+    ImGui::Checkbox("##useGravity", &m_useGravity);
 }
 
 
 void Rigidbody::computeGravity() {
-    
+    if(m_useGravity){
+
+        m_move.y = -m_mass;
+
+        Collider* collider = m_gameobject->getComponent<Collider*>();
+        if(collider != nullptr){
+            if(collider->isGrounded()){
+                m_move.y = 0.0f;
+            }
+        }
+    }
 }
