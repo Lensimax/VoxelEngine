@@ -129,6 +129,12 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("640*480")) { if(m_window != NULL) glfwSetWindowSize(m_window, 640, 480); }
             if (ImGui::MenuItem("1280*720")) { if(m_window != NULL) glfwSetWindowSize(m_window, 1280, 720); }
             if (ImGui::MenuItem("1920*1080")) { if(m_window != NULL) glfwSetWindowSize(m_window, 1920, 1080); }
+            if (ImGui::BeginMenu("Limit FPS ")){
+                extern float global_limitFramerate;
+                if (ImGui::MenuItem("30 FPS")) { global_limitFramerate = 30.0f; }
+                if (ImGui::MenuItem("60 FPS")) { global_limitFramerate = 60.0f; }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
 
