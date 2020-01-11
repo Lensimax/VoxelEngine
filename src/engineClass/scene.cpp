@@ -15,7 +15,7 @@
 #include "../components/axisRenderer.h"
 #include "../terrain/terrainManager.h"
 
-#include "../components/controller.h"
+#include "../components/rigidbody.h"
 #include "../components/cameraProjective.h"
 #include "../components/cameraRenderer.h"
 #include "../components/cameraFollow.h"
@@ -41,7 +41,7 @@ Scene::Scene(){
     player->addComponent<Mesh*>(new MeshCube(0.5f));
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
-    player->addComponent<Controller*>(new Controller());
+    player->addComponent<Rigidbody*>(new Rigidbody());
     player->addComponent<AxisRenderer*>(new AxisRenderer());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     //player->addComponent<GroundFollow*>(new GroundFollow());

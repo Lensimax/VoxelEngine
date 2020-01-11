@@ -100,6 +100,7 @@ private:
     bool m_firstFramePassed;
 
     bool m_playMode;
+    
 
 };
 

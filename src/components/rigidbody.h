@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef RIGIDBODY_H
+#define RIGIDBODY_H
 
 #include "component.h"
 #include "../engineClass/gameObject.h"
@@ -18,17 +18,18 @@
 #include <imgui_impl_opengl3.h>
 
 
-class Controller : public Component {
+class Rigidbody : public Component {
 
 public:
-    Controller();
+    Rigidbody();
 
-
+    void inputUpdate() override;
     void update() override;
 
     void createUI() override;
 
-    float m_speed = 0.2f;
+    float m_speed;
+    glm::vec3 m_move;
 
 private:
 
