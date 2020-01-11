@@ -146,17 +146,70 @@ void Collider::physicsUpdate() {
 
 }
 
+glm::vec2 intersectQuadLine(glm::vec2 A, glm::vec2 B, glm::vec2 Rect0, glm::vec2 Rect1){
+    
+    glm::vec2 AB = B - A;
+    glm::vec2 interPoint;
+
+    if (AB.x < 0) {
+        if (AB.y < 0) {
+            if ((AB.x * (Rect0.y - A.y) - AB.y * (Rect0.x - A.x)) > 0) {
+                interPoint.x = Rect0.x;
+                interPoint.y = ((interPoint.x - A.x) * AB.y / AB.x) + A.y;
+            } else {
+                interPoint.y = Rect0.y;
+                interPoint.x = ((interPoint.y - A.y) * AB.x / AB.y) + A.x;
+            }
+        }
+        else {
+            if ((AB.x * (Rect1.y - A.y) - AB.y * (Rect0.x - A.x)) < 0) {
+                interPoint.x = Rect0.x;
+                interPoint.y = ((interPoint.x - A.x) * AB.y / AB.x) + A.y;
+            } else {
+                interPoint.y = Rect1.y;
+                interPoint.x = ((interPoint.y - A.y) * AB.x / AB.y) + A.x;
+            }
+        }
+    }
+    else {
+        if (AB.y < 0) {
+            if ((AB.x * (Rect0.y - A.y) - AB.y * (Rect1.x - A.x)) < 0) {
+                interPoint.x = Rect1.x;
+                interPoint.y = ((interPoint.x - A.x) * AB.y / AB.x) + A.y;
+            } else {
+                interPoint.y = Rect0.y;
+                interPoint.x = ((interPoint.y - A.y) * AB.x / AB.y) + A.x;
+            }
+        }
+        else {
+            if ((AB.x * (Rect1.y - A.y) - AB.y * (Rect1.x - A.x)) > 0) {
+                interPoint.x = Rect1.x;
+                interPoint.y = ((interPoint.x - A.x) * AB.y / AB.x) + A.y;
+            } else {
+                interPoint.y = Rect1.y;
+                interPoint.x = ((interPoint.y - A.y) * AB.x / AB.y) + A.x;
+            }
+        }
+    }
+    return interPoint;
+}
+
+
 void Collider::raycast(){
     m_targetHitPoint = m_gameobject->getTransform()->getPosition();
     glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
     float dx = glm::cos(rotation.y);
     float dz = glm::sin(rotation.y);
 
-    const float length = 3.0f;
+    const float length = 1.0f;
 
     m_targetHitPoint.z += length * dx;
     m_targetHitPoint.x += length * dz;
     
+    if(m_terrain->getVoxelAt(m_targetHitPoint) == Voxel::Full){ // collision
+
+    }
+
 }
 
 void Collider::createUI() {
