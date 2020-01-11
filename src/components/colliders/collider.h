@@ -1,5 +1,6 @@
 #ifndef COLLIDER_H
 #define COLLIDER_H
+#include "../rigidbody.h"
 
 #include "../component.h"
 #include "../../terrain/terrainManager.h"
@@ -12,6 +13,7 @@ public:
     Collider(glm::vec3 box = glm::vec3(0.6f));
     ~Collider();
 
+    void start() override;
     void physicsUpdate() override;
     void createUI() override;
 
@@ -35,9 +37,9 @@ private:
     glm::vec3 m_collidingBox;
     bool m_showCollidingBox, m_showCheckCollision;
 
-    Voxel m_bottom, m_top, m_left, m_right, m_front, m_back;
-
     glm::vec3 m_boxMin, m_boxMax;
+
+    Rigidbody *m_rb;
 
     bool m_isGrounded;  
 };

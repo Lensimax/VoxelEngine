@@ -57,16 +57,23 @@ void Rigidbody::update() {
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
 
 
+    // printf("Avant Player Y: %f\n", m_gameobject->getTransform()->getPosition().y);
     computeGravity();
+
+    m_vectorMove.x *= m_speed;
+    m_vectorMove.z *= m_speed;
+
 
     assert(global_limitFramerate != 0.0f);
     float deltaTime = ImGui::GetIO().Framerate / global_limitFramerate;
-    m_vectorMove *= deltaTime*m_speed;
+    m_vectorMove *= deltaTime;
+    printf("Delta Y: %f\n", deltaTime);
 
     
 
     m_gameobject->m_transform->setPosition(pos+m_vectorMove); 
 
+    // printf("Après Player Y: %f\n", m_gameobject->getTransform()->getPosition().y);
 }
 
 void Rigidbody::createUI() {
@@ -82,7 +89,7 @@ void Rigidbody::createUI() {
 void Rigidbody::computeGravity() {
     if(m_useGravity){
 
-        m_vectorMove.y = -m_mass;
+        m_vectorMove.y = -m_mass*m_gameobject->getTransform()->getScale().y;
 
         Collider* collider = m_gameobject->getComponent<Collider*>();
         if(collider != nullptr && collider->getActive()){

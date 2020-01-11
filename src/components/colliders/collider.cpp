@@ -2,7 +2,6 @@
 
 
 #include "../../engineClass/gameObject.h"
-#include "../rigidbody.h"
 
 #include <imgui.h>
 #include <drawDebug.h>
@@ -29,11 +28,16 @@
 
 Collider::Collider(glm::vec3 box) : m_collidingBox(box), m_showCollidingBox(true), m_showCheckCollision(true) {
     setName("Collider");
-    computeCollisionWithGround();
 }
 
 Collider::~Collider() {
     
+}
+
+void Collider::start(){
+    m_rb = m_gameobject->getComponent<Rigidbody*>();
+    assert(m_rb != nullptr);
+    computeCollisionWithGround();
 }
 
 bool Collider::intersect(glm::vec3 boxMin, glm::vec3 boxMax) {
@@ -47,21 +51,19 @@ bool Collider::intersect(glm::vec3 box1Min, glm::vec3 box1Max, glm::vec3 box2Min
 }
 
 bool Collider::intersectAccordingToMove(glm::vec3 boxMin, glm::vec3 boxMax) {
-    Rigidbody *rb = m_gameobject->getComponent<Rigidbody*>();
-    if(rb != nullptr){
-        glm::vec3 objMin = m_boxMin;
-        objMin.y -= rb->getMass();
-        glm::vec3 objMax = m_boxMax;
-        return intersect(objMin, objMax, boxMin, boxMax);
-    } else {
-        return false;
-    }
+    assert(m_rb != nullptr);
+    glm::vec3 objMin = m_boxMin;
+    objMin.y -= m_rb->getMass();
+    glm::vec3 objMax = m_boxMax;
+    return intersect(objMin, objMax, boxMin, boxMax);
     
 }
 
 
 void Collider::computeCollisionWithGround(){
     if(m_terrain != nullptr){
+        // m_boxMin -= m_rb->getMass()*2.0f;
+
         if(m_terrain->getVoxelAt(m_boxMin) == Voxel::Full){
             m_isGrounded = true; return;
         }
@@ -88,11 +90,12 @@ void Collider::updateCollidingBox(){
 
     m_boxMin += position; m_boxMax += position;
 
-    
-    Rigidbody *rb = m_gameobject->getComponent<Rigidbody*>();
-    if(rb != nullptr && rb->getActive()){
-        glm::vec3 move = rb->getMove();
-        move *= rb->getSpeed();
+    assert(m_rb != nullptr);
+    if(m_rb->getActive()){
+        glm::vec3 move = m_rb->getMove();
+        // move *= m_rb->getSpeed();
+        move.x *=m_rb->getSpeed();
+        move.z *=m_rb->getSpeed();
         if(move.x > 0){ m_boxMax.x += move.x;}
         else {m_boxMin.x += move.x;}
         if(move.y > 0){ m_boxMax.y += move.y;}
@@ -111,7 +114,7 @@ glm::vec3 Collider::computeCollision(){
     if(m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMax.z)) == Voxel::Full){
         return glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMax.z);
     }
-    if(m_terrain->getVoxelAt(glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMax.z)) == Voxel::Full){
+    if(m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMin.z)) == Voxel::Full){
         return glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMax.z);
     }
     if(m_terrain->getVoxelAt(glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMin.z)) == Voxel::Full){
@@ -121,29 +124,22 @@ glm::vec3 Collider::computeCollision(){
 }
 
 void Collider::physicsUpdate() {
+    assert(m_rb != nullptr);
     updateCollidingBox();
     if(m_terrain == nullptr){ return;}
 
-    computeCollisionWithGround();
+    if(m_rb->getActive() && m_rb->useGravity()){
+        computeCollisionWithGround();
+    }
 
     if(computeCollision() != glm::vec3(0)){
-        Rigidbody *rb = m_gameobject->getComponent<Rigidbody*>();
-        if(rb != nullptr && rb->getActive()){
-            glm::vec3 move = rb->getMove();
+        if(m_rb != nullptr && m_rb->getActive()){
+            glm::vec3 move = m_rb->getMove();
             move.x = 0.0f; move.z = 0.0f;
-            rb->setMove(move);
+            m_rb->setMove(move);
         }
     }
 
-/*
-    m_top = m_terrain->getVoxelAt(glm::vec3(position.x, position.y+boxMax.y, position.z));
-    m_bottom = m_terrain->getVoxelAt(glm::vec3(position.x, position.y+boxMin.y, position.z));
-    m_right = m_terrain->getVoxelAt(glm::vec3(position.x+boxMax.x, position.y, position.z));
-    m_left = m_terrain->getVoxelAt(glm::vec3(position.x+boxMin.x, position.y, position.z));
-    m_front = m_terrain->getVoxelAt(glm::vec3(position.x, position.y, position.z+box.z));
-    m_back = m_terrain->getVoxelAt(glm::vec3(position.x, position.y, position.z-box.z));
-
-*/
 }
 
 void Collider::createUI() {
@@ -163,14 +159,6 @@ void Collider::createUI() {
 
         ImGui::Text("chunk coord : (%f, %f, %f)", chunk_coord.x, chunk_coord.y, chunk_coord.z);
         ImGui::Text("voxel coord : (%f, %f, %f)", voxelCoordGrid.x, voxelCoordGrid.y, voxelCoordGrid.z);
-
-
-        /*displayImGuiVoxel(m_top, "Top");
-        displayImGuiVoxel(m_bottom, "Bottom");
-        displayImGuiVoxel(m_left, "Left");
-        displayImGuiVoxel(m_right, "Right");
-        displayImGuiVoxel(m_back, "Back");
-        displayImGuiVoxel(m_top, "Top");*/
 
     }
 
@@ -218,11 +206,6 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
     // affichage des voxels à check pour les collisions
     if(m_terrain != nullptr && m_showCheckCollision){
 
-        // Test intersect
-        // glm::vec3 voxel = glm::vec3(4.0f, 13.0f, 35.0f);
-        // drawAABB(voxel, voxel+1.0f, shader, intersect(voxel, voxel+1.0f) ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
-
-
         // Intersection with ground
         // glm::vec3 voxel1 = m_terrain->toVoxelWorldCoord(m_boxMin + glm::vec3(-1,0,0));
         glm::vec3 voxelBottom1 = m_terrain->toVoxelWorldCoord(m_boxMin);
@@ -239,12 +222,12 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
         // Intersection pour le mouvement du joueur
         glm::vec3 voxel1 = m_terrain->toVoxelWorldCoord(m_boxMax);
         glm::vec3 voxel2 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMax.z));
-        glm::vec3 voxel3 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMax.z));
+        glm::vec3 voxel3 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMin.z));
         glm::vec3 voxel4 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMin.z));
 
         drawAABB(voxel1, voxel1+1.0f, shader, m_terrain->getVoxelAt(m_boxMax) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
         drawAABB(voxel2, voxel2+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMax.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
-        drawAABB(voxel3, voxel3+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMax.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
+        drawAABB(voxel3, voxel3+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMin.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
         drawAABB(voxel4, voxel4+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMin.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
     
 

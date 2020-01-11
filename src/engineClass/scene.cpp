@@ -40,7 +40,7 @@ Scene::Scene(){
 
     
 
-    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,32.5f,33.7f)));
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,15.0f,33.7f)));
     player->addComponent<Mesh*>(new MeshCube(0.5f));
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
@@ -52,7 +52,7 @@ Scene::Scene(){
     player->getComponent<FireProjectiles*>()->setScene(this);
     player->getComponent<FireProjectiles*>()->setActive(false);
     player->addComponent<DebugTransform*>(new DebugTransform());
-    player->addComponent<Collider*>(new Collider());
+    player->addComponent<Collider*>(new Collider(glm::vec3(0.6, 0.9,0.6)));
     objectsEngine.push_back(player);
 
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
@@ -287,7 +287,7 @@ void Scene::togglePause(){
 
 
 void Scene::loadDefaultScene(){
-    m_pause = false;
+    m_pause = true;
     m_idObject = 0;
     objectsEngine = std::vector<GameObject*>();
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 128, 0)));

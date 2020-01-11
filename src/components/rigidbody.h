@@ -32,6 +32,7 @@ public:
     float getMass(){return m_mass;}
     glm::vec3 getMove(){return m_vectorMove;}
     void setMove(glm::vec3 move){m_vectorMove = move;}
+    bool useGravity(){return m_useGravity;}
 
 private:
     void computeGravity();
