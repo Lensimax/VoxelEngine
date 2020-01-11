@@ -12,7 +12,8 @@ void TerrainManager::start() {
 
     // Création des chunks autour du joueur
 
-    createChunksAround(getPlayerCoord());
+    manageChunksAround(getPlayerCoord());
+    // createChunksAround(getPlayerCoord());
 
     updateChunks();
 }
@@ -71,11 +72,10 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
     glm::ivec3 grid_offset(getTerrainSize() / 2, 0, getTerrainSize() / 2);
     glm::ivec3 min_grid_coord = current_grid_coord - grid_offset;
 
+
+    // Création des chunks necessaire autour de la position world_coord (sans doublons)
+    
     std::vector<GameObject*> to_keep;
-
-    // Création des chunks autour de la position world_coord qui n'éxistent pas déja
-
-    // m_grid_to_chunk_map.clear();
 
     for (size_t i = 0 ; i < getTerrainSize() ; ++i)
     {
@@ -101,6 +101,24 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
                 m_grid_to_chunk_map[chunk_grid_coord] = chunk->getComponent<TerrainChunk*>();
                 to_keep.push_back(chunk);
             }
+        }
+    }
+
+    // Efface les Chunks trop loin de la position world_coord
+
+    for (auto& p : m_grid_to_chunk_map)
+    {
+        TerrainChunk* terrain_chunk = p.second;
+        GameObject* go = terrain_chunk->getGameObject();
+
+        auto res = find(to_keep.begin(), to_keep.end(), go);
+
+        if (res == to_keep.end()) // non trouvé
+        {
+            glm::ivec3 chunk_grid_coord = toChunkGridCoord(go->getTransform()->getPosition());
+            m_grid_to_chunk_map.erase(chunk_grid_coord);
+            // std::cerr << "to_remove : " << go->getID() << '\n';        
+            m_gameobject->removeChild(go->getID());
         }
     }
 }
