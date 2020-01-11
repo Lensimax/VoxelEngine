@@ -172,6 +172,9 @@ int main(int, char**)
 
         /// UPDATE
         inputManager.update();
+
+        scene->physicsUpdate();
+
         scene->update();
         renderer->update();
         // std::thread threadSceneUpdate(&Scene::update, scene);

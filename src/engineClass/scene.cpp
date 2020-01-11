@@ -37,7 +37,7 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(0,17.5f,0)));
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,48.5f,33.7f)));
     player->addComponent<Mesh*>(new MeshCube(0.5f));
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());

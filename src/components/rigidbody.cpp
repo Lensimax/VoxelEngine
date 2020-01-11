@@ -8,7 +8,7 @@
 #define M_PI 3.14159265359
 
 
-Rigidbody::Rigidbody() : m_speed(0.5f), m_move(glm::vec3(0)), m_useGravity(false), m_mass(0.15f) {
+Rigidbody::Rigidbody() : m_speed(0.5f), m_move(glm::vec3(0)), m_useGravity(true), m_mass(0.15f) {
     setName("Rigidbody");
 }
 
