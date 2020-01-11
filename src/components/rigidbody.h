@@ -28,6 +28,8 @@ public:
 
     void createUI() override;
 
+    float getSpeed(){return m_speed;}
+    float getMass(){return m_mass;}
 
 private:
     void computeGravity();

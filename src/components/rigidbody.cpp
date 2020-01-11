@@ -79,7 +79,7 @@ void Rigidbody::computeGravity() {
         m_move.y = -m_mass;
 
         Collider* collider = m_gameobject->getComponent<Collider*>();
-        if(collider != nullptr){
+        if(collider != nullptr && collider->getActive()){
             if(collider->isGrounded()){
                 m_move.y = 0.0f;
             }

@@ -27,6 +27,7 @@
 
 
 Collider::Collider(glm::vec3 box) : m_collidingBox(box), m_showCollidingBox(true) {
+    
     setName("Collider");
 }
 
@@ -34,15 +35,24 @@ Collider::~Collider() {
     
 }
 
-void Collider::update() {
+bool Collider::intersect(glm::vec3 boxMin, glm::vec3 boxMax) {
+  return (m_boxMin.x <= boxMax.x && m_boxMax.x >= boxMin.x) &&
+         (m_boxMin.y <= boxMax.y && m_boxMax.y >= boxMin.y) &&
+         (m_boxMin.z <= boxMax.z && m_boxMax.z >= boxMin.z);
+}
+
+void Collider::physicsUpdate() {
     const glm::vec3 box = m_collidingBox*m_gameobject->getTransform()->getScale();
     glm::vec3 position = m_gameobject->getTransform()->getPosition();
+
     m_top = m_terrain->getVoxelAt(glm::vec3(position.x, position.y+box.y, position.z));
     m_bottom = m_terrain->getVoxelAt(glm::vec3(position.x, position.y-box.y, position.z));
     m_right = m_terrain->getVoxelAt(glm::vec3(position.x+box.x, position.y, position.z));
     m_left = m_terrain->getVoxelAt(glm::vec3(position.x-box.x, position.y, position.z));
     m_front = m_terrain->getVoxelAt(glm::vec3(position.x, position.y, position.z+box.z));
     m_back = m_terrain->getVoxelAt(glm::vec3(position.x, position.y, position.z-box.z));
+
+
 }
 
 void Collider::createUI() {
@@ -51,10 +61,6 @@ void Collider::createUI() {
 
     if(m_terrain != nullptr){
         glm::vec3 position = m_gameobject->getTransform()->getPosition();
-        ImGui::Text("Position: (%f, %f, %f)", position.x, position.y, position.z);
-
-        Voxel voxel = m_terrain->getVoxelAt(position);
-        displayImGuiVoxel(voxel, "test");
 
         displayImGuiVoxel(m_top, "Top");
         displayImGuiVoxel(m_bottom, "Bottom");
