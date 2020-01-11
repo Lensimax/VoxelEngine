@@ -22,6 +22,11 @@ public:
 private:
     void displayImGuiVoxel(Voxel voxel, const char message[]);
     bool intersect(glm::vec3 boxMin, glm::vec3 boxMax);
+    bool intersect(glm::vec3 box1Min, glm::vec3 box1Max, glm::vec3 box2Min, glm::vec3 box2Max);
+    bool intersectAccordingToMove(glm::vec3 boxMin, glm::vec3 boxMax);
+    void updateCollidingBox();
+
+    void drawAABB(glm::vec3 min, glm::vec3 max, Shader shader, glm::vec4 color = glm::vec4(1,0,0,1));
 
     TerrainManager *m_terrain = nullptr;
 

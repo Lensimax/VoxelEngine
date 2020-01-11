@@ -31,6 +31,8 @@ public:
 
 	glm::ivec3 toChunkGridCoord(glm::vec3 world_coord) const;
 	glm::uvec3 toChunkCoord(glm::vec3 world_coord) const;
+	glm::vec3 toVoxelCoordInChunk(glm::vec3 world_coord) const;
+	glm::vec3 toVoxelWorldCoord(glm::vec3 world_coord) const;
 
 	TerrainChunk* getPlayerChunk();
 	TerrainChunk* getChunkAt(glm::vec3 world_coord); 

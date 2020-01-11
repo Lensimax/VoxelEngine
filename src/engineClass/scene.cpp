@@ -37,7 +37,7 @@ Scene::Scene(){
 
     loadDefaultScene();
 
-    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,48.5f,33.7f)));
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,13.5f,33.7f)));
     player->addComponent<Mesh*>(new MeshCube(0.5f));
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
@@ -46,6 +46,7 @@ Scene::Scene(){
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     //player->addComponent<GroundFollow*>(new GroundFollow());
     player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
+    player->getComponent<FireProjectiles*>()->setActive(false);
     player->addComponent<DebugTransform*>(new DebugTransform());
     player->addComponent<Collider*>(new Collider());
     objectsEngine.push_back(player);
