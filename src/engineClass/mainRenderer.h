@@ -51,6 +51,8 @@ public:
     inline GLuint getEditorTextureID(){return m_editorTextureID;}
     inline GameObject *getCamera(){return m_camera;}
 
+    float global_limitFramerate = 60.f;
+
 private:
 
     void renderTheScene(Scene *scene, int width, int height);
@@ -100,7 +102,7 @@ private:
     bool m_firstFramePassed;
 
     bool m_playMode;
-    
+
 
 };
 

@@ -28,6 +28,10 @@ public:
 
     void createUI() override;
 
+
+private:
+    void computeGravity();
+
     float m_speed;
     glm::vec3 m_move;
 

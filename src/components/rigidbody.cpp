@@ -1,9 +1,10 @@
 #include "rigidbody.h"
+#include "../engineClass/mainRenderer.h"
 
 #define M_PI 3.14159265359
 
 
-Rigidbody::Rigidbody() : m_speed(2.0f), m_move(glm::vec3(0.0f)) {
+Rigidbody::Rigidbody() {
     setName("Rigidbody");
 }
 
@@ -30,6 +31,7 @@ void Rigidbody::inputUpdate() {
 }
 
 void Rigidbody::update() {
+    extern float global_limitFramerate;
 
 
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
@@ -41,7 +43,10 @@ void Rigidbody::update() {
     float dxx = glm::cos(M_PI - rotation.y);
     float dzx = glm::sin(M_PI - rotation.y);
 
-    float deltaTime = ImGui::GetIO().Framerate/1000.f;
+    computeGravity();
+
+
+    float deltaTime = ImGui::GetIO().Framerate/global_limitFramerate;
     m_move *= deltaTime*m_speed;
 
     pos.z += m_move.z * dx;
@@ -59,3 +64,7 @@ void Rigidbody::createUI() {
     ImGui::DragFloat("##speed", &m_speed, 0.01f,0.01f, 1000.f); 
 }
 
+
+void Rigidbody::computeGravity() {
+    
+}

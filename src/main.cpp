@@ -29,6 +29,7 @@
 #include "engineClass/mainRenderer.h"
 #include "engineClass/UI.h"
 #include "engineClass/InputManager.h"
+// #include "engineClass/var_global.h"
 
 #include <chrono>
 #include <thread>
@@ -41,7 +42,7 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-
+float global_limitFramerate;
 
 
 void display(int display_w, int display_h, MainRenderer *renderer, UI *ui){
@@ -158,8 +159,7 @@ int main(int, char**)
 
     int display_w, display_h;
     double lasttime = glfwGetTime();
-
-    float TARGET_FPS = 60.0f;
+    global_limitFramerate = 60.f;
 
     // Main loop
     while (!glfwWindowShouldClose(window)){
@@ -189,11 +189,11 @@ int main(int, char**)
         display(display_w, display_h, renderer, ui);
 
         // wait for refresh rate
-        while (glfwGetTime() < lasttime + 1.0/TARGET_FPS) {
+        while (glfwGetTime() < lasttime + 1.0/global_limitFramerate) {
             // sleep for x milliseconds
             std::this_thread::sleep_for(std::chrono::milliseconds(1));   
         }
-        lasttime += 1.0/TARGET_FPS;
+        lasttime += 1.0/global_limitFramerate;
 
         glfwSwapBuffers(window);
     }
