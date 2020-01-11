@@ -106,9 +106,10 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
 
     // Efface les Chunks trop loin de la position world_coord
 
-    for (auto& p : m_grid_to_chunk_map)
+
+    for (auto it = m_grid_to_chunk_map.cbegin(); it != m_grid_to_chunk_map.cend();)
     {
-        TerrainChunk* terrain_chunk = p.second;
+        TerrainChunk* terrain_chunk = it->second;
         GameObject* go = terrain_chunk->getGameObject();
 
         auto res = find(to_keep.begin(), to_keep.end(), go);
@@ -116,9 +117,11 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
         if (res == to_keep.end()) // non trouvé
         {
             glm::ivec3 chunk_grid_coord = toChunkGridCoord(go->getTransform()->getPosition());
-            m_grid_to_chunk_map.erase(chunk_grid_coord);
-            // std::cerr << "to_remove : " << go->getID() << '\n';        
+            m_grid_to_chunk_map.erase(it++);
             m_gameobject->removeChild(go->getID());
+        }
+        else {
+            ++it;
         }
     }
 }

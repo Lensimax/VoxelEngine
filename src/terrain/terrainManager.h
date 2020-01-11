@@ -2,11 +2,12 @@
 #define _TERRAIN_MANAGER_H_
 
 #include <map>
+#include <functional>
 
 #include "terrainChunk.h"
 #include "../engineClass/gameObject.h"
 
-auto ivec3_comp = [](const glm::ivec3& v1, const glm::ivec3& v2)
+auto ivec3_comp = [](const glm::ivec3& v1, const glm::ivec3& v2) -> bool
 {
 	if (v1.x < v2.x)
 	{
@@ -79,7 +80,7 @@ private:
 	Transform* m_player_transform = nullptr;
 	glm::ivec3 m_oldChunkGridCoord;
 
-	std::map<glm::ivec3, TerrainChunk*, decltype(ivec3_comp)> m_grid_to_chunk_map;
+	std::map<glm::ivec3, TerrainChunk*, std::function<bool(const glm::ivec3& v1, const glm::ivec3& v2)>> m_grid_to_chunk_map;
 };
 
 #endif
