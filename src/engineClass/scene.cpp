@@ -256,6 +256,23 @@ void Scene::inputUpdate(){
     }
 }
 
+void Scene::physicsUpdate(){
+    if(!m_pause){
+        for(unsigned int i=0; i<objectsEngine.size(); i++){
+            physicsUpdateObj(objectsEngine[i]);
+        }
+    }
+}
+
+void Scene::physicsUpdateObj(GameObject *obj){
+    obj->physicsUpdate();
+    // std::thread threadUpdate(&GameObject::update, obj);
+    for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+        physicsUpdateObj(obj->m_listOfChildren[i]);
+    }
+    // threadUpdate.join();
+}
+
 
 void Scene::togglePause(){
     m_pause = !m_pause;

@@ -15,6 +15,7 @@ public:
 
     virtual void update(){}
     virtual void inputUpdate(){}
+    virtual void physicsUpdate(){}
 
     virtual void createUI(){}
 

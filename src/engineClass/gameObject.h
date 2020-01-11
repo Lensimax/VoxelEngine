@@ -20,6 +20,7 @@ public:
 
     void update();
     void inputUpdate();
+    void physicsUpdate();
 
     // ID + NAME
     void setName(std::string n);

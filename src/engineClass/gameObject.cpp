@@ -149,6 +149,12 @@ void GameObject::inputUpdate(){
     }
 }
 
+void GameObject::physicsUpdate(){
+    for(unsigned int i=0; i<m_components.size(); i++){
+        m_components[i]->physicsUpdate();
+    }
+}
+
 
 void GameObject::removeComponentToBeDestroyed(){
     for(int i=m_toRemove.size()-1; i>=0; i--){
