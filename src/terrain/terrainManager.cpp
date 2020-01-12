@@ -2,6 +2,31 @@
 #include "../material/simpleMat.h"
 #include <algorithm>
 
+#ifndef LAMBDA_IVEC3
+#define LAMBDA_IVEC3
+auto ivec3_comp = [](const glm::ivec3& v1, const glm::ivec3& v2) -> bool
+{
+	if (v1.x < v2.x)
+	{
+		return true;
+	}
+	else if (v1.x == v2.x)
+	{
+		if (v1.y < v2.y)
+		{
+			return true;
+		}
+		else if (v1.y == v2.y)
+		{
+			if (v1.z < v2.z){
+				return true;
+			}
+		}
+	}
+	return false;
+};
+#endif
+
 TerrainManager::TerrainManager(size_t chunk_size, size_t terrain_size, Transform* player_transform) : m_chunk_size(chunk_size), m_terrain_size(terrain_size), m_player_transform(player_transform), m_grid_to_chunk_map(ivec3_comp) {
     assert(m_player_transform != nullptr);
 

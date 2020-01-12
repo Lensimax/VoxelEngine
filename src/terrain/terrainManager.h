@@ -16,27 +16,6 @@
 #include "terrainChunk.h"
 #include "../engineClass/gameObject.h"
 
-auto ivec3_comp = [](const glm::ivec3& v1, const glm::ivec3& v2) -> bool
-{
-	if (v1.x < v2.x)
-	{
-		return true;
-	}
-	else if (v1.x == v2.x)
-	{
-		if (v1.y < v2.y)
-		{
-			return true;
-		}
-		else if (v1.y == v2.y)
-		{
-			if (v1.z < v2.z){
-				return true;
-			}
-		}
-	}
-	return false;
-};
 
 class TerrainManager : public Component {
 
