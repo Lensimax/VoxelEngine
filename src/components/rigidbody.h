@@ -37,10 +37,12 @@ public:
 private:
     void computeGravity();
 
-    float m_speed, m_mass;
+    float m_speed, m_mass, m_jumpForce;
     bool m_useGravity;
 
     glm::vec3 m_vectorMove;
+    glm::vec3 m_velocity;
+
 };
 
 #endif

@@ -10,7 +10,7 @@
 #endif
 
 
-Rigidbody::Rigidbody() : m_speed(0.5f), m_vectorMove(glm::vec3(0)), m_useGravity(true), m_mass(0.15f) {
+Rigidbody::Rigidbody() : m_speed(0.5f), m_velocity(glm::vec3(0)), m_vectorMove(glm::vec3(0)), m_jumpForce(1.3f), m_useGravity(true), m_mass(0.15f) {
     setName("Rigidbody");
 }
 
@@ -32,7 +32,12 @@ void Rigidbody::inputUpdate() {
         input.x = 1.0f;
     }
     if(ImGui::IsKeyPressed(' ')) { // barre espace
-        input.y = 1.0f;
+        Collider* collider = m_gameobject->getComponent<Collider*>();
+        if(collider != nullptr && collider->getActive()){
+            if(collider->isGrounded()){
+                input.y = 1.0f;
+            }
+        }
     }
 
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
@@ -47,9 +52,13 @@ void Rigidbody::inputUpdate() {
     pos.x += input.z * dz;
     pos.z += input.x * dzx;
     pos.x += input.x * dxx;
-    pos.y += input.y;
+    
+
+    float yMove = m_vectorMove.y + input.y*m_jumpForce;
+    
 
     m_vectorMove = pos - m_gameobject->getTransform()->getPosition(); 
+    m_vectorMove.y = yMove;
 }
 
 void Rigidbody::update() {
@@ -59,7 +68,6 @@ void Rigidbody::update() {
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
 
 
-    // printf("Avant Player Y: %f\n", m_gameobject->getTransform()->getPosition().y);
     computeGravity();
 
     m_vectorMove.x *= m_speed;
@@ -75,7 +83,6 @@ void Rigidbody::update() {
 
     m_gameobject->m_transform->setPosition(pos+m_vectorMove); 
 
-    // printf("Après Player Y: %f\n", m_gameobject->getTransform()->getPosition().y);
 }
 
 void Rigidbody::createUI() {
@@ -83,19 +90,22 @@ void Rigidbody::createUI() {
     ImGui::DragFloat("##speed", &m_speed, 0.01f,0.01f, 1000.f);
     ImGui::Text("Mass : ");
     ImGui::DragFloat("##mass", &m_mass, 0.01f,0.01f, 1000.f);
+    ImGui::Text("Jump Force : ");
+    ImGui::DragFloat("##jump", &m_jumpForce, 0.01f,0.01f, 1000.f);
     ImGui::Text("Use gravity: "); ImGui::SameLine();
     ImGui::Checkbox("##useGravity", &m_useGravity);
+    ImGui::Text("Vector move : (%4f, %4f, %4f)", m_vectorMove.x, m_vectorMove.y, m_vectorMove.z);
 }
 
 
 void Rigidbody::computeGravity() {
     if(m_useGravity){
 
-        m_vectorMove.y = -m_mass*m_gameobject->getTransform()->getScale().y;
+        m_vectorMove.y -= m_mass*m_gameobject->getTransform()->getScale().y;
 
         Collider* collider = m_gameobject->getComponent<Collider*>();
         if(collider != nullptr && collider->getActive()){
-            if(collider->isGrounded()){
+            if(collider->isGrounded() && m_vectorMove.y < 0){
                 m_vectorMove.y = 0.0f;
             }
         }
