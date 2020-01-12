@@ -2,14 +2,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#ifndef GLM_H
-#define GLM_H
-#include <glm/gtx/perpendicular.hpp>
-#include <glm/glm.hpp>
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/gtc/matrix_inverse.hpp>
-#endif
+
 
 #include <string>
 #include <vector>
@@ -19,13 +12,6 @@
 #include "gameObject.h"
 
 #include "../components/cameraProjective.h"
-
-struct CameraInfo {
-    bool found;
-    glm::mat4 projMat;
-    glm::mat4 viewMat;
-}; 
-
 
 class Scene {
 
