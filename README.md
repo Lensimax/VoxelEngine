@@ -95,4 +95,5 @@ Should work
 * FBX loader : https://github.com/nem0/OpenFBX/blob/master/demo/main.cpp#L203
 * Procedural generation : https://www.youtube.com/watch?v=wbpMiKiSKm8
 * Multi-threading : https://www.randygaul.net/wp-content/uploads/2014/09/MultiThread.pdf
+* Intersection : https://noonat.github.io/intersect/
 

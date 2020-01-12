@@ -26,6 +26,12 @@ Mesh::Mesh() {
     setName("Mesh");
 }
 
+Mesh::~Mesh() 
+{
+    if (m_vertexArrayID != 0)
+        deleteVAO();
+}
+
 void Mesh::createUI(){
     if (ImGui::TreeNode("Mesh")){
         ImGui::Text("Number vertices: %d", getNBVertices());
@@ -184,9 +190,9 @@ void Mesh::addTriangle(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3
 
     // Coord bidon pour ne pas faire bugger l'affichage
 
-    m_coords.emplace_back(glm::vec3(0, 0, 0));
-    m_coords.emplace_back(glm::vec3(0, 0, 0));
-    m_coords.emplace_back(glm::vec3(0, 0, 0));
+    m_coords.push_back(glm::vec3(0, 0, 0));
+    m_coords.push_back(glm::vec3(0, 0, 0));
+    m_coords.push_back(glm::vec3(0, 0, 0));
 }
 
 void Mesh::addQuad    (const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3, const glm::vec3& v4,

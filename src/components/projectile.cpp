@@ -1,6 +1,8 @@
 #include "projectile.h"
 
-#define M_PI 3.14159265359
+#ifndef M_PI
+#define M_PI 3.1415926
+#endif
 
 #ifndef GLM_H
 #define GLM_H

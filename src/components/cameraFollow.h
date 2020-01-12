@@ -1,14 +1,6 @@
 #ifndef CAMERAFOLLOW_H
 #define CAMERAFOLLOW_H
 
-#ifndef GLM_H
-#define GLM_H
-#include <glm/gtx/perpendicular.hpp>
-#include <glm/glm.hpp>
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/gtc/matrix_inverse.hpp>
-#endif
 
 #include "../engineClass/gameObject.h"
 #include "component.h"

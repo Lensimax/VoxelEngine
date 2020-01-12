@@ -17,7 +17,7 @@ void UI::drawUI(){
     if(!m_hasToBeDisplayed){
         return;
     }
-    createInfoWindow();
+    // createInfoWindow();
 
     if(m_scene != NULL){
         createUISceneManager(m_scene);
@@ -109,6 +109,9 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Load Scene", "WIP")) { /* Do stuff */ }
             if (ImGui::MenuItem("Save Scene", "WIP")) { /* Do stuff */ }
             if (ImGui::BeginMenu("Scene Example")){
+                if (ImGui::MenuItem("Exploration Scene")) { scene->deleteScene(); scene->loadExplorationScene(); }
+                if (ImGui::MenuItem("Gameplay Scene")) { scene->deleteScene(); scene->loadGameplayScene(); }
+                if (ImGui::MenuItem("Default Scene")) { scene->deleteScene(); scene->loadDefaultScene(); }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -129,6 +132,12 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("640*480")) { if(m_window != NULL) glfwSetWindowSize(m_window, 640, 480); }
             if (ImGui::MenuItem("1280*720")) { if(m_window != NULL) glfwSetWindowSize(m_window, 1280, 720); }
             if (ImGui::MenuItem("1920*1080")) { if(m_window != NULL) glfwSetWindowSize(m_window, 1920, 1080); }
+            if (ImGui::BeginMenu("Limit FPS ")){
+                extern float global_limitFramerate;
+                if (ImGui::MenuItem("30 FPS")) { global_limitFramerate = 30.0f; }
+                if (ImGui::MenuItem("60 FPS")) { global_limitFramerate = 60.0f; }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
 

@@ -17,7 +17,6 @@ class MeshCube : public Mesh {
 public:
 
     MeshCube(float w = 1.0f, bool center = true);
-    ~MeshCube();
     
 	void recreate();
 	void createUI();

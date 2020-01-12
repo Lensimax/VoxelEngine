@@ -1,3 +1,12 @@
+#ifndef GLM_H
+#define GLM_H
+#include <glm/gtx/perpendicular.hpp>
+#include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
+#endif
+
 #include "scene.h"
 #include "../engineClass/gameObject.h"
 
@@ -15,54 +24,28 @@
 #include "../components/axisRenderer.h"
 #include "../terrain/terrainManager.h"
 
-#include "../components/controller.h"
+#include "../components/rigidbody.h"
 #include "../components/cameraProjective.h"
 #include "../components/cameraRenderer.h"
 #include "../components/cameraFollow.h"
 #include "../components/thirdPersonController.h"
 #include "../components/groundFollow.h"
 #include "../components/fireProjectiles.h"
+#include "../components/debug/debugTransform.h"
+#include "../components/colliders/collider.h"
 
 #include <thread>
+
+#ifndef M_PI
+#define M_PI 3.1415926
+#endif
 
 
 #include <iostream>
 
-#define M_PI 3.14159265359
-
-
 Scene::Scene(){
-
-    loadDefaultScene();
-
-    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3()));
-    player->addComponent<Mesh*>(new MeshCube());
-    player->addComponent<Material*>(new Lambertian());
-    player->addComponent<MeshRenderer*>(new MeshRenderer());
-    player->addComponent<Controller*>(new Controller());
-    player->addComponent<AxisRenderer*>(new AxisRenderer());
-    player->addComponent<ThirdPersonController*>(new ThirdPersonController());
-    player->addComponent<GroundFollow*>(new GroundFollow());
-    player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
-    objectsEngine.push_back(player);
-
-  
-    GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 5, player->getTransform()));
-    objectsEngine.push_back(terrain);
-    
-
-    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
-    camera->addComponent<CameraProjective*>(new CameraProjective());
-    CameraFollow* camFoll = new CameraFollow();
-    camera->addComponent<CameraFollow*>(camFoll);
-    camFoll->setPlayer(player);
-
-    player->getComponent<ThirdPersonController*>()->setCamera(camera);
-    // player->getComponent<ThirdPersonController*>()->setActive(false);
-    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
-    player->getComponent<FireProjectiles*>()->setScene(this);
-    objectsEngine.push_back(camera);
+    // loadGameplayScene();
+    loadExplorationScene();
 }
 
 Scene::~Scene(){
@@ -179,9 +162,9 @@ void Scene::addGameObject(GameObject *obj){
 void Scene::addCube(){
     GameObject *cube = new GameObject(addNewId(), "Cube");
 
-    cube->addComponent<MeshRenderer*>(new MeshRenderer());
     cube->addComponent<Mesh*>(new MeshCube());
     cube->addComponent<Material*>(new Lambertian());
+    cube->addComponent<MeshRenderer*>(new MeshRenderer());
  
     objectsEngine.push_back(cube);
 
@@ -206,11 +189,12 @@ int Scene::addNewId(){
 }
 
 void Scene::updateObj(GameObject *obj){
-    std::thread threadUpdate(&GameObject::update, obj);
+    obj->update();
+    // std::thread threadUpdate(&GameObject::update, obj);
     for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
         updateObj(obj->m_listOfChildren[i]);
     }
-    threadUpdate.join();
+    // threadUpdate.join();
 }
 
 void Scene::update(){
@@ -236,6 +220,23 @@ void Scene::inputUpdate(){
     }
 }
 
+void Scene::physicsUpdate(){
+    if(!m_pause){
+        for(unsigned int i=0; i<objectsEngine.size(); i++){
+            physicsUpdateObj(objectsEngine[i]);
+        }
+    }
+}
+
+void Scene::physicsUpdateObj(GameObject *obj){
+    obj->physicsUpdate();
+    // std::thread threadUpdate(&GameObject::update, obj);
+    for(unsigned int i=0; i<obj->m_listOfChildren.size(); i++){
+        physicsUpdateObj(obj->m_listOfChildren[i]);
+    }
+    // threadUpdate.join();
+}
+
 
 void Scene::togglePause(){
     m_pause = !m_pause;
@@ -243,9 +244,79 @@ void Scene::togglePause(){
 
 
 void Scene::loadDefaultScene(){
-    m_pause = false;
+    m_pause = true;
     m_idObject = 0;
     objectsEngine = std::vector<GameObject*>();
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 128, 0)));
 }
 
+void Scene::loadExplorationScene(){
+    loadDefaultScene();
+
+    m_pause = false;
+
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,15.0f,33.7f)));
+    player->addComponent<Mesh*>(new MeshCube(0.5f));
+    player->addComponent<Material*>(new Lambertian());
+    player->addComponent<MeshRenderer*>(new MeshRenderer());
+    player->addComponent<Rigidbody*>(new Rigidbody(2.0f));
+    player->getComponent<Rigidbody*>()->setUseGravity(false);
+    player->addComponent<ThirdPersonController*>(new ThirdPersonController());
+    player->addComponent<GroundFollow*>(new GroundFollow());
+    objectsEngine.push_back(player);
+
+    GameObject *terrain = new GameObject(addNewId(), "Terrain");
+    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 9, player->getTransform()));
+    objectsEngine.push_back(terrain);
+  
+
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
+    camera->addComponent<CameraProjective*>(new CameraProjective());
+    CameraFollow* camFoll = new CameraFollow();
+    camera->addComponent<CameraFollow*>(camFoll);
+    camFoll->setPlayer(player);
+
+    player->getComponent<ThirdPersonController*>()->setCamera(camera);
+    // player->getComponent<ThirdPersonController*>()->setActive(false);
+    player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+    
+    
+    objectsEngine.push_back(camera);
+}
+
+
+void Scene::loadGameplayScene(){
+
+    loadDefaultScene();
+
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(2.8f,15.0f,33.7f)));
+    player->addComponent<Mesh*>(new MeshCube(0.5f));
+    player->addComponent<Material*>(new Lambertian());
+    player->addComponent<MeshRenderer*>(new MeshRenderer());
+    player->addComponent<Rigidbody*>(new Rigidbody());
+    player->addComponent<ThirdPersonController*>(new ThirdPersonController());
+    player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
+    player->getComponent<FireProjectiles*>()->setScene(this);
+    player->getComponent<FireProjectiles*>()->setActive(false);
+    player->addComponent<Collider*>(new Collider(glm::vec3(0.5, 0.6,0.5)));
+    objectsEngine.push_back(player);
+
+    GameObject *terrain = new GameObject(addNewId(), "Terrain");
+    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 9, player->getTransform()));
+    objectsEngine.push_back(terrain);
+  
+
+    player->getComponent<Collider*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+    
+
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
+    camera->addComponent<CameraProjective*>(new CameraProjective());
+    CameraFollow* camFoll = new CameraFollow();
+    camera->addComponent<CameraFollow*>(camFoll);
+    camFoll->setPlayer(player);
+
+    player->getComponent<ThirdPersonController*>()->setCamera(camera);
+    // player->getComponent<ThirdPersonController*>()->setActive(false);
+    objectsEngine.push_back(camera);
+
+}

@@ -29,6 +29,7 @@
 #include "engineClass/mainRenderer.h"
 #include "engineClass/UI.h"
 #include "engineClass/InputManager.h"
+// #include "engineClass/var_global.h"
 
 #include <chrono>
 #include <thread>
@@ -41,6 +42,9 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
+float global_limitFramerate;
+
+std::chrono::microseconds inputUpdateTime, updateTime, renderingTime, rendererUpdate, physicsUpdate;
 
 
 
@@ -52,6 +56,18 @@ void display(int display_w, int display_h, MainRenderer *renderer, UI *ui){
     // CREATE UI //
     ui->drawUI();
     //ImGui::ShowDemoWindow();
+    if(ui->hasToDisplayed()){
+        ImGui::Begin("Execution time");
+        ImGui::Text("Application average %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
+        ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
+        ImGui::Text("Input update : %u microseconds", inputUpdateTime);
+        ImGui::Text("Physics update: %u microseconds", physicsUpdate);
+        ImGui::Text("scene update : %u microseconds", updateTime);
+        ImGui::Text("rendering : %u microseconds", renderingTime);
+        ImGui::Text("renderer update : %u microseconds", rendererUpdate);
+        ImGui::End();
+    }
+    
     // Rendering
     ImGui::Render();
     renderer->displaySceneOnTheScreen(display_w, display_h);
@@ -156,10 +172,10 @@ int main(int, char**)
     inputManager.setRenderer(renderer);
 
 
+
     int display_w, display_h;
     double lasttime = glfwGetTime();
-
-    float TARGET_FPS = 60.0f;
+    global_limitFramerate = 60.f;
 
     // Main loop
     while (!glfwWindowShouldClose(window)){
@@ -168,30 +184,53 @@ int main(int, char**)
         glfwPollEvents();
         glfwGetFramebufferSize(window, &display_w, &display_h);
 
+
+        auto start = std::chrono::high_resolution_clock::now();
         scene->inputUpdate();
+        auto stop = std::chrono::high_resolution_clock::now(); 
+        inputUpdateTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
 
         /// UPDATE
-        std::thread threadInput(&InputManager::update, &inputManager);
-        std::thread threadSceneUpdate(&Scene::update, scene);
-        std::thread threadRendererUpdate(&MainRenderer::update, renderer);
-        renderer->update();
+        inputManager.update();
 
-        threadInput.join();
-        threadSceneUpdate.join();
-        threadRendererUpdate.join();
+        start = std::chrono::high_resolution_clock::now();
+        scene->physicsUpdate();
+        stop = std::chrono::high_resolution_clock::now(); 
+        physicsUpdate = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
+
+        start = std::chrono::high_resolution_clock::now();
+        scene->update();
+        stop = std::chrono::high_resolution_clock::now(); 
+        updateTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
+        
+        start = std::chrono::high_resolution_clock::now();
+        renderer->update();
+        stop = std::chrono::high_resolution_clock::now(); 
+        rendererUpdate = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
+        
+        // std::thread threadSceneUpdate(&Scene::update, scene);
+        // std::thread threadRendererUpdate(&MainRenderer::update, renderer);
+        // renderer->update();
+
+        //threadInput.join();
+        // threadSceneUpdate.join();
+        // threadRendererUpdate.join();
 
         // RENDERING
+        start = std::chrono::high_resolution_clock::now();
         rendering(display_w, display_h, renderer, scene);
+        stop = std::chrono::high_resolution_clock::now(); 
+        renderingTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 
         // DISPLAY ON THE SCREEN
         display(display_w, display_h, renderer, ui);
 
         // wait for refresh rate
-        while (glfwGetTime() < lasttime + 1.0/TARGET_FPS) {
+        while (glfwGetTime() < lasttime + 1.0/global_limitFramerate) {
             // sleep for x milliseconds
             std::this_thread::sleep_for(std::chrono::milliseconds(1));   
         }
-        lasttime += 1.0/TARGET_FPS;
+        lasttime += 1.0/global_limitFramerate;
 
         glfwSwapBuffers(window);
     }

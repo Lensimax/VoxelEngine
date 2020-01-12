@@ -30,6 +30,8 @@ GameObject::~GameObject(){
     for(unsigned int i=0; i<m_listOfChildren.size(); i++){
         delete m_listOfChildren[i];
     }
+    m_components.clear();
+    m_listOfChildren.clear();
 }
 
 void GameObject::setName(std::string n){
@@ -144,6 +146,12 @@ void GameObject::update(){
 void GameObject::inputUpdate(){
     for(unsigned int i=0; i<m_components.size(); i++){
         m_components[i]->inputUpdate();
+    }
+}
+
+void GameObject::physicsUpdate(){
+    for(unsigned int i=0; i<m_components.size(); i++){
+        m_components[i]->physicsUpdate();
     }
 }
 

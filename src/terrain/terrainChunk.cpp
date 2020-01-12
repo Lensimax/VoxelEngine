@@ -2,6 +2,7 @@
 
 #include "terrainChunk.h"
 #include "simplexNoise.h"
+#include "terrainManager.h"
 
 ///////////////////////// Chunk
 
@@ -11,20 +12,18 @@ TerrainChunk::TerrainChunk(size_t cubic_size) : voxels(cubic_size) {
 	setName("TerrainChunk");
 }
 
-TerrainChunk::~TerrainChunk() {
-	renderer->mesh->deleteVAO();
-}
+void TerrainChunk::start() {
+	assert(m_gameobject != nullptr);
 
-void TerrainChunk::start() {	
 	renderer = m_gameobject->getComponent<MeshRenderer*>();
 	
 	assert(renderer != nullptr);
 	
-	generate();
+	// generate();
 
-	calculateMesh();
+	// calculateMesh();
 
-	renderer->mesh->createVAO();
+	// renderer->mesh->createVAO();
 }
 
 // TerrainChunk::TerrainChunk(size_t cubic_size, float x, float y, float z) : TerrainChunk(cubic_size, glm::vec3(x, y, z)) {}
@@ -32,10 +31,6 @@ void TerrainChunk::start() {
 void TerrainChunk::generate() {
 	glm::vec3 position = m_gameobject->getTransform()->getPosition();
 	// std::cerr << position.x << ','<< position.y << ',' << position.z << '\n';
-	// float scale = 100.f;
-	// size_t octaves = 3;
-
-	// SimplexNoise snoise(1.0f / scale);
 
 	for(size_t i = 0 ; i < voxels.width() ; ++i) {
 		for(size_t k = 0 ; k < voxels.depth() ; ++k) {
@@ -65,13 +60,48 @@ void TerrainChunk::generate() {
 std::array<bool, 6> TerrainChunk::surrounding(size_t x, size_t y, size_t z) const {
 
 	std::array<bool, 6> activated_neighbors = {}; // Tout est faux
+	glm::vec3 position = m_gameobject->getTransform()->getPosition();
 
-	if ( !(x == (voxels.width() - 1))  && voxels(x + 1, y    , z    ) != Voxel::Empty) activated_neighbors[0] = true;
-    if ( !(x == 0)                     && voxels(x - 1, y    , z    ) != Voxel::Empty) activated_neighbors[1] = true;
-    if ( !(y == (voxels.height() - 1)) && voxels(x    , y + 1, z    ) != Voxel::Empty) activated_neighbors[2] = true;
-    if ( !(y == 0)                     && voxels(x    , y - 1, z    ) != Voxel::Empty) activated_neighbors[3] = true;
-    if ( !(z == (voxels.depth() - 1))  && voxels(x    , y    , z + 1) != Voxel::Empty) activated_neighbors[4] = true;
-    if ( !(z == 0)                     && voxels(x    , y    , z - 1) != Voxel::Empty) activated_neighbors[5] = true;
+
+	if ( (!(x == (voxels.width() - 1))  && (voxels(x + 1, y    , z    ) != Voxel::Empty)) ||
+		  ((x == (voxels.width() - 1))  && (y <= getHeightAt(voxels.cubic_size(), position.x + x + 1, position.z + z))) )
+		activated_neighbors[0] = true;
+    
+    if ( (!(x == 0)                     && (voxels(x - 1, y    , z    ) != Voxel::Empty)) ||
+    	  ((x == 0)                     && (y <= getHeightAt(voxels.cubic_size(), position.x + x - 1, position.z + z))) ) 
+    	activated_neighbors[1] = true;
+    
+    if ( (!(y == (voxels.height() - 1)) && (voxels(x    , y + 1, z    ) != Voxel::Empty)) ||
+    	  ((y == (voxels.height() - 1)) && (y <= getHeightAt(voxels.cubic_size(), position.x + x, position.z + z))) ) 
+    	activated_neighbors[2] = true;
+    
+    if ( (!(y == 0)                     && (voxels(x    , y - 1, z    ) != Voxel::Empty)) ||
+    	  ((y == 0)                     && (y <= getHeightAt(voxels.cubic_size(), position.x + x, position.z + z))) ) 
+    	activated_neighbors[3] = true;
+    
+    if ( (!(z == (voxels.depth() - 1))  && (voxels(x    , y    , z + 1) != Voxel::Empty)) ||
+    	   ((z == (voxels.depth() - 1)) && (y <= getHeightAt(voxels.cubic_size(), position.x + x, position.z + z + 1))) ) 
+    	activated_neighbors[4] = true;
+
+    if ( (!(z == 0)                     && (voxels(x    , y    , z - 1) != Voxel::Empty)) ||
+    	  ((z == 0)                     && (y <= getHeightAt(voxels.cubic_size(), position.x + x, position.z +  z - 1))) ) 
+    	activated_neighbors[5] = true;
+
+	// if ( !(x == (voxels.width() - 1))  && (voxels(x + 1, y    , z    ) != Voxel::Empty) ) activated_neighbors[0] = true;
+	// if ( !(x == 0)                     && (voxels(x - 1, y    , z    ) != Voxel::Empty) ) activated_neighbors[1] = true;
+	// if ( !(y == (voxels.height()- 1))  && (voxels(x    , y + 1, z    ) != Voxel::Empty) ) activated_neighbors[2] = true;
+	// if ( !(y == 0)                     && (voxels(x    , y - 1, z    ) != Voxel::Empty) ) activated_neighbors[3] = true;
+	// if ( !(z == (voxels.depth() - 1))  && (voxels(x    , y    , z + 1) != Voxel::Empty) ) activated_neighbors[4] = true;
+	// if ( !(z == 0)                     && (voxels(x    , y    , z - 1) != Voxel::Empty) ) activated_neighbors[5] = true;
+ 
+
+	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x + 1, y    , z    )) != Voxel::Empty) activated_neighbors[0] = true;
+	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x - 1, y    , z    )) != Voxel::Empty) activated_neighbors[1] = true;
+	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x    , y + 1, z    )) != Voxel::Empty) activated_neighbors[2] = true;
+	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x    , y - 1, z    )) != Voxel::Empty) activated_neighbors[3] = true;
+	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x    , y    , z + 1)) != Voxel::Empty) activated_neighbors[4] = true;
+	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x    , y    , z - 1)) != Voxel::Empty) activated_neighbors[5] = true;
+ 
 
 	return activated_neighbors;
 }
