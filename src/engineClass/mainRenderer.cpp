@@ -5,7 +5,9 @@
 
 #include <drawDebug.h>
 
-
+#ifndef M_PI
+#define M_PI 3.1415926
+#endif
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include <GL/gl3w.h>    // Initialize with gl3wInit()

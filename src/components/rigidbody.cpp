@@ -5,7 +5,9 @@
 
 #include "colliders/collider.h"
 
-#define M_PI 3.14159265359
+#ifndef M_PI
+#define M_PI 3.1415926
+#endif
 
 
 Rigidbody::Rigidbody() : m_speed(0.5f), m_vectorMove(glm::vec3(0)), m_useGravity(true), m_mass(0.15f) {
