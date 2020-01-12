@@ -51,7 +51,6 @@ public:
 	glm::vec3 toWorldGridCoord(glm::ivec3 chunk_grid_coord) const;
 	glm::uvec3 toVoxelCoord(glm::vec3 world_coord) const;
 
-	TerrainChunk* getPlayerChunk();
 	TerrainChunk* getChunkAt(glm::vec3 world_coord); 
 
 	Voxel getVoxelAt(glm::vec3 world_coord);
