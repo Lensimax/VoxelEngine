@@ -9,25 +9,31 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
-GroundFollow::GroundFollow() : m_heightOffset(1.5f){
+GroundFollow::GroundFollow() : m_heightOffset(0.25f){
     setName("Ground Follow");
 }
 
 void GroundFollow::update(){
     if(m_terrain != nullptr){
         glm::vec3 position = m_gameobject->getTransform()->getPosition();
+        position.y -= m_heightOffset;
+        
+        glm::vec3 bottomVoxelOffset(0, 1, 0);
+        
+        Voxel v = m_terrain->getVoxelAt(round(position));
+        
+        if (v == Voxel::Empty) {
+            v = m_terrain->getVoxelAt(round(position - bottomVoxelOffset));
 
-        // m_terrain->setVoxelAt(position - glm::vec3(2, 2, 2), Voxel::Empty);
-        
-        float height = m_terrain->getHeightAt(position.x, position.z);
-        
-        if (position.y > height + m_heightOffset)
-            position.y -= 1.0f;
-        else
-            position.y = height + m_heightOffset;
-        
+            if (v == Voxel::Empty){
+                position.y = round(position.y - 1); 
+            }
+        }
+        else{
+            position.y = round(position.y + 1);
+        }
 
-        m_gameobject->getTransform()->setPosition(position);
+        m_gameobject->getTransform()->setPosition(position + bottomVoxelOffset * m_heightOffset);
     }
 }
 

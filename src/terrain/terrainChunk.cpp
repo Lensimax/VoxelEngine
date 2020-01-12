@@ -19,7 +19,7 @@ void TerrainChunk::start() {
 	
 	assert(renderer != nullptr);
 	
-	// generate();
+	generate();
 
 	// calculateMesh();
 

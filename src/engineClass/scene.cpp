@@ -33,6 +33,7 @@
 #include "../components/fireProjectiles.h"
 #include "../components/debug/debugTransform.h"
 #include "../components/colliders/collider.h"
+#include "../components/terrainModificator.h"
 
 #include <thread>
 
@@ -263,6 +264,7 @@ void Scene::loadExplorationScene(){
     player->getComponent<Rigidbody*>()->setUseGravity(false);
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     player->addComponent<GroundFollow*>(new GroundFollow());
+    player->addComponent<TerrainModificator*>(new TerrainModificator());
     objectsEngine.push_back(player);
 
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
@@ -279,7 +281,8 @@ void Scene::loadExplorationScene(){
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     // player->getComponent<ThirdPersonController*>()->setActive(false);
     player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
-    
+	player->getComponent<TerrainModificator*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+
     
     objectsEngine.push_back(camera);
 }

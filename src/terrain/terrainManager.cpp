@@ -151,17 +151,20 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
     }
 }
 
-void TerrainManager::updateChunks(){
+void TerrainManager::updateChunkAt(glm::vec3 world_coord){
 
-    // initialize leurs valeurs de terrain
 
-    for (auto& p : m_grid_to_chunk_map)
-    {
-        TerrainChunk* chunk = p.second;
-
-        if (chunk->needUpdate)
-            chunk->generate();
+    TerrainChunk* chunk = getChunkAt(world_coord);
+    
+    if (chunk) {
+        chunk->renderer->mesh->clear();
+        chunk->renderer->mesh->deleteVAO();
+        chunk->calculateMesh();
+        chunk->renderer->mesh->createVAO();
     }
+}
+
+void TerrainManager::updateChunks(){
 
     // Calcul de leurs mesh
 
@@ -170,7 +173,11 @@ void TerrainManager::updateChunks(){
         TerrainChunk* chunk = p.second;
         
         if (chunk->needUpdate)
+        {
+            chunk->renderer->mesh->clear();
+            chunk->renderer->mesh->deleteVAO();
             chunk->calculateMesh();
+        }
     }
 
     // Envoie des données au GPU pour le dessin
@@ -257,7 +264,7 @@ Voxel TerrainManager::getVoxelAt(glm::vec3 world_coord) {
     TerrainChunk* chunk = getChunkAt(world_coord);
     if (chunk != nullptr)
     {
-        glm::uvec3 voxel = toVoxelCoord(world_coord);
+        glm::vec3 voxel = toVoxelCoord(world_coord);
         return chunk->voxels(voxel.x, voxel.y, voxel.z);
     }
     else
@@ -273,6 +280,7 @@ void  TerrainManager::setVoxelAt(glm::vec3 world_coord, Voxel v) {
     {
         glm::uvec3 voxel = toVoxelCoord(world_coord);
         chunk->voxels(voxel.x, voxel.y, voxel.z) = v;
+        std::cerr << "set\n";
     }
 }
 

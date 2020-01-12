@@ -77,7 +77,7 @@ void Rigidbody::update() {
     assert(global_limitFramerate != 0.0f);
     float deltaTime = ImGui::GetIO().Framerate / global_limitFramerate;
     m_vectorMove *= deltaTime;
-    printf("Delta Y: %f\n", deltaTime);
+    // printf("Delta Y: %f\n", deltaTime);
 
     
 

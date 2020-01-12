@@ -39,7 +39,9 @@ public:
 	/// Modificators
 
 	void createChunksAround(glm::vec3 world_coord);
-	void manageChunksAround(glm::vec3 world_coord); // managechunks_around
+	void manageChunksAround(glm::vec3 world_coord);
+	
+	void updateChunkAt(glm::vec3 world_coord);
 	void updateChunks();
 
 	/// Accessors
