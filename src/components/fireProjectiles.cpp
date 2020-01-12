@@ -20,6 +20,9 @@ FireProjectiles::~FireProjectiles(){
 }
 
 void FireProjectiles::inputUpdate(){
+    if(!getActive()){
+        return;
+    }
     if(ImGui::IsKeyPressed('F')){
         createProjectile();
     }

@@ -199,6 +199,21 @@ glm::uvec3 TerrainManager::toVoxelCoord(glm::vec3 world_coord) const {
     );
 }
 
+// renvoie les coordonnées du voxel dans le chunk à ce point monde
+glm::vec3 TerrainManager::toVoxelCoordInChunk(glm::vec3 world_coord) const {
+    int x = std::floor(world_coord.x); x = x % getChunkSize();
+    int y = std::floor(world_coord.y); y = y % getChunkSize();
+    int z = std::floor(world_coord.z); z = z % getChunkSize();
+
+    return glm::vec3(x,y,z);
+}
+
+glm::vec3 TerrainManager::toVoxelWorldCoord(glm::vec3 world_coord) const {
+    glm::vec3 coord = toChunkGridCoord(world_coord) * glm::ivec3(getChunkSize()); 
+    coord += toVoxelCoordInChunk(world_coord);
+    return coord;
+}
+
 TerrainChunk* TerrainManager::getPlayerChunk() {
     return getChunkAt(getPlayerCoord());
 }

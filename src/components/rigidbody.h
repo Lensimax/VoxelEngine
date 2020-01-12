@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef RIGIDBODY_H
+#define RIGIDBODY_H
 
 #include "component.h"
 #include "../engineClass/gameObject.h"
@@ -18,21 +18,29 @@
 #include <imgui_impl_opengl3.h>
 
 
-class Controller : public Component {
+class Rigidbody : public Component {
 
 public:
-    Controller();
+    Rigidbody();
 
-
+    void inputUpdate() override;
     void update() override;
 
     void createUI() override;
 
-    float m_speed = 0.2f;
+    float getSpeed(){return m_speed;}
+    float getMass(){return m_mass;}
+    glm::vec3 getMove(){return m_vectorMove;}
+    void setMove(glm::vec3 move){m_vectorMove = move;}
+    bool useGravity(){return m_useGravity;}
 
 private:
+    void computeGravity();
 
+    float m_speed, m_mass;
+    bool m_useGravity;
 
+    glm::vec3 m_vectorMove;
 };
 
 #endif

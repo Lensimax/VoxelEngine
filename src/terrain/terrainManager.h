@@ -56,9 +56,11 @@ public:
 
 	/// Accessors
 
-	glm::ivec3 toChunkGridCoord(glm::vec3 world_coord)       const;
-	glm::vec3  toWorldGridCoord(glm::ivec3 chunk_grid_coord) const;
-
+	glm::ivec3 toChunkGridCoord(glm::vec3 world_coord) const;
+	glm::uvec3 toChunkCoord(glm::vec3 world_coord) const;
+	glm::vec3 toVoxelCoordInChunk(glm::vec3 world_coord) const;
+	glm::vec3 toVoxelWorldCoord(glm::vec3 world_coord) const;
+	glm::vec3 toWorldGridCoord(glm::ivec3 chunk_grid_coord) const;
 	glm::uvec3 toVoxelCoord(glm::vec3 world_coord) const;
 
 	TerrainChunk* getPlayerChunk();
