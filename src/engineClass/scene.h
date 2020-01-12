@@ -40,6 +40,8 @@ public:
     void deleteObject(int id);
 
     void loadDefaultScene();
+    void loadGameplayScene();
+    void loadExplorationScene();
 
 
     std::vector<GameObject*> objectsEngine;
@@ -48,8 +50,8 @@ public:
     void togglePause();
 
 
-private:
     void deleteScene();
+private:
 
     CameraProjective* getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
     Light *getLightRecursive(GameObject *obj);

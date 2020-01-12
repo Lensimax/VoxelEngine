@@ -21,7 +21,7 @@
 class Rigidbody : public Component {
 
 public:
-    Rigidbody();
+    Rigidbody(float speed = 0.5f);
 
     void inputUpdate() override;
     void update() override;
@@ -33,6 +33,7 @@ public:
     glm::vec3 getMove(){return m_vectorMove;}
     void setMove(glm::vec3 move){m_vectorMove = move;}
     bool useGravity(){return m_useGravity;}
+    void setUseGravity(bool use){m_useGravity = use;}
 
 private:
     void computeGravity();

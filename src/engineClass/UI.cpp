@@ -109,6 +109,9 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::MenuItem("Load Scene", "WIP")) { /* Do stuff */ }
             if (ImGui::MenuItem("Save Scene", "WIP")) { /* Do stuff */ }
             if (ImGui::BeginMenu("Scene Example")){
+                if (ImGui::MenuItem("Exploration Scene")) { scene->deleteScene(); scene->loadExplorationScene(); }
+                if (ImGui::MenuItem("Gameplay Scene")) { scene->deleteScene(); scene->loadGameplayScene(); }
+                if (ImGui::MenuItem("Default Scene")) { scene->deleteScene(); scene->loadDefaultScene(); }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
