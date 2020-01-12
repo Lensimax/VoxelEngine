@@ -46,7 +46,28 @@
 
 Scene::Scene(){
     // loadGameplayScene();
-    loadExplorationScene();
+    // loadExplorationScene();
+    loadDefaultScene();
+
+    m_pause = false;
+
+    GameObject *player = new GameObject(addNewId(), "Player", new Transform(glm::vec3(0)));
+    player->addComponent<Mesh*>(new MeshCube(0.5f));
+    player->addComponent<Material*>(new Lambertian());
+    player->addComponent<MeshRenderer*>(new MeshRenderer());
+    player->addComponent<ThirdPersonController*>(new ThirdPersonController());
+    objectsEngine.push_back(player);
+
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
+    camera->addComponent<CameraProjective*>(new CameraProjective());
+    CameraFollow* camFoll = new CameraFollow();
+    camera->addComponent<CameraFollow*>(camFoll);
+    camera->addComponent<CameraRenderer*>(new CameraRenderer());
+    camFoll->setPlayer(player);
+
+    player->getComponent<ThirdPersonController*>()->setCamera(camera);
+
+    objectsEngine.push_back(camera);
 }
 
 Scene::~Scene(){
@@ -276,6 +297,7 @@ void Scene::loadExplorationScene(){
     camera->addComponent<CameraProjective*>(new CameraProjective());
     CameraFollow* camFoll = new CameraFollow();
     camera->addComponent<CameraFollow*>(camFoll);
+    camera->addComponent<CameraRenderer*>(new CameraRenderer());
     camFoll->setPlayer(player);
 
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
