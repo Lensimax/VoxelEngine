@@ -9,7 +9,6 @@ public:
 
     TerrainModificator();
 
-    void start() override;
     void inputUpdate() override;
     // void update() override;
     void createUI() override;

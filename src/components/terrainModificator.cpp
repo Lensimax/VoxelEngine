@@ -13,41 +13,31 @@ TerrainModificator::TerrainModificator(){
     setName("Terrain Modificator");
 }
 
-void TerrainModificator::start(){
-    // assert(m_terrain != nullptr);
-}
+void TerrainModificator::destroy(glm::vec3 world_coord, size_t radius) {
 
+    glm::vec3 min_coord = world_coord - glm::vec3(radius);
 
-void TerrainModificator::destroy(glm::vec3 position, size_t size) {
+    for(size_t i = 0 ; i < m_terrain->getChunkSize() ; i++) {
+        for(size_t j = 0 ; j < m_terrain->getChunkSize() ; j++) {
+            for(size_t k = 0 ; k < m_terrain->getChunkSize() ; k++) {
 
-    glm::vec3 world_coord = m_gameobject->getTransform()->getPosition();
-    glm::vec3 min_coord = world_coord - (glm::vec3(size) / glm::vec3(2.0));
+                glm::vec3 current_coord = min_coord + glm::vec3(i, j, k);
 
-
-    for(size_t i = 0 ; i < size ; i++) {
-        for(size_t j = 0 ; j < size ; j++) {
-            for(size_t k = 0 ; k < size ; k++) {
-                m_terrain->setVoxelAt(min_coord + glm::vec3(i, j, k), Voxel::Empty);
+                if (glm::distance(world_coord, current_coord) <= radius)
+                    m_terrain->setVoxelAt(min_coord + glm::vec3(i, j, k), Voxel::Empty);
             }
         }
     }
 }
 
-
 void TerrainModificator::inputUpdate(){
+
+    assert(m_terrain != nullptr);
 
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
 
     if(ImGui::IsKeyPressed('O')){
-        destroy(pos, 10);
-        // glm::vec3 deletePos = pos;
-        // pos.y -= 1;
-        
-        // if (m_terrain->getVoxelAt(deletePos) != Voxel::Empty)
-        // {
-        //     m_terrain->setVoxelAt(deletePos, Voxel::Empty);
-        //     m_terrain->updateChunkAt(deletePos);
-        // }
+        destroy(pos, 5);
     }
 }
 
