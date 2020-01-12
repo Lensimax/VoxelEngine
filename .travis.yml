@@ -57,24 +57,6 @@ jobs:
         - cmake --build .
 
     - stage: build
-      name: "Windows Build Debug"
-      os: windows
-      before_install:
-        - |-
-        choco upgrade --no-progress -y msys2
-        export msys2='cmd //C RefreshEnv.cmd '
-        export msys2+='& set MSYS=winsymlinks:nativestrict '
-        export msys2+='& C:\\tools\\msys64\\msys2_shell.cmd -defterm -no-start'
-        export mingw64="$msys2 -mingw64 -full-path -here -c \$\* --"
-        export msys2+=" -msys2 -c \$\* --"
-        $msys2 pacman --sync --noconfirm --needed cmake
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - ls
-
-    - stage: build
       name: "Linux Build Release"
       os: linux
       install:
