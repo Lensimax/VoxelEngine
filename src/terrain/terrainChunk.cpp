@@ -60,31 +60,30 @@ void TerrainChunk::generate() {
 std::array<bool, 6> TerrainChunk::surrounding(size_t x, size_t y, size_t z) const {
 
 	std::array<bool, 6> activated_neighbors = {}; // Tout est faux
-	glm::vec3 position = m_gameobject->getTransform()->getPosition();
-
+	glm::vec3 pos = m_gameobject->getTransform()->getPosition();
 
 	if ( (!(x == (voxels.width() - 1))  && (voxels(x + 1, y    , z    ) != Voxel::Empty)) ||
-		  ((x == (voxels.width() - 1))  && (y <= getHeightAt(voxels.cubic_size(), position.x + x + 1, position.z + z))) )
+		  ((x == (voxels.width() - 1))  && (y < getHeightAt(voxels.cubic_size(), pos.x + x + 1, pos.z + z))) )
 		activated_neighbors[0] = true;
     
     if ( (!(x == 0)                     && (voxels(x - 1, y    , z    ) != Voxel::Empty)) ||
-    	  ((x == 0)                     && (y <= getHeightAt(voxels.cubic_size(), position.x + x - 1, position.z + z))) ) 
+    	  ((x == 0)                     && (y < getHeightAt(voxels.cubic_size(), pos.x + float(x) - 1, pos.z + z))) ) 
     	activated_neighbors[1] = true;
     
     if ( (!(y == (voxels.height() - 1)) && (voxels(x    , y + 1, z    ) != Voxel::Empty)) ||
-    	  ((y == (voxels.height() - 1)) && (y <= getHeightAt(voxels.cubic_size(), position.x + x, position.z + z))) ) 
+    	  ((y == (voxels.height() - 1)) && (float(y) + 1 < getHeightAt(voxels.cubic_size(), pos.x + x, pos.z + z))) ) 
     	activated_neighbors[2] = true;
     
     if ( (!(y == 0)                     && (voxels(x    , y - 1, z    ) != Voxel::Empty)) ||
-    	  ((y == 0)                     && (y <= getHeightAt(voxels.cubic_size(), position.x + x, position.z + z))) ) 
+    	  ((y == 0)                     && (float(y) - 1 < getHeightAt(voxels.cubic_size(), pos.x + x, pos.z + z))) ) 
     	activated_neighbors[3] = true;
     
     if ( (!(z == (voxels.depth() - 1))  && (voxels(x    , y    , z + 1) != Voxel::Empty)) ||
-    	   ((z == (voxels.depth() - 1)) && (y <= getHeightAt(voxels.cubic_size(), position.x + x, position.z + z + 1))) ) 
+    	  ((z == (voxels.depth() - 1))  && (y < getHeightAt(voxels.cubic_size(), pos.x + x, pos.z + z + 1))) ) 
     	activated_neighbors[4] = true;
 
     if ( (!(z == 0)                     && (voxels(x    , y    , z - 1) != Voxel::Empty)) ||
-    	  ((z == 0)                     && (y <= getHeightAt(voxels.cubic_size(), position.x + x, position.z +  z - 1))) ) 
+    	  ((z == 0)                     && (y < getHeightAt(voxels.cubic_size(), pos.x + x, pos.z +  float(z) - 1))) ) 
     	activated_neighbors[5] = true;
 
 	// if ( !(x == (voxels.width() - 1))  && (voxels(x + 1, y    , z    ) != Voxel::Empty) ) activated_neighbors[0] = true;
@@ -93,15 +92,6 @@ std::array<bool, 6> TerrainChunk::surrounding(size_t x, size_t y, size_t z) cons
 	// if ( !(y == 0)                     && (voxels(x    , y - 1, z    ) != Voxel::Empty) ) activated_neighbors[3] = true;
 	// if ( !(z == (voxels.depth() - 1))  && (voxels(x    , y    , z + 1) != Voxel::Empty) ) activated_neighbors[4] = true;
 	// if ( !(z == 0)                     && (voxels(x    , y    , z - 1) != Voxel::Empty) ) activated_neighbors[5] = true;
- 
-
-	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x + 1, y    , z    )) != Voxel::Empty) activated_neighbors[0] = true;
-	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x - 1, y    , z    )) != Voxel::Empty) activated_neighbors[1] = true;
-	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x    , y + 1, z    )) != Voxel::Empty) activated_neighbors[2] = true;
-	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x    , y - 1, z    )) != Voxel::Empty) activated_neighbors[3] = true;
-	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x    , y    , z + 1)) != Voxel::Empty) activated_neighbors[4] = true;
-	// if (m_terrain->getVoxelAt(chunk_position + glm::vec3(x    , y    , z - 1)) != Voxel::Empty) activated_neighbors[5] = true;
- 
 
 	return activated_neighbors;
 }
