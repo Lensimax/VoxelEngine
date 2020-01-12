@@ -52,7 +52,7 @@ Scene::Scene(){
     player->getComponent<FireProjectiles*>()->setScene(this);
     player->getComponent<FireProjectiles*>()->setActive(false);
     player->addComponent<DebugTransform*>(new DebugTransform());
-    player->addComponent<Collider*>(new Collider(glm::vec3(0.6, 0.9,0.6)));
+    player->addComponent<Collider*>(new Collider(glm::vec3(0.5, 0.6,0.5)));
     objectsEngine.push_back(player);
 
     GameObject *terrain = new GameObject(addNewId(), "Terrain");

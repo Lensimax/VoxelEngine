@@ -29,7 +29,7 @@ private:
     void updateCollidingBox();
     void computeCollisionWithGround();
     glm::vec3 computeCollision();
-    void raycast();
+    bool raycast();
 
     void drawAABB(glm::vec3 min, glm::vec3 max, Shader shader, glm::vec4 color = glm::vec4(1,0,0,1));
 

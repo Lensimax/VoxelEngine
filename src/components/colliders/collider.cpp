@@ -26,7 +26,7 @@
 #endif
 
 
-Collider::Collider(glm::vec3 box) : m_collidingBox(box), m_showCollidingBox(true), m_showCheckCollision(true) {
+Collider::Collider(glm::vec3 box) : m_collidingBox(box), m_showCollidingBox(false), m_showCheckCollision(false) {
     setName("Collider");
     m_targetHitPoint = glm::vec3(0);
 }
@@ -142,7 +142,16 @@ void Collider::physicsUpdate() {
     }
 
     /// TEST
-    raycast();
+    // if(raycast() && m_rb != nullptr && m_rb->getActive()){
+    //     const float safeBias = 0.05f;
+    //     glm::vec3 move = m_rb->getMove();
+    //     if(move.x != 0.0f || move.z != 0.0f){
+    //         glm::vec3 translation = m_targetHitPoint - m_gameobject->getTransform()->getPosition();
+    //         move.x = translation.x - safeBias;
+    //         move.z = translation.z - safeBias;
+    //         m_rb->setMove(move);
+    //     }
+    // }
 
 }
 
@@ -152,8 +161,8 @@ glm::vec2 intersectQuadLine(glm::vec2 A, glm::vec2 B, glm::vec2 Rect0, glm::vec2
     glm::vec2 AB = B - A;
     glm::vec2 interPoint;
 
-    if (AB.x < 0) {
-        if (AB.y < 0) {
+    if (AB.x > 0) {
+        if (AB.y > 0) {
             if ((AB.x * (Rect0.y - A.y) - AB.y * (Rect0.x - A.x)) > 0) {
                 interPoint.x = Rect0.x;
                 interPoint.y = ((interPoint.x - A.x) * AB.y / AB.x) + A.y;
@@ -222,7 +231,7 @@ glm::vec2 Intersects(glm::vec2 a1, glm::vec2 a2, glm::vec2 b1, glm::vec2 b2)
     return intersection;
 }
 
-void Collider::raycast(){
+bool Collider::raycast(){
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
     m_targetHitPoint = pos;
     glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
@@ -237,14 +246,17 @@ void Collider::raycast(){
     if(m_terrain->getVoxelAt(m_targetHitPoint) == Voxel::Full){ // collision
         glm::vec3 min = m_terrain->toVoxelWorldCoord(m_targetHitPoint);
 
-        glm::vec2 intersectPoint = Intersects(glm::vec2(pos.x, pos.z), glm::vec2(m_targetHitPoint.x, m_targetHitPoint.z),
+        glm::vec2 intersectPoint = intersectQuadLine(glm::vec2(pos.x, pos.z), glm::vec2(m_targetHitPoint.x, m_targetHitPoint.z),
         glm::vec2(min.x, min.z), glm::vec2(min.x+1.0f, min.z+0.0f));
         // glm::vec2 intersectPoint = intersectQuadLine(glm::vec2(pos.x, pos.z), glm::vec2(m_targetHitPoint.x, m_targetHitPoint.z),
         // glm::vec2(min.x, min.z), glm::vec2(min.x+1.0f, min.z+1.0f));
-
-        m_targetHitPoint.x = intersectPoint.x;
-        m_targetHitPoint.z = intersectPoint.y;
+        if(intersectPoint != glm::vec2(0)){
+            m_targetHitPoint.x = intersectPoint.x;
+            m_targetHitPoint.z = intersectPoint.y;
+            return true;
+        } 
     }
+    return false;
 
 }
 
@@ -322,7 +334,7 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
 
         // Intersection with ground
         // glm::vec3 voxel1 = m_terrain->toVoxelWorldCoord(m_boxMin + glm::vec3(-1,0,0));
-        /*glm::vec3 voxelBottom1 = m_terrain->toVoxelWorldCoord(m_boxMin);
+        glm::vec3 voxelBottom1 = m_terrain->toVoxelWorldCoord(m_boxMin);
         glm::vec3 voxelBottom2 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMin.x, m_boxMin.y, m_boxMax.z));
         glm::vec3 voxelBottom3 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMax.z));
         glm::vec3 voxelBottom4 = m_terrain->toVoxelWorldCoord(glm::vec3(m_boxMax.x, m_boxMin.y, m_boxMin.z));
@@ -343,13 +355,13 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
         drawAABB(voxel2, voxel2+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMax.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
         drawAABB(voxel3, voxel3+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMin.x, m_boxMax.y, m_boxMin.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
         drawAABB(voxel4, voxel4+1.0f, shader, m_terrain->getVoxelAt(glm::vec3(m_boxMax.x, m_boxMax.y, m_boxMin.z)) == Voxel::Full ? glm::vec4(1,0,0,1) : glm::vec4(0,0,1,1));
-        */
+        
 
-       glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &glm::vec4(1,0,1,1)[0]);
-       glm::vec3 array[2];
-       array[0] = m_gameobject->getTransform()->getPosition();
-       array[1] = m_targetHitPoint; 
-       DrawDebug::drawArrayPosition(2, (float*)&array[0], GL_LINES);
+    //    glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &glm::vec4(1,0,1,1)[0]);
+    //    glm::vec3 array[2];
+    //    array[0] = m_gameobject->getTransform()->getPosition();
+    //    array[1] = m_targetHitPoint; 
+    //    DrawDebug::drawArrayPosition(2, (float*)&array[0], GL_LINES);
     }
 
     drawAABB(m_boxMin, m_boxMax, shader);
