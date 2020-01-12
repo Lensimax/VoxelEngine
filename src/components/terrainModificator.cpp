@@ -31,7 +31,6 @@ void TerrainModificator::destroy(glm::vec3 position, size_t size) {
             }
         }
     }
-                m_terrain->updateChunkAt(min_coord);
 }
 
 
