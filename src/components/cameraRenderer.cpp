@@ -39,9 +39,11 @@ void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 proje
         return;
     }
     
+    // GLMCOUT::printMat(modelMat);
+    // GLMCOUT::printMat(viewMat);
+    // std::cout << "\n\n";
 
 
-    const glm::mat4 inverted = glm::inverse(m_gameobject->getTransform()->getModelMat());
 
     // const glm::vec3 forward = normalize(glm::vec3(inverted[2]));
     // glm::vec3 origin = m_gameobject->getTransform()->getPosition();
