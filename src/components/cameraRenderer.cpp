@@ -38,12 +38,15 @@ void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 proje
     if(camera == NULL){
         return;
     }
+    
 
 
-    const mat4 inverted = glm::inverse(m_gameobject->getTransform()->getModelMat());
+    const glm::mat4 inverted = glm::inverse(m_gameobject->getTransform()->getModelMat());
 
+    // const glm::vec3 forward = normalize(glm::vec3(inverted[2]));
+    // glm::vec3 origin = m_gameobject->getTransform()->getPosition();
     glm::vec3 origin = glm::vec3(0, 0, 0);
-    glm::vec3 forward = glm::vec3(0, 0, 1);
+    glm::vec3 forward = glm::vec3(0,0,1);
     glm::vec3 up = glm::vec3(0, 1, 0);
     glm::vec3 right = glm::vec3(1, 0, 0);
 
@@ -57,6 +60,7 @@ void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 proje
     glUseProgram(shader.id());
     glUniformMatrix4fv(glGetUniformLocation(shader.id(),"modelMat"),1,GL_FALSE,&(modelMat[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader.id(),"viewMat"),1,GL_FALSE,&(viewMat[0][0]));
+    // glUniformMatrix4fv(glGetUniformLocation(shader.id(),"viewMat"),1,GL_FALSE,&(glm::mat4(1.0f)[0][0]));
     glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
     
     // Z axis

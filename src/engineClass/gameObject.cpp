@@ -138,20 +138,26 @@ void GameObject::update(){
     m_transform->update();
 
     for(unsigned int i=0; i<m_components.size(); i++){
-        m_components[i]->update();
+        if(m_components[i]->getActive()){
+            m_components[i]->update();
+        }
     }
 }
 
 
 void GameObject::inputUpdate(){
     for(unsigned int i=0; i<m_components.size(); i++){
-        m_components[i]->inputUpdate();
+        if(m_components[i]->getActive()){
+            m_components[i]->inputUpdate();
+        }
     }
 }
 
 void GameObject::physicsUpdate(){
     for(unsigned int i=0; i<m_components.size(); i++){
-        m_components[i]->physicsUpdate();
+        if(m_components[i]->getActive()){
+            m_components[i]->physicsUpdate();
+        }
     }
 }
 
