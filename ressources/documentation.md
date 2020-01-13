@@ -51,7 +51,7 @@ Vous pouvez lancer l'executable
 
 La game loop est présente dans le fichier ```main.cpp```. Elle appelle plusieurs classes qui votn s'occuper de la mise à jour des objets et du rendu.
 
-Classes importantes (la plupart présent dans le dossier engineClass/) :
+Classes importantes (la plupart présent dans le dossier ```engineClass```) :
 
 * **Scene** : gère tous les objets dans la scène. C'est cette classe qui va appeler le méthode de mise à jour des objets et des méthodes de dessins des objets.
 * **MainRenderer** : C'est lui qui s'occupe de la configuration d'```OpenGL```, qui met les bonnes options et qui décide quoi afficher. Selon si le moteur est en mode "Jeu" ou non il va afficher des choses différentes. C'est le mode "Editeur" et le mode "Jeu". On peut basculé de l'un à l'autre avec ```CTRL + U```.
@@ -59,4 +59,22 @@ Classes importantes (la plupart présent dans le dossier engineClass/) :
 * **InputManager** : cette classe gère les entrées clavier au niveau du moteur. Exemple: mettre en pause le jeu, passer en mode wireframe, etc. Les contrôles du joueur sont gérés à un autre endroit.
 * **Transform** : cette classe gère tout ce qui est position, rotation, scale d'un objet. Chaque objet en a un.
 * **Gameobject** : Cette objet du moteur qui est géré par la scène. Il possède une liste de ```Component``` qui vont venir changer le comportement de ce Gameobject. Il possède un nom et un ID.
-* **Component** :  Ceux sont des classes qui vont modifier le comportement d'un ou plusieurs Gameobject. Ils ont plusieurs fonctions de mise àjour qui sont appelées à des moments différents (```update()```, ```inputUpdate()```, ```physicsUpdate()```)
+* **Component** :  Ceux sont des classes qui vont modifier le comportement d'un ou plusieurs Gameobject. Ils ont plusieurs fonctions de mise àjour qui sont appelées à des moments différents (```update()```, ```inputUpdate()```, ```physicsUpdate()```). C'est inspiré de ce qui est fait dans **Unity**
+
+##### Composants
+
+On va faire un vite tour des **Component** et de ce qu'ils font : (dans le dossier ```components``` et ```terrain```)
+
+* Les **Renderer** : (```AxisRenderer```, ```CameraRenderer```, ```MeshRenderer```) ils font tous les trois un rendu ```OpenGL```, le plus important des trois est le ```MeshRenderer``` qui fait le rendu d'un maillage avec les informations de normales, position, etc.
+* **Collider** : il défini un box collider de type AABB (Axis-aligned bounding boxes) il fait la detection de collision **mais pour l'instant qu'avec le terrain**
+* **Rigidbody** : il permet de faire les déplacements de l'objet dependant de la vitesse du ```Rigidbody```.
+* **CameraFollow** : defini le comportement d'une camera qui suit un objet à une certaine distance.
+* **GroundFollow** : permet à l'objet de rester toujours à la surface du terrain
+* **CameraControllerFirstPerson** : defini le comportement d'une caméra e vue à la première personne. Elle est utilisé pour la caméra de l'éditeur.
+* **CameraProjective** : permet d'avoir les informations de projection, c'est ce composant qui donne la matrice 4x4 Projection;
+* **ThirdPersonController** : permet de controller la caméra du mode "Jeu" avec la souris. La caméra va tourner autour du joueur.
+* **FireProjectiles** : permet de tirer des projectiles
+* **Projectile** : Défini le comportement d'un projectile. Dans notre cas, c'est un projectile qui va faire une explosion à l'impact
+* **TerrainModifier** : c'est lui va modifier le terrain quand il y a des explosions
+* **TerrainManager** : C'est lui qui est responsable de la génération et de l'affichage du terrain. C'est lui qui gère quels ```chunk``` doit être afficher et lequels modifier
+* **TerraiChunk** : C'est lui qui contient les informations utiles à un ```chunk```. Chaque ```chunk``` en ont un.
