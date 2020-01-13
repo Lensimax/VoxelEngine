@@ -76,11 +76,13 @@ void FireProjectiles::createProjectile(){
   
     projectile->addComponent<TerrainModificator*>(new TerrainModificator());
     projectile->getComponent<TerrainModificator*>()->setTerrain(m_terrain);
-    projectile->addComponent<Projectile*>(new Projectile(m_radiusExplosionProjectile));
+
+    Projectile *proj = new Projectile(m_radiusExplosionProjectile);
+    proj->setScene(m_scene);
+    proj->setPlayerTransform(m_gameobject->getTransform());
+    projectile->addComponent<Projectile*>(proj);
 
     // debug
-    // projectile->addComponent<AxisRenderer*>(new AxisRenderer());
-    // projectile->addComponent<DebugTransform*>(new DebugTransform());
 
     m_scene->addGameObject(projectile);
 

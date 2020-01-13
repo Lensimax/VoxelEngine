@@ -39,6 +39,8 @@ void Projectile::update(){
 
     if(collider->isInCollision()){
         terainModif->destroy(m_radiusOfExplosion);
+        assert(m_scene != nullptr);
+        m_scene->addToDestroy(m_gameobject->getID());
     }
 }
 

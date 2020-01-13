@@ -244,10 +244,18 @@ void Scene::togglePause(){
     m_pause = !m_pause;
 }
 
+void Scene::cleanDestroy(){
+    for(int index : m_hasToBeDestroyed){
+        deleteObject(index);
+    }
+    m_hasToBeDestroyed.clear();
+}
+
 
 void Scene::loadDefaultScene(){
     m_pause = true;
     m_idObject = 0;
+    m_hasToBeDestroyed = std::vector<int>();
     objectsEngine = std::vector<GameObject*>();
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 128, 0)));
 }
