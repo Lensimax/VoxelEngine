@@ -59,7 +59,6 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
     # Do Visual Studio specific stuff
 else() 
     if (CMAKE_GENERATOR MATCHES "MinGW")
-        message("Generator MinGW ACTIVATED")
     else()
         add_definitions(-std=c++11)
         if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -72,6 +71,7 @@ else()
         
 endif()
 
+message("Generator : ${CMAKE_GENERATOR}")
 
 
 
