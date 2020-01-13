@@ -70,7 +70,7 @@ void UI::drawUI(){
     }
 
     ImGui::Begin("Controls");
-    ImGui::Text("CTRL+U: switch with play Mode");
+    ImGui::Text("CTRL+U: switch with play/editor Mode");
     ImGui::Text("CTRL+F: toggle wire frame");
     ImGui::Text("CTRL+P: pause/unpause");
     ImGui::Text("CTRL+G: active/disable camera player");
@@ -156,7 +156,7 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::BeginMenu("Scene Example")){
                 if (ImGui::MenuItem("Exploration Scene")) { scene->deleteScene(); scene->loadExplorationScene(); }
                 if (ImGui::MenuItem("Gameplay Scene")) { scene->deleteScene(); scene->loadGameplayScene(); }
-                if (ImGui::MenuItem("Default Scene")) { scene->deleteScene(); scene->loadDefaultScene(); }
+                if (ImGui::MenuItem("Default Scene")) { scene->deleteScene(); scene->loadSampleScene(); }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -181,6 +181,7 @@ void UI::createUISceneManager(Scene *scene){
                 extern float global_limitFramerate;
                 if (ImGui::MenuItem("30 FPS")) { global_limitFramerate = 30.0f; }
                 if (ImGui::MenuItem("60 FPS")) { global_limitFramerate = 60.0f; }
+                if (ImGui::MenuItem("75 FPS")) { global_limitFramerate = 75.0f; }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();

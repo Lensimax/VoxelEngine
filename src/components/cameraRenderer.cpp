@@ -34,20 +34,26 @@ CameraRenderer::~CameraRenderer(){
 
 void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light){
 
+    if(!getActive()){
+        return;
+    }
+
     CameraProjective * camera = m_gameobject->getComponent<CameraProjective*>();
     if(camera == NULL){
         return;
     }
 
-    glm::vec3 origin = glm::vec3(0, 0, 0);
-    glm::vec3 forward = glm::vec3(0, 0, 1);
-    glm::vec3 up = glm::vec3(0, 1, 0);
-    glm::vec3 right = glm::vec3(1, 0, 0);
+
+    // pour enlever la rotation sur la matrix model
+    modelMat[0][0] = 1; modelMat[1][1] = 1; modelMat[2][2] = 1; 
+    modelMat[0][1] = 0; modelMat[0][2] = 0;
+    modelMat[1][0] = 0; modelMat[1][2] = 0;
+    modelMat[2][0] = 0; modelMat[2][1] = 0;
 
     std::vector<glm::vec3> arrayAxis;
 
 
-    glLineWidth(m_lineWidth);
+    glLineWidth(0.5f);
 
     Shader shader = Shader();
     shader.load("../data/shaders/simple.vert","../data/shaders/simple.frag");
@@ -57,24 +63,40 @@ void CameraRenderer::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 proje
     glUniformMatrix4fv(glGetUniformLocation(shader.id(),"projMat"),1,GL_FALSE,&(projectionMat[0][0]));
     
     // Z axis
-    glm::vec4 color = glm::vec4(0,0,1,1);
+    glm::vec4 color = glm::vec4(1,0,0,1);
     glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &color[0]);
-    arrayAxis.resize(2);
-    arrayAxis[0] = origin; arrayAxis[1] = forward*m_lineLength;
-    DrawDebug::drawArrayPosition(arrayAxis.size(), (float*)&arrayAxis[0], GL_LINES);
 
-    // Y axis
-    color = glm::vec4(0,1,0,1);
-    glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &color[0]);
-    arrayAxis.resize(2);
-    arrayAxis[0] = origin; arrayAxis[1] = up*m_lineLength;
-    DrawDebug::drawArrayPosition(arrayAxis.size(), (float*)&arrayAxis[0], GL_LINES);
+    const float size = 0.2f;
 
-    // X axis
-    color = glm::vec4(1,0,0,1);
-    glUniform4fv(glGetUniformLocation(shader.id(),"color"), 1, &color[0]);
-    arrayAxis.resize(2);
-    arrayAxis[0] = origin; arrayAxis[1] = right*m_lineLength;
+    // face dessus
+    arrayAxis.push_back(glm::vec3(-size, size, size));
+    arrayAxis.push_back(glm::vec3(size, size, size));
+    arrayAxis.push_back(glm::vec3(size, size, size));
+    arrayAxis.push_back(glm::vec3(size, size, -size));
+    arrayAxis.push_back(glm::vec3(size, size, -size));
+    arrayAxis.push_back(glm::vec3(-size, size, -size));
+    arrayAxis.push_back(glm::vec3(-size, size, -size));
+    arrayAxis.push_back(glm::vec3(-size, size, size));
+    // face dessus
+    arrayAxis.push_back(glm::vec3(-size, -size, size));
+    arrayAxis.push_back(glm::vec3(size, -size, size));
+    arrayAxis.push_back(glm::vec3(size, -size, size));
+    arrayAxis.push_back(glm::vec3(size, -size, -size));
+    arrayAxis.push_back(glm::vec3(size, -size, -size));
+    arrayAxis.push_back(glm::vec3(-size, -size, -size));
+    arrayAxis.push_back(glm::vec3(-size, -size, -size));
+    arrayAxis.push_back(glm::vec3(-size, -size, size));
+
+    arrayAxis.push_back(glm::vec3(-size, size, -size));
+    arrayAxis.push_back(glm::vec3(-size, -size, -size));
+    arrayAxis.push_back(glm::vec3(size, size, -size));
+    arrayAxis.push_back(glm::vec3(size, -size, -size));
+    arrayAxis.push_back(glm::vec3(-size, size, size));
+    arrayAxis.push_back(glm::vec3(-size, -size, size));
+    arrayAxis.push_back(glm::vec3(size, size, size));
+    arrayAxis.push_back(glm::vec3(size, -size, size));
+
+
     DrawDebug::drawArrayPosition(arrayAxis.size(), (float*)&arrayAxis[0], GL_LINES);
 
     glUseProgram(0);

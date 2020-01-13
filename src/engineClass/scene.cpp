@@ -46,8 +46,9 @@
 #include <iostream>
 
 Scene::Scene(){
-    loadGameplayScene();
-    // loadExplorationScene();
+    // loadGameplayScene();
+    // loadSampleScene();
+    loadExplorationScene();
 }
 
 Scene::~Scene(){
@@ -271,6 +272,7 @@ void Scene::loadExplorationScene(){
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Rigidbody*>(new Rigidbody(2.0f));
     player->getComponent<Rigidbody*>()->setUseGravity(false);
+    player->addComponent<PlayerController*>(new PlayerController());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     player->addComponent<GroundFollow*>(new GroundFollow());
     player->addComponent<TerrainModificator*>(new TerrainModificator());
@@ -296,7 +298,6 @@ void Scene::loadExplorationScene(){
     objectsEngine.push_back(camera);
 }
 
-
 void Scene::loadGameplayScene(){
 
     loadDefaultScene();
@@ -306,6 +307,7 @@ void Scene::loadGameplayScene(){
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Rigidbody*>(new Rigidbody());
+    player->getComponent<Rigidbody*>()->setUseGravity(true);
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
     player->getComponent<FireProjectiles*>()->setScene(this);
@@ -333,4 +335,18 @@ void Scene::loadGameplayScene(){
     // player->getComponent<ThirdPersonController*>()->setActive(false);
     objectsEngine.push_back(camera);
 
+}
+
+void Scene::loadSampleScene(){
+    loadDefaultScene();
+
+    
+    m_pause = false;
+
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,3.5, 8), glm::vec3(0.40f,0,0)));
+    camera->addComponent<CameraProjective*>(new CameraProjective());
+    camera->addComponent<CameraRenderer*>(new CameraRenderer());
+    objectsEngine.push_back(camera);
+
+    addCube();
 }

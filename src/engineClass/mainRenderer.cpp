@@ -84,8 +84,9 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         l = new DirectionnalLight(scene->addNewId());
     }
 
-    drawEditorGrid(rootTransform->getModelToChild(glm::mat4(1)), camera->getView(), camera->getProjection((float)width/(float)height));
-
+    if(m_gridActivated){
+        drawEditorGrid(rootTransform->getModelToChild(glm::mat4(1)), camera->getView(), camera->getProjection((float)width/(float)height));
+    }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], camera->getView(), camera->getProjection((float)width/(float)height), l, (float)width/(float)height);
@@ -223,7 +224,7 @@ void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
 
     glLineWidth(1);
     
-    const int size = 16;
+    const int size = 64;
     const float step = 1;
 
     std::vector<glm::vec3> arrayVertices;

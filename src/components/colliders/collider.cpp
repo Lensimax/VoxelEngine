@@ -314,7 +314,7 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
 
     const float lineWidth = 0.2f;
 
-    // pour enlever la rotation sur la matric model
+    // pour enlever la rotation sur la matrix model
     modelMat[0][0] = 1; modelMat[1][1] = 1; modelMat[2][2] = 1; 
     modelMat[0][1] = 0; modelMat[0][2] = 0;
     modelMat[1][0] = 0; modelMat[1][2] = 0;

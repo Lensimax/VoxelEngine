@@ -10,7 +10,7 @@
 #endif
 
 
-Rigidbody::Rigidbody(float speed) : m_speed(speed), m_velocity(glm::vec3(0)), m_vectorMove(glm::vec3(0)), m_useGravity(true), m_mass(0.15f) {
+Rigidbody::Rigidbody(float speed) : m_speed(speed), m_velocity(glm::vec3(0)), m_vectorMove(glm::vec3(0)), m_useGravity(false), m_mass(0.15f) {
     setName("Rigidbody");
 }
 

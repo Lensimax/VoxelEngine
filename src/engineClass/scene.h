@@ -15,6 +15,7 @@
 
 
 
+
 class Scene {
 
 public:
@@ -44,6 +45,7 @@ public:
     void loadDefaultScene();
     void loadGameplayScene();
     void loadExplorationScene();
+    void loadSampleScene();
 
     void addToDestroy(int index){m_hasToBeDestroyed.push_back(index);}
 
@@ -58,6 +60,8 @@ public:
     bool getPause(){return m_pause;}
 
     void cleanDestroy();
+
+    // inline void setMainRenderer(MainRenderer *renderer){m_renderer = renderer;}
 
 private:
 
