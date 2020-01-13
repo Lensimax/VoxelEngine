@@ -51,7 +51,7 @@ add_definitions(-DGLFW_INCLUDE_NONE)
 
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-    add_definitions(-O3)
+    add_definitions(-O3 -DNDEBUG)
 endif()
 
 # si le compilateur est Visual Studio

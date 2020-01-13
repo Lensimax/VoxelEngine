@@ -69,13 +69,12 @@ void TerrainManager::inputUpdate() {
         // return;
     }
     
-    glm::vec3 player_coord = getPlayerCoord(); player_coord.y = 0;
+    glm::vec3 player_coord = getPlayerCoord();// player_coord.y = 0;
     
     glm::ivec3 cg_coord = toChunkGridCoord(player_coord);
 
     if (m_oldChunkGridCoord != cg_coord)
     {
-
         manageChunksAround(player_coord);
 
         m_oldChunkGridCoord = cg_coord;
@@ -126,7 +125,7 @@ void TerrainManager::createChunksAround(glm::vec3 position) {
 void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
 
     glm::ivec3 current_grid_coord(toChunkGridCoord(world_coord));
-    glm::ivec3 grid_offset(getTerrainSize() / 2, 0, getTerrainSize() / 2);
+    glm::ivec3 grid_offset(getTerrainSize() / 2, getTerrainSize() / 2, getTerrainSize() / 2);
     glm::ivec3 min_grid_coord = current_grid_coord - grid_offset;
 
 
@@ -136,29 +135,32 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
 
     for (size_t i = 0 ; i < getTerrainSize() ; ++i)
     {
-        for (size_t k = 0 ; k < getTerrainSize() ; ++k)
-        {
-            glm::ivec3 chunk_grid_coord = min_grid_coord + glm::ivec3(i, 0, k);
+    	for (size_t j = 0 ; j < getTerrainSize() ; ++j)
+    	{
+	        for (size_t k = 0 ; k < getTerrainSize() ; ++k)
+	        {
+	            glm::ivec3 chunk_grid_coord = min_grid_coord + glm::ivec3(i, j, k);
 
-            auto res = m_grid_to_chunk_map.find(chunk_grid_coord);
-            
-            if (res != m_grid_to_chunk_map.end()) // Trouvé
-            {
-                TerrainChunk* terrain_chunk = res->second;
+	            auto res = m_grid_to_chunk_map.find(chunk_grid_coord);
+	            
+	            if (res != m_grid_to_chunk_map.end()) // Trouvé
+	            {
+	                TerrainChunk* terrain_chunk = res->second;
 
-                m_grid_to_chunk_map[chunk_grid_coord] = terrain_chunk;
-                to_keep.push_back(terrain_chunk->getGameObject());
-            }
-            else
-            {
-                // Si le chunk n'est pas dans la map il faut le creer
-                GameObject* chunk = createTerrainChunk(toWorldGridCoord(chunk_grid_coord));
-                m_gameobject->addChild(chunk);
+	                m_grid_to_chunk_map[chunk_grid_coord] = terrain_chunk;
+	                to_keep.push_back(terrain_chunk->getGameObject());
+	            }
+	            else
+	            {
+	                // Si le chunk n'est pas dans la map il faut le creer
+	                GameObject* chunk = createTerrainChunk(toWorldGridCoord(chunk_grid_coord));
+	                m_gameobject->addChild(chunk);
 
-                m_grid_to_chunk_map[chunk_grid_coord] = chunk->getComponent<TerrainChunk*>();
-                to_keep.push_back(chunk);
-            }
-        }
+	                m_grid_to_chunk_map[chunk_grid_coord] = chunk->getComponent<TerrainChunk*>();
+	                to_keep.push_back(chunk);
+	            }
+	        }
+    	}
     }
 
     // Efface les Chunks trop loin de la position world_coord
@@ -249,12 +251,11 @@ TerrainChunk* TerrainManager::getPlayerChunk() {
     return getChunkAt(getPlayerCoord());
 }
 
-TerrainChunk* TerrainManager::getChunkAt(glm::vec3 world_coord) {
-    glm::vec3 chunk_coord = toChunkGridCoord(world_coord) * glm::ivec3(getChunkSize()); 
-
-    auto res = std::find_if(std::begin(m_gameobject->m_listOfChildren), std::end(m_gameobject->m_listOfChildren), [&](GameObject* go){return go->getTransform()->getPosition() == chunk_coord;});
-    if (res != std::end(m_gameobject->m_listOfChildren))
-        return (*res)->getComponent<TerrainChunk*>();
+TerrainChunk* TerrainManager::getChunkAt(glm::vec3 world_coord) {    
+    auto res = m_grid_to_chunk_map.find(toChunkGridCoord(world_coord));
+    
+    if (res != m_grid_to_chunk_map.end())
+        return res->second;
     else
         return nullptr;
 }
@@ -280,7 +281,6 @@ void  TerrainManager::setVoxelAt(glm::vec3 world_coord, Voxel v) {
         glm::uvec3 voxel = toVoxelCoord(world_coord);
         chunk->voxels(voxel.x, voxel.y, voxel.z) = v;
         chunk->needUpdate = true;
-        // std::cerr << "set\n";
     }
 }
 
