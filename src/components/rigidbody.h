@@ -28,6 +28,7 @@ public:
     void createUI() override;
 
     float getSpeed(){return m_speed;}
+    void setSpeed(float speed){m_speed = speed;}
     float getMass(){return m_mass;}
     glm::vec3 getMove(){return m_vectorMove;}
     void setMove(glm::vec3 move){m_vectorMove = move;}

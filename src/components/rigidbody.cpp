@@ -24,18 +24,22 @@ void Rigidbody::update() {
 
     computeGravity();
 
-    m_vectorMove.x *= m_speed;
-    m_vectorMove.z *= m_speed;
+    glm::vec3 currentMove = m_vectorMove;
+
+    currentMove.x *= m_speed;
+    currentMove.z *= m_speed;
+
+    
 
 
     assert(global_limitFramerate != 0.0f);
     float deltaTime = ImGui::GetIO().Framerate / global_limitFramerate;
-    m_vectorMove *= deltaTime;
+    currentMove *= deltaTime;
     // printf("Delta Y: %f\n", deltaTime);
 
     
 
-    m_gameobject->m_transform->setPosition(pos+m_vectorMove); 
+    m_gameobject->m_transform->setPosition(pos+currentMove); 
 
 }
 
