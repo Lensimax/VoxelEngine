@@ -21,7 +21,7 @@
 #include "terrainModificator.h"
 
 
-Projectile::Projectile(float speed) : m_speed(speed){
+Projectile::Projectile(int radius) : m_radiusOfExplosion(radius){
     setName("Projectile");
 }
 
@@ -38,7 +38,7 @@ void Projectile::update(){
     }
 
     if(collider->isInCollision()){
-        terainModif->destroy(5);
+        terainModif->destroy(m_radiusOfExplosion);
     }
 }
 
@@ -47,4 +47,6 @@ void Projectile::createUI(){
     if(collider != nullptr){
         ImGui::Text("Is in collision : %s", collider->isInCollision() ? "true" : "false");
     }
+    ImGui::Text("Radius of explosion : ");
+    ImGui::DragInt("##radius", &m_radiusOfExplosion, 1, 1, 100);
 }
