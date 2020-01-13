@@ -8,6 +8,10 @@
 
 //// Constructors
 
+float TerrainChunk::m_frequency = 0.01f;
+size_t TerrainChunk::nbOctaves = 3;
+
+
 TerrainChunk::TerrainChunk(size_t cubic_size) : voxels(cubic_size) {
 	setName("TerrainChunk");
 }
@@ -206,12 +210,10 @@ void TerrainChunk::calculateMesh()
 }
 
 size_t TerrainChunk::getHeightAt(size_t chunk_size, float x, float z) {
-	float scale = 100.f;
-	size_t octaves = 3;
 
-	SimplexNoise snoise(1.0f / scale);
+	SimplexNoise snoise(m_frequency);
 
-	float perlin_value = (snoise.fractal(octaves, x, z) + 1.0) / 2.0;
+	float perlin_value = (snoise.fractal(nbOctaves, x, z) + 1.0) / 2.0;
 			
 	return std::round(perlin_value * chunk_size);
 }

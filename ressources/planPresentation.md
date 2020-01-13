@@ -1,6 +1,8 @@
-
+* enjeu du projet
+    * but du projet
 * presentation du moteur
-    * imgui, glfw, glad, glm
+    * cmake,imgui, glfw, glad, glm
+        * travis
     * structure du moteur
         * classes principales
         * mode editeur / mode jeu
@@ -19,6 +21,10 @@
 * optimisations
     * creation d'un maillage
     * chargement des chunks
+* gameplay
+    * camera
+    * mouvement
+    * explosions
 * améliorations
     * génération procédurale plus riche
     * implémenter un frustum culling

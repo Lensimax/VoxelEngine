@@ -36,14 +36,6 @@ jobs:
       script:
         - cmake --build .
     - stage: build
-      name: "Windows MVS 2019 Build Debug"
-      os: windows
-      install:
-        - mkdir build && cd build
-        - cmake -G "Visual Studio 16 2019" ..
-      script:
-        - cmake --build .
-    - stage: build
       name: "Windows MinGW Build Debug"
       os: windows
       install:

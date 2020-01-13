@@ -29,8 +29,12 @@ auto ivec3_comp = [](const glm::ivec3& v1, const glm::ivec3& v2) -> bool
 
 TerrainManager::TerrainManager(size_t chunk_size, size_t terrain_size, Transform* player_transform) : m_chunk_size(chunk_size), m_terrain_size(terrain_size), m_player_transform(player_transform), m_grid_to_chunk_map(ivec3_comp) {
     assert(m_player_transform != nullptr);
+    setName("Terrain Manager");
 
     m_oldChunkGridCoord = toChunkGridCoord(getPlayerCoord());
+    m_octaves = TerrainChunk::nbOctaves;
+    m_frequency = TerrainChunk::m_frequency;
+    m_recreate = false;
 }
 
 void TerrainManager::start() {
@@ -40,7 +44,30 @@ void TerrainManager::start() {
     manageChunksAround(getPlayerCoord());
 }
 
+void TerrainManager::createUI(){
+
+    ImGui::Text("Noise Frequency : ");
+    ImGui::DragFloat("##speed", &m_frequency, 0.01f,0.001f, 1.f);
+    ImGui::Text("Number of octaves : ");
+    ImGui::DragInt("##radius", &m_octaves, 1, 1, 8);
+
+    if(ImGui::Button("Refresh WIP")){
+        // assert(m_octaves > 0);
+        // assert(m_frequency > 0.0f);
+        // m_recreate = true;
+    }
+}
+
 void TerrainManager::inputUpdate() {
+
+    if(m_recreate){
+        // m_oldChunkGridCoord = toChunkGridCoord(getPlayerCoord());
+        // m_gameobject->deleteAllChildren();
+        // createChunksAround(getPlayerCoord());
+        // manageChunksAround(getPlayerCoord());
+        // m_recreate =false;
+        // return;
+    }
     
     glm::vec3 player_coord = getPlayerCoord(); player_coord.y = 0;
     

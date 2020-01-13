@@ -92,7 +92,7 @@ void FireProjectiles::createProjectile(){
 
 void FireProjectiles::createUI() {
     ImGui::Text("Projectile Speed : ");
-    ImGui::DragFloat("##speed", &m_projectileSpeed, 0.01f,0.01f, 1000.f);
+    ImGui::DragFloat("##speed", &m_projectileSpeed, 0.01f,0.01f, 200.f);
     ImGui::Text("Radius of explosion : ");
     ImGui::DragInt("##radius", &m_radiusExplosionProjectile, 1, 1, 100);
 }

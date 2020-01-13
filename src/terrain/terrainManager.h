@@ -32,6 +32,8 @@ public:
 	void inputUpdate() override;
 	void update() override;
 
+	void createUI() override;
+
 	/// Factory
 
 	// Alloue un nouveau chunk
@@ -71,6 +73,10 @@ private:
 	size_t m_terrain_size;
 	Transform* m_player_transform = nullptr;
 	glm::ivec3 m_oldChunkGridCoord;
+
+	int m_octaves;
+    float m_frequency;
+	bool m_recreate;
 
 	std::map<glm::ivec3, TerrainChunk*, std::function<bool(const glm::ivec3& v1, const glm::ivec3& v2)>> m_grid_to_chunk_map;
 };
