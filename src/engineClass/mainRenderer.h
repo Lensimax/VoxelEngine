@@ -50,7 +50,7 @@ public:
     inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
     inline GLuint getEditorTextureID(){return m_editorTextureID;}
     inline GameObject *getCamera(){return m_camera;}
-
+    inline bool getPlayMode(){return m_playMode;}
 
 private:
 

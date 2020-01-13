@@ -24,6 +24,14 @@ UI::~UI(){
 }
 
 void UI::drawUI(){
+    if(m_scene != nullptr && m_scene->getPause()){
+        ImGui::Begin("Pause Menu");
+        ImGui::TextColored(ImVec4(1,0,0,1) ,"GAME PAUSED !!!");
+        ImGui::TextColored(ImVec4(1,0,0,1) ,"Press CTRL + P to unpause");
+        ImGui::End();
+    }
+
+
     if(!m_hasToBeDisplayed){
         return;
     }
@@ -41,14 +49,33 @@ void UI::drawUI(){
         m_inputManager->createUI();
     }
 
-   
-    if(m_scene != nullptr && m_scene->getPause()){
-        ImGui::Begin("Pause Menu");
-        ImGui::TextColored(ImVec4(1,0,0,1) ,"GAME PAUSED !!!");
-        ImGui::TextColored(ImVec4(1,0,0,1) ,"Press CTRL + P to unpause");
+    if(m_mainRenderer != nullptr){
+        ImGui::Begin("Engine mode");
+        ImGui::Text("%s", m_mainRenderer->getPlayMode() ? "Play mode" : "Editor mode");
         ImGui::End();
 
+        ImGui::Begin("Mode Controls");
+        if(m_mainRenderer->getPlayMode()){
+            ImGui::Text("ZQSD: move");
+            ImGui::Text("Mouse: move camera third person");
+            ImGui::Text("Spacebar: jump");
+            ImGui::Text("F: shoot projectile");
+        } else {
+            ImGui::Text("Left Mouse click: move camera as frist person");
+            ImGui::Text("Right Mouse click: move camera left/rigth/top/bottom");
+            ImGui::Text("Mouse wheel: zoom/unzoom");
+
+        }
+        ImGui::End();
     }
+
+    ImGui::Begin("Controls");
+    ImGui::Text("CTRL+U: switch with play Mode");
+    ImGui::Text("CTRL+F: toggle wire frame");
+    ImGui::Text("CTRL+P: pause/unpause");
+    ImGui::Text("CTRL+G: active/disable camera player");
+    ImGui::Text("CTRL+H: show/hide HUD");
+    ImGui::End();
    
 }
 
