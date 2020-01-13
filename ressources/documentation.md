@@ -1,5 +1,9 @@
 # Compilation et Documentation
 
+Source du projet : https://github.com/TheSpyGeek/VoxelEngine
+
+**Attention** pour cloner utiliser l'option "recursive" de git : ```git clone --recursive https://github.com/TheSpyGeek/VoxelEngine.git```
+
 ## Compilation
 
 Le projet utilise ```cmake``` pour le développement nous utilisons le flags type de compilation en mode ```Debug``` mais pour une utilisation est pour voir les performances il vaut mieux utiliser le mode ```Release```. Pour ce faire , lors de la préparation avec ```Cmake``` au lieu de juste faire ```cmake ..``` vous devez faire ```cmake -DCMAKE_BUILD_TYPE=Release ..```.

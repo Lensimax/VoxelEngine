@@ -279,7 +279,7 @@ void Scene::loadExplorationScene(){
     objectsEngine.push_back(player);
 
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 12, player->getTransform()));
+    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 30, player->getTransform()));
     objectsEngine.push_back(terrain);
   
 
