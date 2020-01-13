@@ -37,7 +37,6 @@ Collider::~Collider() {
 
 void Collider::start(){
     m_rb = m_gameobject->getComponent<Rigidbody*>();
-    assert(m_rb != nullptr);
     computeCollisionWithGround();
 }
 
@@ -91,8 +90,7 @@ void Collider::updateCollidingBox(){
 
     m_boxMin += position; m_boxMax += position;
 
-    assert(m_rb != nullptr);
-    if(m_rb->getActive()){
+    if(m_rb != nullptr && m_rb->getActive()){
         glm::vec3 move = m_rb->getMove();
         // move *= m_rb->getSpeed();
         move.x *=m_rb->getSpeed();
@@ -125,15 +123,17 @@ glm::vec3 Collider::computeCollision(){
 }
 
 void Collider::physicsUpdate() {
-    assert(m_rb != nullptr);
+    if(m_rb == nullptr){
+        m_rb = m_gameobject->getComponent<Rigidbody*>();
+    }
     updateCollidingBox();
     if(m_terrain == nullptr){ return;}
 
-    if(m_rb->getActive() && m_rb->useGravity()){
+    if(m_rb != nullptr && m_rb->getActive() && m_rb->useGravity()){
         computeCollisionWithGround();
     }
 
-    if(computeCollision() != glm::vec3(0)){
+    if(m_rb != nullptr && computeCollision() != glm::vec3(0)){
         m_isInCollision = true;
         if(m_rb != nullptr && m_rb->getActive()){
             glm::vec3 move = m_rb->getMove();
@@ -308,9 +308,7 @@ void Collider::displayImGuiVoxel(Voxel voxel, const char message[]) {
 
 void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionMat, Light *light) {
     glm::vec3 position = m_gameobject->getTransform()->getPosition();
-    if(!m_showCollidingBox){
-        return;
-    }
+ 
 
     const float lineWidth = 0.2f;
 
@@ -365,7 +363,9 @@ void Collider::draw(glm::mat4 modelMat, glm::mat4 viewMat, glm::mat4 projectionM
     //    DrawDebug::drawArrayPosition(2, (float*)&array[0], GL_LINES);
     }
 
-    drawAABB(m_boxMin, m_boxMax, shader);
+    if(m_showCollidingBox){
+        drawAABB(m_boxMin, m_boxMax, shader);
+    }
 
 
     glUseProgram(0);
