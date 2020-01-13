@@ -30,6 +30,7 @@ public:
 	void start() override;
 	// void update() override;
 	void inputUpdate() override;
+	void update() override;
 
 	/// Factory
 
@@ -40,9 +41,8 @@ public:
 
 	void createChunksAround(glm::vec3 world_coord);
 	void manageChunksAround(glm::vec3 world_coord);
-	
+
 	void updateChunkAt(glm::vec3 world_coord);
-	void updateChunks();
 
 	/// Accessors
 

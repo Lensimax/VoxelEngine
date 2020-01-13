@@ -57,14 +57,19 @@ endif()
 # si le compilateur est Visual Studio
 if (CMAKE_GENERATOR MATCHES "Visual Studio")
     # Do Visual Studio specific stuff
-else()
-    add_definitions(-std=c++11)
-    if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-        add_definitions(-g)
-        add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic -fsanitize=address -fno-omit-frame-pointer)
-        set(CMAKE_EXE_LINKER_FLAGS -fsanitize=address)
+else() 
+    if (CMAKE_GENERATOR MATCHES "MinGW")
+        message("Generator MinGW ACTIVATED")
+    else()
+        add_definitions(-std=c++11)
+        if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+            add_definitions(-g)
+            add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra)
+            add_definitions(-pedantic -fsanitize=address -fno-omit-frame-pointer)
+            set(CMAKE_EXE_LINKER_FLAGS -fsanitize=address)
+        endif()
     endif()
-    
+        
 endif()
 
 

@@ -14,27 +14,28 @@ GroundFollow::GroundFollow() : m_heightOffset(0.25f){
 }
 
 void GroundFollow::update(){
-    if(m_terrain != nullptr){
-        glm::vec3 position = m_gameobject->getTransform()->getPosition();
-        position.y -= m_heightOffset;
-        
-        glm::vec3 bottomVoxelOffset(0, 1, 0);
-        
-        Voxel v = m_terrain->getVoxelAt(round(position));
-        
-        if (v == Voxel::Empty) {
-            v = m_terrain->getVoxelAt(round(position - bottomVoxelOffset));
+    
+    assert(m_terrain != nullptr);
 
-            if (v == Voxel::Empty){
-                position.y = round(position.y - 1); 
-            }
-        }
-        else{
-            position.y = round(position.y + 1);
-        }
+    glm::vec3 position = m_gameobject->getTransform()->getPosition();
+    position.y -= m_heightOffset;
+    
+    glm::vec3 bottomVoxelOffset(0, 1, 0);
+    
+    Voxel v = m_terrain->getVoxelAt(round(position));
+    
+    if (v == Voxel::Empty) {
+        v = m_terrain->getVoxelAt(round(position - bottomVoxelOffset));
 
-        m_gameobject->getTransform()->setPosition(position + bottomVoxelOffset * m_heightOffset);
+        if (v == Voxel::Empty){
+            position.y = round(position.y - 1); 
+        }
     }
+    else{
+        position.y = round(position.y + 1);
+    }
+
+    m_gameobject->getTransform()->setPosition(position + bottomVoxelOffset * m_heightOffset);
 }
 
 void GroundFollow::createUI(){
