@@ -17,8 +17,11 @@
 
 #include <imgui.h>
 
+#include "colliders/collider.h"
+#include "terrainModificator.h"
 
-Projectile::Projectile(float speed) : m_speed(speed){
+
+Projectile::Projectile(int radius) : m_radiusOfExplosion(radius){
     setName("Projectile");
 }
 
@@ -28,29 +31,24 @@ Projectile::~Projectile(){
 }
 
 void Projectile::update(){
-    if(m_active){
-        float deltaTime = ImGui::GetIO().Framerate/1000.f;
+    Collider* collider = m_gameobject->getComponent<Collider*>();
+    TerrainModificator* terainModif = m_gameobject->getComponent<TerrainModificator*>();
+    if(collider == nullptr || terainModif == nullptr){
+        return;
+    }
 
-        glm::vec3 pos = m_gameobject->getTransform()->getPosition();
-        glm::vec3 rotation = m_gameobject->getTransform()->getRotation();
-
-        float dx = glm::cos(rotation.y);
-        float dz = glm::sin(rotation.y);
-
-        float dxx = glm::cos(M_PI - rotation.y);
-        float dzx = glm::sin(M_PI - rotation.y);
-
-        glm::vec3 move = glm::vec3(0, 0, 0);
-        move.z = 1.0f;
-        move *= deltaTime*m_speed;
-        pos.z += move.z * dx;
-        pos.x += move.z * dz;
-
-        m_gameobject->m_transform->setPosition(pos); 
+    if(collider->isInCollision()){
+        terainModif->destroy(m_radiusOfExplosion);
+        assert(m_scene != nullptr);
+        m_scene->addToDestroy(m_gameobject->getID());
     }
 }
 
 void Projectile::createUI(){
-    ImGui::Text("Speed : ");
-    ImGui::DragFloat("##speed", &m_speed, 0.01f,0.01f, 1000.f);
+    Collider* collider = m_gameobject->getComponent<Collider*>();
+    if(collider != nullptr){
+        ImGui::Text("Is in collision : %s", collider->isInCollision() ? "true" : "false");
+    }
+    ImGui::Text("Radius of explosion : ");
+    ImGui::DragInt("##radius", &m_radiusOfExplosion, 1, 1, 100);
 }

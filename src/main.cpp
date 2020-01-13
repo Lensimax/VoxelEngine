@@ -184,6 +184,8 @@ int main(int, char**)
         glfwPollEvents();
         glfwGetFramebufferSize(window, &display_w, &display_h);
 
+        scene->cleanDestroy();
+
 
         auto start = std::chrono::high_resolution_clock::now();
         scene->inputUpdate();
