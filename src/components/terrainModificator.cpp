@@ -29,12 +29,7 @@ void TerrainModificator::setSphere(glm::vec3 world_coord, size_t radius, Voxel v
     }
 }
 
-void TerrainModificator::inputUpdate(){
-
-    assert(m_terrain != nullptr);
-
-    glm::vec3 pos = m_gameobject->getTransform()->getPosition();
-
+void inputUpdate(){
     if(ImGui::IsKeyPressed('O'))
         setSphere(pos, 10, Voxel::Empty);
     else if (ImGui::IsKeyPressed('U'))

@@ -23,12 +23,12 @@ class Rigidbody : public Component {
 public:
     Rigidbody(float speed = 0.5f);
 
-    void inputUpdate() override;
     void update() override;
 
     void createUI() override;
 
     float getSpeed(){return m_speed;}
+    void setSpeed(float speed){m_speed = speed;}
     float getMass(){return m_mass;}
     glm::vec3 getMove(){return m_vectorMove;}
     void setMove(glm::vec3 move){m_vectorMove = move;}
@@ -38,7 +38,7 @@ public:
 private:
     void computeGravity();
 
-    float m_speed, m_mass, m_jumpForce;
+    float m_speed, m_mass;
     bool m_useGravity;
 
     glm::vec3 m_vectorMove;
