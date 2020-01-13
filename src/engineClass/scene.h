@@ -13,6 +13,8 @@
 
 #include "../components/cameraProjective.h"
 
+
+
 class Scene {
 
 public:
@@ -43,6 +45,8 @@ public:
     void loadGameplayScene();
     void loadExplorationScene();
 
+    void addToDestroy(int index){m_hasToBeDestroyed.push_back(index);}
+
 
     std::vector<GameObject*> objectsEngine;
     int addNewId();
@@ -52,6 +56,9 @@ public:
 
     void deleteScene();
     bool getPause(){return m_pause;}
+
+    void cleanDestroy();
+
 private:
 
     CameraProjective* getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
@@ -60,6 +67,7 @@ private:
     int m_idObject = 0;
 
     bool m_pause;
+    std::vector<int> m_hasToBeDestroyed;
 
 };
 
