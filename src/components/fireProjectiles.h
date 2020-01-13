@@ -3,6 +3,7 @@
 
 #include "component.h"
 #include "../engineClass/scene.h"
+#include "../terrain/terrainManager.h"
 
 class FireProjectiles : public Component {
 
@@ -14,12 +15,14 @@ public:
     void createUI() override;
 
     void setScene(Scene *scene){m_scene = scene;}
+    void setTerrain(TerrainManager *terrain){m_terrain = terrain;}
 private:
     glm::vec3 computeForward();
     void createProjectile();
 
     Scene *m_scene;
     float m_projectileSpeed;
+    TerrainManager *m_terrain;
 
 };
 

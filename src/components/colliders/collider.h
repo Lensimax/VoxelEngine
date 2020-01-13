@@ -21,6 +21,7 @@ public:
 
     inline bool isGrounded(){return m_isGrounded;}
     inline void setTerrain(TerrainManager *terrain){m_terrain = terrain;}
+    inline bool isInCollision(){return m_isGrounded || m_isInCollision;}
 private:
     void displayImGuiVoxel(Voxel voxel, const char message[]);
     bool intersect(glm::vec3 boxMin, glm::vec3 boxMax);

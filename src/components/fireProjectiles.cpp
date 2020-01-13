@@ -71,13 +71,13 @@ void FireProjectiles::createProjectile(){
     projectile->addComponent<MeshRenderer*>(new MeshRenderer());
     projectile->getComponent<Lambertian*>()->toggleDisplayDiffuse();
     projectile->addComponent<Collider*>(new Collider(glm::vec3(0.25f)));
-
+    projectile->getComponent<Collider*>()->setTerrain(m_terrain);
   
-    // projectile->addComponent<Projectile*>(new Projectile());
+    projectile->addComponent<Projectile*>(new Projectile());
 
     // debug
-    projectile->addComponent<AxisRenderer*>(new AxisRenderer());
-    projectile->addComponent<DebugTransform*>(new DebugTransform());
+    // projectile->addComponent<AxisRenderer*>(new AxisRenderer());
+    // projectile->addComponent<DebugTransform*>(new DebugTransform());
 
     m_scene->addGameObject(projectile);
 

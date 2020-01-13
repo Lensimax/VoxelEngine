@@ -312,6 +312,7 @@ void Scene::loadGameplayScene(){
   
 
     player->getComponent<Collider*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+    player->getComponent<FireProjectiles*>()->setTerrain(terrain->getComponent<TerrainManager*>());
     
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
