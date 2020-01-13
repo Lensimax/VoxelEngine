@@ -13,7 +13,7 @@ public:
     // void update() override;
     void createUI() override;
 
-    void destroy(glm::vec3 position, size_t size);
+    void destroy(size_t radius);
 
 
     void setTerrain(TerrainManager *terrain){m_terrain = terrain;}

@@ -18,6 +18,7 @@
 #include <imgui.h>
 
 #include "colliders/collider.h"
+#include "terrainModificator.h"
 
 
 Projectile::Projectile(float speed) : m_speed(speed){
@@ -30,7 +31,15 @@ Projectile::~Projectile(){
 }
 
 void Projectile::update(){
+    Collider* collider = m_gameobject->getComponent<Collider*>();
+    TerrainModificator* terainModif = m_gameobject->getComponent<TerrainModificator*>();
+    if(collider == nullptr || terainModif == nullptr){
+        return;
+    }
 
+    if(collider->isInCollision()){
+        terainModif->destroy(5);
+    }
 }
 
 void Projectile::createUI(){

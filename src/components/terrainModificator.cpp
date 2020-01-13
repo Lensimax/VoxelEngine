@@ -13,7 +13,9 @@ TerrainModificator::TerrainModificator(){
     setName("Terrain Modificator");
 }
 
-void TerrainModificator::destroy(glm::vec3 world_coord, size_t radius) {
+void TerrainModificator::destroy(size_t radius) {
+    assert(m_terrain != nullptr);
+    glm::vec3 world_coord = m_gameobject->getTransform()->getPosition();
 
     glm::vec3 min_coord = world_coord - glm::vec3(radius);
 
@@ -34,11 +36,11 @@ void TerrainModificator::inputUpdate(){
 
     assert(m_terrain != nullptr);
 
-    glm::vec3 pos = m_gameobject->getTransform()->getPosition();
+    /*glm::vec3 pos = m_gameobject->getTransform()->getPosition();
 
     if(ImGui::IsKeyPressed('O')){
-        destroy(pos, 5);
-    }
+        destroy(5);
+    }*/
 }
 
 void TerrainModificator::createUI(){

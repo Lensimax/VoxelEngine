@@ -8,6 +8,7 @@
 #include "debug/debugTransform.h"
 #include "colliders/collider.h"
 #include "rigidbody.h"
+#include "terrainModificator.h"
 
 #include <imgui.h>
 #include <iostream>
@@ -73,6 +74,8 @@ void FireProjectiles::createProjectile(){
     projectile->addComponent<Collider*>(new Collider(glm::vec3(0.25f)));
     projectile->getComponent<Collider*>()->setTerrain(m_terrain);
   
+    projectile->addComponent<TerrainModificator*>(new TerrainModificator());
+    projectile->getComponent<TerrainModificator*>()->setTerrain(m_terrain);
     projectile->addComponent<Projectile*>(new Projectile());
 
     // debug
