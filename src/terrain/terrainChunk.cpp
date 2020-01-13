@@ -8,6 +8,8 @@
 
 //// Constructors
 
+// float TerrainChunk::m_frequency = 0.008f;
+// size_t TerrainChunk::nbOctaves = 4;
 float TerrainChunk::m_frequency = 0.01f;
 size_t TerrainChunk::nbOctaves = 3;
 
