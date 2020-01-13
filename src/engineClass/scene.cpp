@@ -268,9 +268,8 @@ void Scene::loadExplorationScene(){
     objectsEngine.push_back(player);
 
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 9, player->getTransform()));
+    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 5, player->getTransform()));
     objectsEngine.push_back(terrain);
-  
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
     camera->addComponent<CameraProjective*>(new CameraProjective());

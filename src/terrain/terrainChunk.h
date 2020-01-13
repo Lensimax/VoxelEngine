@@ -19,11 +19,12 @@ public:
 
 	CubicArray<Voxel> voxels;
 	MeshRenderer* renderer = nullptr;
+	TerrainManager* terrain = nullptr;
 	bool needUpdate = true;
 
 	/// Constructors
 
-	TerrainChunk(size_t cubic_size);
+	TerrainChunk(size_t cubic_size, TerrainManager* terrain);
 
 	/// Overrides
 
@@ -45,6 +46,7 @@ public:
 	/// Statics
 
 	static size_t getHeightAt(size_t chunk_size, float x, float z);
+	static Voxel getGroundAt(size_t chunk_size, float x, float y, float z);
 // private:
 
 	// TerrainManager* m_terrain = nullptr;

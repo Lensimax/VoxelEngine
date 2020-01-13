@@ -8,7 +8,7 @@
 
 //// Constructors
 
-TerrainChunk::TerrainChunk(size_t cubic_size) : voxels(cubic_size) {
+TerrainChunk::TerrainChunk(size_t cubic_size, TerrainManager* terrain) : voxels(cubic_size), terrain(terrain) {
 	setName("TerrainChunk");
 }
 
@@ -32,25 +32,38 @@ void TerrainChunk::generate() {
 	glm::vec3 position = m_gameobject->getTransform()->getPosition();
 	// std::cerr << position.x << ','<< position.y << ',' << position.z << '\n';
 
-	for(size_t i = 0 ; i < voxels.width() ; ++i) {
-		for(size_t k = 0 ; k < voxels.depth() ; ++k) {
-			
-			// perlin_value in [0, 1]
-			// float perlin_value = (snoise.fractal(octaves,
-				                  // position.x + i, 
-				                  // position.z + k) + 1.0) / 2.0;
-			// 
-			// size_t max_y = std::round(perlin_value * voxels.cubic_size());
-			size_t max_y = getHeightAt(voxels.cubic_size(), position.x + i, position.z + k);
-// 
-			// voxels(i, max_y, k) = Voxel::Full;
+	if (position.y >= 0 && position.y < voxels.height()) // Affichage de la surface du terrain
+	{
+		for(size_t i = 0 ; i < voxels.width() ; ++i) {
+			for(size_t k = 0 ; k < voxels.depth() ; ++k) {
+				
+				// perlin_value in [0, 1]
+				// float perlin_value = (snoise.fractal(octaves,
+					                  // position.x + i, 
+					                  // position.z + k) + 1.0) / 2.0;
+				// 
+				// size_t max_y = std::round(perlin_value * voxels.cubic_size());
+				size_t max_y = getHeightAt(voxels.cubic_size(), position.x + i, position.z + k);
+	// 
+				// voxels(i, max_y, k) = Voxel::Full;
 
-			// if (max_y > 0)
-				// voxels(i, max_y - 1, k) = Voxel::Full;
-			
-			for (size_t j = 0 ; j < max_y ; ++j) // => active les voxel de 0 à Y 
-			{
-				voxels(i, j, k) = Voxel::Full;
+				// if (max_y > 0)
+					// voxels(i, max_y - 1, k) = Voxel::Full;
+				
+				for (size_t j = 0 ; j < max_y ; ++j) // => active les voxel de 0 à Y 
+				{
+					voxels(i, j, k) = Voxel::Full;
+				}
+			}
+		}
+	}
+	else if (position.y < 0) { // Affiche le sous-sol de la map
+		for(size_t i = 0 ; i < voxels.width() ; ++i) {
+			for (size_t j = 0 ; j < voxels.height() ; ++j) // => active les voxel de 0 à Y 
+				for(size_t k = 0 ; k < voxels.depth() ; ++k) {
+				{
+					voxels(i, j, k) = getGroundAt(voxels.cubic_size(), position.x + i, position.y + j, position.z + k);
+				}
 			}
 		}
 	}
@@ -92,6 +105,17 @@ std::array<bool, 6> TerrainChunk::surrounding(size_t x, size_t y, size_t z) cons
 	// if ( !(y == 0)                     && (voxels(x    , y - 1, z    ) != Voxel::Empty) ) activated_neighbors[3] = true;
 	// if ( !(z == (voxels.depth() - 1))  && (voxels(x    , y    , z + 1) != Voxel::Empty) ) activated_neighbors[4] = true;
 	// if ( !(z == 0)                     && (voxels(x    , y    , z - 1) != Voxel::Empty) ) activated_neighbors[5] = true;
+
+	// assert(x != 0 && x != voxels.width() - 1);
+	// assert(y != 0 && y != voxels.height() - 1);
+	// assert(z != 0 && z != voxels.depth() - 1);
+
+	// if (voxels(x + 1, y    , z    ) != Voxel::Empty) activated_neighbors[0] = true;
+	// if (voxels(x - 1, y    , z    ) != Voxel::Empty) activated_neighbors[1] = true;
+	// if (voxels(x    , y + 1, z    ) != Voxel::Empty) activated_neighbors[2] = true;
+	// if (voxels(x    , y - 1, z    ) != Voxel::Empty) activated_neighbors[3] = true;
+	// if (voxels(x    , y    , z + 1) != Voxel::Empty) activated_neighbors[4] = true;
+	// if (voxels(x    , y    , z - 1) != Voxel::Empty) activated_neighbors[5] = true;
 
 	return activated_neighbors;
 }
@@ -193,9 +217,9 @@ void TerrainChunk::addCubeFaces(const std::array<bool, 6>& surrounding, size_t x
 
 void TerrainChunk::calculateMesh()
 {
-	for(size_t i = 0 ; i< voxels.width() ; i++) {
-		for(size_t j = 0 ; j < voxels.height() ; j++) {
-			for(size_t k = 0 ; k < voxels.depth() ; k++) {
+	for(size_t i = 0 ; i< voxels.width(); i++) {
+		for(size_t j = 0 ; j < voxels.height(); j++) {
+			for(size_t k = 0 ; k < voxels.depth(); k++) {
 				if (voxels(i, j, k) != Voxel::Empty) // si le voxel est activé
 				{
 					this->addCubeFaces(this->surrounding(i, j, k), i, j, k);
@@ -204,6 +228,20 @@ void TerrainChunk::calculateMesh()
 		}
 	}
 }
+
+// void TerrainChunk::calculateMeshBorder()
+// {
+// 	for(size_t i = 1 ; i< voxels.width() -1; i++) {
+// 		for(size_t j = 1 ; j < voxels.height() -1; j++) {
+// 			for(size_t k = 1 ; k < voxels.depth() -1; k++) {
+// 				if (voxels(i, j, k) != Voxel::Empty) // si le voxel est activé
+// 				{
+// 					this->addCubeFaces(this->surrounding(i, j, k), i, j, k);
+// 				}
+// 			}
+// 		}
+// 	}
+// }
 
 size_t TerrainChunk::getHeightAt(size_t chunk_size, float x, float z) {
 	float scale = 100.f;
@@ -215,3 +253,15 @@ size_t TerrainChunk::getHeightAt(size_t chunk_size, float x, float z) {
 			
 	return std::round(perlin_value * chunk_size);
 }
+
+Voxel TerrainChunk::getGroundAt(size_t chunk_size, float x, float y, float z) {
+	float scale = 50.f;
+	size_t octaves = 3;
+
+	SimplexNoise snoise(1.0f / scale);
+
+	float perlin_value = (snoise.fractal(octaves, x, y, z) + 1.0) / 2.0;
+			
+	return perlin_value < 0.5 ? Voxel::Empty : Voxel::Full;
+}
+

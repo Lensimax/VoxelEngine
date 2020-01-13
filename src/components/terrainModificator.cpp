@@ -13,8 +13,7 @@ TerrainModificator::TerrainModificator(){
     setName("Terrain Modificator");
 }
 
-void TerrainModificator::destroy(glm::vec3 world_coord, size_t radius) {
-
+void TerrainModificator::setSphere(glm::vec3 world_coord, size_t radius, Voxel v) {
     glm::vec3 min_coord = world_coord - glm::vec3(radius);
 
     for(size_t i = 0 ; i < m_terrain->getChunkSize() ; i++) {
@@ -24,7 +23,7 @@ void TerrainModificator::destroy(glm::vec3 world_coord, size_t radius) {
                 glm::vec3 current_coord = min_coord + glm::vec3(i, j, k);
 
                 if (glm::distance(world_coord, current_coord) <= radius)
-                    m_terrain->setVoxelAt(min_coord + glm::vec3(i, j, k), Voxel::Empty);
+                    m_terrain->setVoxelAt(min_coord + glm::vec3(i, j, k), v);
             }
         }
     }
@@ -36,9 +35,10 @@ void TerrainModificator::inputUpdate(){
 
     glm::vec3 pos = m_gameobject->getTransform()->getPosition();
 
-    if(ImGui::IsKeyPressed('O')){
-        destroy(pos, 5);
-    }
+    if(ImGui::IsKeyPressed('O'))
+        setSphere(pos, 10, Voxel::Empty);
+    else if (ImGui::IsKeyPressed('U'))
+        setSphere(pos, 10, Voxel::Full);
 }
 
 void TerrainModificator::createUI(){

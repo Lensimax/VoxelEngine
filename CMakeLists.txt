@@ -51,7 +51,7 @@ add_definitions(-DGLFW_INCLUDE_NONE)
 
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-    add_definitions(-O3)
+    add_definitions(-O3 -DNDEBUG)
 endif()
 
 # si le compilateur est Visual Studio
@@ -61,7 +61,7 @@ else()
     add_definitions(-std=c++11)
     if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         add_definitions(-g)
-        add_definitions(-Wformat -Wall -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic -fsanitize=address -fno-omit-frame-pointer)
+        add_definitions(-Wformat -Wall -DDEBUG -Wdelete-non-virtual-dtor -Wshadow -Wextra -pedantic -fsanitize=address -fno-omit-frame-pointer)
         set(CMAKE_EXE_LINKER_FLAGS -fsanitize=address)
     endif()
     
