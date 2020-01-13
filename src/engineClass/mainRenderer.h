@@ -10,13 +10,14 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #endif
 
+
 #include "../tools/lights/light.h"
-#include "scene.h"
 #include "../tools/lights/directionnalLight.h"
 #include "../material/shader.h"
 
 #include "../components/cameraProjective.h"
 
+#include "scene.h"
 
 #include <vector>
 #include <string>
@@ -50,8 +51,12 @@ public:
     inline GLuint getGameTextureID(){return m_renderedSceneTextureID;}
     inline GLuint getEditorTextureID(){return m_editorTextureID;}
     inline GameObject *getCamera(){return m_camera;}
+    inline bool getPlayMode(){return m_playMode;}
 
-    float global_limitFramerate = 60.f;
+    inline void setCamera(glm::vec3 position, glm::vec3 rotation){
+        m_camera->getTransform()->setPosition(position);
+        m_camera->getTransform()->setRotation(rotation);
+    }
 
 private:
 

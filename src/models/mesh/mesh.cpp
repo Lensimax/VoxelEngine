@@ -28,8 +28,7 @@ Mesh::Mesh() {
 
 Mesh::~Mesh() 
 {
-    if (m_vertexArrayID != 0)
-        deleteVAO();
+    deleteVAO();
 }
 
 void Mesh::createUI(){
@@ -166,8 +165,10 @@ void Mesh::drawVAO(){
 }
 
 void Mesh::deleteVAO(){
-    glDeleteBuffers(m_buffers.size(), m_buffers.data());
-    glDeleteVertexArrays(1,&m_vertexArrayID);
+    if (m_vertexArrayID != 0){
+        glDeleteBuffers(m_buffers.size(), m_buffers.data());
+        glDeleteVertexArrays(1,&m_vertexArrayID);
+    }
 }
 
 

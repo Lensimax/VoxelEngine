@@ -33,6 +33,8 @@
 #include "../components/fireProjectiles.h"
 #include "../components/debug/debugTransform.h"
 #include "../components/colliders/collider.h"
+#include "../components/terrainModificator.h"
+#include "../components/playerController.h"
 
 #include <thread>
 
@@ -45,6 +47,7 @@
 
 Scene::Scene(){
     // loadGameplayScene();
+    // loadSampleScene();
     loadExplorationScene();
 }
 
@@ -242,10 +245,18 @@ void Scene::togglePause(){
     m_pause = !m_pause;
 }
 
+void Scene::cleanDestroy(){
+    for(int index : m_hasToBeDestroyed){
+        deleteObject(index);
+    }
+    m_hasToBeDestroyed.clear();
+}
+
 
 void Scene::loadDefaultScene(){
     m_pause = true;
     m_idObject = 0;
+    m_hasToBeDestroyed = std::vector<int>();
     objectsEngine = std::vector<GameObject*>();
     objectsEngine.push_back(new DirectionnalLight(addNewId(), "Light", glm::vec3(0, 128, 0)));
 }
@@ -261,12 +272,14 @@ void Scene::loadExplorationScene(){
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Rigidbody*>(new Rigidbody(2.0f));
     player->getComponent<Rigidbody*>()->setUseGravity(false);
+    player->addComponent<PlayerController*>(new PlayerController());
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     player->addComponent<GroundFollow*>(new GroundFollow());
+    player->addComponent<TerrainModificator*>(new TerrainModificator());
     objectsEngine.push_back(player);
 
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
-    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 9, player->getTransform()));
+    terrain->addComponent<TerrainManager*>(new TerrainManager(32, 12, player->getTransform()));
     objectsEngine.push_back(terrain);
   
 
@@ -279,11 +292,11 @@ void Scene::loadExplorationScene(){
     player->getComponent<ThirdPersonController*>()->setCamera(camera);
     // player->getComponent<ThirdPersonController*>()->setActive(false);
     player->getComponent<GroundFollow*>()->setTerrain(terrain->getComponent<TerrainManager*>());
-    
+	player->getComponent<TerrainModificator*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+
     
     objectsEngine.push_back(camera);
 }
-
 
 void Scene::loadGameplayScene(){
 
@@ -294,11 +307,13 @@ void Scene::loadGameplayScene(){
     player->addComponent<Material*>(new Lambertian());
     player->addComponent<MeshRenderer*>(new MeshRenderer());
     player->addComponent<Rigidbody*>(new Rigidbody());
+    player->getComponent<Rigidbody*>()->setUseGravity(true);
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
     player->getComponent<FireProjectiles*>()->setScene(this);
-    player->getComponent<FireProjectiles*>()->setActive(false);
+    // player->getComponent<FireProjectiles*>()->setActive(false);
     player->addComponent<Collider*>(new Collider(glm::vec3(0.5, 0.6,0.5)));
+    player->addComponent<PlayerController*>(new PlayerController());
     objectsEngine.push_back(player);
 
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
@@ -307,6 +322,7 @@ void Scene::loadGameplayScene(){
   
 
     player->getComponent<Collider*>()->setTerrain(terrain->getComponent<TerrainManager*>());
+    player->getComponent<FireProjectiles*>()->setTerrain(terrain->getComponent<TerrainManager*>());
     
 
     GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,164, 0), glm::vec3(M_PI / 2 - 0.3, M_PI, 0)));
@@ -319,4 +335,18 @@ void Scene::loadGameplayScene(){
     // player->getComponent<ThirdPersonController*>()->setActive(false);
     objectsEngine.push_back(camera);
 
+}
+
+void Scene::loadSampleScene(){
+    loadDefaultScene();
+
+    
+    m_pause = false;
+
+    GameObject *camera = new GameObject(addNewId(), "Camera", new Transform(glm::vec3(0,3.5, 8), glm::vec3(0.40f,0,0)));
+    camera->addComponent<CameraProjective*>(new CameraProjective());
+    camera->addComponent<CameraRenderer*>(new CameraRenderer());
+    objectsEngine.push_back(camera);
+
+    addCube();
 }

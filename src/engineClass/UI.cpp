@@ -1,12 +1,22 @@
 
 #include "UI.h"
 
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 
 
 UI::UI() : m_scene(NULL), m_mainRenderer(NULL), m_inputManager(NULL), m_window(NULL), m_selectedID(0), m_hasToBeDisplayed(true) {
+    /*ImGuiIO& io = ImGui::GetIO();
+    m_pFont = io.Fonts->AddFontFromFileTTF("../data/fonts/BreeSerif-Regular.ttf", 20.0f);
+    assert(m_pFont !=  nullptr);
+
+    auto m_defaultFont = io.Fonts->AddFontFromFileTTF("../data/fonts/NotoSerif-Black.ttf", 10.0f);
+    assert(m_defaultFont !=  nullptr);*/
+
+    // io.Fonts->AddFontDefault();
+    /*unsigned char * pixels; 
+    int width, height, bytes_per_pixels;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixels);
+    GLuint id = loadTexture(pixels, width, height, 4);
+    io.Fonts->SetTexID((void*)id);*/
 }
 
 UI::~UI(){
@@ -14,23 +24,58 @@ UI::~UI(){
 }
 
 void UI::drawUI(){
+    if(m_scene != nullptr && m_scene->getPause()){
+        ImGui::Begin("Pause Menu");
+        ImGui::TextColored(ImVec4(1,0,0,1) ,"GAME PAUSED !!!");
+        ImGui::TextColored(ImVec4(1,0,0,1) ,"Press CTRL + P to unpause");
+        ImGui::End();
+    }
+
+
     if(!m_hasToBeDisplayed){
         return;
     }
     // createInfoWindow();
 
-    if(m_scene != NULL){
+    if(m_scene != nullptr){
         createUISceneManager(m_scene);
     }
 
-    if(m_mainRenderer != NULL){
+    if(m_mainRenderer != nullptr){
         m_mainRenderer->createUI();
     }
 
-    if(m_inputManager != NULL){
+    if(m_inputManager != nullptr){
         m_inputManager->createUI();
     }
 
+    if(m_mainRenderer != nullptr){
+        ImGui::Begin("Engine mode");
+        ImGui::Text("%s", m_mainRenderer->getPlayMode() ? "Play mode" : "Editor mode");
+        ImGui::End();
+
+        ImGui::Begin("Mode Controls");
+        if(m_mainRenderer->getPlayMode()){
+            ImGui::Text("ZQSD: move");
+            ImGui::Text("Mouse: move camera third person");
+            ImGui::Text("Spacebar: jump");
+            ImGui::Text("F: shoot projectile");
+        } else {
+            ImGui::Text("Left Mouse click: move camera as frist person");
+            ImGui::Text("Right Mouse click: move camera left/rigth/top/bottom");
+            ImGui::Text("Mouse wheel: zoom/unzoom");
+
+        }
+        ImGui::End();
+    }
+
+    ImGui::Begin("Controls");
+    ImGui::Text("CTRL+U: switch with play/editor Mode");
+    ImGui::Text("CTRL+F: toggle wire frame");
+    ImGui::Text("CTRL+P: pause/unpause");
+    ImGui::Text("CTRL+G: active/disable camera player");
+    ImGui::Text("CTRL+H: show/hide HUD");
+    ImGui::End();
    
 }
 
@@ -111,7 +156,7 @@ void UI::createUISceneManager(Scene *scene){
             if (ImGui::BeginMenu("Scene Example")){
                 if (ImGui::MenuItem("Exploration Scene")) { scene->deleteScene(); scene->loadExplorationScene(); }
                 if (ImGui::MenuItem("Gameplay Scene")) { scene->deleteScene(); scene->loadGameplayScene(); }
-                if (ImGui::MenuItem("Default Scene")) { scene->deleteScene(); scene->loadDefaultScene(); }
+                if (ImGui::MenuItem("Default Scene")) { scene->deleteScene(); scene->loadSampleScene(); }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -136,6 +181,7 @@ void UI::createUISceneManager(Scene *scene){
                 extern float global_limitFramerate;
                 if (ImGui::MenuItem("30 FPS")) { global_limitFramerate = 30.0f; }
                 if (ImGui::MenuItem("60 FPS")) { global_limitFramerate = 60.0f; }
+                if (ImGui::MenuItem("75 FPS")) { global_limitFramerate = 75.0f; }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
@@ -230,4 +276,19 @@ void UI::set(MainRenderer *main){
 
 void UI::set(GLFWwindow *win){
     m_window = win;
+}
+
+
+GLuint UI::loadTexture(unsigned char *pixels, int w, int h, int components){
+GLuint textureID;
+glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+glGenTextures(1, &textureID);
+glBindTexture(GL_TEXTURE_2D, textureID);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+glTexImage2D(GL_TEXTURE_2D, 0, components, w, h, 0, (components==3)?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+return textureID;
 }

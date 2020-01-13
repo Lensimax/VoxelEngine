@@ -46,8 +46,12 @@ public:
 
 	static size_t getHeightAt(size_t chunk_size, float x, float z);
 // private:
+	static float m_frequency;
+	static size_t nbOctaves;
 
 	// TerrainManager* m_terrain = nullptr;
+
+private:
 };
 
 #endif

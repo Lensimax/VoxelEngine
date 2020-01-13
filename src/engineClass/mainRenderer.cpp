@@ -84,8 +84,9 @@ void MainRenderer::renderTheScene(Scene *scene, int width, int height){
         l = new DirectionnalLight(scene->addNewId());
     }
 
-    drawEditorGrid(rootTransform->getModelToChild(glm::mat4(1)), camera->getView(), camera->getProjection((float)width/(float)height));
-
+    if(m_gridActivated){
+        drawEditorGrid(rootTransform->getModelToChild(glm::mat4(1)), camera->getView(), camera->getProjection((float)width/(float)height));
+    }
 
     for(unsigned int i=0; i<scene->objectsEngine.size(); i++){
         drawRecursive(rootTransform->getModelToChild(glm::mat4(1)), scene->objectsEngine[i], camera->getView(), camera->getProjection((float)width/(float)height), l, (float)width/(float)height);
@@ -223,7 +224,7 @@ void MainRenderer::drawEditorGrid(glm::mat4 modelMat, glm::mat4 viewMat, glm::ma
 
     glLineWidth(1);
     
-    const int size = 16;
+    const int size = 64;
     const float step = 1;
 
     std::vector<glm::vec3> arrayVertices;
@@ -257,18 +258,17 @@ void MainRenderer::update(){
 
 
 void MainRenderer::createUI(){
-    ImGui::Begin("Renderer Setting");
+    ImGui::Begin("MainRenderer Setting");
 
-    m_camera->createUI("Renderer Setting");
+    m_camera->createUI("MainRenderer Setting");
 
     ImGui::End();
 
 
-    if(m_firstFramePassed){
+    if(m_firstFramePassed && !m_playMode){
         ImGui::Begin("Game View", nullptr, ImGuiWindowFlags_NoResize);
         ImGui::Image((void*)(intptr_t)getGameTextureID(), ImVec2(426,240), ImVec2(0,1), ImVec2(1,0));
-        ImGui::End();
-        
+        ImGui::End();        
     }
 }
 
