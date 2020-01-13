@@ -23,6 +23,7 @@ private:
     Scene *m_scene;
     float m_projectileSpeed;
     TerrainManager *m_terrain;
+    int m_radiusExplosionProjectile;
 
 };
 

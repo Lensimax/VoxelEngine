@@ -13,7 +13,7 @@
 #include <imgui.h>
 #include <iostream>
 
-FireProjectiles::FireProjectiles() : m_projectileSpeed(0.2f){
+FireProjectiles::FireProjectiles() : m_projectileSpeed(0.2f), m_radiusExplosionProjectile(5){
     setName("Fire Projectiles");
 }
 
@@ -76,7 +76,7 @@ void FireProjectiles::createProjectile(){
   
     projectile->addComponent<TerrainModificator*>(new TerrainModificator());
     projectile->getComponent<TerrainModificator*>()->setTerrain(m_terrain);
-    projectile->addComponent<Projectile*>(new Projectile());
+    projectile->addComponent<Projectile*>(new Projectile(m_radiusExplosionProjectile));
 
     // debug
     // projectile->addComponent<AxisRenderer*>(new AxisRenderer());
@@ -91,4 +91,6 @@ void FireProjectiles::createProjectile(){
 void FireProjectiles::createUI() {
     ImGui::Text("Projectile Speed : ");
     ImGui::DragFloat("##speed", &m_projectileSpeed, 0.01f,0.01f, 1000.f);
+    ImGui::Text("Radius of explosion : ");
+    ImGui::DragInt("##radius", &m_radiusExplosionProjectile, 1, 1, 100);
 }

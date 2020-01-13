@@ -8,9 +8,7 @@ class TerrainModificator : public Component {
 public:
 
     TerrainModificator();
-
-    void inputUpdate() override;
-    // void update() override;
+    
     void createUI() override;
 
     void destroy(size_t radius);
