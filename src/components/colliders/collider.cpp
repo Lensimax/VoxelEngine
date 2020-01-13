@@ -26,7 +26,7 @@
 #endif
 
 
-Collider::Collider(glm::vec3 box) : m_collidingBox(box), m_showCollidingBox(false), m_showCheckCollision(false) {
+Collider::Collider(glm::vec3 box) : m_collidingBox(box), m_showCollidingBox(false), m_showCheckCollision(false), m_isInCollision(false) {
     setName("Collider");
     m_targetHitPoint = glm::vec3(0);
 }
@@ -134,6 +134,7 @@ void Collider::physicsUpdate() {
     }
 
     if(computeCollision() != glm::vec3(0)){
+        m_isInCollision = true;
         if(m_rb != nullptr && m_rb->getActive()){
             glm::vec3 move = m_rb->getMove();
             move.x = 0.0f; move.z = 0.0f;

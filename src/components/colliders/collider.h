@@ -44,7 +44,7 @@ private:
 
     glm::vec3 m_targetHitPoint;
 
-    bool m_isGrounded;  
+    bool m_isGrounded, m_isInCollision;  
 };
 
 #endif

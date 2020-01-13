@@ -34,6 +34,7 @@
 #include "../components/debug/debugTransform.h"
 #include "../components/colliders/collider.h"
 #include "../components/terrainModificator.h"
+#include "../components/playerController.h"
 
 #include <thread>
 
@@ -45,8 +46,8 @@
 #include <iostream>
 
 Scene::Scene(){
-    // loadGameplayScene();
-    loadExplorationScene();
+    loadGameplayScene();
+    // loadExplorationScene();
 }
 
 Scene::~Scene(){
@@ -300,8 +301,9 @@ void Scene::loadGameplayScene(){
     player->addComponent<ThirdPersonController*>(new ThirdPersonController());
     player->addComponent<FireProjectiles*>(new FireProjectiles()); // ça fait rammer mon pc à mort ! O_o
     player->getComponent<FireProjectiles*>()->setScene(this);
-    player->getComponent<FireProjectiles*>()->setActive(false);
+    // player->getComponent<FireProjectiles*>()->setActive(false);
     player->addComponent<Collider*>(new Collider(glm::vec3(0.5, 0.6,0.5)));
+    player->addComponent<PlayerController*>(new PlayerController());
     objectsEngine.push_back(player);
 
     GameObject *terrain = new GameObject(addNewId(), "Terrain");
