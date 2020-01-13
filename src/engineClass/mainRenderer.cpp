@@ -257,18 +257,17 @@ void MainRenderer::update(){
 
 
 void MainRenderer::createUI(){
-    ImGui::Begin("Renderer Setting");
+    ImGui::Begin("MainRenderer Setting");
 
-    m_camera->createUI("Renderer Setting");
+    m_camera->createUI("MainRenderer Setting");
 
     ImGui::End();
 
 
-    if(m_firstFramePassed){
+    if(m_firstFramePassed && !m_playMode){
         ImGui::Begin("Game View", nullptr, ImGuiWindowFlags_NoResize);
         ImGui::Image((void*)(intptr_t)getGameTextureID(), ImVec2(426,240), ImVec2(0,1), ImVec2(1,0));
-        ImGui::End();
-        
+        ImGui::End();        
     }
 }
 

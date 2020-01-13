@@ -51,6 +51,7 @@ public:
 
 
     void deleteScene();
+    bool getPause(){return m_pause;}
 private:
 
     CameraProjective* getCameraRecursive(GameObject *obj, glm::mat4 modelMat);
