@@ -9,9 +9,11 @@ public:
 
     TerrainModificator();
     
+    void inputUpdate() override;
     void createUI() override;
 
-    void setSphere(glm::vec3 position, size_t size, Voxel v);
+    void destroy(size_t radius);
+    void setSphere(glm::vec3 position, size_t radius, Voxel v);
 
     void setTerrain(TerrainManager *terrain){m_terrain = terrain;}
 
