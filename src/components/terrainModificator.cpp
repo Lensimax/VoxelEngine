@@ -40,7 +40,7 @@ void TerrainModificator::inputUpdate(){
 
     if(ImGui::IsKeyPressed('O'))
         setSphere(pos, 10, Voxel::Empty);
-    else if (ImGui::IsKeyPressed('U'))
+    else if (ImGui::IsKeyPressed('I'))
         setSphere(pos, 10, Voxel::Full);
 }
 
