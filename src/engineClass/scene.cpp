@@ -47,8 +47,8 @@
 
 Scene::Scene(){
     // loadGameplayScene();
-    // loadSampleScene();
-    loadExplorationScene();
+    loadSampleScene();
+    // loadExplorationScene();
 }
 
 Scene::~Scene(){
@@ -349,4 +349,10 @@ void Scene::loadSampleScene(){
     objectsEngine.push_back(camera);
 
     addCube();
+
+    GameObject *player = new GameObject(addNewId(), "Petit cube", new Transform(glm::vec3(-2,0.0f,0.0f)));
+    player->addComponent<Mesh*>(new MeshCube(0.5f));
+    player->addComponent<Material*>(new SimpleMat());
+    player->addComponent<MeshRenderer*>(new MeshRenderer());
+    objectsEngine.push_back(player);
 }

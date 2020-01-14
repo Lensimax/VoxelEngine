@@ -21,7 +21,7 @@ using namespace glm;
 
 SimpleMat::SimpleMat(glm::vec4 color) : m_color(color){
 
-
+    setName("Simple Material");
     createShader();
 
 
