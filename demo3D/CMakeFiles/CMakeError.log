@@ -1,0 +1,55 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/thespygeek/Projet/voxelEngine/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_06003/fast"
+/usr/bin/make -f CMakeFiles/cmTC_06003.dir/build.make CMakeFiles/cmTC_06003.dir/build
+make[1] : on entre dans le répertoire « /home/thespygeek/Projet/voxelEngine/build/CMakeFiles/CMakeTmp »
+Building C object CMakeFiles/cmTC_06003.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_06003.dir/CheckSymbolExists.c.o   -c /home/thespygeek/Projet/voxelEngine/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_06003
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06003.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_06003.dir/CheckSymbolExists.c.o  -o cmTC_06003 
+CMakeFiles/cmTC_06003.dir/CheckSymbolExists.c.o : Dans la fonction « main » :
+CheckSymbolExists.c:(.text+0x1b) : référence indéfinie vers « pthread_create »
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_06003.dir/build.make:97: recipe for target 'cmTC_06003' failed
+make[1]: *** [cmTC_06003] Error 1
+make[1] : on quitte le répertoire « /home/thespygeek/Projet/voxelEngine/build/CMakeFiles/CMakeTmp »
+Makefile:126: recipe for target 'cmTC_06003/fast' failed
+make: *** [cmTC_06003/fast] Error 2
+
+File /home/thespygeek/Projet/voxelEngine/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/thespygeek/Projet/voxelEngine/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_cc294/fast"
+/usr/bin/make -f CMakeFiles/cmTC_cc294.dir/build.make CMakeFiles/cmTC_cc294.dir/build
+make[1] : on entre dans le répertoire « /home/thespygeek/Projet/voxelEngine/build/CMakeFiles/CMakeTmp »
+Building C object CMakeFiles/cmTC_cc294.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_cc294.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_cc294
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cc294.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_cc294.dir/CheckFunctionExists.c.o  -o cmTC_cc294 -lpthreads 
+/usr/bin/ld : ne peut trouver -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_cc294.dir/build.make:97: recipe for target 'cmTC_cc294' failed
+make[1]: *** [cmTC_cc294] Error 1
+make[1] : on quitte le répertoire « /home/thespygeek/Projet/voxelEngine/build/CMakeFiles/CMakeTmp »
+Makefile:126: recipe for target 'cmTC_cc294/fast' failed
+make: *** [cmTC_cc294/fast] Error 2
+
+
