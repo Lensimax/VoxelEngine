@@ -135,7 +135,7 @@ void TerrainManager::manageChunksAround(glm::vec3 world_coord) {
 
     for (size_t i = 0 ; i < getTerrainSize() ; ++i)
     {
-    	for (size_t j = 0 ; j < getTerrainSize() ; ++j)
+    	for (size_t j = 0 ; j < getTerrainSize()-1 ; ++j)
     	{
 	        for (size_t k = 0 ; k < getTerrainSize() ; ++k)
 	        {
