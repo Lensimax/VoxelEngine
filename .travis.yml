@@ -51,7 +51,7 @@ jobs:
             - cmake
       install:
         - mkdir build && cd build
-        - cmake ..
+        - cmake -G "MinGW Makefiles" ..
       script:
         - cmake --build .
 
