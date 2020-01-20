@@ -4,7 +4,7 @@
 
 
 
-CameraControllerFirstPerson::CameraControllerFirstPerson() : m_sensitivityRotateWorld(glm::vec2(0.5f)), m_scrollZoomSensitivity(1.f), m_stafeSensitivity(0.01f) {
+CameraControllerFirstPerson::CameraControllerFirstPerson() : m_sensitivityRotateWorld(glm::vec2(0.5f)), m_scrollZoomSensitivity(1.f), m_stafeSensitivity(0.1f) {
 
     setName("Camera Controller");
 
