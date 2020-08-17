@@ -6,6 +6,10 @@ Voxel-Engine is a WIP game engine specialized for voxel rendering. It is made by
 
 ![terrain_1](ressources/terrain_1.png)
 
+![terrain_deep](ressources/terrain_deep.png)
+
+![terrain_large](ressources/terrain_large.png)
+
 #### Features
 
 ###### Jeu
